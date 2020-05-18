@@ -17,100 +17,179 @@
         display: inline-block !important;
     }
 
-    .selected {
+    .selected-inp {
         background-color: red;
     }
+    .selected-outp {
+        color: blue;
+        font-weight: bold;
+    }
+
     input[type=radio] {
         width: 30px;
         height: 30px;
+    }
+
+    code {
+        white-space: pre-wrap;
+        font-size: 12px;
     }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid" id="cb-source">
         <!-- Content here -->
-        <div id="cb-source">
-            <h4>Package <b>{{ source.FEName }}</b></h4>
-            <div v-for="func in source.Funcs">
-                <span v-for="comment in func.Docs">
-                    // {{ comment }}<br>
-                </span>
-                <div class="alert alert-success" role="alert">
-                    <span :id="'func-' + func.Name">
-                        func {{ func.Name }}(
-                        <div v-for="(input, index) in func.In" :id="'func-' + func.Name + '-in-' + index" class="func-type">
-                            {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-' + func.Name + '-out-' + index" class="func-type">
-                                {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) </span>
-                        <div>
-                                    <div v-for="(input, index) in func.In" class="func-type">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChange($event)">
-                                            <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+        <h4>Package <b>{{ source.FEName }}</b></h4>
+        <div v-for="func in source.Funcs" class="row">
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <span v-for="comment in func.Docs">
+                        // {{ comment }}<br>
+                    </span>
+                    <div class="alert alert-success" role="alert">
+                        <span :id="'func-' + func.Name">
+                            func {{ func.Name }}(
+                            <div v-for="(input, index) in func.In" :id="'func-' + func.Name + '-in-' + index" class="func-type">
+                                {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-' + func.Name + '-out-' + index" class="func-type">
+                                    {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) </span> </div>
+                    </div>
+                        <!--checkboxes for inp -->
+                            <div class="col-md-12">
+                                        <div v-for="(input, index) in func.In" class="func-type">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChangeInp($event)">
+                                                <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div v-for="(funOut, index) in func.Out" class="func-type">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChange($event)">
-                                            <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                        <div v-for="(funOut, index) in func.Out" class="func-type">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChangeInp($event)">
+                                                <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                            </div>
                                         </div>
-                                    </div>
-                        </div>
+                            </div>
+                        <!--checkboxes for outp -->
+                            <div class="col-md-12">
+                                        <div v-for="(input, index) in func.In" class="func-type">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChangeOutp($event)">
+                                                <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+                                            </div>
+                                        </div>
+                                        <div v-for="(funOut, index) in func.Out" class="func-type">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChangeOutp($event)">
+                                                <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                            </div>
+                                        </div>
+                            </div>                            
+
+                </div>
+
+                <div class="col-md-6">
+                    <code>
+                    class {{ func.FEName }} extends TaintTracking::FunctionModel {
+                      {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
+
+                      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+                        inp.{{ codeqlInp['func-' + func.Name] }} and outp.{{ codeqlOutp['func-' + func.Name] }}
+                      }
+                    }
+                    </code>
                 </div>
             </div>
             <br>
         </div>
-    </div>
-    <script type="text/javascript">
-    var srcapp = new Vue({
-        el: '#cb-source',
-        data() {
-            return {
-                source: null
+        <script type="text/javascript">
+
+        var srcapp = new Vue({
+            el: '#cb-source',
+            data: {
+                source: {},
+                codeqlInp: {},
+                codeqlOutp: {}
+            },
+            mounted() {
+                self = this;
+                fetch('/api/source')
+                    .then(response => response.json())
+                    .then(json => {
+                        this.source = json;
+
+                        self.codeqlInp ={};
+                        self.codeqlOutp={};
+
+                        self.source.Funcs.forEach(function(elem) {
+                           self.codeqlInp['func-' +elem.Name] = "a";
+                           self.codeqlOutp['func-' +elem.Name] = "a";
+                        });
+
+                    })
+            },
+            methods: {
+                update: function(obj, prop, event) {
+                    Vue.set(obj, prop, event);
+                  },
+                getInp(key) {
+                    return  this.codeqlInp[key]
+                },
+                onChangeInp(event) {
+                    var optionText = event.target;
+
+                    var parentID = optionText.getAttribute("parent");
+                    var qual = optionText.getAttribute("name");
+                    var parent = document.getElementById(parentID);
+
+                    var children = document.querySelectorAll('#' + parentID + ' > .selected-inp')
+                    children.forEach(function(elem) {
+                        elem.classList.remove("selected-inp");
+                    });
+
+                    console.log(parentID);
+                    console.log(optionText.value);
+                    console.log(this.codeqlInp[parentID]);
+                    this.update(this.codeqlInp, parentID, optionText.value);
+                    var element = document.getElementById(optionText.value);
+                    element.classList.add("selected-inp");
+                } ,
+              onChangeOutp(event) {
+                    var optionText = event.target;
+
+                    var parentID = optionText.getAttribute("parent");
+                    var qual = optionText.getAttribute("name");
+                    var parent = document.getElementById(parentID);
+
+                    var children = document.querySelectorAll('#' + parentID + ' > .selected-outp')
+                    children.forEach(function(elem) {
+                        elem.classList.remove("selected-outp");
+                    });
+
+                    console.log(parentID);
+                    console.log(optionText.value);
+                    console.log(this.codeqlInp);
+                    this.codeqlInp[parentID]=optionText.value
+                    var element = document.getElementById(optionText.value);
+                    element.classList.add("selected-outp");
+                }
             }
-        },
-        mounted() {
-            fetch('/api/source')
-                .then(response => response.json())
-                .then(json => {
-                    this.source = json
-                })
-        },
-        methods: {
-            onChange(event) {
-                var optionText = event.target;
-
-                var parentID = optionText.getAttribute("parent");
-                var parent = document.getElementById(parentID);
-
-                var children = document.querySelectorAll('#'+parentID+' > .selected')
-                children.forEach(function(elem) {
-                    elem.classList.remove("selected");
-                  });
-
-                console.log(optionText.getAttribute("parent"));
-                console.log(optionText.value);
-                var element = document.getElementById(optionText.value);
-                element.classList.add("selected");
-            }
-        }
-    })
-    Vue.component('func-item', {
-        props: ['func'],
-        template: `
+        })
+        Vue.component('func-item', {
+            props: ['func'],
+            template: `
         
         <span v-for="comment in func.Docs">
             // {{ comment }}<br>
         </span>
 
         `
-    })
-    </script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        })
+        </script>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 
 </html>

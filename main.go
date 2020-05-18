@@ -16,7 +16,9 @@ import (
 
 func main() {
 	var pkg string
+	var runServer bool
 	flag.StringVar(&pkg, "pkg", "", "package you want to scan and convert to goa types")
+	flag.BoolVar(&runServer, "http", false, "run http server")
 	flag.Parse()
 
 	// One package at a time:
@@ -39,7 +41,8 @@ func main() {
 	{
 		pk := pks[0]
 		feModule.Name = pk.Name
-		feModule.FEName = FormatModuleName(pk.Name)
+		feModule.FEName = FormatCodeQlName(pk.Name)
+		feModule.PkgPath = pk.Path
 
 		Sfln(
 			"package %q has %v funcs, %v methods, and %v interfaces",
@@ -50,7 +53,10 @@ func main() {
 		)
 		for _, fn := range pk.Funcs {
 			if fn.Receiver == nil {
-				feModule.Funcs = append(feModule.Funcs, getFEFunc(fn))
+				f := getFEFunc(fn)
+				// TODO: what to do with aliases???
+				f.PkgPath = feModule.PkgPath
+				feModule.Funcs = append(feModule.Funcs, f)
 			}
 		}
 		for _, mt := range pk.Methods {
@@ -66,8 +72,8 @@ func main() {
 		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
 	})
 
-	{
-		Q(feModule)
+	Q(feModule)
+	if runServer {
 		r := gin.Default()
 		r.StaticFile("", "./index.html")
 		r.Static("/static", "./static")
@@ -93,12 +99,13 @@ func FormatQualifiedTypeName(packagePath string, typeOnlyName string) string {
 func ToCamel(s string) string {
 	return strcase.ToCamel(s)
 }
-func FormatModuleName(name string) string {
+func FormatCodeQlName(name string) string {
 	return ToCamel(strings.ReplaceAll(name, "\"", ""))
 }
 
 type FEModule struct {
 	Name       string
+	PkgPath    string
 	FEName     string
 	Funcs      []*FEFunc
 	Methods    []*FEMethod
@@ -106,10 +113,12 @@ type FEModule struct {
 }
 
 type FEFunc struct {
-	Docs []string
-	Name string
-	In   []*FEType
-	Out  []*FEType
+	FEName  string
+	Docs    []string
+	Name    string
+	PkgPath string
+	In      []*FEType
+	Out     []*FEType
 }
 type FEMethod struct {
 	Docs     []string
@@ -194,6 +203,7 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 func getFEFunc(fn *scanner.Func) *FEFunc {
 	var fe FEFunc
 	fe.Name = fn.Name
+	fe.FEName = FormatCodeQlName(fn.Name)
 	fe.Docs = fn.Doc
 	for _, in := range fn.Input {
 		fe.In = append(fe.In, getFETypeVar(in))
