@@ -5,9 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"go/types"
+	"sort"
+	"strings"
 
 	"github.com/gagliardetto/codebox/scanner"
 	. "github.com/gagliardetto/utils"
+	"github.com/iancoleman/strcase"
 )
 
 func main() {
@@ -15,6 +18,7 @@ func main() {
 	flag.StringVar(&pkg, "pkg", "", "package you want to scan and convert to goa types")
 	flag.Parse()
 
+	// One package at a time:
 	sc, err := scanner.New(pkg)
 	if err != nil {
 		panic(err)
@@ -25,7 +29,17 @@ func main() {
 		panic(err)
 	}
 
-	for _, pk := range pks {
+	feModule := &FEModule{
+		Funcs:      make([]*FEFunc, 0),
+		Methods:    make([]*FEMethod, 0),
+		Interfaces: make([]*FEInterface, 0),
+	}
+
+	{
+		pk := pks[0]
+		feModule.Name = pk.Name
+		feModule.FEName = FormatModuleName(pk.Name)
+
 		Sfln(
 			"package %q has %v funcs, %v methods, and %v interfaces",
 			pk.Name,
@@ -35,19 +49,50 @@ func main() {
 		)
 		for _, fn := range pk.Funcs {
 			if fn.Receiver == nil {
-				Q(getFEFunc(fn))
+				feModule.Funcs = append(feModule.Funcs, getFEFunc(fn))
 			}
 		}
-		Ln("----")
 		for _, mt := range pk.Methods {
-			Q(getFEMethod(mt, pk.Funcs))
+			feModule.Methods = append(feModule.Methods, getFEMethod(mt, pk.Funcs))
 		}
-		Ln("----")
 		for _, it := range pk.Interfaces {
-			Q(getFEInterface(it))
+			feModule.Interfaces = append(feModule.Interfaces, getFEInterface(it))
 		}
 	}
+
+	// Sort by receiver:
+	sort.Slice(feModule.Methods, func(i, j int) bool {
+		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
+	})
+
+	Q(feModule)
 }
+
+func FormatQualifiedTypeName(packagePath string, typeOnlyName string) string {
+
+	qualifiedName := Sf(
+		"%q.%s",
+		packagePath,
+		typeOnlyName,
+	)
+
+	return qualifiedName
+}
+func ToCamel(s string) string {
+	return strcase.ToCamel(s)
+}
+func FormatModuleName(name string) string {
+	return ToCamel(strings.ReplaceAll(name, "\"", ""))
+}
+
+type FEModule struct {
+	Name       string
+	FEName     string
+	Funcs      []*FEFunc
+	Methods    []*FEMethod
+	Interfaces []*FEInterface
+}
+
 func debugMethod(mt *types.Selection) {
 	Ln(mt.String())
 	Ln(mt.Obj().String())
