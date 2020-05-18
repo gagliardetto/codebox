@@ -10,6 +10,7 @@ import (
 
 	"github.com/gagliardetto/codebox/scanner"
 	. "github.com/gagliardetto/utils"
+	"github.com/gin-gonic/gin"
 	"github.com/iancoleman/strcase"
 )
 
@@ -65,7 +66,18 @@ func main() {
 		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
 	})
 
-	Q(feModule)
+	{
+		Q(feModule)
+		r := gin.Default()
+		r.StaticFile("", "./index.html")
+		r.Static("/static", "./static")
+
+		r.GET("/api/source", func(c *gin.Context) {
+			c.JSON(200, feModule)
+		})
+
+		r.Run() // listen and serve on 0.0.0.0:8080
+	}
 }
 
 func FormatQualifiedTypeName(packagePath string, typeOnlyName string) string {
@@ -91,6 +103,37 @@ type FEModule struct {
 	Funcs      []*FEFunc
 	Methods    []*FEMethod
 	Interfaces []*FEInterface
+}
+
+type FEFunc struct {
+	Docs []string
+	Name string
+	In   []*FEType
+	Out  []*FEType
+}
+type FEMethod struct {
+	Docs     []string
+	IsOnPtr  bool
+	Receiver *FEReceiver
+	Func     *FEFunc
+}
+type FEInterface struct {
+	Docs    []string
+	Name    string
+	Methods []*FEFunc
+}
+
+type FEReceiver struct {
+	FEType
+}
+
+type FEType struct {
+	VarName       string
+	TypeName      string
+	PkgPath       string
+	QualifiedName string
+	IsPtr         bool
+	IsBasic       bool
 }
 
 func debugMethod(mt *types.Selection) {
@@ -206,38 +249,6 @@ func getFEInterface(it *scanner.Interface) *FEInterface {
 		fe.Methods = append(fe.Methods, getFEFunc(mt))
 	}
 	return &fe
-}
-
-type FEInterface struct {
-	Docs    []string
-	Name    string
-	Methods []*FEFunc
-}
-type FEMethod struct {
-	Docs     []string
-	IsOnPtr  bool
-	Receiver *FEReceiver
-	Func     *FEFunc
-}
-
-type FEFunc struct {
-	Docs []string
-	Name string
-	In   []*FEType
-	Out  []*FEType
-}
-
-type FEReceiver struct {
-	FEType
-}
-
-type FEType struct {
-	VarName       string
-	TypeName      string
-	PkgPath       string
-	QualifiedName string
-	IsPtr         bool
-	IsBasic       bool
 }
 
 func SelectionString(s *types.Selection, qf types.Qualifier) string {
