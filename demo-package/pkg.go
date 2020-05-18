@@ -1,15 +1,52 @@
 package somepackage
 
+import (
+	"io"
+	"strconv"
+
+	"github.com/gogo/protobuf/jsonpb"
+)
+
 // Doc of SomeFunc
-func SomeFunc(s string) string {
+func SomeFunc(inputName0 string, w io.Writer, s strconv.NumError, gh jsonpb.AnyResolver) (out0 string) {
 	return ""
+}
+
+func unexportedFunc() (out0 string) {
+	return ""
+}
+
+// This is interface doc.
+type SomeInterface interface {
+	// a method documentation
+	AMethod0(in string) bool
+	// other comments
+	// a lot of other comments
+	AMethod1(in string) bool
 }
 
 // Doc of SomeStruct
 type SomeStruct struct {
 }
 
-// SomeMethod is a method on something.
-func (st *SomeStruct) SomeMethod(in string) string {
+// doc on pointer method
+func (st *SomeStruct) SomePtrMethod(methodInput0 string, r io.Reader) string {
+	return ""
+}
+
+// doc on val method
+func (st SomeStruct) SomeValMethod(methodInput0 string, r io.Reader) string {
+	return ""
+}
+
+type SomeType int
+
+// Pointer method on TypeMethod
+func (st *SomeType) TypePtrMethod(b bool) string {
+	return ""
+}
+
+// Value method on TypeMethod with pointer param
+func (st SomeType) TypeValueMethod(b *bool) string {
 	return ""
 }

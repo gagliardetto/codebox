@@ -120,6 +120,18 @@ func (ctx *context) trySetDocs(name string, obj Documentable) {
 		}
 	}
 }
+func (ctx *context) trySetDocsForInterfaceMethod(it string, method string, obj Documentable) {
+	if itx0, ok := ctx.types[it]; ok {
+		itx1, ok := itx0.Type.(*ast.InterfaceType)
+		if ok {
+			for _, mtx0 := range itx1.Methods.List {
+				if method == mtx0.Names[0].Name {
+					obj.SetDocs(mtx0.Doc)
+				}
+			}
+		}
+	}
+}
 
 const genComment = `//proteus:generate`
 

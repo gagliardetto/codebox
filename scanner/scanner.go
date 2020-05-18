@@ -4,6 +4,7 @@ package scanner
 import (
 	"errors"
 	"fmt"
+	"go/token"
 	"go/types"
 	"os"
 	"path/filepath"
@@ -116,7 +117,7 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 	objs := objectsInScope(gopkg.Scope())
 
 	pkg := &Package{
-		Path:    removeGoPath(gopkg),
+		Path:    RemoveGoPath(gopkg),
 		Name:    gopkg.Name(),
 		Aliases: make(map[string]Type),
 	}
@@ -138,7 +139,43 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 		return nil
 	}
 
+	switch t := o.Type().Underlying().(type) {
+	case *types.Interface:
+		it := &Interface{}
+
+		if !token.IsExported(nameForType(o.Type())) {
+			break
+		}
+		it.Name = nameForType(o.Type())
+		ctx.trySetDocs(nameForType(o.Type()), it)
+	ExplicitMethodLoop:
+		for i := 0; i < t.NumExplicitMethods(); i++ {
+
+			methObj := t.ExplicitMethod(i)
+			meth := methObj.Type()
+
+			if !methObj.Exported() {
+				continue ExplicitMethodLoop
+			}
+
+			fn := scanFunc(
+				&Func{Name: methObj.Name()},
+				meth.(*types.Signature),
+			)
+
+			ctx.trySetDocsForInterfaceMethod(
+				nameForType(o.Type()),
+				methObj.Name(),
+				fn,
+			)
+
+			it.Methods = append(it.Methods, fn)
+		}
+		p.Interfaces = append(p.Interfaces, it)
+	}
+
 	switch t := o.Type().(type) {
+
 	case *types.Named:
 		hasStringMethod, err := isStringer(t)
 		if err != nil {
@@ -171,11 +208,10 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 			p.Aliases[objName(t.Obj())] = scanType(t.Underlying())
 		}
 	case *types.Signature:
-		if ctx.shouldGenerateFunc(nameForFunc(o)) {
-			fn := scanFunc(&Func{Name: o.Name()}, t)
-			ctx.trySetDocs(nameForFunc(o), fn)
-			p.Funcs = append(p.Funcs, fn)
-		}
+		fn := scanFunc(&Func{Name: o.Name()}, t)
+		ctx.trySetDocs(nameForFunc(o), fn)
+		p.Funcs = append(p.Funcs, fn)
+
 	}
 
 	return nil
@@ -262,7 +298,7 @@ func nameForFunc(o types.Object) (name string) {
 func nameForType(o types.Type) (name string) {
 	name = o.String()
 	i := strings.LastIndex(name, ".")
-	name = name[i+1 : len(name)]
+	name = name[i+1:]
 
 	return
 }
@@ -273,7 +309,7 @@ func scanType(typ types.Type) (t Type) {
 		t = NewBasic(u.Name())
 	case *types.Named:
 		t = NewNamed(
-			removeGoPath(u.Obj().Pkg()),
+			RemoveGoPath(u.Obj().Pkg()),
 			u.Obj().Name(),
 		)
 	case *types.Slice:
@@ -366,7 +402,12 @@ func scanTuple(tuple *types.Tuple) []Type {
 	result := make([]Type, 0, tuple.Len())
 
 	for i := 0; i < tuple.Len(); i++ {
-		result = append(result, scanType(tuple.At(i).Type()))
+		typVar := tuple.At(i)
+		tp := scanType(tuple.At(i).Type())
+		if tp != nil {
+			tp.SetTypesVar(typVar)
+			result = append(result, tp)
+		}
 	}
 
 	return result
@@ -447,7 +488,10 @@ func objectsInScope(scope *types.Scope) (objs []types.Object) {
 			// Only need to extract methods for the pointer type since it contains
 			// the methods for the non-pointer type as well.
 			objs = append(objs, methodsForType(types.NewPointer(typ))...)
+		} else {
+			objs = append(objs, methodsForType(types.NewPointer(typ))...)
 		}
+
 	}
 	return
 }
@@ -461,6 +505,8 @@ func methodsInScope(scope *types.Scope) (objs []*types.Selection) {
 		if _, ok := typ.Underlying().(*types.Struct); ok {
 			// Only need to extract methods for the pointer type since it contains
 			// the methods for the non-pointer type as well.
+			objs = append(objs, methodNamesForType(types.NewPointer(typ))...)
+		} else {
 			objs = append(objs, methodNamesForType(types.NewPointer(typ))...)
 		}
 	}
@@ -487,10 +533,10 @@ func methodsForType(typ types.Type) (objs []types.Object) {
 }
 
 func objName(obj types.Object) string {
-	return fmt.Sprintf("%s.%s", removeGoPath(obj.Pkg()), obj.Name())
+	return fmt.Sprintf("%s.%s", RemoveGoPath(obj.Pkg()), obj.Name())
 }
 
-func removeGoPath(pkg *types.Package) string {
+func RemoveGoPath(pkg *types.Package) string {
 	// error is a type.Named whose package is nil.
 	if pkg == nil {
 		return ""
