@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- development version, includes helpful console warnings -->
+    <script src="static/vue-dev.js"></script>
+    <title>Hello, world!</title>
+    <style type="text/css">
+    .func-type {
+        white-space: nowrap !important;
+        float: none !important;
+        display: inline-block !important;
+    }
+
+    .selected {
+        background-color: red;
+    }
+    input[type=radio] {
+        width: 30px;
+        height: 30px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Content here -->
+        <div id="cb-source">
+            <h4>Package <b>{{ source.FEName }}</b></h4>
+            <div v-for="func in source.Funcs">
+                <span v-for="comment in func.Docs">
+                    // {{ comment }}<br>
+                </span>
+                <div class="alert alert-success" role="alert">
+                    <span :id="'func-' + func.Name">
+                        func {{ func.Name }}(
+                        <div v-for="(input, index) in func.In" :id="'func-' + func.Name + '-in-' + index" class="func-type">
+                            {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-' + func.Name + '-out-' + index" class="func-type">
+                                {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) </span>
+                        <div>
+                                    <div v-for="(input, index) in func.In" class="func-type">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChange($event)">
+                                            <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+                                        </div>
+                                    </div>
+                                    <div v-for="(funOut, index) in func.Out" class="func-type">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChange($event)">
+                                            <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                        </div>
+                                    </div>
+                        </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var srcapp = new Vue({
+        el: '#cb-source',
+        data() {
+            return {
+                source: null
+            }
+        },
+        mounted() {
+            fetch('/api/source')
+                .then(response => response.json())
+                .then(json => {
+                    this.source = json
+                })
+        },
+        methods: {
+            onChange(event) {
+                var optionText = event.target;
+
+                var parentID = optionText.getAttribute("parent");
+                var parent = document.getElementById(parentID);
+
+                var children = document.querySelectorAll('#'+parentID+' > .selected')
+                children.forEach(function(elem) {
+                    elem.classList.remove("selected");
+                  });
+
+                console.log(optionText.getAttribute("parent"));
+                console.log(optionText.value);
+                var element = document.getElementById(optionText.value);
+                element.classList.add("selected");
+            }
+        }
+    })
+    Vue.component('func-item', {
+        props: ['func'],
+        template: `
+        
+        <span v-for="comment in func.Docs">
+            // {{ comment }}<br>
+        </span>
+
+        `
+    })
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>
