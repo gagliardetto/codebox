@@ -548,7 +548,11 @@ func RemoveGoPath(pkg *types.Package) string {
 	}
 }
 func StringRemoveGoPath(pkgPath string) string {
-	return strings.Replace(pkgPath, filepath.Join(goPath, "src")+"/", "", -1)
+	clean := strings.Replace(pkgPath, filepath.Join(goPath, "src")+"/", "", -1)
+	return TrimThisPath(clean)
+}
+func TrimThisPath(pkgPath string) string {
+	return strings.TrimPrefix(pkgPath, "github.com/gagliardetto/codebox/src/")
 }
 
 type errorList []error

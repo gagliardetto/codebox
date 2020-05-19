@@ -111,7 +111,7 @@
         border-radius: 50%;
     }
 
-    .isNotUsed * {
+    .isNotUsed > * {
         color: #bdc3c7 !important;
         background-color: #ecf0f1 !important;
         border-color: #ecf0f1 !important;
@@ -125,7 +125,7 @@
     .codebox-generated {
         margin-top: 10px;
         padding: 20px;
-        border: 1px solid #ccc;
+        border: 1px solid;
         -moz-outline-radius: 10px;
         -webkit-outline-radius: 10px;
     }
@@ -157,7 +157,7 @@
         <!--functions -->
         <div v-for="func in source.Funcs" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
-                <div class="codebox-source">
+                <div class="codebox-source border-success">
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="func.CodeQL.IsUse">
@@ -223,7 +223,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="codebox-generated" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
+                <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
                     <code :id="'code-func-'+func.Name">
                         private class {{ func.FEName }} extends TaintTracking::FunctionModel {
                           {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
@@ -239,7 +239,7 @@
         <!-- methods -->
         <div v-for="method in source.Methods" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !method.CodeQL.IsUse }">
-                <div class="codebox-source">
+                <div class="codebox-source border-primary">
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="method.CodeQL.IsUse">
@@ -325,7 +325,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="codebox-generated" v-bind:class="{ hidden: !method.CodeQL.IsUse }">
+                <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsUse }">
                     <code :id="'code-method-'+method.FEName">
                         private class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
                           {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
@@ -342,7 +342,7 @@
         <div v-for="interface in source.Interfaces">
         <div v-for="itMeth in interface.Methods" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !itMeth.CodeQL.IsUse }">
-                <div class="codebox-source">
+                <div class="codebox-source border-warning">
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="itMeth.CodeQL.IsUse">
@@ -428,7 +428,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="codebox-generated" v-bind:class="{ hidden: !itMeth.CodeQL.IsUse }">
+                <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsUse }">
                     <code :id="'code-itMeth-'+itMeth.FEName">
                         private class {{ itMeth.ClassName }} extends TaintTracking::FunctionModel, Method {
                           {{ itMeth.ClassName }}() {
