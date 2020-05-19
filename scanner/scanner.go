@@ -555,10 +555,11 @@ func RemoveGoPath(pkg *types.Package) string {
 }
 func StringRemoveGoPath(pkgPath string) string {
 	clean := strings.Replace(pkgPath, filepath.Join(goPath, "src")+"/", "", -1)
-	return TrimThisPath(clean)
+	return RemoveGoSrcClonePath(clean)
 }
-func TrimThisPath(pkgPath string) string {
-	return strings.TrimPrefix(pkgPath, "github.com/gagliardetto/codebox/src/")
+func RemoveGoSrcClonePath(pkgPath string) string {
+	clean := strings.Replace(pkgPath, "github.com/gagliardetto/codebox/src/", "", -1)
+	return clean
 }
 
 type errorList []error
