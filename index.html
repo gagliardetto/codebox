@@ -21,9 +21,10 @@
         color: blue;
         font-weight: bold;
     }
+
     .selected-outp {
         border-radius: 3px;
-            background: red;
+        background: red;
     }
 
     input[type=radio] {
@@ -35,9 +36,10 @@
         white-space: pre-wrap;
         font-size: 12px;
     }
+
     .com {
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-        font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
         font-size: 15px;
         line-height: 1.42857143;
         white-space: pre;
@@ -48,65 +50,65 @@
 
     /* The switch - the box around the slider */
     .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
     }
 
     /* Hide default HTML checkbox */
     .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
+        opacity: 0;
+        width: 0;
+        height: 0;
     }
 
     /* The slider */
     .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      -webkit-transition: .4s;
-      transition: .4s;
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
     }
 
     .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      -webkit-transition: .4s;
-      transition: .4s;
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
     }
 
-    input:checked + .slider {
-      background-color: #2196F3;
+    input:checked+.slider {
+        background-color: #2196F3;
     }
 
-    input:focus + .slider {
-      box-shadow: 0 0 1px #2196F3;
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
     }
 
-    input:checked + .slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
     }
 
     /* Rounded sliders */
     .slider.round {
-      border-radius: 34px;
+        border-radius: 34px;
     }
 
     .slider.round:before {
-      border-radius: 50%;
+        border-radius: 50%;
     }
 
     .isNotUsed * {
@@ -114,30 +116,36 @@
         background-color: #ecf0f1 !important;
         border-color: #ecf0f1 !important;
     }
+
     .hidden {
         display: none;
     }
-    .codebox-source, .codebox-generated {
-        margin-top:10px;
-         padding: 20px;
-         border: 1px solid #ccc;
-         -moz-outline-radius: 10px;
-         -webkit-outline-radius: 10px;
+
+    .codebox-source,
+    .codebox-generated {
+        margin-top: 10px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        -moz-outline-radius: 10px;
+        -webkit-outline-radius: 10px;
     }
+
     .copy-btn {
         width: 60px;
-            height: 34px;
-            font-size: 14px;
-            padding: 0px;
+        height: 34px;
+        font-size: 14px;
+        padding: 0px;
     }
+
     .content-checkbox {
-               display: grid;
-               justify-content: center;
-            }
+        display: grid;
+        justify-content: center;
+    }
+
     .move-left {
         width: auto;
         box-shadow: none;
-      }
+    }
     </style>
 </head>
 
@@ -146,199 +154,182 @@
         <!-- Content here -->
         <h4>Package <b>{{ source.FEName }}</b></h4>
         <div v-for="func in source.Funcs" class="row">
-
             <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
-            <div class="codebox-source">
-                <!-- Rectangular switch -->
-                <label class="switch">
-                  <input type="checkbox" v-model="func.CodeQL.IsUse">
-                  <span class="slider">{{func.CodeQL.IsUse?"ON":"OFF"}}</span>
-                </label>
-                <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
-                <div class="col-md-12">
-                    <span class="com">
-                        <div v-for="comment in func.Docs">// {{ comment }}</div>
-                    </span>
-
-                    <table class="table-responsive table-sm">
-                      <tbody>
-                        <tr :id="'func-'+func.Name">
-                          <th scope="row">func {{ func.Name }}(</th>
-                          <td v-for="(funIn, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
-                              {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
-                              <b>{{funIn.TypeName}}</b>
-                              {{index < func.In.length - 1 ? ", " : "" }}
-                          </td>
-                          <th>) (</th>
-                          <td v-for="(funOut, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
-                            {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
-                            <b>{{ funOut.TypeName }}</b>
-                            {{index < func.Out.length - 1 ? ", " : "" }}
-                          </td>
-                          <th>)</th>
-                        </tr>
-
-                        <!--checkboxes for inp -->
-                        <tr>
-                          <td> </td>
-                          <td v-for="(funIn, index) in func.In" class="func-type">
-                              <div class="form-check form-check-inline col">
-                                  <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
-                                  <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
-                              </div>
-                          </td>
-                          <td> </td>
-                            <td v-for="(funOut, index) in func.Out" class="func-type">
-                                <div class="form-check form-check-inline col">
-                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
-                                    <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
-                                </div>
-                            </td>
-                          <td> </td>
-                        </tr>
-
-                        <!--checkboxes for outp -->
-                        <tr>
-                          <td> </td>
-                            <td v-for="(funIn, index) in func.In" class="func-type">
-                                <div class="form-check form-check-inline col">
-                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
-                                    <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
-                                </div>
-                            </td>
-                          <td> </td>
-                            <td v-for="(funOut, index) in func.Out" class="func-type">
-                                <div class="form-check form-check-inline col">
-                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
-                                    <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
-                                </div>
-                            </td>
-                          <td> </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <div class="codebox-source">
+                    <!-- Rectangular switch -->
+                    <label class="switch">
+                        <input type="checkbox" v-model="func.CodeQL.IsUse">
+                        <span class="slider">{{func.CodeQL.IsUse?"ON":"OFF"}}</span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
+                    <div class="col-md-12">
+                        <span class="com">
+                            <div v-for="comment in func.Docs">// {{ comment }}</div>
+                        </span>
+                        <table class="table-responsive table-sm">
+                            <tbody>
+                                <tr :id="'func-'+func.Name">
+                                    <th scope="row">func {{ func.Name }}(</th>
+                                    <td v-for="(funIn, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
+                                        {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
+                                        <b>{{funIn.TypeName}}</b>
+                                        {{index < func.In.length - 1 ? ", " : "" }} </td> <th>) (</th>
+                                    <td v-for="(funOut, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
+                                        {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
+                                        <b>{{ funOut.TypeName }}</b>
+                                        {{index < func.Out.length - 1 ? ", " : "" }} </td> <th>)</th>
+                                </tr>
+                                <!--checkboxes for inp -->
+                                <tr>
+                                    <td>FROM:</td>
+                                    <td v-for="(funIn, index) in func.In" class="func-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                            <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td> </td>
+                                    <td v-for="(funOut, index) in func.Out" class="func-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                            <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td> </td>
+                                </tr>
+                                <!--checkboxes for outp -->
+                                <tr>
+                                    <td>INTO:</td>
+                                    <td v-for="(funIn, index) in func.In" class="func-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                            <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td> </td>
+                                    <td v-for="(funOut, index) in func.Out" class="func-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                            <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td> </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                        
-
-                </div>
-</div>
-
-                <div class="col-md-6">
-            <div class="codebox-generated" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
-                    <code :id="'code-func-'+func.Name">
-                    class {{ func.FEName }} extends TaintTracking::FunctionModel {
-                      {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
-
-                      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                        inp.{{ func.CodeQL.Inp }} and outp.{{ func.CodeQL.Outp }}
-                      }
-                    }
-                    </code>
-                </div>
                 </div>
             </div>
-            <br>
+            <div class="col-md-6">
+                <div class="codebox-generated" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
+                    <code :id="'code-func-'+func.Name">
+                        class {{ func.FEName }} extends TaintTracking::FunctionModel {
+                          {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
+
+                          override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+                            inp.{{ func.CodeQL.Inp }} and outp.{{ func.CodeQL.Outp }}
+                          }
+                        }
+                    </code>
+                </div>
+            </div>
         </div>
-        <script type="text/javascript">
+        <br>
+    </div>
+    <script type="text/javascript">
+    function selectText(containerid) {
+        if (document.selection) { // IE
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById(containerid));
+            range.select();
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById(containerid));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        }
+    }
+    var srcapp = new Vue({
+        el: '#cb-source',
+        data: {
+            source: null
+        },
+        mounted() {
+            self = this;
+            fetch('/api/source')
+                .then(response => response.json())
+                .then(json => {
+                    this.source = json;
+                })
+        },
+        methods: {
+            copyTestingCode(event) {
+                var radioButton = event.target;
+                var targetIDInView = radioButton.getAttribute("for");
 
+                selectText(targetIDInView)
 
- function selectText(containerid) {
-     if (document.selection) { // IE
-         var range = document.body.createTextRange();
-         range.moveToElementText(document.getElementById(containerid));
-         range.select();
-     } else if (window.getSelection) {
-         var range = document.createRange();
-         range.selectNode(document.getElementById(containerid));
-         window.getSelection().removeAllRanges();
-         window.getSelection().addRange(range);
-     }
- }
-        var srcapp = new Vue({
-            el: '#cb-source',
-            data: {
-                source: null
-            },
-            mounted() {
-                self = this;
-                fetch('/api/source')
-                    .then(response => response.json())
-                    .then(json => {
-                        this.source = json;
-                    })
-            },
-            methods: {
-                copyTestingCode (event) {
-                    var radioButton = event.target;
-                    var targetIDInView = radioButton.getAttribute("for");
-
-                    selectText(targetIDInView)
-
-                  try {
+                try {
                     var successful = document.execCommand('copy');
                     var msg = successful ? 'successful' : 'unsuccessful';
                     console.log('Testing code was copied ' + msg);
-                  } catch (err) {
+                } catch (err) {
                     alert('Oops, unable to copy');
-                  }
-
-                },
-                onChangeInp(event, fn) {
-                    var radioButton = event.target;
-
-                    var parentID = radioButton.getAttribute("parent");
-                    var targetIDInView = radioButton.getAttribute("colorfor");
-                    var parent = document.getElementById(parentID);
-
-                    var children = document.querySelectorAll('#' + parentID + ' > .selected-inp')
-                    children.forEach(function(elem) {
-                        elem.classList.remove("selected-inp");
-                    });
-
-                    fn.CodeQL.Inp = radioButton.value
-
-                    console.log(parentID);
-                    console.log(radioButton.value);
-                    var element = document.getElementById(targetIDInView);
-                    element.classList.add("selected-inp");
-                } ,
-              onChangeOutp(event, fn) {
-                    var radioButton = event.target;
-
-                    var parentID = radioButton.getAttribute("parent");
-                    var targetIDInView = radioButton.getAttribute("colorfor");
-                    var parent = document.getElementById(parentID);
-
-                    var children = document.querySelectorAll('#' + parentID + ' > .selected-outp')
-                    children.forEach(function(elem) {
-                        elem.classList.remove("selected-outp");
-                    });
-
-                    fn.CodeQL.Outp = radioButton.value
-
-                    console.log(parentID);
-                    console.log(radioButton.value);
-                    var element = document.getElementById(targetIDInView);
-                    element.classList.add("selected-outp");
                 }
+
+            },
+            onChangeInp(event, fn) {
+                var radioButton = event.target;
+
+                var parentID = radioButton.getAttribute("parent");
+                var targetIDInView = radioButton.getAttribute("colorfor");
+                var parent = document.getElementById(parentID);
+
+                var children = document.querySelectorAll('#' + parentID + ' > .selected-inp')
+                children.forEach(function(elem) {
+                    elem.classList.remove("selected-inp");
+                });
+
+                fn.CodeQL.Inp = radioButton.value
+
+                var element = document.getElementById(targetIDInView);
+                element.classList.add("selected-inp");
+            },
+            onChangeOutp(event, fn) {
+                var radioButton = event.target;
+
+                var parentID = radioButton.getAttribute("parent");
+                var targetIDInView = radioButton.getAttribute("colorfor");
+                var parent = document.getElementById(parentID);
+
+                var children = document.querySelectorAll('#' + parentID + ' > .selected-outp')
+                children.forEach(function(elem) {
+                    elem.classList.remove("selected-outp");
+                });
+
+                fn.CodeQL.Outp = radioButton.value
+
+                var element = document.getElementById(targetIDInView);
+                element.classList.add("selected-outp");
             }
-        })
-        Vue.component('func-item', {
-            props: ['func'],
-            template: `
+        }
+    })
+    Vue.component('func-item', {
+        props: ['func'],
+        template: `
         
         <span v-for="comment in func.Docs">
             // {{ comment }}<br>
         </span>
 
         `
-        })
-        </script>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    })
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 
 </html>
