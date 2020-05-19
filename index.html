@@ -34,6 +34,16 @@
         white-space: pre-wrap;
         font-size: 12px;
     }
+    .com {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+        font-size: 15px;
+        line-height: 1.42857143;
+        white-space: pre;
+        word-break: normal;
+        box-sizing: border-box;
+        color: #006600;
+    }
     </style>
 </head>
 
@@ -44,15 +54,17 @@
         <div v-for="func in source.Funcs" class="row">
             <div class="col-md-6">
                 <div class="col-md-12">
-                    <span v-for="comment in func.Docs">
-                        // {{ comment }}<br>
+                    <span class="com">
+                        <div v-for="comment in func.Docs">// {{ comment }}</div>
                     </span>
                     <div class="alert alert-success" role="alert">
                         <span :id="'func-'+func.Name">
                             func {{ func.Name }}(
                             <div v-for="(input, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
                                 {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
-                                    {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) </span> </div>
+                                    {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) 
+                        </span>
+                    </div>
                     </div>
                         <!--checkboxes for inp -->
                             <div class="col-md-12">

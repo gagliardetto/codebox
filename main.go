@@ -42,7 +42,7 @@ func main() {
 		pk := pks[0]
 		feModule.Name = pk.Name
 		feModule.FEName = FormatCodeQlName(pk.Name)
-		feModule.PkgPath = pk.Path
+		feModule.PkgPath = TrimThisPath(pk.Path)
 
 		Sfln(
 			"package %q has %v funcs, %v methods, and %v interfaces",
@@ -84,6 +84,10 @@ func main() {
 
 		r.Run() // listen and serve on 0.0.0.0:8080
 	}
+}
+
+func TrimThisPath(pkgPath string) string {
+	return strings.TrimPrefix(pkgPath, "github.com/gagliardetto/codebox/src/")
 }
 
 func FormatQualifiedTypeName(packagePath string, typeOnlyName string) string {
