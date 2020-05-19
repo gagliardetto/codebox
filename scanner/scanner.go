@@ -212,11 +212,13 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 			p.Aliases[objName(t.Obj())] = scanType(t.Underlying())
 		}
 	case *types.Signature:
-		fn := scanFunc(&Func{Name: o.Name()}, t)
-		fn.Signature = StringRemoveGoPath(o.String())
-		fn.PkgPath = RemoveGoPath(o.Pkg())
-		ctx.trySetDocs(nameForFunc(o), fn)
-		p.Funcs = append(p.Funcs, fn)
+		if o.Exported() {
+			fn := scanFunc(&Func{Name: o.Name()}, t)
+			fn.Signature = StringRemoveGoPath(o.String())
+			fn.PkgPath = RemoveGoPath(o.Pkg())
+			ctx.trySetDocs(nameForFunc(o), fn)
+			p.Funcs = append(p.Funcs, fn)
+		}
 
 	}
 
@@ -284,7 +286,11 @@ func IsValidatable(t *types.Named) (bool, error) {
 func methodsForNamed(t *types.Named) []*types.Func {
 	methods := make([]*types.Func, 0)
 	for i := 0; i < t.NumMethods(); i++ {
-		methods = append(methods, t.Method(i))
+		meth := t.Method(i)
+		if !meth.Exported() {
+			continue
+		}
+		methods = append(methods, meth)
 	}
 	return methods
 }
@@ -510,6 +516,10 @@ func methodsInScope(scope *types.Scope) (objs []*types.Selection) {
 		obj := scope.Lookup(n)
 
 		typ := obj.Type()
+
+		if !obj.Exported() {
+			continue
+		}
 
 		if _, ok := typ.Underlying().(*types.Struct); ok {
 			// Only need to extract methods for the pointer type since it contains

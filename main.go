@@ -53,7 +53,10 @@ func main() {
 			}
 		}
 		for _, mt := range pk.Methods {
-			feModule.Methods = append(feModule.Methods, getFEMethod(mt, pk.Funcs))
+			meth := getFEMethod(mt, pk.Funcs)
+			if meth != nil {
+				feModule.Methods = append(feModule.Methods, meth)
+			}
 		}
 		for _, it := range pk.Interfaces {
 			feModule.Interfaces = append(feModule.Interfaces, getFEInterface(it, feModule.PkgPath))
@@ -78,9 +81,9 @@ func main() {
 	Sfln(
 		"package %q has %v funcs, %v methods, and %v interfaces",
 		pk.Name,
-		len(pk.Funcs),
-		len(pk.Methods),
-		len(pk.Interfaces),
+		len(feModule.Funcs),
+		len(feModule.Methods),
+		len(feModule.Interfaces),
 	)
 	if runServer {
 		r := gin.Default()
@@ -130,6 +133,13 @@ type FEFunc struct {
 	Out       []*FEType
 }
 
+func DocsWithDefault(docs []string) []string {
+	if docs == nil {
+		docs = make([]string, 0)
+	}
+	return docs
+}
+
 type FEType struct {
 	Placeholder   CodeQlPlaceholder
 	VarName       string
@@ -148,7 +158,7 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	}
 	fe.Name = fn.Name
 	fe.FEName = FormatCodeQlName(fn.Name)
-	fe.Docs = fn.Doc
+	fe.Docs = DocsWithDefault(fn.Doc)
 	fe.Signature = RemoveThisPackagePathFromSignature(fn.Signature, fn.PkgPath)
 	fe.PkgPath = fn.PkgPath
 	for i, in := range fn.Input {
@@ -217,6 +227,7 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 		Inp:  "TODO",
 		Outp: "TODO",
 	}
+	fe.Docs = make([]string, 0)
 
 	fe.Receiver = &FEReceiver{}
 	fe.Receiver.Placeholder.Val = "isReceiver()"
@@ -245,17 +256,26 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 		}
 	}
 	{
-		for _, mtFn := range allFuncs {
-			if mtFn.Receiver != nil {
+		findCorrespondingFunc := func() bool {
+			for _, mtFn := range allFuncs {
+				if mtFn.Receiver != nil {
 
-				sameReceiverType := fe.Receiver.QualifiedName == mtFn.Receiver.TypeString()
-				sameFuncName := methodFuncName == mtFn.Name
+					sameReceiverType := fe.Receiver.QualifiedName == mtFn.Receiver.TypeString()
+					sameFuncName := methodFuncName == mtFn.Name
 
-				if sameReceiverType && sameFuncName {
-					fe.Docs = mtFn.Doc
-					fe.Func = getFEFunc(mtFn)
+					if sameReceiverType && sameFuncName {
+						fe.Docs = DocsWithDefault(mtFn.Doc)
+						fe.Func = getFEFunc(mtFn)
+						return true
+					}
 				}
 			}
+			return false
+		}
+
+		found := findCorrespondingFunc()
+		if !found {
+			return nil
 		}
 	}
 
@@ -313,7 +333,7 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPa
 		fe.IsOnPtr = true
 	}
 	{
-		fe.Docs = methodFunc.Doc
+		fe.Docs = DocsWithDefault(methodFunc.Doc)
 		fe.Func = feFunc
 	}
 
@@ -326,7 +346,7 @@ func getFEInterface(it *scanner.Interface, pkgPath string) *FEInterface {
 	pkgPath = scanner.StringRemoveGoPath(pkgPath)
 
 	fe.Name = it.Name
-	fe.Docs = it.Doc
+	fe.Docs = DocsWithDefault(it.Doc)
 	fe.PkgPath = pkgPath
 	fe.QualifiedName = scanner.StringRemoveGoPath(pkgPath) + "." + it.Name
 	fe.PkgPath = scanner.StringRemoveGoPath(pkgPath)
