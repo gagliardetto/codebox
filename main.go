@@ -42,7 +42,7 @@ func main() {
 	{
 		feModule.Name = pk.Name
 		feModule.FEName = FormatCodeQlName(pk.Name)
-		feModule.PkgPath = TrimThisPath(pk.Path)
+		feModule.PkgPath = scanner.TrimThisPath(pk.Path)
 
 		for _, fn := range pk.Funcs {
 			if fn.Receiver == nil {
@@ -62,6 +62,11 @@ func main() {
 
 	// Sort methods by receiver:
 	sort.Slice(feModule.Methods, func(i, j int) bool {
+		// If same receiver...
+		if feModule.Methods[i].Receiver.QualifiedName == feModule.Methods[j].Receiver.QualifiedName {
+			// ... sort by func name:
+			return feModule.Methods[i].Func.Name < feModule.Methods[j].Func.Name
+		}
 		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
 	})
 	// Sort funcs by name:
@@ -90,20 +95,6 @@ func main() {
 	}
 }
 
-func TrimThisPath(pkgPath string) string {
-	return strings.TrimPrefix(pkgPath, "github.com/gagliardetto/codebox/src/")
-}
-
-func FormatQualifiedTypeName(packagePath string, typeOnlyName string) string {
-
-	qualifiedName := Sf(
-		"%q.%s",
-		packagePath,
-		typeOnlyName,
-	)
-
-	return qualifiedName
-}
 func ToCamel(s string) string {
 	return strcase.ToCamel(s)
 }
@@ -129,13 +120,14 @@ type FEModule struct {
 }
 
 type FEFunc struct {
-	CodeQL  *CodeQlFinalVals
-	FEName  string
-	Docs    []string
-	Name    string
-	PkgPath string
-	In      []*FEType
-	Out     []*FEType
+	CodeQL    *CodeQlFinalVals
+	Signature string
+	FEName    string
+	Docs      []string
+	Name      string
+	PkgPath   string
+	In        []*FEType
+	Out       []*FEType
 }
 
 type FEType struct {
@@ -157,6 +149,8 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	fe.Name = fn.Name
 	fe.FEName = FormatCodeQlName(fn.Name)
 	fe.Docs = fn.Doc
+	fe.Signature = RemoveThisPackagePathFromSignature(fn.Signature, fn.PkgPath)
+	fe.PkgPath = fn.PkgPath
 	for i, in := range fn.Input {
 		v := getFETypeVar(in)
 		v.Placeholder.Val = Sf("isParameter(%v)", i)
@@ -173,6 +167,10 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 		fe.Out = append(fe.Out, v)
 	}
 	return &fe
+}
+func RemoveThisPackagePathFromSignature(signature string, pkgPath string) string {
+	clean := strings.Replace(signature, pkgPath+".", "", -1)
+	return clean
 }
 func getFETypeVar(tp scanner.Type) *FEType {
 	var fe FEType

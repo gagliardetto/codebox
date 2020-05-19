@@ -139,6 +139,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 		return nil
 	}
 
+	// Scan interface types:
 	switch t := o.Type().Underlying().(type) {
 	case *types.Interface:
 		it := &Interface{}
@@ -162,6 +163,8 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 				&Func{Name: methObj.Name()},
 				meth.(*types.Signature),
 			)
+			fn.Signature = StringRemoveGoPath(methObj.String())
+			fn.PkgPath = RemoveGoPath(methObj.Pkg())
 
 			ctx.trySetDocsForInterfaceMethod(
 				nameForType(o.Type()),
@@ -174,6 +177,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 		p.Interfaces = append(p.Interfaces, it)
 	}
 
+	// Scan other types:
 	switch t := o.Type().(type) {
 
 	case *types.Named:
@@ -209,6 +213,8 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 		}
 	case *types.Signature:
 		fn := scanFunc(&Func{Name: o.Name()}, t)
+		fn.Signature = StringRemoveGoPath(o.String())
+		fn.PkgPath = RemoveGoPath(o.Pkg())
 		ctx.trySetDocs(nameForFunc(o), fn)
 		p.Funcs = append(p.Funcs, fn)
 

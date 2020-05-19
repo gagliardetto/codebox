@@ -343,6 +343,8 @@ type Func struct {
 	Output   []Type
 	// IsVariadic will be true if the last input parameter is variadic.
 	IsVariadic bool
+	Signature  string
+	PkgPath    string
 }
 
 // Interface is an interface.

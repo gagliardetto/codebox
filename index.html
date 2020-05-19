@@ -235,6 +235,7 @@
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
                     <code :id="'code-func-'+func.Name">
                         private class {{ func.FEName }} extends TaintTracking::FunctionModel {
+                          // signature: {{func.Signature}}
                           {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
@@ -338,6 +339,7 @@
                 <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsUse }">
                     <code :id="'code-method-'+method.FEName">
                         private class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
+                          // signature: {{method.Func.Signature}}
                           {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
@@ -442,6 +444,7 @@
                 <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsUse }">
                     <code :id="'code-itMeth-'+itMeth.FEName">
                         private class {{ itMeth.ClassName }} extends TaintTracking::FunctionModel, Method {
+                          // signature: {{itMeth.Func.Signature}}
                           {{ itMeth.ClassName }}() {
                             this.implements("{{ source.PkgPath }}", "{{ itMeth.Receiver.TypeName }}", "{{ itMeth.Func.Name }}")
                           }
