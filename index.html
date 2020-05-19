@@ -225,7 +225,7 @@
             <div class="col-md-6">
                 <div class="codebox-generated" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
                     <code :id="'code-func-'+func.Name">
-                        class {{ func.FEName }} extends TaintTracking::FunctionModel {
+                        private class {{ func.FEName }} extends TaintTracking::FunctionModel {
                           {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
@@ -327,7 +327,7 @@
             <div class="col-md-6">
                 <div class="codebox-generated" v-bind:class="{ hidden: !method.CodeQL.IsUse }">
                     <code :id="'code-method-'+method.FEName">
-                        class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
+                        private class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
                           {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
@@ -338,7 +338,112 @@
                 </div>
             </div>
         </div>
-        
+        <!-- interface and their methods -->
+        <div v-for="interface in source.Interfaces">
+        <div v-for="itMeth in interface.Methods" class="row">
+            <div class="col-md-6" v-bind:class="{ isNotUsed: !itMeth.CodeQL.IsUse }">
+                <div class="codebox-source">
+                    <!-- Rectangular switch -->
+                    <label class="switch">
+                        <input type="checkbox" v-model="itMeth.CodeQL.IsUse">
+                        <span class="slider"></span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !itMeth.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-itMeth-'+itMeth.FEName">COPY</button>
+                    <div class="col-md-12">
+                        <span class="com">
+                            <div v-for="comment in itMeth.Docs">// {{ comment }}</div>
+                        </span>
+                        <table class="table-responsive table-sm">
+                            <tbody>
+                                <tr :id="'itMeth-'+itMeth.FEName">
+                                    <td></td>
+                                    <td class="itMeth-type" :id="'itMeth-'+itMeth.FEName+'-receiver'">
+                                        ({{itMeth.IsOnPtr?"*":""}}{{itMeth.Receiver.TypeName}})
+                                    </td>
+                                    <td>func {{ itMeth.Func.Name }}(</td>
+                                    <td v-for="(funIn, index) in itMeth.Func.In" :id="'itMeth-'+itMeth.FEName+'-in-'+index" class="itMeth-type">
+                                        {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
+                                        <b>{{funIn.TypeName}}</b>
+                                        {{index < itMeth.Func.In.length - 1 ? ", " : "" }} </td>
+                                    <td>) (</td>
+                                    <td v-for="(funOut, index) in itMeth.Func.Out" :id="'itMeth-'+itMeth.FEName+'-out-'+index" class="itMeth-type">
+                                        {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
+                                        <b>{{ funOut.TypeName }}</b>
+                                        {{index < itMeth.Func.Out.length - 1 ? ", " : "" }} </td>
+                                    <td>)</td>
+                                </tr>
+                                <!--checkboxes for inp -->
+                                <tr>
+                                    <td>FROM:</td>
+                                    <td class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="itMeth.Receiver.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-receiver'"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funIn, index) in itMeth.Func.In" class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funIn.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-in-'+index">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funOut, index) in itMeth.Func.Out" class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funOut.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-out-'+index">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!--checkboxes for outp -->
+                                <tr>
+                                    <td>INTO:</td>
+                                    <td class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="itMeth.Receiver.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-receiver'"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funIn, index) in itMeth.Func.In" class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funIn.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-in-'+index">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funOut, index) in itMeth.Func.Out" class="itMeth-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funOut.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-out-'+index">
+                                            <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="codebox-generated" v-bind:class="{ hidden: !itMeth.CodeQL.IsUse }">
+                    <code :id="'code-itMeth-'+itMeth.FEName">
+                        private class {{ itMeth.ClassName }} extends TaintTracking::FunctionModel, Method {
+                          {{ itMeth.ClassName }}() {
+                            this.implements("{{ source.PkgPath }}", "{{ itMeth.Receiver.TypeName }}", "{{ itMeth.Func.Name }}")
+                          }
+
+                          override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+                            inp.{{ itMeth.CodeQL.Inp }} and outp.{{ itMeth.CodeQL.Outp }}
+                          }
+                        }
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <script type="text/javascript">
     function selectText(containerid) {
