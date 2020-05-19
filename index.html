@@ -44,6 +44,78 @@
         box-sizing: border-box;
         color: #006600;
     }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .isNotUsed * {
+        color: #bdc3c7 !important;
+        background-color: #ecf0f1 !important;
+        border-color: #ecf0f1 !important;
+    }
+    .hiddenCodeQl {
+        display: none;
+    }
     </style>
 </head>
 
@@ -52,7 +124,13 @@
         <!-- Content here -->
         <h4>Package <b>{{ source.FEName }}</b></h4>
         <div v-for="func in source.Funcs" class="row">
-            <div class="col-md-6">
+
+            <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
+                <!-- Rectangular switch -->
+                <label class="switch">
+                  <input type="checkbox" v-model="func.CodeQL.IsUse">
+                  <span class="slider">{{func.CodeQL.IsUse}}</span>
+                </label>
                 <div class="col-md-12">
                     <span class="com">
                         <div v-for="comment in func.Docs">// {{ comment }}</div>
@@ -60,9 +138,16 @@
                     <div class="alert alert-success" role="alert">
                         <span :id="'func-'+func.Name">
                             func {{ func.Name }}(
-                            <div v-for="(input, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
-                                {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
-                                    {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) 
+                            <div v-for="(funIn, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
+                                {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
+                                <b>{{funIn.TypeName}}</b>
+                                {{index < func.In.length - 1 ? ", " : "" }}
+                            </div> )
+                                ( <div v-for="(funOut, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
+                                    {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
+                                    <b>{{ funOut.TypeName }}</b>
+                                    {{index < func.Out.length - 1 ? ", " : "" }}
+                                </div> ) 
                         </span>
                     </div>
                     </div>
@@ -100,7 +185,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <code>
+                    <code v-bind:class="{ hiddenCodeQl: !func.CodeQL.IsUse }">
                     class {{ func.FEName }} extends TaintTracking::FunctionModel {
                       {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 

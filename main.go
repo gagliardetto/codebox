@@ -108,8 +108,9 @@ func FormatCodeQlName(name string) string {
 }
 
 type CodeQlFinalVals struct {
-	Inp  string
-	Outp string
+	Inp   string
+	Outp  string
+	IsUse bool
 }
 type CodeQlPlaceholder struct {
 	Val string
