@@ -22,7 +22,13 @@
         font-weight: bold;
     }
     .selected-outp {
-        background-color: red;
+        border-radius: 6px;
+            background: red;
+            /* padding: 1px; */
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-left: -5px;
+            margin-right: -5px;
     }
 
     input[type=radio] {
@@ -113,8 +119,21 @@
         background-color: #ecf0f1 !important;
         border-color: #ecf0f1 !important;
     }
-    .hiddenCodeQl {
+    .hidden {
         display: none;
+    }
+    .codebox-source, .codebox-generated {
+        margin-top:10px;
+         padding: 20px;
+         border: 1px solid #ccc;
+         -moz-outline-radius: 10px;
+         -webkit-outline-radius: 10px;
+    }
+    .copy-btn {
+        width: 60px;
+            height: 34px;
+            font-size: 14px;
+            padding: 0px;
     }
     </style>
 </head>
@@ -126,11 +145,13 @@
         <div v-for="func in source.Funcs" class="row">
 
             <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
+            <div class="codebox-source">
                 <!-- Rectangular switch -->
                 <label class="switch">
                   <input type="checkbox" v-model="func.CodeQL.IsUse">
-                  <span class="slider">{{func.CodeQL.IsUse}}</span>
+                  <span class="slider"></span>
                 </label>
+                <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
                 <div class="col-md-12">
                     <span class="com">
                         <div v-for="comment in func.Docs">// {{ comment }}</div>
@@ -183,9 +204,11 @@
                             </div>                            
 
                 </div>
+</div>
 
                 <div class="col-md-6">
-                    <code v-bind:class="{ hiddenCodeQl: !func.CodeQL.IsUse }">
+            <div class="codebox-generated" v-bind:class="{ hidden: !func.CodeQL.IsUse }">
+                    <code :id="'code-func-'+func.Name">
                     class {{ func.FEName }} extends TaintTracking::FunctionModel {
                       {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
@@ -195,13 +218,25 @@
                     }
                     </code>
                 </div>
+                </div>
             </div>
             <br>
         </div>
         <script type="text/javascript">
 
 
- 
+ function selectText(containerid) {
+     if (document.selection) { // IE
+         var range = document.body.createTextRange();
+         range.moveToElementText(document.getElementById(containerid));
+         range.select();
+     } else if (window.getSelection) {
+         var range = document.createRange();
+         range.selectNode(document.getElementById(containerid));
+         window.getSelection().removeAllRanges();
+         window.getSelection().addRange(range);
+     }
+ }
         var srcapp = new Vue({
             el: '#cb-source',
             data: {
@@ -226,8 +261,20 @@
                     })
             },
             methods: {
-                getInp(key) {
-                    return  this.codeqlInp[key]
+                copyTestingCode (event) {
+                    var radioButton = event.target;
+                    var targetIDInView = radioButton.getAttribute("for");
+
+                    selectText(targetIDInView)
+
+                  try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    console.log('Testing code was copied ' + msg);
+                  } catch (err) {
+                    alert('Oops, unable to copy');
+                  }
+
                 },
                 onChangeInp(event, fn) {
                     var radioButton = event.target;
