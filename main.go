@@ -38,19 +38,12 @@ func main() {
 		Interfaces: make([]*FEInterface, 0),
 	}
 
+	pk := pks[0]
 	{
-		pk := pks[0]
 		feModule.Name = pk.Name
 		feModule.FEName = FormatCodeQlName(pk.Name)
 		feModule.PkgPath = TrimThisPath(pk.Path)
 
-		Sfln(
-			"package %q has %v funcs, %v methods, and %v interfaces",
-			pk.Name,
-			len(pk.Funcs),
-			len(pk.Methods),
-			len(pk.Interfaces),
-		)
 		for _, fn := range pk.Funcs {
 			if fn.Receiver == nil {
 				f := getFEFunc(fn)
@@ -63,16 +56,27 @@ func main() {
 			feModule.Methods = append(feModule.Methods, getFEMethod(mt, pk.Funcs))
 		}
 		for _, it := range pk.Interfaces {
-			feModule.Interfaces = append(feModule.Interfaces, getFEInterface(it))
+			feModule.Interfaces = append(feModule.Interfaces, getFEInterface(it, feModule.PkgPath))
 		}
 	}
 
-	// Sort by receiver:
+	// Sort methods by receiver:
 	sort.Slice(feModule.Methods, func(i, j int) bool {
 		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
 	})
+	// Sort funcs by name:
+	sort.Slice(feModule.Funcs, func(i, j int) bool {
+		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
+	})
 
 	Q(feModule)
+	Sfln(
+		"package %q has %v funcs, %v methods, and %v interfaces",
+		pk.Name,
+		len(pk.Funcs),
+		len(pk.Methods),
+		len(pk.Interfaces),
+	)
 	if runServer {
 		r := gin.Default()
 		r.StaticFile("", "./index.html")
@@ -132,25 +136,6 @@ type FEFunc struct {
 	PkgPath string
 	In      []*FEType
 	Out     []*FEType
-}
-type FEMethod struct {
-	CodeQL    *CodeQlFinalVals
-	ClassName string
-	Docs      []string
-	IsOnPtr   bool
-	Receiver  *FEReceiver
-	FEName    string
-	Func      *FEFunc
-}
-type FEInterface struct {
-	CodeQL  *CodeQlFinalVals
-	Docs    []string
-	Name    string
-	Methods []*FEFunc
-}
-
-type FEReceiver struct {
-	FEType
 }
 
 type FEType struct {
@@ -217,7 +202,7 @@ func getFETypeVar(tp scanner.Type) *FEType {
 	if ok {
 		fe.TypeName = named.Obj().Name()
 		if pkg := named.Obj().Pkg(); pkg != nil {
-			fe.QualifiedName = pkg.Path() + "." + named.Obj().Name()
+			fe.QualifiedName = scanner.StringRemoveGoPath(pkg.Path()) + "." + named.Obj().Name()
 			fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
 		}
 	} else {
@@ -276,22 +261,79 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 		}
 	}
 
-	fe.FEName = fe.Receiver.TypeName + "_" + methodFuncName
-	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "_" + methodFuncName)
+	fe.FEName = fe.Receiver.TypeName + "-" + methodFuncName
+	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
 	return &fe
 }
 
-func getFEInterface(it *scanner.Interface) *FEInterface {
-	var fe FEInterface
+type FEMethod struct {
+	CodeQL    *CodeQlFinalVals
+	ClassName string
+	Docs      []string
+	IsOnPtr   bool
+	Receiver  *FEReceiver
+	FEName    string
+	Func      *FEFunc
+}
+type FEInterface struct {
+	Docs          []string
+	Name          string
+	PkgPath       string
+	QualifiedName string
+	Methods       []*FEMethod
+}
+
+type FEReceiver struct {
+	FEType
+}
+
+func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPath string) *FEMethod {
+	var fe FEMethod
+
 	fe.CodeQL = &CodeQlFinalVals{
 		Inp:  "TODO",
 		Outp: "TODO",
 	}
 
+	fe.Receiver = &FEReceiver{}
+	fe.Receiver.Placeholder.Val = "isReceiver()"
+
+	feFunc := getFEFunc(methodFunc)
+	feFunc.PkgPath = pkgPath
+	{
+
+		fe.Receiver.TypeName = it.Name
+		fe.Receiver.QualifiedName = scanner.StringRemoveGoPath(feFunc.PkgPath) + "." + feFunc.Name
+		fe.Receiver.PkgPath = scanner.StringRemoveGoPath(feFunc.PkgPath)
+	}
+
+	fe.Func = &FEFunc{}
+	methodFuncName := feFunc.Name
+
+	{
+		// Check if the method is on a pointer of a value:
+		fe.IsOnPtr = true
+	}
+	{
+		fe.Docs = methodFunc.Doc
+		fe.Func = feFunc
+	}
+
+	fe.FEName = fe.Receiver.TypeName + "-" + methodFuncName
+	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
+	return &fe
+}
+func getFEInterface(it *scanner.Interface, pkgPath string) *FEInterface {
+	var fe FEInterface
+	pkgPath = scanner.StringRemoveGoPath(pkgPath)
+
 	fe.Name = it.Name
 	fe.Docs = it.Doc
+	fe.PkgPath = pkgPath
+	fe.QualifiedName = scanner.StringRemoveGoPath(pkgPath) + "." + it.Name
+	fe.PkgPath = scanner.StringRemoveGoPath(pkgPath)
 	for _, mt := range it.Methods {
-		fe.Methods = append(fe.Methods, getFEFunc(mt))
+		fe.Methods = append(fe.Methods, getFEInterfaceMethod(it, mt, pkgPath))
 	}
 	return &fe
 }

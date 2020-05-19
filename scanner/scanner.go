@@ -498,6 +498,9 @@ func objectsInScope(scope *types.Scope) (objs []types.Object) {
 
 func methodsInScope(scope *types.Scope) (objs []*types.Selection) {
 	for _, n := range scope.Names() {
+		if !token.IsExported(n) {
+			continue
+		}
 		obj := scope.Lookup(n)
 
 		typ := obj.Type()
@@ -541,8 +544,11 @@ func RemoveGoPath(pkg *types.Package) string {
 	if pkg == nil {
 		return ""
 	} else {
-		return strings.Replace(pkg.Path(), filepath.Join(goPath, "src")+"/", "", -1)
+		return StringRemoveGoPath(pkg.Path())
 	}
+}
+func StringRemoveGoPath(pkgPath string) string {
+	return strings.Replace(pkgPath, filepath.Join(goPath, "src")+"/", "", -1)
 }
 
 type errorList []error

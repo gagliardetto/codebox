@@ -125,8 +125,10 @@ func (ctx *context) trySetDocsForInterfaceMethod(it string, method string, obj D
 		itx1, ok := itx0.Type.(*ast.InterfaceType)
 		if ok {
 			for _, mtx0 := range itx1.Methods.List {
-				if method == mtx0.Names[0].Name {
-					obj.SetDocs(mtx0.Doc)
+				if mtx0.Names != nil && len(mtx0.Names) > 0 {
+					if method == mtx0.Names[0].Name {
+						obj.SetDocs(mtx0.Doc)
+					}
 				}
 			}
 		}
