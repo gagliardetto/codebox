@@ -18,11 +18,11 @@
     }
 
     .selected-inp {
-        background-color: red;
-    }
-    .selected-outp {
         color: blue;
         font-weight: bold;
+    }
+    .selected-outp {
+        background-color: red;
     }
 
     input[type=radio] {
@@ -48,39 +48,39 @@
                         // {{ comment }}<br>
                     </span>
                     <div class="alert alert-success" role="alert">
-                        <span :id="'func-' + func.Name">
+                        <span :id="'func-'+func.Name">
                             func {{ func.Name }}(
-                            <div v-for="(input, index) in func.In" :id="'func-' + func.Name + '-in-' + index" class="func-type">
-                                {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-' + func.Name + '-out-' + index" class="func-type">
+                            <div v-for="(input, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
+                                {{ input.VarName }} {{ input.IsPtr ? "*" : "" }}<b>{{ input.TypeName }}</b>{{index < func.In.length - 1 ? ", " : "" }} </div> ) ( <div v-for="(output, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
                                     {{ output.VarName }} {{ output.IsPtr ? "*" : "" }}<b>{{ output.TypeName }}</b>{{index < func.Out.length - 1 ? ", " : "" }} </div> ) </span> </div>
                     </div>
                         <!--checkboxes for inp -->
                             <div class="col-md-12">
-                                        <div v-for="(input, index) in func.In" class="func-type">
+                                        <div v-for="(funIn, index) in func.In" class="func-type">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChangeInp($event)">
-                                                <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                                <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
                                             </div>
                                         </div>
                                         <div v-for="(funOut, index) in func.Out" class="func-type">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChangeInp($event)">
-                                                <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                                <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
                                             </div>
                                         </div>
                             </div>
                         <!--checkboxes for outp -->
                             <div class="col-md-12">
-                                        <div v-for="(input, index) in func.In" class="func-type">
+                                        <div v-for="(funIn, index) in func.In" class="func-type">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="'func-' + func.Name + '-in-' + index" :parent="'func-' + func.Name" @change="onChangeOutp($event)">
-                                                <label class="form-check-label" :for="'func-' + func.Name + '-in-' + index"></label>
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                                <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
                                             </div>
                                         </div>
                                         <div v-for="(funOut, index) in func.Out" class="func-type">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="'func-' + func.Name + '-out-' + index" :parent="'func-' + func.Name" @change="onChangeOutp($event)">
-                                                <label class="form-check-label" :for="'func-' + func.Name + '-out-' + index"></label>
+                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                                <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
                                             </div>
                                         </div>
                             </div>                            
@@ -93,7 +93,7 @@
                       {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                       override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                        inp.{{ codeqlInp['func-' + func.Name] }} and outp.{{ codeqlOutp['func-' + func.Name] }}
+                        inp.{{ func.CodeQL.Inp }} and outp.{{ func.CodeQL.Outp }}
                       }
                     }
                     </code>
@@ -103,12 +103,14 @@
         </div>
         <script type="text/javascript">
 
+
+ 
         var srcapp = new Vue({
             el: '#cb-source',
             data: {
-                source: {},
-                codeqlInp: {},
-                codeqlOutp: {}
+                source: null,
+                codeqlInp: null,
+                codeqlOutp: null
             },
             mounted() {
                 self = this;
@@ -124,21 +126,17 @@
                            self.codeqlInp['func-' +elem.Name] = "a";
                            self.codeqlOutp['func-' +elem.Name] = "a";
                         });
-
                     })
             },
             methods: {
-                update: function(obj, prop, event) {
-                    Vue.set(obj, prop, event);
-                  },
                 getInp(key) {
                     return  this.codeqlInp[key]
                 },
-                onChangeInp(event) {
-                    var optionText = event.target;
+                onChangeInp(event, fn) {
+                    var radioButton = event.target;
 
-                    var parentID = optionText.getAttribute("parent");
-                    var qual = optionText.getAttribute("name");
+                    var parentID = radioButton.getAttribute("parent");
+                    var targetIDInView = radioButton.getAttribute("colorfor");
                     var parent = document.getElementById(parentID);
 
                     var children = document.querySelectorAll('#' + parentID + ' > .selected-inp')
@@ -146,18 +144,18 @@
                         elem.classList.remove("selected-inp");
                     });
 
+                    fn.CodeQL.Inp = radioButton.value
+
                     console.log(parentID);
-                    console.log(optionText.value);
-                    console.log(this.codeqlInp[parentID]);
-                    this.update(this.codeqlInp, parentID, optionText.value);
-                    var element = document.getElementById(optionText.value);
+                    console.log(radioButton.value);
+                    var element = document.getElementById(targetIDInView);
                     element.classList.add("selected-inp");
                 } ,
-              onChangeOutp(event) {
-                    var optionText = event.target;
+              onChangeOutp(event, fn) {
+                    var radioButton = event.target;
 
-                    var parentID = optionText.getAttribute("parent");
-                    var qual = optionText.getAttribute("name");
+                    var parentID = radioButton.getAttribute("parent");
+                    var targetIDInView = radioButton.getAttribute("colorfor");
                     var parent = document.getElementById(parentID);
 
                     var children = document.querySelectorAll('#' + parentID + ' > .selected-outp')
@@ -165,11 +163,11 @@
                         elem.classList.remove("selected-outp");
                     });
 
+                    fn.CodeQL.Outp = radioButton.value
+
                     console.log(parentID);
-                    console.log(optionText.value);
-                    console.log(this.codeqlInp);
-                    this.codeqlInp[parentID]=optionText.value
-                    var element = document.getElementById(optionText.value);
+                    console.log(radioButton.value);
+                    var element = document.getElementById(targetIDInView);
                     element.classList.add("selected-outp");
                 }
             }

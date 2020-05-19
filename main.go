@@ -103,6 +103,13 @@ func FormatCodeQlName(name string) string {
 	return ToCamel(strings.ReplaceAll(name, "\"", ""))
 }
 
+type CodeQlFinalVals struct {
+	Inp  string
+	Outp string
+}
+type CodeQlPlaceholder struct {
+	Val string
+}
 type FEModule struct {
 	Name       string
 	PkgPath    string
@@ -113,6 +120,7 @@ type FEModule struct {
 }
 
 type FEFunc struct {
+	CodeQL  *CodeQlFinalVals
 	FEName  string
 	Docs    []string
 	Name    string
@@ -121,12 +129,14 @@ type FEFunc struct {
 	Out     []*FEType
 }
 type FEMethod struct {
+	CodeQL   *CodeQlFinalVals
 	Docs     []string
 	IsOnPtr  bool
 	Receiver *FEReceiver
 	Func     *FEFunc
 }
 type FEInterface struct {
+	CodeQL  *CodeQlFinalVals
 	Docs    []string
 	Name    string
 	Methods []*FEFunc
@@ -137,6 +147,7 @@ type FEReceiver struct {
 }
 
 type FEType struct {
+	Placeholder   CodeQlPlaceholder
 	VarName       string
 	TypeName      string
 	PkgPath       string
@@ -145,19 +156,80 @@ type FEType struct {
 	IsBasic       bool
 }
 
-func debugMethod(mt *types.Selection) {
-	Ln(mt.String())
-	Ln(mt.Obj().String())
-	Ln(mt.Recv().String())
-	Ln(mt.Type().String())
+func getFEFunc(fn *scanner.Func) *FEFunc {
+	var fe FEFunc
+	fe.CodeQL = &CodeQlFinalVals{
+		Inp:  "TODO",
+		Outp: "TODO",
+	}
+	fe.Name = fn.Name
+	fe.FEName = FormatCodeQlName(fn.Name)
+	fe.Docs = fn.Doc
+	for i, in := range fn.Input {
+		v := getFETypeVar(in)
+		v.Placeholder.Val = Sf("isParameter(%v)", i)
+		fe.In = append(fe.In, v)
+	}
+	for i, out := range fn.Output {
+		v := getFETypeVar(out)
 
-	Ln("selection:", SelectionString(mt, nil))
+		if len(fn.Output) == 1 {
+			v.Placeholder.Val = "isResult()"
+		} else {
+			v.Placeholder.Val = Sf("isResult(%v)", i)
+		}
+		fe.Out = append(fe.Out, v)
+	}
+	return &fe
+}
+func getFETypeVar(tp scanner.Type) *FEType {
+	var fe FEType
+	varName := tp.GetTypesVar().Name()
+	if varName != "" {
+		fe.VarName = varName
+	}
+
+	{
+		// Check if type is a pointer:
+		var typFinal types.Type
+		ptr, isPtr := tp.GetTypesVar().Type().(*types.Pointer)
+		if isPtr {
+			fe.IsPtr = true
+			typFinal = ptr.Elem()
+		} else {
+			typFinal = tp.GetTypesVar().Type()
+		}
+
+		_, isBasic := typFinal.(*types.Basic)
+		if isBasic {
+			fe.IsBasic = true
+		}
+	}
+
+	named, ok := tp.GetTypesVar().Type().(*types.Named)
+	if ok {
+		fe.TypeName = named.Obj().Name()
+		if pkg := named.Obj().Pkg(); pkg != nil {
+			fe.QualifiedName = pkg.Path() + "." + named.Obj().Name()
+			fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
+		}
+	} else {
+		fe.TypeName = tp.TypeString()
+	}
+
+	return &fe
 }
 
 func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 	var fe FEMethod
 
+	fe.CodeQL = &CodeQlFinalVals{
+		Inp:  "TODO",
+		Outp: "TODO",
+	}
+
 	fe.Receiver = &FEReceiver{}
+	fe.Receiver.Placeholder.Val = "isReceiver()"
 	{
 		var named *types.Named
 		ptr, isPtr := mt.Recv().(*types.Pointer)
@@ -200,59 +272,13 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 	return &fe
 }
 
-func getFEFunc(fn *scanner.Func) *FEFunc {
-	var fe FEFunc
-	fe.Name = fn.Name
-	fe.FEName = FormatCodeQlName(fn.Name)
-	fe.Docs = fn.Doc
-	for _, in := range fn.Input {
-		fe.In = append(fe.In, getFETypeVar(in))
-	}
-	for _, out := range fn.Output {
-		fe.Out = append(fe.Out, getFETypeVar(out))
-	}
-	return &fe
-}
-func getFETypeVar(tp scanner.Type) *FEType {
-	var fe FEType
-	varName := tp.GetTypesVar().Name()
-	if varName != "" {
-		fe.VarName = varName
-	}
-
-	{
-		// Check if type is a pointer:
-		var typFinal types.Type
-		ptr, isPtr := tp.GetTypesVar().Type().(*types.Pointer)
-		if isPtr {
-			fe.IsPtr = true
-			typFinal = ptr.Elem()
-		} else {
-			typFinal = tp.GetTypesVar().Type()
-		}
-
-		_, isBasic := typFinal.(*types.Basic)
-		if isBasic {
-			fe.IsBasic = true
-		}
-	}
-
-	named, ok := tp.GetTypesVar().Type().(*types.Named)
-	if ok {
-		fe.TypeName = named.Obj().Name()
-		if pkg := named.Obj().Pkg(); pkg != nil {
-			fe.QualifiedName = pkg.Path() + "." + named.Obj().Name()
-			fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
-		}
-	} else {
-		fe.TypeName = tp.TypeString()
-	}
-
-	return &fe
-}
-
 func getFEInterface(it *scanner.Interface) *FEInterface {
 	var fe FEInterface
+	fe.CodeQL = &CodeQlFinalVals{
+		Inp:  "TODO",
+		Outp: "TODO",
+	}
+
 	fe.Name = it.Name
 	fe.Docs = it.Doc
 	for _, mt := range it.Methods {
