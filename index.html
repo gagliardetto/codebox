@@ -11,7 +11,7 @@
     <script src="static/vue-dev.js"></script>
     <title>Hello, world!</title>
     <style type="text/css">
-    .func-type {
+    .func-type, .method-type {
         white-space: nowrap !important;
         float: none !important;
         display: inline-block !important;
@@ -153,13 +153,15 @@
     <div class="container-fluid" id="cb-source">
         <!-- Content here -->
         <h4>Package <b>{{ source.FEName }}</b></h4>
+
+        <!--functions -->
         <div v-for="func in source.Funcs" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
                 <div class="codebox-source">
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="func.CodeQL.IsUse">
-                        <span class="slider">{{func.CodeQL.IsUse?"ON":"OFF"}}</span>
+                        <span class="slider"></span>
                     </label>
                     <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
                     <div class="col-md-12">
@@ -234,7 +236,108 @@
                 </div>
             </div>
         </div>
-        <br>
+        <!-- methods -->
+        <div v-for="method in source.Methods" class="row">
+            <div class="col-md-6" v-bind:class="{ isNotUsed: !method.CodeQL.IsUse }">
+                <div class="codebox-source">
+                    <!-- Rectangular switch -->
+                    <label class="switch">
+                        <input type="checkbox" v-model="method.CodeQL.IsUse">
+                        <span class="slider"></span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !method.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-method-'+method.FEName">COPY</button>
+                    <div class="col-md-12">
+                        <span class="com">
+                            <div v-for="comment in method.Docs">// {{ comment }}</div>
+                        </span>
+                        <table class="table-responsive table-sm">
+                            <tbody>
+                                <tr :id="'method-'+method.FEName">
+                                    <td></td>
+                                    <td class="method-type" :id="'method-'+method.FEName+'-receiver'">
+                                        ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
+                                    </td>
+                                    <td>func {{ method.Func.Name }}(</td>
+                                    <td v-for="(funIn, index) in method.Func.In" :id="'method-'+method.FEName+'-in-'+index" class="method-type">
+                                        {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
+                                        <b>{{funIn.TypeName}}</b>
+                                        {{index < method.Func.In.length - 1 ? ", " : "" }} </td>
+                                    <td>) (</td>
+                                    <td v-for="(funOut, index) in method.Func.Out" :id="'method-'+method.FEName+'-out-'+index" class="method-type">
+                                        {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
+                                        <b>{{ funOut.TypeName }}</b>
+                                        {{index < method.Func.Out.length - 1 ? ", " : "" }} </td>
+                                    <td>)</td>
+                                </tr>
+                                <!--checkboxes for inp -->
+                                <tr>
+                                    <td>FROM:</td>
+                                    <td class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="method.Receiver.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funIn, index) in method.Func.In" class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funIn.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-in-'+index">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funOut, index) in method.Func.Out" class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funOut.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-out-'+index">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!--checkboxes for outp -->
+                                <tr>
+                                    <td>INTO:</td>
+                                    <td class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="method.Receiver.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funIn, index) in method.Func.In" class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funIn.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-in-'+index">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-in-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td v-for="(funOut, index) in method.Func.Out" class="method-type">
+                                        <div class="form-check form-check-inline col">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funOut.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-out-'+index">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-out-'+index"></label>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="codebox-generated" v-bind:class="{ hidden: !method.CodeQL.IsUse }">
+                    <code :id="'code-method-'+method.FEName">
+                        class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
+                          {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
+
+                          override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+                            inp.{{ method.CodeQL.Inp }} and outp.{{ method.CodeQL.Outp }}
+                          }
+                        }
+                    </code>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
     function selectText(containerid) {
@@ -291,6 +394,8 @@
                 });
 
                 fn.CodeQL.Inp = radioButton.value
+                console.log(parentID)
+                console.log(targetIDInView)
 
                 var element = document.getElementById(targetIDInView);
                 element.classList.add("selected-inp");
@@ -308,6 +413,8 @@
                 });
 
                 fn.CodeQL.Outp = radioButton.value
+                console.log(parentID)
+                console.log(targetIDInView)
 
                 var element = document.getElementById(targetIDInView);
                 element.classList.add("selected-outp");

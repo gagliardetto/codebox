@@ -134,11 +134,13 @@ type FEFunc struct {
 	Out     []*FEType
 }
 type FEMethod struct {
-	CodeQL   *CodeQlFinalVals
-	Docs     []string
-	IsOnPtr  bool
-	Receiver *FEReceiver
-	Func     *FEFunc
+	CodeQL    *CodeQlFinalVals
+	ClassName string
+	Docs      []string
+	IsOnPtr   bool
+	Receiver  *FEReceiver
+	FEName    string
+	Func      *FEFunc
 }
 type FEInterface struct {
 	CodeQL  *CodeQlFinalVals
@@ -274,6 +276,8 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 		}
 	}
 
+	fe.FEName = fe.Receiver.TypeName + "_" + methodFuncName
+	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "_" + methodFuncName)
 	return &fe
 }
 
