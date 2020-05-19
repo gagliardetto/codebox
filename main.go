@@ -41,7 +41,7 @@ func main() {
 	pk := pks[0]
 	{
 		feModule.Name = pk.Name
-		feModule.FEName = FormatCodeQlName(pk.Name)
+		feModule.FEName = pk.Path
 		feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
 
 		for _, fn := range pk.Funcs {
