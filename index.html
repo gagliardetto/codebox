@@ -146,6 +146,15 @@
         width: auto;
         box-shadow: none;
     }
+
+    .type-indication {
+        position: absolute;
+        right: 23px;
+        top: 1em;
+        font-weight: bolder;
+        font-style: initial;
+        font-size: 0.7em;
+    }
     </style>
 </head>
 
@@ -158,6 +167,7 @@
         <div v-for="func in source.Funcs" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsUse }">
                 <div class="codebox-source border-success">
+                    <div class="type-indication text-success">FUNCTION</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="func.CodeQL.IsUse">
@@ -240,6 +250,7 @@
         <div v-for="method in source.Methods" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !method.CodeQL.IsUse }">
                 <div class="codebox-source border-primary">
+                    <div class="type-indication text-primary">METHOD</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="method.CodeQL.IsUse">
@@ -343,6 +354,7 @@
         <div v-for="itMeth in interface.Methods" class="row">
             <div class="col-md-6" v-bind:class="{ isNotUsed: !itMeth.CodeQL.IsUse }">
                 <div class="codebox-source border-warning">
+                    <div class="type-indication text-warning">INTERFACE</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
                         <input type="checkbox" v-model="itMeth.CodeQL.IsUse">
@@ -358,9 +370,9 @@
                                 <tr :id="'itMeth-'+itMeth.FEName">
                                     <td></td>
                                     <td class="intmet-type" :id="'itMeth-'+itMeth.FEName+'-receiver'">
-                                        ({{itMeth.IsOnPtr?"*":""}}{{itMeth.Receiver.TypeName}})
+                                        (nil)(<b>{{itMeth.Receiver.TypeName}}</b>)
                                     </td>
-                                    <td>func {{ itMeth.Func.Name }}(</td>
+                                    <td>func <b>{{ itMeth.Func.Name }}</b>(</td>
                                     <td v-for="(funIn, index) in itMeth.Func.In" :id="'itMeth-'+itMeth.FEName+'-in-'+index" class="intmet-type">
                                         {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
                                         <b>{{funIn.TypeName}}</b>
