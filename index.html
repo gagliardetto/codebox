@@ -22,13 +22,8 @@
         font-weight: bold;
     }
     .selected-outp {
-        border-radius: 6px;
+        border-radius: 3px;
             background: red;
-            /* padding: 1px; */
-            padding-left: 5px;
-            padding-right: 5px;
-            margin-left: -5px;
-            margin-right: -5px;
     }
 
     input[type=radio] {
@@ -135,6 +130,14 @@
             font-size: 14px;
             padding: 0px;
     }
+    .content-checkbox {
+               display: grid;
+               justify-content: center;
+            }
+    .move-left {
+        width: auto;
+        box-shadow: none;
+      }
     </style>
 </head>
 
@@ -149,59 +152,73 @@
                 <!-- Rectangular switch -->
                 <label class="switch">
                   <input type="checkbox" v-model="func.CodeQL.IsUse">
-                  <span class="slider"></span>
+                  <span class="slider">{{func.CodeQL.IsUse?"ON":"OFF"}}</span>
                 </label>
                 <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsUse }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
                 <div class="col-md-12">
                     <span class="com">
                         <div v-for="comment in func.Docs">// {{ comment }}</div>
                     </span>
-                    <div class="alert alert-success" role="alert">
-                        <span :id="'func-'+func.Name">
-                            func {{ func.Name }}(
-                            <div v-for="(funIn, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
-                                {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
-                                <b>{{funIn.TypeName}}</b>
-                                {{index < func.In.length - 1 ? ", " : "" }}
-                            </div> )
-                                ( <div v-for="(funOut, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
-                                    {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
-                                    <b>{{ funOut.TypeName }}</b>
-                                    {{index < func.Out.length - 1 ? ", " : "" }}
-                                </div> ) 
-                        </span>
-                    </div>
-                    </div>
+
+                    <table class="table-responsive table-sm">
+                      <tbody>
+                        <tr :id="'func-'+func.Name">
+                          <th scope="row">func {{ func.Name }}(</th>
+                          <td v-for="(funIn, index) in func.In" :id="'func-'+func.Name+'-in-'+index" class="func-type">
+                              {{funIn.VarName}} {{funIn.IsPtr?"*":""}}
+                              <b>{{funIn.TypeName}}</b>
+                              {{index < func.In.length - 1 ? ", " : "" }}
+                          </td>
+                          <th>) (</th>
+                          <td v-for="(funOut, index) in func.Out" :id="'func-'+func.Name+'-out-'+index" class="func-type">
+                            {{funOut.VarName}} {{funOut.IsPtr?"*":""}}
+                            <b>{{ funOut.TypeName }}</b>
+                            {{index < func.Out.length - 1 ? ", " : "" }}
+                          </td>
+                          <th>)</th>
+                        </tr>
+
                         <!--checkboxes for inp -->
-                            <div class="col-md-12">
-                                        <div v-for="(funIn, index) in func.In" class="func-type">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
-                                                <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
-                                            </div>
-                                        </div>
-                                        <div v-for="(funOut, index) in func.Out" class="func-type">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
-                                                <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
-                                            </div>
-                                        </div>
-                            </div>
+                        <tr>
+                          <td> </td>
+                          <td v-for="(funIn, index) in func.In" class="func-type">
+                              <div class="form-check form-check-inline col">
+                                  <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                  <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
+                              </div>
+                          </td>
+                          <td> </td>
+                            <td v-for="(funOut, index) in func.Out" class="func-type">
+                                <div class="form-check form-check-inline col">
+                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                    <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
+                                </div>
+                            </td>
+                          <td> </td>
+                        </tr>
+
                         <!--checkboxes for outp -->
-                            <div class="col-md-12">
-                                        <div v-for="(funIn, index) in func.In" class="func-type">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
-                                                <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
-                                            </div>
-                                        </div>
-                                        <div v-for="(funOut, index) in func.Out" class="func-type">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
-                                                <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
-                                            </div>
-                                        </div>
-                            </div>                            
+                        <tr>
+                          <td> </td>
+                            <td v-for="(funIn, index) in func.In" class="func-type">
+                                <div class="form-check form-check-inline col">
+                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funIn.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-in-'+index">
+                                    <label class="form-check-label" :for="'func-'+func.Name+'-in-'+index"></label>
+                                </div>
+                            </td>
+                          <td> </td>
+                            <td v-for="(funOut, index) in func.Out" class="func-type">
+                                <div class="form-check form-check-inline col">
+                                    <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funOut.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-out-'+index">
+                                    <label class="form-check-label" :for="'func-'+func.Name+'-out-'+index"></label>
+                                </div>
+                            </td>
+                          <td> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+                        
 
                 </div>
 </div>
@@ -240,9 +257,7 @@
         var srcapp = new Vue({
             el: '#cb-source',
             data: {
-                source: null,
-                codeqlInp: null,
-                codeqlOutp: null
+                source: null
             },
             mounted() {
                 self = this;
@@ -250,14 +265,6 @@
                     .then(response => response.json())
                     .then(json => {
                         this.source = json;
-
-                        self.codeqlInp ={};
-                        self.codeqlOutp={};
-
-                        self.source.Funcs.forEach(function(elem) {
-                           self.codeqlInp['func-' +elem.Name] = "a";
-                           self.codeqlOutp['func-' +elem.Name] = "a";
-                        });
                     })
             },
             methods: {
