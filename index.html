@@ -184,6 +184,18 @@
                             <div v-for="comment in func.Docs">// {{ comment }}</div>
                         </span>
                         <table class="table-responsive table-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                              <defs>
+                                <marker :id="'arrowhead-func-'+func.Name" viewBox="0 0 10 10" refX="3" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                                </marker>
+                              </defs>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-func-'+func.Name+')'">
+                                <path :id="'arrowLeft-func-'+func.Name"/>
+                                <path :id="'arrowRight-func-'+func.Name"/>
+                              </g>
+                            </svg>
                             <tbody>
                                 <tr :id="'func-'+func.Name">
                                     <th scope="row">func {{ func.Name }}(</th>
@@ -268,6 +280,18 @@
                             <div v-for="comment in method.Docs">// {{ comment }}</div>
                         </span>
                         <table class="table-responsive table-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                              <defs>
+                                <marker :id="'arrowhead-method-'+method.FEName" viewBox="0 0 10 10" refX="3" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                                </marker>
+                              </defs>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-method-'+method.FEName+')'">
+                                <path :id="'arrowLeft-method-'+method.FEName"/>
+                                <path :id="'arrowRight-method-'+method.FEName"/>
+                              </g>
+                            </svg>
                             <tbody>
                                 <tr :id="'method-'+method.FEName">
                                     <td></td>
@@ -373,6 +397,18 @@
                             <div v-for="comment in itMeth.Docs">// {{ comment }}</div>
                         </span>
                         <table class="table-responsive table-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                              <defs>
+                                <marker :id="'arrowhead-itMeth-'+itMeth.FEName" viewBox="0 0 10 10" refX="3" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                                </marker>
+                              </defs>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-itMeth-'+itMeth.FEName+')'">
+                                <path :id="'arrowLeft-itMeth-'+itMeth.FEName"/>
+                                <path :id="'arrowRight-itMeth-'+itMeth.FEName"/>
+                              </g>
+                            </svg>
                             <tbody>
                                 <tr :id="'itMeth-'+itMeth.FEName">
                                     <td></td>
@@ -465,7 +501,77 @@
         </div>
     </div>
     </div>
+
     <script type="text/javascript">
+    function drawArrow(idFrom, idInto, arrowID){
+        if (idFrom == "" || idInto == "" || arrowID == "") {
+            return
+        }
+      var divFrom       = document.querySelector("#"+idFrom);
+      var divInto       = document.querySelector("#"+idInto);
+      var arrowLeft  = document.querySelector("#arrowLeft-"+arrowID);
+      var arrowRight = document.querySelector("#arrowRight-"+arrowID);
+
+      if (divFrom == null || divInto == null) {
+        return
+      }
+      let rectFrom = divFrom.getBoundingClientRect();
+      let rectInto = divInto.getBoundingClientRect();
+
+      var drawConnector = function() {
+        var posnALeft = {
+          x: divFrom.offsetLeft - 8,
+          y: divFrom.offsetTop  + divFrom.offsetHeight / 2
+        };
+        var posnBLeft = {
+          x: divInto.offsetLeft - 8,
+          y: divInto.offsetTop  + divInto.offsetHeight / 2
+        };
+
+        console.log(posnALeft);
+        console.log(posnBLeft);
+
+        var posnFrom = {
+          x: rectFrom.right - rectFrom.width/2,
+          y: rectFrom.bottom - rectFrom.height
+        };
+        var posnInto = {
+          x: rectInto.right - rectInto.width/2,
+          y: rectInto.bottom - rectInto.height
+        };
+        console.log(posnFrom);
+        console.log(posnInto);
+
+        let horizOffset = 0;
+        if (divInto.offsetLeft > divFrom.offsetLeft) {
+          horizOffset = divInto.offsetLeft - divFrom.offsetLeft
+        } else {
+          horizOffset = divFrom.offsetLeft - divInto.offsetLeft
+        }
+
+        horizOffset = horizOffset + rectFrom.width + rectInto.width
+
+        var dStrLeft =
+            "M" +
+            (divFrom.offsetLeft + rectFrom.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+            "C "+
+             (posnALeft.x + rectInto.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+             (Math.abs(horizOffset)) + "," + (divFrom.offsetParent.offsetHeight - 60) + " " +
+             (divInto.offsetLeft + rectInto.width/2 ) + "," + (divInto.offsetParent.offsetHeight) + " "
+        arrowLeft.setAttribute("d", dStrLeft);
+      };
+
+      setTimeout(drawConnector, 250);
+      /* The setTimeout delay here is only required to prevent
+       * the initial appearance of the arrows from being
+       * incorrect due to the animated expansion of the
+       * Stack Overflow code snippet results after clicking
+       * "Run Code Snippet." If this was a simpler website,
+       * a simple command, i.e. `drawConnector();` would suffice.
+       */
+    }
+
+
     function selectText(containerid) {
         if (document.selection) { // IE
             var range = document.body.createTextRange();
@@ -483,7 +589,7 @@
         data: {
             source: null
         },
-        mounted() {
+        created() {
             self = this;
             fetch('/api/source')
                 .then(response => response.json())
@@ -519,9 +625,11 @@
                     elem.classList.remove("selected-inp");
                 });
 
-                fn.CodeQL.Inp = radioButton.value
-                console.log(parentID)
-                console.log(targetIDInView)
+                fn.CodeQL.Inp = radioButton.value;
+                fn.CodeQL.InpID = targetIDInView;
+                drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
+                console.log(parentID);
+                console.log(targetIDInView);
 
                 var element = document.getElementById(targetIDInView);
                 element.classList.add("selected-inp");
@@ -538,9 +646,11 @@
                     elem.classList.remove("selected-outp");
                 });
 
-                fn.CodeQL.Outp = radioButton.value
-                console.log(parentID)
-                console.log(targetIDInView)
+                fn.CodeQL.Outp = radioButton.value;
+                fn.CodeQL.OutpID = targetIDInView;
+                drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
+                console.log(parentID);
+                console.log(targetIDInView);
 
                 var element = document.getElementById(targetIDInView);
                 element.classList.add("selected-outp");
