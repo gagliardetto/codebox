@@ -6,7 +6,10 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+// TODO:
+// -  generate ad-hoc medium types.
 func main() {
+	// store[kind("func","method","interface")][qualified_name][array_of:{in:{elem:"",index:0},out:{elem:"",index:0}}]
 	if false {
 		f := NewFile("main")
 		f.Func().Id("main").Params().Block(
