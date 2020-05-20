@@ -561,14 +561,7 @@
         arrowLeft.setAttribute("d", dStrLeft);
       };
 
-      setTimeout(drawConnector, 250);
-      /* The setTimeout delay here is only required to prevent
-       * the initial appearance of the arrows from being
-       * incorrect due to the animated expansion of the
-       * Stack Overflow code snippet results after clicking
-       * "Run Code Snippet." If this was a simpler website,
-       * a simple command, i.e. `drawConnector();` would suffice.
-       */
+      drawConnector();
     }
 
 
