@@ -1,0 +1,541 @@
+## standard library
+
+NOTE: remove all `testdata` and `internal`.
+
+- [ ] `./archive`
+	- [ ] `./archive/tar`
+	- [ ] `./archive/zip`
+- [ ] `./bufio`
+- [ ] `./builtin`
+- [ ] `./bytes`
+- [ ] `./cmd`
+	- [ ] `./cmd/addr2line`
+	- [ ] `./cmd/api`
+	- [ ] `./cmd/asm`
+	- [ ] `./cmd/buildid`
+	- [ ] `./cmd/cgo`
+	- [ ] `./cmd/compile`
+	- [ ] `./cmd/cover`
+	- [ ] `./cmd/dist`
+	- [ ] `./cmd/doc`
+	- [ ] `./cmd/fix`
+	- [ ] `./cmd/go`
+	- [ ] `./cmd/gofmt`
+	- [ ] `./cmd/link`
+	- [ ] `./cmd/nm`
+	- [ ] `./cmd/objdump`
+	- [ ] `./cmd/pack`
+	- [ ] `./cmd/pprof`
+	- [ ] `./cmd/test2json`
+	- [ ] `./cmd/trace`
+	- [ ] `./cmd/vendor`
+	- [ ] `./cmd/vet`
+- [ ] `./compress`
+	- [ ] `./compress/bzip2`
+	- [ ] `./compress/flate`
+	- [ ] `./compress/gzip`
+	- [ ] `./compress/lzw`
+	- [ ] `./compress/zlib`
+- [ ] `./container`
+	- [ ] `./container/heap`
+	- [ ] `./container/list`
+	- [ ] `./container/ring`
+- [ ] `./context`
+- [ ] `./crypto`
+	- [ ] `./crypto/aes`
+	- [ ] `./crypto/cipher`
+	- [ ] `./crypto/des`
+	- [ ] `./crypto/dsa`
+	- [ ] `./crypto/ecdsa`
+	- [ ] `./crypto/ed25519`
+	- [ ] `./crypto/elliptic`
+	- [ ] `./crypto/hmac`
+	- [ ] `./crypto/md5`
+	- [ ] `./crypto/rand`
+	- [ ] `./crypto/rc4`
+	- [ ] `./crypto/rsa`
+	- [ ] `./crypto/sha1`
+	- [ ] `./crypto/sha256`
+	- [ ] `./crypto/sha512`
+	- [ ] `./crypto/subtle`
+	- [ ] `./crypto/tls`
+	- [ ] `./crypto/x509`
+	- [ ] `./crypto/x509/pkix`
+- [ ] `./database`
+	- [ ] `./database/sql`
+	- [ ] `./database/sql/driver`
+- [ ] `./debug`
+	- [ ] `./debug/dwarf`
+	- [ ] `./debug/elf`
+	- [ ] `./debug/gosym`
+	- [ ] `./debug/macho`
+	- [ ] `./debug/pe`
+	- [ ] `./debug/plan9obj`
+- [ ] `./encoding`
+	- [ ] `./encoding/ascii85`
+	- [ ] `./encoding/asn1`
+	- [ ] `./encoding/base32`
+	- [ ] `./encoding/base64`
+	- [ ] `./encoding/binary`
+	- [ ] `./encoding/csv`
+	- [ ] `./encoding/gob`
+	- [ ] `./encoding/hex`
+	- [ ] `./encoding/json`
+	- [ ] `./encoding/pem`
+	- [ ] `./encoding/xml`
+- [ ] `./errors`
+- [ ] `./expvar`
+- [ ] `./flag`
+- [ ] `./fmt`
+- [ ] `./go`
+	- [ ] `./go/ast`
+	- [ ] `./go/build`
+	- [ ] `./go/constant`
+	- [ ] `./go/doc`
+	- [ ] `./go/format`
+	- [ ] `./go/importer`
+	- [ ] `./go/parser`
+	- [ ] `./go/printer`
+	- [ ] `./go/scanner`
+	- [ ] `./go/token`
+	- [ ] `./go/types`
+- [ ] `./hash`
+	- [ ] `./hash/adler32`
+	- [ ] `./hash/crc32`
+	- [ ] `./hash/crc64`
+	- [ ] `./hash/fnv`
+	- [ ] `./hash/maphash`
+- [ ] `./html`
+- [ ] `./html/template`
+- [ ] `./image`
+	- [ ] `./image/color`
+	- [ ] `./image/color/palette`
+	- [ ] `./image/draw`
+	- [ ] `./image/gif`
+	- [ ] `./image/jpeg`
+	- [ ] `./image/png`
+- [ ] `./index`
+- [ ] `./index/suffixarray`
+- [ ] `./io`
+- [ ] `./io/ioutil`
+- [ ] `./log`
+- [ ] `./log/syslog`
+- [ ] `./math`
+	- [ ] `./math/big`
+	- [ ] `./math/bits`
+	- [ ] `./math/cmplx`
+	- [ ] `./math/rand`
+- [ ] `./mime`
+	- [ ] `./mime/multipart`
+	- [ ] `./mime/quotedprintable`
+- [ ] `./net`
+	- [ ] `./net/http`
+	- [ ] `./net/http/cgi`
+	- [ ] `./net/http/cookiejar`
+	- [ ] `./net/http/fcgi`
+	- [ ] `./net/http/httptest`
+	- [ ] `./net/http/httptrace`
+	- [ ] `./net/http/httputil`
+	- [ ] `./net/http/pprof`
+	- [ ] `./net/mail`
+	- [ ] `./net/rpc`
+	- [ ] `./net/rpc/jsonrpc`
+	- [ ] `./net/smtp`
+	- [ ] `./net/textproto`
+	- [ ] `./net/url`
+- [ ] `./os`
+	- [ ] `./os/exec`
+	- [ ] `./os/signal`
+	- [ ] `./os/user`
+- [ ] `./path`
+	- [ ] `./path/filepath`
+- [ ] `./plugin`
+- [ ] `./reflect`
+- [ ] `./regexp`
+	- [ ] `./regexp/syntax`
+- [ ] `./runtime`
+	- [ ] `./runtime/cgo`
+	- [ ] `./runtime/debug`
+	- [ ] `./runtime/msan`
+	- [ ] `./runtime/pprof`
+	- [ ] `./runtime/race`
+	- [ ] `./runtime/trace`
+- [ ] `./sort`
+- [ ] `./strconv`
+- [ ] `./strings`
+- [ ] `./sync`
+	- [ ] `./sync/atomic`
+- [ ] `./syscall`
+	- [ ] `./syscall/js`
+- [ ] `./testing`
+	- [ ] `./testing/iotest`
+	- [ ] `./testing/quick`
+- [ ] `./text`
+	- [ ] `./text/scanner`
+	- [ ] `./text/tabwriter`
+	- [ ] `./text/template`
+	- [ ] `./text/template/parse`
+- [ ] `./time`
+- [ ] `./unicode`
+	- [ ] `./unicode/utf16`
+	- [ ] `./unicode/utf8`
+- [ ] `./unsafe`
+
+---
+
+### packages vendored inside standard library that are not included in the `golang.org/x` list
+
+- [ ] `./golang.org/x/crypto/chacha20`
+- [ ] `./github.com/google/pprof`
+	- [ ] `./github.com/google/pprof/driver`
+	- [ ] `./github.com/google/pprof/profile`
+	- [ ] `./github.com/google/pprof/third_party`
+	- [ ] `./github.com/google/pprof/third_party/d3`
+	- [ ] `./github.com/google/pprof/third_party/d3flamegraph`
+	- [ ] `./github.com/google/pprof/third_party/svgpan`
+- [ ] `./github.com/ianlancetaylor/demangle`
+- [ ] `./golang.org/x/arch`
+	- [ ] `./golang.org/x/arch/arm`
+	- [ ] `./golang.org/x/arch/arm64`
+	- [ ] `./golang.org/x/arch/arm64/arm64asm`
+	- [ ] `./golang.org/x/arch/arm/armasm`
+	- [ ] `./golang.org/x/arch/ppc64`
+	- [ ] `./golang.org/x/arch/ppc64/ppc64asm`
+	- [ ] `./golang.org/x/arch/x86`
+	- [ ] `./golang.org/x/arch/x86/x86asm`
+- [ ] `./golang.org/x/mod`
+	- [ ] `./golang.org/x/mod/modfile`
+	- [ ] `./golang.org/x/mod/module`
+	- [ ] `./golang.org/x/mod/semver`
+	- [ ] `./golang.org/x/mod/sumdb`
+	- [ ] `./golang.org/x/mod/sumdb/dirhash`
+	- [ ] `./golang.org/x/mod/sumdb/note`
+	- [ ] `./golang.org/x/mod/sumdb/tlog`
+	- [ ] `./golang.org/x/mod/zip`
+
+
+### golang.org/x
+
+- [ ] `./golang.org/x/crypto`
+	- [ ] `./golang.org/x/crypto/acme`
+	- [ ] `./golang.org/x/crypto/acme/autocert`
+	- [ ] `./golang.org/x/crypto/argon2`
+	- [ ] `./golang.org/x/crypto/bcrypt`
+	- [ ] `./golang.org/x/crypto/blake2b`
+	- [ ] `./golang.org/x/crypto/blake2s`
+	- [ ] `./golang.org/x/crypto/blowfish`
+	- [ ] `./golang.org/x/crypto/bn256`
+	- [ ] `./golang.org/x/crypto/cast5`
+	- [ ] `./golang.org/x/crypto/chacha20poly1305`
+	- [ ] `./golang.org/x/crypto/cryptobyte`
+	- [ ] `./golang.org/x/crypto/cryptobyte/asn1`
+	- [ ] `./golang.org/x/crypto/curve25519`
+	- [ ] `./golang.org/x/crypto/ed25519`
+	- [ ] `./golang.org/x/crypto/hkdf`
+	- [ ] `./golang.org/x/crypto/md4`
+	- [ ] `./golang.org/x/crypto/nacl`
+	- [ ] `./golang.org/x/crypto/nacl/auth`
+	- [ ] `./golang.org/x/crypto/nacl/box`
+	- [ ] `./golang.org/x/crypto/nacl/secretbox`
+	- [ ] `./golang.org/x/crypto/nacl/sign`
+	- [ ] `./golang.org/x/crypto/ocsp`
+	- [ ] `./golang.org/x/crypto/openpgp`
+	- [ ] `./golang.org/x/crypto/openpgp/armor`
+	- [ ] `./golang.org/x/crypto/openpgp/clearsign`
+	- [ ] `./golang.org/x/crypto/openpgp/elgamal`
+	- [ ] `./golang.org/x/crypto/openpgp/errors`
+	- [ ] `./golang.org/x/crypto/openpgp/packet`
+	- [ ] `./golang.org/x/crypto/openpgp/s2k`
+	- [ ] `./golang.org/x/crypto/otr`
+	- [ ] `./golang.org/x/crypto/pbkdf2`
+	- [ ] `./golang.org/x/crypto/pkcs12`
+	- [ ] `./golang.org/x/crypto/poly1305`
+	- [ ] `./golang.org/x/crypto/ripemd160`
+	- [ ] `./golang.org/x/crypto/salsa20`
+	- [ ] `./golang.org/x/crypto/salsa20/salsa`
+	- [ ] `./golang.org/x/crypto/scrypt`
+	- [ ] `./golang.org/x/crypto/sha3`
+	- [ ] `./golang.org/x/crypto/ssh`
+	- [ ] `./golang.org/x/crypto/ssh/agent`
+	- [ ] `./golang.org/x/crypto/ssh/knownhosts`
+	- [ ] `./golang.org/x/crypto/ssh/terminal`
+	- [ ] `./golang.org/x/crypto/ssh/test`
+	- [ ] `./golang.org/x/crypto/tea`
+	- [ ] `./golang.org/x/crypto/twofish`
+	- [ ] `./golang.org/x/crypto/xtea`
+	- [ ] `./golang.org/x/crypto/xts`
+- [ ] `./golang.org/x/net`
+	- [ ] `./golang.org/x/net/bpf`
+	- [ ] `./golang.org/x/net/context`
+	- [ ] `./golang.org/x/net/context/ctxhttp`
+	- [ ] `./golang.org/x/net/dict`
+	- [ ] `./golang.org/x/net/dns`
+	- [ ] `./golang.org/x/net/dns/dnsmessage`
+	- [ ] `./golang.org/x/net/html`
+	- [ ] `./golang.org/x/net/html/atom`
+	- [ ] `./golang.org/x/net/html/charset`
+	- [ ] `./golang.org/x/net/http`
+	- [ ] `./golang.org/x/net/http2`
+	- [ ] `./golang.org/x/net/http2/h2c`
+	- [ ] `./golang.org/x/net/http2/h2demo`
+	- [ ] `./golang.org/x/net/http2/h2i`
+	- [ ] `./golang.org/x/net/http2/hpack`
+	- [ ] `./golang.org/x/net/http/httpguts`
+	- [ ] `./golang.org/x/net/http/httpproxy`
+	- [ ] `./golang.org/x/net/icmp`
+	- [ ] `./golang.org/x/net/idna`
+	- [ ] `./golang.org/x/net/ipv4`
+	- [ ] `./golang.org/x/net/ipv6`
+	- [ ] `./golang.org/x/net/lif`
+	- [ ] `./golang.org/x/net/nettest`
+	- [ ] `./golang.org/x/net/netutil`
+	- [ ] `./golang.org/x/net/proxy`
+	- [ ] `./golang.org/x/net/publicsuffix`
+	- [ ] `./golang.org/x/net/route`
+	- [ ] `./golang.org/x/net/trace`
+	- [ ] `./golang.org/x/net/webdav`
+	- [ ] `./golang.org/x/net/websocket`
+	- [ ] `./golang.org/x/net/xsrftoken`
+- [ ] `./golang.org/x/oauth2`
+	- [ ] `./golang.org/x/oauth2/amazon`
+	- [ ] `./golang.org/x/oauth2/bitbucket`
+	- [ ] `./golang.org/x/oauth2/cern`
+	- [ ] `./golang.org/x/oauth2/clientcredentials`
+	- [ ] `./golang.org/x/oauth2/facebook`
+	- [ ] `./golang.org/x/oauth2/fitbit`
+	- [ ] `./golang.org/x/oauth2/foursquare`
+	- [ ] `./golang.org/x/oauth2/github`
+	- [ ] `./golang.org/x/oauth2/gitlab`
+	- [ ] `./golang.org/x/oauth2/google`
+	- [ ] `./golang.org/x/oauth2/heroku`
+	- [ ] `./golang.org/x/oauth2/hipchat`
+	- [ ] `./golang.org/x/oauth2/instagram`
+	- [ ] `./golang.org/x/oauth2/jira`
+	- [ ] `./golang.org/x/oauth2/jws`
+	- [ ] `./golang.org/x/oauth2/jwt`
+	- [ ] `./golang.org/x/oauth2/kakao`
+	- [ ] `./golang.org/x/oauth2/linkedin`
+	- [ ] `./golang.org/x/oauth2/mailchimp`
+	- [ ] `./golang.org/x/oauth2/mailru`
+	- [ ] `./golang.org/x/oauth2/mediamath`
+	- [ ] `./golang.org/x/oauth2/microsoft`
+	- [ ] `./golang.org/x/oauth2/nokiahealth`
+	- [ ] `./golang.org/x/oauth2/odnoklassniki`
+	- [ ] `./golang.org/x/oauth2/paypal`
+	- [ ] `./golang.org/x/oauth2/slack`
+	- [ ] `./golang.org/x/oauth2/spotify`
+	- [ ] `./golang.org/x/oauth2/stackoverflow`
+	- [ ] `./golang.org/x/oauth2/twitch`
+	- [ ] `./golang.org/x/oauth2/uber`
+	- [ ] `./golang.org/x/oauth2/vk`
+	- [ ] `./golang.org/x/oauth2/yahoo`
+	- [ ] `./golang.org/x/oauth2/yandex`
+- [ ] `./golang.org/x/sync`
+	- [ ] `./golang.org/x/sync/errgroup`
+	- [ ] `./golang.org/x/sync/semaphore`
+	- [ ] `./golang.org/x/sync/singleflight`
+	- [ ] `./golang.org/x/sync/syncmap`
+- [ ] `./golang.org/x/sys`
+	- [ ] `./golang.org/x/sys/cpu`
+	- [ ] `./golang.org/x/sys/plan9`
+	- [ ] `./golang.org/x/sys/unix`
+	- [ ] `./golang.org/x/sys/unix/linux`
+	- [ ] `./golang.org/x/sys/windows`
+	- [ ] `./golang.org/x/sys/windows/mkwinsyscall`
+	- [ ] `./golang.org/x/sys/windows/registry`
+	- [ ] `./golang.org/x/sys/windows/svc`
+	- [ ] `./golang.org/x/sys/windows/svc/debug`
+	- [ ] `./golang.org/x/sys/windows/svc/eventlog`
+	- [ ] `./golang.org/x/sys/windows/svc/example`
+	- [ ] `./golang.org/x/sys/windows/svc/mgr`
+- [ ] `./golang.org/x/text`
+	- [ ] `./golang.org/x/text/cases`
+	- [ ] `./golang.org/x/text/cmd`
+	- [ ] `./golang.org/x/text/cmd/gotext`
+	- [ ] `./golang.org/x/text/collate`
+	- [ ] `./golang.org/x/text/collate/build`
+	- [ ] `./golang.org/x/text/collate/tools`
+	- [ ] `./golang.org/x/text/collate/tools/colcmp`
+	- [ ] `./golang.org/x/text/currency`
+	- [ ] `./golang.org/x/text/date`
+	- [ ] `./golang.org/x/text/encoding`
+	- [ ] `./golang.org/x/text/encoding/charmap`
+	- [ ] `./golang.org/x/text/encoding/htmlindex`
+	- [ ] `./golang.org/x/text/encoding/ianaindex`
+	- [ ] `./golang.org/x/text/encoding/japanese`
+	- [ ] `./golang.org/x/text/encoding/korean`
+	- [ ] `./golang.org/x/text/encoding/simplifiedchinese`
+	- [ ] `./golang.org/x/text/encoding/traditionalchinese`
+	- [ ] `./golang.org/x/text/encoding/unicode`
+	- [ ] `./golang.org/x/text/encoding/unicode/utf32`
+	- [ ] `./golang.org/x/text/feature`
+	- [ ] `./golang.org/x/text/feature/plural`
+	- [ ] `./golang.org/x/text/language`
+	- [ ] `./golang.org/x/text/language/display`
+	- [ ] `./golang.org/x/text/message`
+	- [ ] `./golang.org/x/text/message/catalog`
+	- [ ] `./golang.org/x/text/message/pipeline`
+	- [ ] `./golang.org/x/text/number`
+	- [ ] `./golang.org/x/text/runes`
+	- [ ] `./golang.org/x/text/search`
+	- [ ] `./golang.org/x/text/secure`
+	- [ ] `./golang.org/x/text/secure/bidirule`
+	- [ ] `./golang.org/x/text/secure/precis`
+	- [ ] `./golang.org/x/text/transform`
+	- [ ] `./golang.org/x/text/unicode`
+	- [ ] `./golang.org/x/text/unicode/bidi`
+	- [ ] `./golang.org/x/text/unicode/cldr`
+	- [ ] `./golang.org/x/text/unicode/norm`
+	- [ ] `./golang.org/x/text/unicode/rangetable`
+	- [ ] `./golang.org/x/text/unicode/runenames`
+	- [ ] `./golang.org/x/text/width`
+- [ ] `./golang.org/x/tools`
+- [ ] `./golang.org/x/tools/benchmark`
+- [ ] `./golang.org/x/tools/benchmark/parse`
+- [ ] `./golang.org/x/tools/blog`
+- [ ] `./golang.org/x/tools/blog/atom`
+- [ ] `./golang.org/x/tools/cmd`
+	- [ ] `./golang.org/x/tools/cmd/auth`
+	- [ ] `./golang.org/x/tools/cmd/auth/authtest`
+	- [ ] `./golang.org/x/tools/cmd/auth/cookieauth`
+	- [ ] `./golang.org/x/tools/cmd/auth/gitauth`
+	- [ ] `./golang.org/x/tools/cmd/auth/netrcauth`
+	- [ ] `./golang.org/x/tools/cmd/benchcmp`
+	- [ ] `./golang.org/x/tools/cmd/bundle`
+	- [ ] `./golang.org/x/tools/cmd/callgraph`
+	- [ ] `./golang.org/x/tools/cmd/compilebench`
+	- [ ] `./golang.org/x/tools/cmd/cover`
+	- [ ] `./golang.org/x/tools/cmd/digraph`
+	- [ ] `./golang.org/x/tools/cmd/eg`
+	- [ ] `./golang.org/x/tools/cmd/fiximports`
+	- [ ] `./golang.org/x/tools/cmd/getgo`
+	- [ ] `./golang.org/x/tools/cmd/getgo/server`
+	- [ ] `./golang.org/x/tools/cmd/go-contrib-init`
+	- [ ] `./golang.org/x/tools/cmd/godex`
+	- [ ] `./golang.org/x/tools/cmd/godoc`
+	- [ ] `./golang.org/x/tools/cmd/goimports`
+	- [ ] `./golang.org/x/tools/cmd/gomvpkg`
+	- [ ] `./golang.org/x/tools/cmd/gorename`
+	- [ ] `./golang.org/x/tools/cmd/gotype`
+	- [ ] `./golang.org/x/tools/cmd/goyacc`
+	- [ ] `./golang.org/x/tools/cmd/guru`
+	- [ ] `./golang.org/x/tools/cmd/guru/serial`
+	- [ ] `./golang.org/x/tools/cmd/html2article`
+	- [ ] `./golang.org/x/tools/cmd/present`
+	- [ ] `./golang.org/x/tools/cmd/present/static`
+	- [ ] `./golang.org/x/tools/cmd/present/templates`
+	- [ ] `./golang.org/x/tools/cmd/splitdwarf`
+	- [ ] `./golang.org/x/tools/cmd/ssadump`
+	- [ ] `./golang.org/x/tools/cmd/stress`
+	- [ ] `./golang.org/x/tools/cmd/stringer`
+	- [ ] `./golang.org/x/tools/cmd/toolstash`
+- [ ] `./golang.org/x/tools/container`
+	- [ ] `./golang.org/x/tools/container/intsets`
+- [ ] `./golang.org/x/tools/cover`
+- [ ] `./golang.org/x/tools/go`
+	- [ ] `./golang.org/x/tools/go/analysis`
+	- [ ] `./golang.org/x/tools/go/analysis/analysistest`
+	- [ ] `./golang.org/x/tools/go/analysis/doc`
+	- [ ] `./golang.org/x/tools/go/analysis/multichecker`
+	- [ ] `./golang.org/x/tools/go/analysis/passes`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/asmdecl`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/assign`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/atomic`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/atomicalign`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/bools`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/buildssa`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/buildtag`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/cgocall`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/composite`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/copylock`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/ctrlflow`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/deepequalerrors`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/errorsas`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/findcall`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/findcall/cmd`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/findcall/cmd/findcall`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/httpresponse`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/inspect`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/loopclosure`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/lostcancel`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/lostcancel/cmd`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/lostcancel/cmd/lostcancel`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/nilfunc`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/nilness`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/nilness/cmd`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/nilness/cmd/nilness`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/pkgfact`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/printf`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/shadow`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/shadow/cmd`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/shift`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/sortslice`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/stdmethods`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/structtag`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/testinggoroutine`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/tests`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unmarshal`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unmarshal/cmd`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unmarshal/cmd/unmarshal`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unreachable`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unsafeptr`
+	- [ ] `./golang.org/x/tools/go/analysis/passes/unusedresult`
+	- [ ] `./golang.org/x/tools/go/analysis/singlechecker`
+	- [ ] `./golang.org/x/tools/go/analysis/unitchecker`
+- [ ] `./golang.org/x/tools/go/ast`
+	- [ ] `./golang.org/x/tools/go/ast/astutil`
+	- [ ] `./golang.org/x/tools/go/ast/inspector`
+- [ ] `./golang.org/x/tools/go/buildutil`
+- [ ] `./golang.org/x/tools/go/callgraph`
+	- [ ] `./golang.org/x/tools/go/callgraph/cha`
+	- [ ] `./golang.org/x/tools/go/callgraph/rta`
+	- [ ] `./golang.org/x/tools/go/callgraph/static`
+- [ ] `./golang.org/x/tools/go/cfg`
+- [ ] `./golang.org/x/tools/godoc`
+	- [ ] `./golang.org/x/tools/godoc/analysis`
+	- [ ] `./golang.org/x/tools/godoc/golangorgenv`
+	- [ ] `./golang.org/x/tools/godoc/redirect`
+	- [ ] `./golang.org/x/tools/godoc/static`
+	- [ ] `./golang.org/x/tools/godoc/static/analysis`
+	- [ ] `./golang.org/x/tools/godoc/static/images`
+	- [ ] `./golang.org/x/tools/godoc/util`
+	- [ ] `./golang.org/x/tools/godoc/vfs`
+	- [ ] `./golang.org/x/tools/godoc/vfs/gatefs`
+	- [ ] `./golang.org/x/tools/godoc/vfs/httpfs`
+	- [ ] `./golang.org/x/tools/godoc/vfs/mapfs`
+	- [ ] `./golang.org/x/tools/godoc/vfs/zipfs`
+- [ ] `./golang.org/x/tools/go/expect`
+- [ ] `./golang.org/x/tools/go/gccgoexportdata`
+- [ ] `./golang.org/x/tools/go/gcexportdata`
+- [ ] `./golang.org/x/tools/go/loader`
+- [ ] `./golang.org/x/tools/go/packages`
+- [ ] `./golang.org/x/tools/go/packages/gopackages`
+- [ ] `./golang.org/x/tools/go/packages/packagestest`
+- [ ] `./golang.org/x/tools/gopls`
+	- [ ] `./golang.org/x/tools/gopls/doc`
+	- [ ] `./golang.org/x/tools/gopls/integration`
+	- [ ] `./golang.org/x/tools/gopls/integration/govim`
+	- [ ] `./golang.org/x/tools/gopls/integration/parse`
+	- [ ] `./golang.org/x/tools/gopls/integration/replay`
+	- [ ] `./golang.org/x/tools/gopls/test`
+- [ ] `./golang.org/x/tools/go/pointer`
+- [ ] `./golang.org/x/tools/go/ssa`
+	- [ ] `./golang.org/x/tools/go/ssa/interp`
+	- [ ] `./golang.org/x/tools/go/ssa/ssautil`
+- [ ] `./golang.org/x/tools/go/types`
+	- [ ] `./golang.org/x/tools/go/types/objectpath`
+	- [ ] `./golang.org/x/tools/go/types/typeutil`
+- [ ] `./golang.org/x/tools/go/vcs`
+- [ ] `./golang.org/x/tools/imports`
+- [ ] `./golang.org/x/tools/playground`
+	- [ ] `./golang.org/x/tools/playground/socket`
+- [ ] `./golang.org/x/tools/present`
+- [ ] `./golang.org/x/tools/refactor`
+	- [ ] `./golang.org/x/tools/refactor/eg`
+	- [ ] `./golang.org/x/tools/refactor/importgraph`
+	- [ ] `./golang.org/x/tools/refactor/rename`
+	- [ ] `./golang.org/x/tools/refactor/satisfy`
+- [ ] `./golang.org/x/tools/txtar`
+- [ ] `./golang.org/x/xerrors`
+---
