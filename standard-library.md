@@ -1,6 +1,6 @@
 ## standard library
 
-NOTE: remove all `testdata` and `internal`.
+NOTE: remove all with `testdata`, `internal`, `examples` in the path.
 
 - [ ] `archive`
 	- [ ] `archive/tar`
@@ -185,7 +185,6 @@ NOTE: remove all `testdata` and `internal`.
 
 ### packages vendored inside standard library that are not included in the `golang.org/x` list
 
-- [ ] `golang.org/x/crypto/chacha20`
 - [ ] `github.com/google/pprof`
 	- [ ] `github.com/google/pprof/driver`
 	- [ ] `github.com/google/pprof/profile`
@@ -194,29 +193,149 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `github.com/google/pprof/third_party/d3flamegraph`
 	- [ ] `github.com/google/pprof/third_party/svgpan`
 - [ ] `github.com/ianlancetaylor/demangle`
-- [ ] `golang.org/x/arch`
-	- [ ] `golang.org/x/arch/arm`
-	- [ ] `golang.org/x/arch/arm64`
+
+
+### golang.org/x (from https://godoc.org/-/subrepo)
+
+NOTE: removed
+- golang.org/x/scratch/*
+- golang.org/x/talks/*
+
+- [ ] /x/arch/*
 	- [ ] `golang.org/x/arch/arm64/arm64asm`
+	- [ ] `golang.org/x/arch/arm64/arm64gen`
+	- [ ] `golang.org/x/arch/arm64/arm64spec`
 	- [ ] `golang.org/x/arch/arm/armasm`
-	- [ ] `golang.org/x/arch/ppc64`
+	- [ ] `golang.org/x/arch/arm/armmap`
+	- [ ] `golang.org/x/arch/arm/armspec`
 	- [ ] `golang.org/x/arch/ppc64/ppc64asm`
-	- [ ] `golang.org/x/arch/x86`
+	- [ ] `golang.org/x/arch/ppc64/ppc64map`
+	- [ ] `golang.org/x/arch/ppc64/ppc64spec`
 	- [ ] `golang.org/x/arch/x86/x86asm`
-- [ ] `golang.org/x/mod`
-	- [ ] `golang.org/x/mod/modfile`
-	- [ ] `golang.org/x/mod/module`
-	- [ ] `golang.org/x/mod/semver`
-	- [ ] `golang.org/x/mod/sumdb`
-	- [ ] `golang.org/x/mod/sumdb/dirhash`
-	- [ ] `golang.org/x/mod/sumdb/note`
-	- [ ] `golang.org/x/mod/sumdb/tlog`
-	- [ ] `golang.org/x/mod/zip`
-
-
-### golang.org/x
-
-- [ ] `golang.org/x/crypto`
+	- [ ] `golang.org/x/arch/x86/x86avxgen`
+	- [ ] `golang.org/x/arch/x86/x86csv`
+	- [ ] `golang.org/x/arch/x86/x86map`
+	- [ ] `golang.org/x/arch/x86/x86spec`
+	- [ ] `golang.org/x/arch/x86/xeddata`
+- [ ] /x/benchmarks/*
+	- [ ] `golang.org/x/benchmarks/build`
+	- [ ] `golang.org/x/benchmarks/driver`
+	- [ ] `golang.org/x/benchmarks/garbage`
+	- [ ] `golang.org/x/benchmarks/http`
+	- [ ] `golang.org/x/benchmarks/json`
+- [ ] `golang.org/x/blog`
+	- [ ] `golang.org/x/blog/content/appengine`
+	- [ ] `golang.org/x/blog/content/cover`
+	- [ ] `golang.org/x/blog/content/h2push/server`
+	- [ ] `golang.org/x/blog/content/survey2016`
+	- [ ] `golang.org/x/blog/content/survey2017`
+	- [ ] `golang.org/x/blog/support/racy`
+- [ ] `golang.org/x/build`
+	- [ ] `golang.org/x/build/app/appengine`
+	- [ ] `golang.org/x/build/app/key`
+	- [ ] `golang.org/x/build/autocertcache`
+	- [ ] `golang.org/x/build/buildenv`
+	- [ ] `golang.org/x/build/buildlet`
+	- [ ] `golang.org/x/build/cmd/buildlet`
+	- [ ] `golang.org/x/build/cmd/buildlet/stage0`
+	- [ ] `golang.org/x/build/cmd/buildlet/testssh`
+	- [ ] `golang.org/x/build/cmd/buildstats`
+	- [ ] `golang.org/x/build/cmd/cl`
+	- [ ] `golang.org/x/build/cmd/coordinator`
+	- [ ] `golang.org/x/build/cmd/coordinator/metrics`
+	- [ ] `golang.org/x/build/cmd/coordinator/protos`
+	- [ ] `golang.org/x/build/cmd/debugnewvm`
+	- [ ] `golang.org/x/build/cmd/docker2boot`
+	- [ ] `golang.org/x/build/cmd/fetchlogs`
+	- [ ] `golang.org/x/build/cmd/gcpinit`
+	- [ ] `golang.org/x/build/cmd/genbootstrap`
+	- [ ] `golang.org/x/build/cmd/genbuilderkey`
+	- [ ] `golang.org/x/build/cmd/gerritbot`
+	- [ ] `golang.org/x/build/cmd/gitmirror`
+	- [ ] `golang.org/x/build/cmd/gomote`
+	- [ ] `golang.org/x/build/cmd/gopherbot`
+	- [ ] `golang.org/x/build/cmd/gopherstats`
+	- [ ] `golang.org/x/build/cmd/makemac`
+	- [ ] `golang.org/x/build/cmd/perfrun`
+	- [ ] `golang.org/x/build/cmd/pubsubhelper`
+	- [ ] `golang.org/x/build/cmd/pubsubhelper/pubsubtypes`
+	- [ ] `golang.org/x/build/cmd/racebuild`
+	- [ ] `golang.org/x/build/cmd/release`
+	- [ ] `golang.org/x/build/cmd/releasebot`
+	- [ ] `golang.org/x/build/cmd/relnote`
+	- [ ] `golang.org/x/build/cmd/retrybuilds`
+	- [ ] `golang.org/x/build/cmd/rmplaysnippet`
+	- [ ] `golang.org/x/build/cmd/rundockerbuildlet`
+	- [ ] `golang.org/x/build/cmd/scaleway`
+	- [ ] `golang.org/x/build/cmd/tip`
+	- [ ] `golang.org/x/build/cmd/updatecontrib`
+	- [ ] `golang.org/x/build/cmd/updatedisks`
+	- [ ] `golang.org/x/build/cmd/upload`
+	- [ ] `golang.org/x/build/cmd/xb`
+	- [ ] `golang.org/x/build/dashboard`
+	- [ ] `golang.org/x/build/devapp`
+	- [ ] `golang.org/x/build/devapp/owners`
+	- [ ] `golang.org/x/build/envutil`
+	- [ ] `golang.org/x/build/gerrit`
+	- [ ] `golang.org/x/build/kubernetes`
+	- [ ] `golang.org/x/build/kubernetes/api`
+	- [ ] `golang.org/x/build/kubernetes/gke`
+	- [ ] `golang.org/x/build/livelog`
+	- [ ] `golang.org/x/build/maintner`
+	- [ ] `golang.org/x/build/maintner/cmd/maintserve`
+	- [ ] `golang.org/x/build/maintner/godata`
+	- [ ] `golang.org/x/build/maintner/gostats`
+	- [ ] `golang.org/x/build/maintner/maintnerd`
+	- [ ] `golang.org/x/build/maintner/maintnerd/apipb`
+	- [ ] `golang.org/x/build/maintner/maintnerd/gcslog`
+	- [ ] `golang.org/x/build/maintner/maintnerd/maintapi`
+	- [ ] `golang.org/x/build/maintner/maintnerd/maintapi/version`
+	- [ ] `golang.org/x/build/maintner/maintpb`
+	- [ ] `golang.org/x/build/maintner/maintq`
+	- [ ] `golang.org/x/build/maintner/maintwatch`
+	- [ ] `golang.org/x/build/maintner/reclog`
+	- [ ] `golang.org/x/build/pargzip`
+	- [ ] `golang.org/x/build/repos`
+	- [ ] `golang.org/x/build/revdial/v2`
+	- [ ] `golang.org/x/build/tarutil`
+	- [ ] `golang.org/x/build/types`
+	- [ ] `golang.org/x/build/vcs-test/vcweb`
+	- [ ] `golang.org/x/build/version`
+	- [ ] `golang.org/x/build/version/go1.10`
+	- [ ] `golang.org/x/build/version/go1.10.1`
+	- [ ] `golang.org/x/build/version/go1.10.2`
+	- [ ] `golang.org/x/build/version/go1.10.3`
+	- [ ] `golang.org/x/build/version/go1.10beta1`
+	- [ ] `golang.org/x/build/version/go1.10beta2`
+	- [ ] `golang.org/x/build/version/go1.10rc1`
+	- [ ] `golang.org/x/build/version/go1.10rc2`
+	- [ ] `golang.org/x/build/version/go1.11beta1`
+	- [ ] `golang.org/x/build/version/go1.8`
+	- [ ] `golang.org/x/build/version/go1.8.1`
+	- [ ] `golang.org/x/build/version/go1.8.2`
+	- [ ] `golang.org/x/build/version/go1.8.3`
+	- [ ] `golang.org/x/build/version/go1.8.4`
+	- [ ] `golang.org/x/build/version/go1.8.5`
+	- [ ] `golang.org/x/build/version/go1.8.6`
+	- [ ] `golang.org/x/build/version/go1.8.7`
+	- [ ] `golang.org/x/build/version/go1.8beta1`
+	- [ ] `golang.org/x/build/version/go1.8beta2`
+	- [ ] `golang.org/x/build/version/go1.8rc1`
+	- [ ] `golang.org/x/build/version/go1.8rc2`
+	- [ ] `golang.org/x/build/version/go1.8rc3`
+	- [ ] `golang.org/x/build/version/go1.9`
+	- [ ] `golang.org/x/build/version/go1.9.1`
+	- [ ] `golang.org/x/build/version/go1.9.2`
+	- [ ] `golang.org/x/build/version/go1.9.3`
+	- [ ] `golang.org/x/build/version/go1.9.4`
+	- [ ] `golang.org/x/build/version/go1.9.5`
+	- [ ] `golang.org/x/build/version/go1.9.6`
+	- [ ] `golang.org/x/build/version/go1.9.7`
+	- [ ] `golang.org/x/build/version/go1.9beta1`
+	- [ ] `golang.org/x/build/version/go1.9beta2`
+	- [ ] `golang.org/x/build/version/go1.9rc1`
+	- [ ] `golang.org/x/build/version/go1.9rc2`
+- [ ] /x/crypto/*
 	- [ ] `golang.org/x/crypto/acme`
 	- [ ] `golang.org/x/crypto/acme/autocert`
 	- [ ] `golang.org/x/crypto/argon2`
@@ -226,6 +345,7 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/crypto/blowfish`
 	- [ ] `golang.org/x/crypto/bn256`
 	- [ ] `golang.org/x/crypto/cast5`
+	- [ ] `golang.org/x/crypto/chacha20`
 	- [ ] `golang.org/x/crypto/chacha20poly1305`
 	- [ ] `golang.org/x/crypto/cryptobyte`
 	- [ ] `golang.org/x/crypto/cryptobyte/asn1`
@@ -233,7 +353,6 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/crypto/ed25519`
 	- [ ] `golang.org/x/crypto/hkdf`
 	- [ ] `golang.org/x/crypto/md4`
-	- [ ] `golang.org/x/crypto/nacl`
 	- [ ] `golang.org/x/crypto/nacl/auth`
 	- [ ] `golang.org/x/crypto/nacl/box`
 	- [ ] `golang.org/x/crypto/nacl/secretbox`
@@ -264,17 +383,131 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/crypto/twofish`
 	- [ ] `golang.org/x/crypto/xtea`
 	- [ ] `golang.org/x/crypto/xts`
-- [ ] `golang.org/x/net`
+- [ ] `golang.org/x/debug/cmd/viewcore`
+- [ ] /x/exp/*
+	- [ ] `golang.org/x/exp/apidiff`
+	- [ ] `golang.org/x/exp/cmd/apidiff`
+	- [ ] `golang.org/x/exp/cmd/gorelease`
+	- [ ] `golang.org/x/exp/cmd/macos-roots-test`
+	- [ ] `golang.org/x/exp/cmd/modgraphviz`
+	- [ ] `golang.org/x/exp/cmd/txtar`
+	- [ ] `golang.org/x/exp/ebnf`
+	- [ ] `golang.org/x/exp/ebnflint`
+	- [ ] `golang.org/x/exp/errors`
+	- [ ] `golang.org/x/exp/errors/fmt`
+	- [ ] `golang.org/x/exp/io/i2c`
+	- [ ] `golang.org/x/exp/io/i2c/driver`
+	- [ ] `golang.org/x/exp/io/spi`
+	- [ ] `golang.org/x/exp/io/spi/driver`
+	- [ ] `golang.org/x/exp/mmap`
+	- [ ] `golang.org/x/exp/rand`
+	- [ ] `golang.org/x/exp/shiny/driver`
+	- [ ] `golang.org/x/exp/shiny/driver/gldriver`
+	- [ ] `golang.org/x/exp/shiny/driver/mtldriver`
+	- [ ] `golang.org/x/exp/shiny/driver/windriver`
+	- [ ] `golang.org/x/exp/shiny/driver/x11driver`
+	- [ ] `golang.org/x/exp/shiny/gesture`
+	- [ ] `golang.org/x/exp/shiny/iconvg`
+	- [ ] `golang.org/x/exp/shiny/imageutil`
+	- [ ] `golang.org/x/exp/shiny/materialdesign/colornames`
+	- [ ] `golang.org/x/exp/shiny/materialdesign/icons`
+	- [ ] `golang.org/x/exp/shiny/screen`
+	- [ ] `golang.org/x/exp/shiny/text`
+	- [ ] `golang.org/x/exp/shiny/unit`
+	- [ ] `golang.org/x/exp/shiny/widget`
+	- [ ] `golang.org/x/exp/shiny/widget/flex`
+	- [ ] `golang.org/x/exp/shiny/widget/glwidget`
+	- [ ] `golang.org/x/exp/shiny/widget/node`
+	- [ ] `golang.org/x/exp/shiny/widget/theme`
+	- [ ] `golang.org/x/exp/sumdb/gosumcheck`
+	- [ ] `golang.org/x/exp/utf8string`
+	- [ ] `golang.org/x/exp/winfsnotify`
+- [ ] /x/image/*
+	- [ ] `golang.org/x/image/bmp`
+	- [ ] `golang.org/x/image/ccitt`
+	- [ ] `golang.org/x/image/colornames`
+	- [ ] `golang.org/x/image/draw`
+	- [ ] `golang.org/x/image/font`
+	- [ ] `golang.org/x/image/font/basicfont`
+	- [ ] `golang.org/x/image/font/gofont/gobold`
+	- [ ] `golang.org/x/image/font/gofont/gobolditalic`
+	- [ ] `golang.org/x/image/font/gofont/goitalic`
+	- [ ] `golang.org/x/image/font/gofont/gomedium`
+	- [ ] `golang.org/x/image/font/gofont/gomediumitalic`
+	- [ ] `golang.org/x/image/font/gofont/gomono`
+	- [ ] `golang.org/x/image/font/gofont/gomonobold`
+	- [ ] `golang.org/x/image/font/gofont/gomonobolditalic`
+	- [ ] `golang.org/x/image/font/gofont/gomonoitalic`
+	- [ ] `golang.org/x/image/font/gofont/goregular`
+	- [ ] `golang.org/x/image/font/gofont/gosmallcaps`
+	- [ ] `golang.org/x/image/font/gofont/gosmallcapsitalic`
+	- [ ] `golang.org/x/image/font/inconsolata`
+	- [ ] `golang.org/x/image/font/opentype`
+	- [ ] `golang.org/x/image/font/plan9font`
+	- [ ] `golang.org/x/image/font/sfnt`
+	- [ ] `golang.org/x/image/math/f32`
+	- [ ] `golang.org/x/image/math/f64`
+	- [ ] `golang.org/x/image/math/fixed`
+	- [ ] `golang.org/x/image/riff`
+	- [ ] `golang.org/x/image/tiff`
+	- [ ] `golang.org/x/image/tiff/lzw`
+	- [ ] `golang.org/x/image/vector`
+	- [ ] `golang.org/x/image/vp8`
+	- [ ] `golang.org/x/image/vp8l`
+	- [ ] `golang.org/x/image/webp`
+- [ ] `golang.org/x/lint`
+	- [ ] `golang.org/x/lint/golint`
+- [ ] /x/mobile/*
+	- [ ] `golang.org/x/mobile/app`
+	- [ ] `golang.org/x/mobile/asset`
+	- [ ] `golang.org/x/mobile/bind`
+	- [ ] `golang.org/x/mobile/bind/java`
+	- [ ] `golang.org/x/mobile/bind/objc`
+	- [ ] `golang.org/x/mobile/bind/seq`
+	- [ ] `golang.org/x/mobile/cmd/gobind`
+	- [ ] `golang.org/x/mobile/cmd/gomobile`
+	- [ ] `golang.org/x/mobile/event/key`
+	- [ ] `golang.org/x/mobile/event/lifecycle`
+	- [ ] `golang.org/x/mobile/event/mouse`
+	- [ ] `golang.org/x/mobile/event/paint`
+	- [ ] `golang.org/x/mobile/event/size`
+	- [ ] `golang.org/x/mobile/event/touch`
+	- [ ] `golang.org/x/mobile/example/basic`
+	- [ ] `golang.org/x/mobile/example/bind/hello`
+	- [ ] `golang.org/x/mobile/example/flappy`
+	- [ ] `golang.org/x/mobile/example/network`
+	- [ ] `golang.org/x/mobile/exp/app/debug`
+	- [ ] `golang.org/x/mobile/exp/audio/al`
+	- [ ] `golang.org/x/mobile/exp/f32`
+	- [ ] `golang.org/x/mobile/exp/font`
+	- [ ] `golang.org/x/mobile/exp/gl/glutil`
+	- [ ] `golang.org/x/mobile/exp/sensor`
+	- [ ] `golang.org/x/mobile/exp/sprite`
+	- [ ] `golang.org/x/mobile/exp/sprite/clock`
+	- [ ] `golang.org/x/mobile/exp/sprite/glsprite`
+	- [ ] `golang.org/x/mobile/exp/sprite/portable`
+	- [ ] `golang.org/x/mobile/geom`
+	- [ ] `golang.org/x/mobile/gl`
+- [ ] /x/mod/*
+	- [ ] `golang.org/x/mod/gosumcheck`
+	- [ ] `golang.org/x/mod/modfile`
+	- [ ] `golang.org/x/mod/module`
+	- [ ] `golang.org/x/mod/semver`
+	- [ ] `golang.org/x/mod/sumdb`
+	- [ ] `golang.org/x/mod/sumdb/dirhash`
+	- [ ] `golang.org/x/mod/sumdb/note`
+	- [ ] `golang.org/x/mod/sumdb/storage`
+	- [ ] `golang.org/x/mod/sumdb/tlog`
+	- [ ] `golang.org/x/mod/zip`
+- [ ] /x/net/*
 	- [ ] `golang.org/x/net/bpf`
 	- [ ] `golang.org/x/net/context`
 	- [ ] `golang.org/x/net/context/ctxhttp`
 	- [ ] `golang.org/x/net/dict`
-	- [ ] `golang.org/x/net/dns`
 	- [ ] `golang.org/x/net/dns/dnsmessage`
 	- [ ] `golang.org/x/net/html`
 	- [ ] `golang.org/x/net/html/atom`
 	- [ ] `golang.org/x/net/html/charset`
-	- [ ] `golang.org/x/net/http`
 	- [ ] `golang.org/x/net/http2`
 	- [ ] `golang.org/x/net/http2/h2c`
 	- [ ] `golang.org/x/net/http2/h2demo`
@@ -286,7 +519,6 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/net/idna`
 	- [ ] `golang.org/x/net/ipv4`
 	- [ ] `golang.org/x/net/ipv6`
-	- [ ] `golang.org/x/net/lif`
 	- [ ] `golang.org/x/net/nettest`
 	- [ ] `golang.org/x/net/netutil`
 	- [ ] `golang.org/x/net/proxy`
@@ -301,6 +533,7 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/oauth2/bitbucket`
 	- [ ] `golang.org/x/oauth2/cern`
 	- [ ] `golang.org/x/oauth2/clientcredentials`
+	- [ ] `golang.org/x/oauth2/endpoints`
 	- [ ] `golang.org/x/oauth2/facebook`
 	- [ ] `golang.org/x/oauth2/fitbit`
 	- [ ] `golang.org/x/oauth2/foursquare`
@@ -330,16 +563,37 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/oauth2/vk`
 	- [ ] `golang.org/x/oauth2/yahoo`
 	- [ ] `golang.org/x/oauth2/yandex`
-- [ ] `golang.org/x/sync`
+- [ ] /x/perf/*
+	- [ ] `golang.org/x/perf/analysis/app`
+	- [ ] `golang.org/x/perf/analysis/appengine`
+	- [ ] `golang.org/x/perf/analysis/localperf`
+	- [ ] `golang.org/x/perf/benchstat`
+	- [ ] `golang.org/x/perf/cmd/benchsave`
+	- [ ] `golang.org/x/perf/cmd/benchstat`
+	- [ ] `golang.org/x/perf/storage`
+	- [ ] `golang.org/x/perf/storage/app`
+	- [ ] `golang.org/x/perf/storage/appengine`
+	- [ ] `golang.org/x/perf/storage/benchfmt`
+	- [ ] `golang.org/x/perf/storage/db`
+	- [ ] `golang.org/x/perf/storage/db/dbtest`
+	- [ ] `golang.org/x/perf/storage/db/sqlite3`
+	- [ ] `golang.org/x/perf/storage/fs`
+	- [ ] `golang.org/x/perf/storage/fs/gcs`
+	- [ ] `golang.org/x/perf/storage/fs/local`
+	- [ ] `golang.org/x/perf/storage/localperfdata`
+	- [ ] `golang.org/x/perf/storage/query`
+- [ ] `golang.org/x/playground`
+	- [ ] `golang.org/x/playground/sandbox`
+	- [ ] `golang.org/x/playground/sandbox/sandboxtypes`
+- [ ] `golang.org/x/review/git-codereview`
+- [ ] /x/sync/*
 	- [ ] `golang.org/x/sync/errgroup`
 	- [ ] `golang.org/x/sync/semaphore`
 	- [ ] `golang.org/x/sync/singleflight`
 	- [ ] `golang.org/x/sync/syncmap`
-- [ ] `golang.org/x/sys`
+- [ ] /x/sys/*
 	- [ ] `golang.org/x/sys/cpu`
-	- [ ] `golang.org/x/sys/plan9`
 	- [ ] `golang.org/x/sys/unix`
-	- [ ] `golang.org/x/sys/unix/linux`
 	- [ ] `golang.org/x/sys/windows`
 	- [ ] `golang.org/x/sys/windows/mkwinsyscall`
 	- [ ] `golang.org/x/sys/windows/registry`
@@ -348,13 +602,12 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/sys/windows/svc/eventlog`
 	- [ ] `golang.org/x/sys/windows/svc/example`
 	- [ ] `golang.org/x/sys/windows/svc/mgr`
+- [ ] `golang.org/x/term`
 - [ ] `golang.org/x/text`
 	- [ ] `golang.org/x/text/cases`
-	- [ ] `golang.org/x/text/cmd`
 	- [ ] `golang.org/x/text/cmd/gotext`
 	- [ ] `golang.org/x/text/collate`
 	- [ ] `golang.org/x/text/collate/build`
-	- [ ] `golang.org/x/text/collate/tools`
 	- [ ] `golang.org/x/text/collate/tools/colcmp`
 	- [ ] `golang.org/x/text/currency`
 	- [ ] `golang.org/x/text/date`
@@ -368,7 +621,6 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/text/encoding/traditionalchinese`
 	- [ ] `golang.org/x/text/encoding/unicode`
 	- [ ] `golang.org/x/text/encoding/unicode/utf32`
-	- [ ] `golang.org/x/text/feature`
 	- [ ] `golang.org/x/text/feature/plural`
 	- [ ] `golang.org/x/text/language`
 	- [ ] `golang.org/x/text/language/display`
@@ -389,13 +641,11 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/text/unicode/rangetable`
 	- [ ] `golang.org/x/text/unicode/runenames`
 	- [ ] `golang.org/x/text/width`
-- [ ] `golang.org/x/tools`
-- [ ] `golang.org/x/tools/benchmark`
-- [ ] `golang.org/x/tools/benchmark/parse`
-- [ ] `golang.org/x/tools/blog`
-- [ ] `golang.org/x/tools/blog/atom`
-- [ ] `golang.org/x/tools/cmd`
-	- [ ] `golang.org/x/tools/cmd/auth`
+- [ ] `golang.org/x/time/rate`
+- [ ] /x/tools/*
+	- [ ] `golang.org/x/tools/benchmark/parse`
+	- [ ] `golang.org/x/tools/blog`
+	- [ ] `golang.org/x/tools/blog/atom`
 	- [ ] `golang.org/x/tools/cmd/auth/authtest`
 	- [ ] `golang.org/x/tools/cmd/auth/cookieauth`
 	- [ ] `golang.org/x/tools/cmd/auth/gitauth`
@@ -422,22 +672,17 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/tools/cmd/guru/serial`
 	- [ ] `golang.org/x/tools/cmd/html2article`
 	- [ ] `golang.org/x/tools/cmd/present`
-	- [ ] `golang.org/x/tools/cmd/present/static`
-	- [ ] `golang.org/x/tools/cmd/present/templates`
+	- [ ] `golang.org/x/tools/cmd/present2md`
 	- [ ] `golang.org/x/tools/cmd/splitdwarf`
 	- [ ] `golang.org/x/tools/cmd/ssadump`
 	- [ ] `golang.org/x/tools/cmd/stress`
 	- [ ] `golang.org/x/tools/cmd/stringer`
 	- [ ] `golang.org/x/tools/cmd/toolstash`
-- [ ] `golang.org/x/tools/container`
 	- [ ] `golang.org/x/tools/container/intsets`
-- [ ] `golang.org/x/tools/cover`
-- [ ] `golang.org/x/tools/go`
+	- [ ] `golang.org/x/tools/cover`
 	- [ ] `golang.org/x/tools/go/analysis`
 	- [ ] `golang.org/x/tools/go/analysis/analysistest`
-	- [ ] `golang.org/x/tools/go/analysis/doc`
 	- [ ] `golang.org/x/tools/go/analysis/multichecker`
-	- [ ] `golang.org/x/tools/go/analysis/passes`
 	- [ ] `golang.org/x/tools/go/analysis/passes/asmdecl`
 	- [ ] `golang.org/x/tools/go/analysis/passes/assign`
 	- [ ] `golang.org/x/tools/go/analysis/passes/atomic`
@@ -452,90 +697,89 @@ NOTE: remove all `testdata` and `internal`.
 	- [ ] `golang.org/x/tools/go/analysis/passes/deepequalerrors`
 	- [ ] `golang.org/x/tools/go/analysis/passes/errorsas`
 	- [ ] `golang.org/x/tools/go/analysis/passes/findcall`
-	- [ ] `golang.org/x/tools/go/analysis/passes/findcall/cmd`
 	- [ ] `golang.org/x/tools/go/analysis/passes/findcall/cmd/findcall`
 	- [ ] `golang.org/x/tools/go/analysis/passes/httpresponse`
+	- [ ] `golang.org/x/tools/go/analysis/passes/ifaceassert`
 	- [ ] `golang.org/x/tools/go/analysis/passes/inspect`
 	- [ ] `golang.org/x/tools/go/analysis/passes/loopclosure`
 	- [ ] `golang.org/x/tools/go/analysis/passes/lostcancel`
-	- [ ] `golang.org/x/tools/go/analysis/passes/lostcancel/cmd`
 	- [ ] `golang.org/x/tools/go/analysis/passes/lostcancel/cmd/lostcancel`
 	- [ ] `golang.org/x/tools/go/analysis/passes/nilfunc`
 	- [ ] `golang.org/x/tools/go/analysis/passes/nilness`
-	- [ ] `golang.org/x/tools/go/analysis/passes/nilness/cmd`
 	- [ ] `golang.org/x/tools/go/analysis/passes/nilness/cmd/nilness`
 	- [ ] `golang.org/x/tools/go/analysis/passes/pkgfact`
 	- [ ] `golang.org/x/tools/go/analysis/passes/printf`
 	- [ ] `golang.org/x/tools/go/analysis/passes/shadow`
-	- [ ] `golang.org/x/tools/go/analysis/passes/shadow/cmd`
 	- [ ] `golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow`
 	- [ ] `golang.org/x/tools/go/analysis/passes/shift`
 	- [ ] `golang.org/x/tools/go/analysis/passes/sortslice`
 	- [ ] `golang.org/x/tools/go/analysis/passes/stdmethods`
+	- [ ] `golang.org/x/tools/go/analysis/passes/stringintconv`
+	- [ ] `golang.org/x/tools/go/analysis/passes/stringintconv/cmd/stringintconv`
 	- [ ] `golang.org/x/tools/go/analysis/passes/structtag`
 	- [ ] `golang.org/x/tools/go/analysis/passes/testinggoroutine`
 	- [ ] `golang.org/x/tools/go/analysis/passes/tests`
 	- [ ] `golang.org/x/tools/go/analysis/passes/unmarshal`
-	- [ ] `golang.org/x/tools/go/analysis/passes/unmarshal/cmd`
 	- [ ] `golang.org/x/tools/go/analysis/passes/unmarshal/cmd/unmarshal`
 	- [ ] `golang.org/x/tools/go/analysis/passes/unreachable`
 	- [ ] `golang.org/x/tools/go/analysis/passes/unsafeptr`
 	- [ ] `golang.org/x/tools/go/analysis/passes/unusedresult`
 	- [ ] `golang.org/x/tools/go/analysis/singlechecker`
 	- [ ] `golang.org/x/tools/go/analysis/unitchecker`
-- [ ] `golang.org/x/tools/go/ast`
 	- [ ] `golang.org/x/tools/go/ast/astutil`
 	- [ ] `golang.org/x/tools/go/ast/inspector`
-- [ ] `golang.org/x/tools/go/buildutil`
-- [ ] `golang.org/x/tools/go/callgraph`
+	- [ ] `golang.org/x/tools/go/buildutil`
+	- [ ] `golang.org/x/tools/go/callgraph`
 	- [ ] `golang.org/x/tools/go/callgraph/cha`
 	- [ ] `golang.org/x/tools/go/callgraph/rta`
 	- [ ] `golang.org/x/tools/go/callgraph/static`
-- [ ] `golang.org/x/tools/go/cfg`
-- [ ] `golang.org/x/tools/godoc`
+	- [ ] `golang.org/x/tools/go/cfg`
+	- [ ] `golang.org/x/tools/godoc`
 	- [ ] `golang.org/x/tools/godoc/analysis`
 	- [ ] `golang.org/x/tools/godoc/golangorgenv`
 	- [ ] `golang.org/x/tools/godoc/redirect`
 	- [ ] `golang.org/x/tools/godoc/static`
-	- [ ] `golang.org/x/tools/godoc/static/analysis`
-	- [ ] `golang.org/x/tools/godoc/static/images`
 	- [ ] `golang.org/x/tools/godoc/util`
 	- [ ] `golang.org/x/tools/godoc/vfs`
 	- [ ] `golang.org/x/tools/godoc/vfs/gatefs`
 	- [ ] `golang.org/x/tools/godoc/vfs/httpfs`
 	- [ ] `golang.org/x/tools/godoc/vfs/mapfs`
 	- [ ] `golang.org/x/tools/godoc/vfs/zipfs`
-- [ ] `golang.org/x/tools/go/expect`
-- [ ] `golang.org/x/tools/go/gccgoexportdata`
-- [ ] `golang.org/x/tools/go/gcexportdata`
-- [ ] `golang.org/x/tools/go/loader`
-- [ ] `golang.org/x/tools/go/packages`
-- [ ] `golang.org/x/tools/go/packages/gopackages`
-- [ ] `golang.org/x/tools/go/packages/packagestest`
-- [ ] `golang.org/x/tools/gopls`
-	- [ ] `golang.org/x/tools/gopls/doc`
-	- [ ] `golang.org/x/tools/gopls/integration`
+	- [ ] `golang.org/x/tools/go/expect`
+	- [ ] `golang.org/x/tools/go/gccgoexportdata`
+	- [ ] `golang.org/x/tools/go/gcexportdata`
+	- [ ] `golang.org/x/tools/go/loader`
+	- [ ] `golang.org/x/tools/go/packages`
+	- [ ] `golang.org/x/tools/go/packages/gopackages`
+	- [ ] `golang.org/x/tools/go/packages/packagestest`
+	- [ ] `golang.org/x/tools/gopls`
 	- [ ] `golang.org/x/tools/gopls/integration/govim`
 	- [ ] `golang.org/x/tools/gopls/integration/parse`
 	- [ ] `golang.org/x/tools/gopls/integration/replay`
-	- [ ] `golang.org/x/tools/gopls/test`
-- [ ] `golang.org/x/tools/go/pointer`
-- [ ] `golang.org/x/tools/go/ssa`
+	- [ ] `golang.org/x/tools/go/pointer`
+	- [ ] `golang.org/x/tools/go/ssa`
 	- [ ] `golang.org/x/tools/go/ssa/interp`
 	- [ ] `golang.org/x/tools/go/ssa/ssautil`
-- [ ] `golang.org/x/tools/go/types`
 	- [ ] `golang.org/x/tools/go/types/objectpath`
 	- [ ] `golang.org/x/tools/go/types/typeutil`
-- [ ] `golang.org/x/tools/go/vcs`
-- [ ] `golang.org/x/tools/imports`
-- [ ] `golang.org/x/tools/playground`
+	- [ ] `golang.org/x/tools/go/vcs`
+	- [ ] `golang.org/x/tools/imports`
+	- [ ] `golang.org/x/tools/playground`
 	- [ ] `golang.org/x/tools/playground/socket`
-- [ ] `golang.org/x/tools/present`
-- [ ] `golang.org/x/tools/refactor`
+	- [ ] `golang.org/x/tools/present`
 	- [ ] `golang.org/x/tools/refactor/eg`
 	- [ ] `golang.org/x/tools/refactor/importgraph`
 	- [ ] `golang.org/x/tools/refactor/rename`
 	- [ ] `golang.org/x/tools/refactor/satisfy`
-- [ ] `golang.org/x/tools/txtar`
+	- [ ] `golang.org/x/tools/txtar`
+- [ ] `golang.org/x/tour`
+- [ ] `golang.org/x/tour/gotour`
+- [ ] `golang.org/x/tour/pic`
+- [ ] `golang.org/x/tour/reader`
+- [ ] `golang.org/x/tour/tree`
+- [ ] `golang.org/x/tour/wc`
+- [ ] `golang.org/x/vgo`
+- [ ] `golang.org/x/website/cmd/golangorg`
+- [ ] `golang.org/x/website/cmd/googlegolangorg`
+- [ ] `golang.org/x/website/content/static`
 - [ ] `golang.org/x/xerrors`
----
