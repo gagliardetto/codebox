@@ -1,191 +1,182 @@
-## standard library
+## standard library (from list available at https://godoc.org/-/go)
 
-NOTE: remove all with `testdata`, `internal`, `examples` in the path.
+NOTE: removed all with `internal`, and `vendor` in the path.
 
-- [ ] `archive`
-	- [ ] `archive/tar`
-	- [ ] `archive/zip`
+Each item in the list is a package on its own:
+
+- [ ] `archive/tar`
+- [ ] `archive/zip`
 - [ ] `bufio`
 - [ ] `builtin`
 - [ ] `bytes`
-- [ ] `cmd`
-	- [ ] `cmd/addr2line`
-	- [ ] `cmd/api`
-	- [ ] `cmd/asm`
-	- [ ] `cmd/buildid`
-	- [ ] `cmd/cgo`
-	- [ ] `cmd/compile`
-	- [ ] `cmd/cover`
-	- [ ] `cmd/dist`
-	- [ ] `cmd/doc`
-	- [ ] `cmd/fix`
-	- [ ] `cmd/go`
-	- [ ] `cmd/gofmt`
-	- [ ] `cmd/link`
-	- [ ] `cmd/nm`
-	- [ ] `cmd/objdump`
-	- [ ] `cmd/pack`
-	- [ ] `cmd/pprof`
-	- [ ] `cmd/test2json`
-	- [ ] `cmd/trace`
-	- [ ] `cmd/vendor`
-	- [ ] `cmd/vet`
-- [ ] `compress`
-	- [ ] `compress/bzip2`
-	- [ ] `compress/flate`
-	- [ ] `compress/gzip`
-	- [ ] `compress/lzw`
-	- [ ] `compress/zlib`
-- [ ] `container`
-	- [ ] `container/heap`
-	- [ ] `container/list`
-	- [ ] `container/ring`
+- [ ] `cmd/api`
+- [ ] `cmd/asm`
+- [ ] `cmd/buildid`
+- [ ] `cmd/cgo`
+- [ ] `cmd/compile`
+- [ ] `cmd/cover`
+- [ ] `cmd/dist`
+- [ ] `cmd/doc`
+- [ ] `cmd/fix`
+- [ ] `cmd/go`
+- [ ] `cmd/gofmt`
+- [ ] `cmd/link`
+- [ ] `cmd/nm`
+- [ ] `cmd/objdump`
+- [ ] `cmd/pack`
+- [ ] `cmd/pprof`
+- [ ] `cmd/test2json`
+- [ ] `cmd/trace`
+- [ ] `cmd/vet`
+- [ ] `compress/bzip2`
+- [ ] `compress/flate`
+- [ ] `compress/gzip`
+- [ ] `compress/lzw`
+- [ ] `compress/zlib`
+- [ ] `container/heap`
+- [ ] `container/list`
+- [ ] `container/ring`
 - [ ] `context`
 - [ ] `crypto`
-	- [ ] `crypto/aes`
-	- [ ] `crypto/cipher`
-	- [ ] `crypto/des`
-	- [ ] `crypto/dsa`
-	- [ ] `crypto/ecdsa`
-	- [ ] `crypto/ed25519`
-	- [ ] `crypto/elliptic`
-	- [ ] `crypto/hmac`
-	- [ ] `crypto/md5`
-	- [ ] `crypto/rand`
-	- [ ] `crypto/rc4`
-	- [ ] `crypto/rsa`
-	- [ ] `crypto/sha1`
-	- [ ] `crypto/sha256`
-	- [ ] `crypto/sha512`
-	- [ ] `crypto/subtle`
-	- [ ] `crypto/tls`
-	- [ ] `crypto/x509`
-	- [ ] `crypto/x509/pkix`
-- [ ] `database`
-	- [ ] `database/sql`
-	- [ ] `database/sql/driver`
-- [ ] `debug`
-	- [ ] `debug/dwarf`
-	- [ ] `debug/elf`
-	- [ ] `debug/gosym`
-	- [ ] `debug/macho`
-	- [ ] `debug/pe`
-	- [ ] `debug/plan9obj`
+- [ ] `crypto/aes`
+- [ ] `crypto/cipher`
+- [ ] `crypto/des`
+- [ ] `crypto/dsa`
+- [ ] `crypto/ecdsa`
+- [ ] `crypto/ed25519`
+- [ ] `crypto/elliptic`
+- [ ] `crypto/hmac`
+- [ ] `crypto/md5`
+- [ ] `crypto/rand`
+- [ ] `crypto/rc4`
+- [ ] `crypto/rsa`
+- [ ] `crypto/sha1`
+- [ ] `crypto/sha256`
+- [ ] `crypto/sha512`
+- [ ] `crypto/subtle`
+- [ ] `crypto/tls`
+- [ ] `crypto/x509`
+- [ ] `crypto/x509/pkix`
+- [ ] `database/sql`
+- [ ] `database/sql/driver`
+- [ ] `debug/dwarf`
+- [ ] `debug/elf`
+- [ ] `debug/gosym`
+- [ ] `debug/macho`
+- [ ] `debug/pe`
+- [ ] `debug/plan9obj`
 - [ ] `encoding`
-	- [ ] `encoding/ascii85`
-	- [ ] `encoding/asn1`
-	- [ ] `encoding/base32`
-	- [ ] `encoding/base64`
-	- [ ] `encoding/binary`
-	- [ ] `encoding/csv`
-	- [ ] `encoding/gob`
-	- [ ] `encoding/hex`
-	- [ ] `encoding/json`
-	- [ ] `encoding/pem`
-	- [ ] `encoding/xml`
+- [ ] `encoding/ascii85`
+- [ ] `encoding/asn1`
+- [ ] `encoding/base32`
+- [ ] `encoding/base64`
+- [ ] `encoding/binary`
+- [ ] `encoding/csv`
+- [ ] `encoding/gob`
+- [ ] `encoding/hex`
+- [ ] `encoding/json`
+- [ ] `encoding/pem`
+- [ ] `encoding/xml`
 - [ ] `errors`
 - [ ] `expvar`
 - [ ] `flag`
 - [ ] `fmt`
-- [ ] `go`
-	- [ ] `go/ast`
-	- [ ] `go/build`
-	- [ ] `go/constant`
-	- [ ] `go/doc`
-	- [ ] `go/format`
-	- [ ] `go/importer`
-	- [ ] `go/parser`
-	- [ ] `go/printer`
-	- [ ] `go/scanner`
-	- [ ] `go/token`
-	- [ ] `go/types`
+- [ ] `go/ast`
+- [ ] `go/build`
+- [ ] `go/constant`
+- [ ] `go/doc`
+- [ ] `go/format`
+- [ ] `go/importer`
+- [ ] `go/parser`
+- [ ] `go/printer`
+- [ ] `go/scanner`
+- [ ] `go/token`
+- [ ] `go/types`
 - [ ] `hash`
-	- [ ] `hash/adler32`
-	- [ ] `hash/crc32`
-	- [ ] `hash/crc64`
-	- [ ] `hash/fnv`
-	- [ ] `hash/maphash`
+- [ ] `hash/adler32`
+- [ ] `hash/crc32`
+- [ ] `hash/crc64`
+- [ ] `hash/fnv`
+- [ ] `hash/maphash`
 - [ ] `html`
 - [ ] `html/template`
 - [ ] `image`
-	- [ ] `image/color`
-	- [ ] `image/color/palette`
-	- [ ] `image/draw`
-	- [ ] `image/gif`
-	- [ ] `image/jpeg`
-	- [ ] `image/png`
-- [ ] `index`
+- [ ] `image/color`
+- [ ] `image/color/palette`
+- [ ] `image/draw`
+- [ ] `image/gif`
+- [ ] `image/jpeg`
+- [ ] `image/png`
 - [ ] `index/suffixarray`
 - [ ] `io`
 - [ ] `io/ioutil`
 - [ ] `log`
 - [ ] `log/syslog`
 - [ ] `math`
-	- [ ] `math/big`
-	- [ ] `math/bits`
-	- [ ] `math/cmplx`
-	- [ ] `math/rand`
+- [ ] `math/big`
+- [ ] `math/bits`
+- [ ] `math/cmplx`
+- [ ] `math/rand`
 - [ ] `mime`
-	- [ ] `mime/multipart`
-	- [ ] `mime/quotedprintable`
+- [ ] `mime/multipart`
+- [ ] `mime/quotedprintable`
 - [ ] `net`
-	- [ ] `net/http`
-	- [ ] `net/http/cgi`
-	- [ ] `net/http/cookiejar`
-	- [ ] `net/http/fcgi`
-	- [ ] `net/http/httptest`
-	- [ ] `net/http/httptrace`
-	- [ ] `net/http/httputil`
-	- [ ] `net/http/pprof`
-	- [ ] `net/mail`
-	- [ ] `net/rpc`
-	- [ ] `net/rpc/jsonrpc`
-	- [ ] `net/smtp`
-	- [ ] `net/textproto`
-	- [ ] `net/url`
+- [ ] `net/http`
+- [ ] `net/http/cgi`
+- [ ] `net/http/cookiejar`
+- [ ] `net/http/fcgi`
+- [ ] `net/http/httptest`
+- [ ] `net/http/httptrace`
+- [ ] `net/http/httputil`
+- [ ] `net/http/pprof`
+- [ ] `net/mail`
+- [ ] `net/rpc`
+- [ ] `net/rpc/jsonrpc`
+- [ ] `net/smtp`
+- [ ] `net/textproto`
+- [ ] `net/url`
 - [ ] `os`
-	- [ ] `os/exec`
-	- [ ] `os/signal`
-	- [ ] `os/user`
+- [ ] `os/exec`
+- [ ] `os/signal`
+- [ ] `os/user`
 - [ ] `path`
-	- [ ] `path/filepath`
+- [ ] `path/filepath`
 - [ ] `plugin`
 - [ ] `reflect`
 - [ ] `regexp`
-	- [ ] `regexp/syntax`
+- [ ] `regexp/syntax`
 - [ ] `runtime`
-	- [ ] `runtime/cgo`
-	- [ ] `runtime/debug`
-	- [ ] `runtime/msan`
-	- [ ] `runtime/pprof`
-	- [ ] `runtime/race`
-	- [ ] `runtime/trace`
+- [ ] `runtime/cgo`
+- [ ] `runtime/debug`
+- [ ] `runtime/pprof`
+- [ ] `runtime/race`
+- [ ] `runtime/trace`
 - [ ] `sort`
 - [ ] `strconv`
 - [ ] `strings`
 - [ ] `sync`
-	- [ ] `sync/atomic`
+- [ ] `sync/atomic`
 - [ ] `syscall`
-	- [ ] `syscall/js`
+- [ ] `syscall/js`
 - [ ] `testing`
-	- [ ] `testing/iotest`
-	- [ ] `testing/quick`
-- [ ] `text`
-	- [ ] `text/scanner`
-	- [ ] `text/tabwriter`
-	- [ ] `text/template`
-	- [ ] `text/template/parse`
+- [ ] `testing/iotest`
+- [ ] `testing/quick`
+- [ ] `text/scanner`
+- [ ] `text/tabwriter`
+- [ ] `text/template`
+- [ ] `text/template/parse`
 - [ ] `time`
 - [ ] `unicode`
-	- [ ] `unicode/utf16`
-	- [ ] `unicode/utf8`
+- [ ] `unicode/utf16`
+- [ ] `unicode/utf8`
 - [ ] `unsafe`
 
 ---
 
 ### packages vendored inside standard library that are not included in the `golang.org/x` list
 
-- [ ] `github.com/google/pprof`
+- [ ] github.com/google/pprof/*
+	- [ ] `github.com/google/pprof`
 	- [ ] `github.com/google/pprof/driver`
 	- [ ] `github.com/google/pprof/profile`
 	- [ ] `github.com/google/pprof/third_party`
@@ -195,9 +186,9 @@ NOTE: remove all with `testdata`, `internal`, `examples` in the path.
 - [ ] `github.com/ianlancetaylor/demangle`
 
 
-### golang.org/x (from https://godoc.org/-/subrepo)
+### golang.org/x (from list available at https://godoc.org/-/subrepo)
 
-NOTE: removed
+NOTE: the following packages were removed:
 - golang.org/x/scratch/*
 - golang.org/x/talks/*
 
@@ -223,14 +214,16 @@ NOTE: removed
 	- [ ] `golang.org/x/benchmarks/garbage`
 	- [ ] `golang.org/x/benchmarks/http`
 	- [ ] `golang.org/x/benchmarks/json`
-- [ ] `golang.org/x/blog`
+- [ ] /x/blog/*
+	- [ ] `golang.org/x/blog`
 	- [ ] `golang.org/x/blog/content/appengine`
 	- [ ] `golang.org/x/blog/content/cover`
 	- [ ] `golang.org/x/blog/content/h2push/server`
 	- [ ] `golang.org/x/blog/content/survey2016`
 	- [ ] `golang.org/x/blog/content/survey2017`
 	- [ ] `golang.org/x/blog/support/racy`
-- [ ] `golang.org/x/build`
+- [ ] /x/build/*
+	- [ ] `golang.org/x/build`
 	- [ ] `golang.org/x/build/app/appengine`
 	- [ ] `golang.org/x/build/app/key`
 	- [ ] `golang.org/x/build/autocertcache`
@@ -455,7 +448,8 @@ NOTE: removed
 	- [ ] `golang.org/x/image/vp8`
 	- [ ] `golang.org/x/image/vp8l`
 	- [ ] `golang.org/x/image/webp`
-- [ ] `golang.org/x/lint`
+- [ ] /x/lint/*
+	- [ ] `golang.org/x/lint`
 	- [ ] `golang.org/x/lint/golint`
 - [ ] /x/mobile/*
 	- [ ] `golang.org/x/mobile/app`
@@ -528,7 +522,8 @@ NOTE: removed
 	- [ ] `golang.org/x/net/webdav`
 	- [ ] `golang.org/x/net/websocket`
 	- [ ] `golang.org/x/net/xsrftoken`
-- [ ] `golang.org/x/oauth2`
+- [ ] /x/oauth2/*
+	- [ ] `golang.org/x/oauth2`
 	- [ ] `golang.org/x/oauth2/amazon`
 	- [ ] `golang.org/x/oauth2/bitbucket`
 	- [ ] `golang.org/x/oauth2/cern`
@@ -582,7 +577,8 @@ NOTE: removed
 	- [ ] `golang.org/x/perf/storage/fs/local`
 	- [ ] `golang.org/x/perf/storage/localperfdata`
 	- [ ] `golang.org/x/perf/storage/query`
-- [ ] `golang.org/x/playground`
+- [ ] /x/playground/*
+	- [ ] `golang.org/x/playground`
 	- [ ] `golang.org/x/playground/sandbox`
 	- [ ] `golang.org/x/playground/sandbox/sandboxtypes`
 - [ ] `golang.org/x/review/git-codereview`
@@ -603,7 +599,8 @@ NOTE: removed
 	- [ ] `golang.org/x/sys/windows/svc/example`
 	- [ ] `golang.org/x/sys/windows/svc/mgr`
 - [ ] `golang.org/x/term`
-- [ ] `golang.org/x/text`
+- [ ] /x/text/*
+	- [ ] `golang.org/x/text`
 	- [ ] `golang.org/x/text/cases`
 	- [ ] `golang.org/x/text/cmd/gotext`
 	- [ ] `golang.org/x/text/collate`
@@ -772,14 +769,16 @@ NOTE: removed
 	- [ ] `golang.org/x/tools/refactor/rename`
 	- [ ] `golang.org/x/tools/refactor/satisfy`
 	- [ ] `golang.org/x/tools/txtar`
-- [ ] `golang.org/x/tour`
-- [ ] `golang.org/x/tour/gotour`
-- [ ] `golang.org/x/tour/pic`
-- [ ] `golang.org/x/tour/reader`
-- [ ] `golang.org/x/tour/tree`
-- [ ] `golang.org/x/tour/wc`
+- [ ] /x/tour/*
+	- [ ] `golang.org/x/tour`
+	- [ ] `golang.org/x/tour/gotour`
+	- [ ] `golang.org/x/tour/pic`
+	- [ ] `golang.org/x/tour/reader`
+	- [ ] `golang.org/x/tour/tree`
+	- [ ] `golang.org/x/tour/wc`
 - [ ] `golang.org/x/vgo`
-- [ ] `golang.org/x/website/cmd/golangorg`
-- [ ] `golang.org/x/website/cmd/googlegolangorg`
-- [ ] `golang.org/x/website/content/static`
+- [ ] /x/website/*
+	- [ ] `golang.org/x/website/cmd/golangorg`
+	- [ ] `golang.org/x/website/cmd/googlegolangorg`
+	- [ ] `golang.org/x/website/content/static`
 - [ ] `golang.org/x/xerrors`
