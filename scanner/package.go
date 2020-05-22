@@ -79,6 +79,9 @@ type Type interface {
 	UnqualifiedName() string
 	GetTypesVar() *types.Var
 	SetTypesVar(*types.Var)
+
+	IsVariadic() bool
+	SetIsVariadic(bool)
 }
 
 // BaseType contains the common fields for all the types.
@@ -89,6 +92,7 @@ type BaseType struct {
 	Struct   bool
 	ID       string
 	TypesVar *types.Var
+	Variadic bool
 }
 
 func newBaseType() *BaseType {
@@ -97,6 +101,8 @@ func newBaseType() *BaseType {
 		Nullable: false,
 	}
 }
+func (t *BaseType) IsVariadic() bool     { return t.Variadic }
+func (t *BaseType) SetIsVariadic(v bool) { t.Variadic = v }
 
 func (t *BaseType) GetTypesVar() *types.Var  { return t.TypesVar }
 func (t *BaseType) SetTypesVar(v *types.Var) { t.TypesVar = v }

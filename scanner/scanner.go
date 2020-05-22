@@ -403,14 +403,15 @@ func scanFunc(fn *Func, signature *types.Signature) *Func {
 	if signature.Recv() != nil {
 		fn.Receiver = scanType(signature.Recv().Type())
 	}
-	fn.Input = scanTuple(signature.Params())
-	fn.Output = scanTuple(signature.Results())
+
+	fn.Input = scanTuple(signature.Params(), signature.Variadic())
+	fn.Output = scanTuple(signature.Results(), false)
 	fn.IsVariadic = signature.Variadic()
 
 	return fn
 }
 
-func scanTuple(tuple *types.Tuple) []Type {
+func scanTuple(tuple *types.Tuple, isVariadic bool) []Type {
 	result := make([]Type, 0, tuple.Len())
 
 	for i := 0; i < tuple.Len(); i++ {
@@ -418,6 +419,14 @@ func scanTuple(tuple *types.Tuple) []Type {
 		tp := scanType(tuple.At(i).Type())
 		if tp != nil {
 			tp.SetTypesVar(typVar)
+
+			// If this is the last element,
+			// and the function is variadic,
+			// then set it to true:
+			isLast := i == tuple.Len()-1
+			if isLast && isVariadic {
+				tp.SetIsVariadic(true)
+			}
 			result = append(result, tp)
 		}
 	}

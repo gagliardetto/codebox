@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"go/types"
 	"sort"
@@ -17,6 +18,7 @@ type StorageItem struct {
 	originalMethod    *FETypeMethod
 	originalInterface *FEInterfaceMethod
 }
+
 type Storage struct {
 	values map[string]*StorageItem
 }
@@ -104,11 +106,48 @@ func main() {
 		r.Static("/static", "./static")
 
 		r.GET("/api/source", func(c *gin.Context) {
-			c.JSON(200, feModule)
+			c.IndentedJSON(200, feModule)
+		})
+		r.POST("/api/pointers", func(c *gin.Context) {
+			var req PayloadSetPointers
+			err := c.BindJSON(&req)
+			if err != nil {
+				Errorf("error binding JSON: %s", err)
+				return
+			}
+
+			if err := req.Validate(); err != nil {
+				Errorf("invalid request: %s", err)
+				return
+			}
+
+			Q(req)
+			c.Status(200)
 		})
 
 		r.Run() // listen and serve on 0.0.0.0:8080
 	}
+}
+
+type PayloadSetPointers struct {
+	Signature string
+	Pointers  *CodeQLPointers
+}
+
+//
+func (req *PayloadSetPointers) Validate() error {
+	if req.Signature == "" {
+		return errors.New("req.Signature is not set")
+	}
+	if req.Pointers == nil {
+		return errors.New("req.Pointers is not set")
+	}
+
+	if err := req.Pointers.Validate(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func ToCamel(s string) string {
@@ -121,8 +160,37 @@ func FormatCodeQlName(name string) string {
 const TODO = "TODO"
 
 type CodeQLPointers struct {
-	Element string
-	Index   int
+	Inp  *Identity
+	Outp *Identity
+}
+
+func (obj *CodeQLPointers) Validate() error {
+	if obj.Inp == nil {
+		return errors.New("obj.Inp is not set")
+	}
+	if obj.Outp == nil {
+		return errors.New("obj.Outp is not set")
+	}
+
+	if err := obj.Inp.Validate(); err != nil {
+		return err
+	}
+	if err := obj.Outp.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}
+func (obj *Identity) Validate() error {
+	if obj.Element == "" || obj.Element == TODO {
+		return errors.New("obj.Element is not set")
+	}
+
+	// the Index can remain the default value only for the receiver:
+	if obj.Index == -1 && obj.Element != ElementReceiver {
+		return errors.New("obj.Index is not set")
+	}
+	return nil
 }
 
 var ValidElementNames = []string{
@@ -143,8 +211,14 @@ func NewCodeQlFinalVals() *CodeQlFinalVals {
 		Inp:  TODO,
 		Outp: TODO,
 		Pointers: &CodeQLPointers{
-			Element: TODO,
-			Index:   -1,
+			Inp: &Identity{
+				Element: TODO,
+				Index:   -1,
+			},
+			Outp: &Identity{
+				Element: TODO,
+				Index:   -1,
+			},
 		},
 	}
 }
@@ -156,10 +230,14 @@ type CodeQlFinalVals struct {
 	IterationNumber int
 	Pointers        *CodeQLPointers // Pointers is where the current pointers will be stored
 }
+
+type Identity struct {
+	Element string
+	Index   int
+}
 type CodeQlIdentity struct {
 	Placeholder string
-	Element     string
-	Index       int
+	Identity
 }
 type FEModule struct {
 	Name             string
@@ -197,6 +275,7 @@ type FEType struct {
 	QualifiedName string
 	IsPtr         bool
 	IsBasic       bool
+	IsVariadic    bool
 }
 
 const (
@@ -215,10 +294,25 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	fe.PkgPath = fn.PkgPath
 	for i, in := range fn.Input {
 		v := getFETypeVar(in)
+
+		placeholder := Sf("isParameter(%v)", i)
+		if v.IsVariadic {
+			if len(fn.Input) == 1 {
+				placeholder = "isParameter(_)"
+			} else {
+				placeholder = Sf("isParameter(any(int i | i >= %v))", i)
+			}
+		}
+		isNotLast := i != len(fn.Input)-1
+		if v.IsVariadic && isNotLast {
+			panic(Sf("parameter %v is variadic but is NOT the last parameter", v))
+		}
 		v.Identity = CodeQlIdentity{
-			Placeholder: Sf("isParameter(%v)", i),
-			Element:     ElementParameter,
-			Index:       i,
+			Placeholder: placeholder,
+			Identity: Identity{
+				Element: ElementParameter,
+				Index:   i,
+			},
 		}
 		fe.Parameters = append(fe.Parameters, v)
 	}
@@ -228,14 +322,18 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 		if len(fn.Output) == 1 {
 			v.Identity = CodeQlIdentity{
 				Placeholder: "isResult()",
-				Element:     ElementResult,
-				Index:       i,
+				Identity: Identity{
+					Element: ElementResult,
+					Index:   i,
+				},
 			}
 		} else {
 			v.Identity = CodeQlIdentity{
 				Placeholder: Sf("isResult(%v)", i),
-				Element:     ElementResult,
-				Index:       i,
+				Identity: Identity{
+					Element: ElementResult,
+					Index:   i,
+				},
 			}
 		}
 		fe.Results = append(fe.Results, v)
@@ -252,6 +350,7 @@ func getFETypeVar(tp scanner.Type) *FEType {
 	if varName != "" {
 		fe.VarName = varName
 	}
+	fe.IsVariadic = tp.IsVariadic()
 
 	{
 		// Check if type is a pointer:
@@ -293,8 +392,10 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 	fe.Receiver = &FEReceiver{}
 	fe.Receiver.Identity = CodeQlIdentity{
 		Placeholder: "isReceiver()",
-		Element:     ElementReceiver,
-		Index:       -1,
+		Identity: Identity{
+			Element: ElementReceiver,
+			Index:   -1,
+		},
 	}
 
 	{
@@ -375,8 +476,10 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPa
 	fe.Receiver = &FEReceiver{}
 	fe.Receiver.Identity = CodeQlIdentity{
 		Placeholder: "isReceiver()",
-		Element:     ElementReceiver,
-		Index:       -1,
+		Identity: Identity{
+			Element: ElementReceiver,
+			Index:   -1,
+		},
 	}
 
 	feFunc := getFEFunc(methodFunc)
