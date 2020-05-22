@@ -224,11 +224,10 @@ func NewCodeQlFinalVals() *CodeQlFinalVals {
 }
 
 type CodeQlFinalVals struct {
-	Inp             string // string representation of the CodeQlIdentity.Placeholder
-	Outp            string // string representation of the CodeQlIdentity.Placeholder
-	IsUse           bool
-	IterationNumber int
-	Pointers        *CodeQLPointers // Pointers is where the current pointers will be stored
+	Inp       string // string representation of the CodeQlIdentity.Placeholder
+	Outp      string // string representation of the CodeQlIdentity.Placeholder
+	IsEnabled bool
+	Pointers  *CodeQLPointers // Pointers is where the current pointers will be stored
 }
 
 type Identity struct {
