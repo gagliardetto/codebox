@@ -753,10 +753,12 @@ type FETypeMethod struct {
 	Func      *FEFunc
 }
 type FEInterfaceMethod struct {
+	// TODO: alias instead of embed?
 	FETypeMethod
 }
 
 type FEReceiver struct {
+	// TODO: alias instead of embed?
 	FEType
 }
 
