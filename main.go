@@ -253,6 +253,7 @@ func main() {
 						req.Pointers.Outp.Element,
 					)
 					if code != nil {
+						// TODO: save `code` inside `fe` (add all to the file only at program exit).
 						file.Add(code.Line())
 					} else {
 						Warnf("NOTHING GENERATED")
