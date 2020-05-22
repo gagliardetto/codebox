@@ -340,8 +340,8 @@
                                     <td>INTO:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="method.Receiver.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsEnabled">
-                                            <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'" :identity-element="method.Receiver.Identity.Element" :identity-index="method.Receiver.Identity.Index"></label>
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="method.Receiver.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsEnabled" :identity-element="method.Receiver.Identity.Element" :identity-index="method.Receiver.Identity.Index">
+                                            <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'"></label>
                                         </div>
                                     </td>
                                     <td></td>
@@ -627,7 +627,7 @@
                 element.classList.add("selected-inp");
 
                 {
-                    let signature = fn.Signature;
+                    let signature = fn.Signature || fn.Func.Signature;
                     let identityElement = radioButton.getAttribute("identity-element");
                     let identityIndex = radioButton.getAttribute("identity-index");
                     fn.CodeQL.Pointers.Inp.Element = identityElement;
@@ -644,10 +644,6 @@
                             'Content-Type': 'application/json',
                           },
                           body: JSON.stringify(payload),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                          console.log('Success:', data);
                         })
                         .catch((error) => {
                           console.error('Error:', error);
@@ -678,7 +674,7 @@
                 element.classList.add("selected-outp");
 
                 {
-                    let signature = fn.Signature;
+                    let signature = fn.Signature || fn.Func.Signature;
                     let identityElement = radioButton.getAttribute("identity-element");
                     let identityIndex = radioButton.getAttribute("identity-index");
                     fn.CodeQL.Pointers.Outp.Element = identityElement;
@@ -695,10 +691,6 @@
                             'Content-Type': 'application/json',
                           },
                           body: JSON.stringify(payload),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                          console.log('Success:', data);
                         })
                         .catch((error) => {
                           console.error('Error:', error);

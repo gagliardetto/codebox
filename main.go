@@ -6,6 +6,7 @@ import (
 	"go/types"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/gagliardetto/codebox/scanner"
 	. "github.com/gagliardetto/utils"
@@ -13,20 +14,94 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-type StorageItem struct {
-	originalFunc      *FEFunc
-	originalMethod    *FETypeMethod
-	originalInterface *FEInterfaceMethod
+var (
+	mu = &sync.RWMutex{}
+)
+
+type IndexItem struct {
+	original interface{}
 }
 
-type Storage struct {
-	values map[string]*StorageItem
+//
+func NewIndexItem(v interface{}) *IndexItem {
+	item := &IndexItem{}
+	item.Set(v)
+	return item
 }
 
-func NewStorage() *Storage {
-	return &Storage{
-		values: make(map[string]*StorageItem),
+//
+func (item *IndexItem) Set(v interface{}) {
+	item.original = v
+}
+
+//
+func (item *IndexItem) IsNil() bool {
+	return item.original == nil
+}
+
+//
+func (item *IndexItem) GetFEFunc() *FEFunc {
+	fe, ok := item.original.(*FEFunc)
+	if !ok {
+		return nil
 	}
+	return fe
+}
+
+//
+func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
+	fe, ok := item.original.(*FETypeMethod)
+	if !ok {
+		return nil
+	}
+	return fe
+}
+
+//
+func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
+	fe, ok := item.original.(*FEInterfaceMethod)
+	if !ok {
+		return nil
+	}
+	return fe
+}
+
+type Index struct {
+	mu     *sync.RWMutex
+	values map[string]*IndexItem
+}
+
+func NewIndex() *Index {
+	return &Index{
+		mu:     &sync.RWMutex{},
+		values: make(map[string]*IndexItem),
+	}
+}
+func (index *Index) GetBySignature(signature string) *IndexItem {
+	index.mu.RLock()
+	defer index.mu.RUnlock()
+
+	val, ok := index.values[signature]
+	if !ok {
+		return nil
+	}
+	return val
+}
+
+func (index *Index) Set(signature string, v interface{}) {
+	index.mu.Lock()
+	defer index.mu.Unlock()
+
+	index.values[signature] = NewIndexItem(v)
+}
+func (index *Index) MustSetUnique(signature string, v interface{}) {
+
+	existing := index.GetBySignature(signature)
+	if existing != nil {
+		panic(Sf("%q already in the index"))
+	}
+
+	index.Set(signature, v)
 }
 
 func main() {
@@ -100,6 +175,20 @@ func main() {
 		len(feModule.TypeMethods),
 		len(feModule.InterfaceMethods),
 	)
+
+	// Create index, and load values to it:
+	index := NewIndex()
+	{
+		for _, v := range feModule.Funcs {
+			index.MustSetUnique(v.Signature, v)
+		}
+		for _, v := range feModule.TypeMethods {
+			index.MustSetUnique(v.Func.Signature, v)
+		}
+		for _, v := range feModule.InterfaceMethods {
+			index.MustSetUnique(v.Func.Signature, v)
+		}
+	}
 	if runServer {
 		r := gin.Default()
 		r.StaticFile("", "./index.html")
@@ -115,13 +204,36 @@ func main() {
 				Errorf("error binding JSON: %s", err)
 				return
 			}
+			Q(req)
 
 			if err := req.Validate(); err != nil {
 				Errorf("invalid request: %s", err)
 				return
 			}
 
-			Q(req)
+			mu.Lock()
+			defer mu.Unlock()
+
+			stored := index.GetBySignature(req.Signature)
+			if stored == nil {
+				Errorf("not found: %q", req.Signature)
+				c.Status(404)
+				return
+			}
+
+			switch stored.original.(type) {
+			case *FEFunc:
+				fe := stored.GetFEFunc()
+				fe.CodeQL.Pointers = req.Pointers
+			case *FETypeMethod:
+				fe := stored.GetFETypeMethod()
+				fe.CodeQL.Pointers = req.Pointers
+			case *FEInterfaceMethod:
+				fe := stored.GetFEInterfaceMethod()
+				fe.CodeQL.Pointers = req.Pointers
+			default:
+				panic(Sf("unknown type for %v", stored.original))
+			}
 			c.Status(200)
 		})
 
