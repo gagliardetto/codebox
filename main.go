@@ -118,13 +118,48 @@ func FormatCodeQlName(name string) string {
 	return ToCamel(strings.ReplaceAll(name, "\"", ""))
 }
 
-type CodeQlFinalVals struct {
-	Inp   string
-	Outp  string
-	IsUse bool
+const TODO = "TODO"
+
+type CodeQLPointers struct {
+	Element string
+	Index   int
 }
-type CodeQlPlaceholder struct {
-	Val string
+
+var ValidElementNames = []string{
+	ElementReceiver,
+	ElementParameter,
+	ElementResult,
+}
+
+func IsValidElementName(name string) bool {
+	return IsAnyOf(
+		name,
+		ValidElementNames...,
+	)
+}
+
+func NewCodeQlFinalVals() *CodeQlFinalVals {
+	return &CodeQlFinalVals{
+		Inp:  TODO,
+		Outp: TODO,
+		Pointers: &CodeQLPointers{
+			Element: TODO,
+			Index:   -1,
+		},
+	}
+}
+
+type CodeQlFinalVals struct {
+	Inp             string // string representation of the CodeQlIdentity.Placeholder
+	Outp            string // string representation of the CodeQlIdentity.Placeholder
+	IsUse           bool
+	IterationNumber int
+	Pointers        *CodeQLPointers // Pointers is where the current pointers will be stored
+}
+type CodeQlIdentity struct {
+	Placeholder string
+	Element     string
+	Index       int
 }
 type FEModule struct {
 	Name             string
@@ -155,7 +190,7 @@ func DocsWithDefault(docs []string) []string {
 }
 
 type FEType struct {
-	Placeholder   CodeQlPlaceholder
+	Identity      CodeQlIdentity
 	VarName       string
 	TypeName      string
 	PkgPath       string
@@ -164,12 +199,15 @@ type FEType struct {
 	IsBasic       bool
 }
 
+const (
+	ElementReceiver  = "receiver"
+	ElementParameter = "parameter"
+	ElementResult    = "result"
+)
+
 func getFEFunc(fn *scanner.Func) *FEFunc {
 	var fe FEFunc
-	fe.CodeQL = &CodeQlFinalVals{
-		Inp:  "TODO",
-		Outp: "TODO",
-	}
+	fe.CodeQL = NewCodeQlFinalVals()
 	fe.Name = fn.Name
 	fe.FEName = FormatCodeQlName(fn.Name)
 	fe.Docs = DocsWithDefault(fn.Doc)
@@ -177,16 +215,28 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	fe.PkgPath = fn.PkgPath
 	for i, in := range fn.Input {
 		v := getFETypeVar(in)
-		v.Placeholder.Val = Sf("isParameter(%v)", i)
+		v.Identity = CodeQlIdentity{
+			Placeholder: Sf("isParameter(%v)", i),
+			Element:     ElementParameter,
+			Index:       i,
+		}
 		fe.Parameters = append(fe.Parameters, v)
 	}
 	for i, out := range fn.Output {
 		v := getFETypeVar(out)
 
 		if len(fn.Output) == 1 {
-			v.Placeholder.Val = "isResult()"
+			v.Identity = CodeQlIdentity{
+				Placeholder: "isResult()",
+				Element:     ElementResult,
+				Index:       i,
+			}
 		} else {
-			v.Placeholder.Val = Sf("isResult(%v)", i)
+			v.Identity = CodeQlIdentity{
+				Placeholder: Sf("isResult(%v)", i),
+				Element:     ElementResult,
+				Index:       i,
+			}
 		}
 		fe.Results = append(fe.Results, v)
 	}
@@ -237,14 +287,16 @@ func getFETypeVar(tp scanner.Type) *FEType {
 func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMethod {
 	var fe FETypeMethod
 
-	fe.CodeQL = &CodeQlFinalVals{
-		Inp:  "TODO",
-		Outp: "TODO",
-	}
+	fe.CodeQL = NewCodeQlFinalVals()
 	fe.Docs = make([]string, 0)
 
 	fe.Receiver = &FEReceiver{}
-	fe.Receiver.Placeholder.Val = "isReceiver()"
+	fe.Receiver.Identity = CodeQlIdentity{
+		Placeholder: "isReceiver()",
+		Element:     ElementReceiver,
+		Index:       -1,
+	}
+
 	{
 		var named *types.Named
 		ptr, isPtr := mt.Recv().(*types.Pointer)
@@ -318,13 +370,14 @@ type FEReceiver struct {
 func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPath string) *FETypeMethod {
 	var fe FETypeMethod
 
-	fe.CodeQL = &CodeQlFinalVals{
-		Inp:  "TODO",
-		Outp: "TODO",
-	}
+	fe.CodeQL = NewCodeQlFinalVals()
 
 	fe.Receiver = &FEReceiver{}
-	fe.Receiver.Placeholder.Val = "isReceiver()"
+	fe.Receiver.Identity = CodeQlIdentity{
+		Placeholder: "isReceiver()",
+		Element:     ElementReceiver,
+		Index:       -1,
+	}
 
 	feFunc := getFEFunc(methodFunc)
 	feFunc.PkgPath = pkgPath

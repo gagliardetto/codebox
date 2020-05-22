@@ -213,14 +213,14 @@
                                     <td>FROM:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funParameter.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-parameter-'+index" :disabled="!func.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funParameter.Identity.Placeholder" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-parameter-'+index" :disabled="!func.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'func-'+func.Name+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funResult.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-result-'+index" :disabled="!func.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-inp'" :value="funResult.Identity.Placeholder" :parent="'func-'+func.Name" @change="onChangeInp($event, func)" :colorfor="'func-'+func.Name+'-result-'+index" :disabled="!func.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'func-'+func.Name+'-result-'+index"></label>
                                         </div>
                                     </td>
@@ -231,14 +231,14 @@
                                     <td>INTO:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funParameter.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-parameter-'+index" :disabled="!func.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funParameter.Identity.Placeholder" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-parameter-'+index" :disabled="!func.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'func-'+func.Name+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funResult.Placeholder.Val" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-result-'+index" :disabled="!func.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-func-'+func.Name+'-outp'" :value="funResult.Identity.Placeholder" :parent="'func-'+func.Name" @change="onChangeOutp($event, func)" :colorfor="'func-'+func.Name+'-result-'+index" :disabled="!func.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'func-'+func.Name+'-result-'+index"></label>
                                         </div>
                                     </td>
@@ -315,21 +315,21 @@
                                     <td>FROM:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="method.Receiver.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="method.Receiver.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funParameter.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-parameter-'+index" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funParameter.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-parameter-'+index" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funResult.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-result-'+index" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-inp'" :value="funResult.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeInp($event, method)" :colorfor="'method-'+method.FEName+'-result-'+index" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-result-'+index"></label>
                                         </div>
                                     </td>
@@ -340,21 +340,21 @@
                                     <td>INTO:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="method.Receiver.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="method.Receiver.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-receiver'" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-receiver'"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funParameter.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-parameter-'+index" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funParameter.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-parameter-'+index" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funResult.Placeholder.Val" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-result-'+index" :disabled="!method.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-method-'+method.FEName+'-outp'" :value="funResult.Identity.Placeholder" :parent="'method-'+method.FEName" @change="onChangeOutp($event, method)" :colorfor="'method-'+method.FEName+'-result-'+index" :disabled="!method.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'method-'+method.FEName+'-result-'+index"></label>
                                         </div>
                                     </td>
@@ -431,21 +431,21 @@
                                     <td>FROM:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="itMeth.Receiver.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="itMeth.Receiver.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-receiver'"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funParameter.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-parameter-'+index" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funParameter.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-parameter-'+index" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funResult.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-result-'+index" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-inp'" :value="funResult.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeInp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-result-'+index" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-result-'+index"></label>
                                         </div>
                                     </td>
@@ -456,21 +456,21 @@
                                     <td>INTO:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="itMeth.Receiver.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="itMeth.Receiver.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-receiver'" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-receiver'"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funParameter.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-parameter-'+index" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funParameter.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-parameter-'+index" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-parameter-'+index"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funResult.Placeholder.Val" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-result-'+index" :disabled="!itMeth.CodeQL.IsUse">
+                                            <input class="form-check-input" type="radio" :name="'radio-itMeth-'+itMeth.FEName+'-outp'" :value="funResult.Identity.Placeholder" :parent="'itMeth-'+itMeth.FEName" @change="onChangeOutp($event, itMeth)" :colorfor="'itMeth-'+itMeth.FEName+'-result-'+index" :disabled="!itMeth.CodeQL.IsUse">
                                             <label class="form-check-label" :for="'itMeth-'+itMeth.FEName+'-result-'+index"></label>
                                         </div>
                                     </td>
