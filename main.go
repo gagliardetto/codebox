@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"flag"
-	"fmt"
 	"go/types"
 	"sort"
 	"strings"
@@ -13,6 +11,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iancoleman/strcase"
 )
+
+type StorageItem struct {
+	originalFunc      *FEFunc
+	originalMethod    *FETypeMethod
+	originalInterface *FEInterfaceMethod
+}
+type Storage struct {
+	values map[string]*StorageItem
+}
+
+func NewStorage() *Storage {
+	return &Storage{
+		values: make(map[string]*StorageItem),
+	}
+}
 
 func main() {
 	var pkg string
@@ -33,9 +46,9 @@ func main() {
 	}
 
 	feModule := &FEModule{
-		Funcs:      make([]*FEFunc, 0),
-		Methods:    make([]*FEMethod, 0),
-		Interfaces: make([]*FEInterface, 0),
+		Funcs:            make([]*FEFunc, 0),
+		TypeMethods:      make([]*FETypeMethod, 0),
+		InterfaceMethods: make([]*FEInterfaceMethod, 0),
 	}
 
 	pk := pks[0]
@@ -53,24 +66,24 @@ func main() {
 			}
 		}
 		for _, mt := range pk.Methods {
-			meth := getFEMethod(mt, pk.Funcs)
+			meth := getFETypeMethod(mt, pk.Funcs)
 			if meth != nil {
-				feModule.Methods = append(feModule.Methods, meth)
+				feModule.TypeMethods = append(feModule.TypeMethods, meth)
 			}
 		}
 		for _, it := range pk.Interfaces {
-			feModule.Interfaces = append(feModule.Interfaces, getFEInterface(it, feModule.PkgPath))
+			feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it, feModule.PkgPath)...)
 		}
 	}
 
 	// Sort methods by receiver:
-	sort.Slice(feModule.Methods, func(i, j int) bool {
+	sort.Slice(feModule.TypeMethods, func(i, j int) bool {
 		// If same receiver...
-		if feModule.Methods[i].Receiver.QualifiedName == feModule.Methods[j].Receiver.QualifiedName {
+		if feModule.TypeMethods[i].Receiver.QualifiedName == feModule.TypeMethods[j].Receiver.QualifiedName {
 			// ... sort by func name:
-			return feModule.Methods[i].Func.Name < feModule.Methods[j].Func.Name
+			return feModule.TypeMethods[i].Func.Name < feModule.TypeMethods[j].Func.Name
 		}
-		return feModule.Methods[i].Receiver.QualifiedName < feModule.Methods[j].Receiver.QualifiedName
+		return feModule.TypeMethods[i].Receiver.QualifiedName < feModule.TypeMethods[j].Receiver.QualifiedName
 	})
 	// Sort funcs by name:
 	sort.Slice(feModule.Funcs, func(i, j int) bool {
@@ -82,8 +95,8 @@ func main() {
 		"package %q has %v funcs, %v methods, and %v interfaces",
 		pk.Name,
 		len(feModule.Funcs),
-		len(feModule.Methods),
-		len(feModule.Interfaces),
+		len(feModule.TypeMethods),
+		len(feModule.InterfaceMethods),
 	)
 	if runServer {
 		r := gin.Default()
@@ -114,12 +127,12 @@ type CodeQlPlaceholder struct {
 	Val string
 }
 type FEModule struct {
-	Name       string
-	PkgPath    string
-	FEName     string
-	Funcs      []*FEFunc
-	Methods    []*FEMethod
-	Interfaces []*FEInterface
+	Name             string
+	PkgPath          string
+	FEName           string
+	Funcs            []*FEFunc
+	TypeMethods      []*FETypeMethod
+	InterfaceMethods []*FEInterfaceMethod
 }
 
 type FEFunc struct {
@@ -129,8 +142,9 @@ type FEFunc struct {
 	Docs      []string
 	Name      string
 	PkgPath   string
-	In        []*FEType
-	Out       []*FEType
+
+	Parameters []*FEType
+	Results    []*FEType
 }
 
 func DocsWithDefault(docs []string) []string {
@@ -164,7 +178,7 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	for i, in := range fn.Input {
 		v := getFETypeVar(in)
 		v.Placeholder.Val = Sf("isParameter(%v)", i)
-		fe.In = append(fe.In, v)
+		fe.Parameters = append(fe.Parameters, v)
 	}
 	for i, out := range fn.Output {
 		v := getFETypeVar(out)
@@ -174,7 +188,7 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 		} else {
 			v.Placeholder.Val = Sf("isResult(%v)", i)
 		}
-		fe.Out = append(fe.Out, v)
+		fe.Results = append(fe.Results, v)
 	}
 	return &fe
 }
@@ -220,8 +234,8 @@ func getFETypeVar(tp scanner.Type) *FEType {
 	return &fe
 }
 
-func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
-	var fe FEMethod
+func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMethod {
+	var fe FETypeMethod
 
 	fe.CodeQL = &CodeQlFinalVals{
 		Inp:  "TODO",
@@ -284,7 +298,7 @@ func getFEMethod(mt *types.Selection, allFuncs []*scanner.Func) *FEMethod {
 	return &fe
 }
 
-type FEMethod struct {
+type FETypeMethod struct {
 	CodeQL    *CodeQlFinalVals
 	ClassName string
 	Docs      []string
@@ -293,20 +307,16 @@ type FEMethod struct {
 	FEName    string
 	Func      *FEFunc
 }
-type FEInterface struct {
-	Docs          []string
-	Name          string
-	PkgPath       string
-	QualifiedName string
-	Methods       []*FEMethod
+type FEInterfaceMethod struct {
+	FETypeMethod
 }
 
 type FEReceiver struct {
 	FEType
 }
 
-func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPath string) *FEMethod {
-	var fe FEMethod
+func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPath string) *FETypeMethod {
+	var fe FETypeMethod
 
 	fe.CodeQL = &CodeQlFinalVals{
 		Inp:  "TODO",
@@ -341,62 +351,14 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func, pkgPa
 	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
 	return &fe
 }
-func getFEInterface(it *scanner.Interface, pkgPath string) *FEInterface {
-	var fe FEInterface
+func getAllFEInterfaceMethods(it *scanner.Interface, pkgPath string) []*FEInterfaceMethod {
 	pkgPath = scanner.StringRemoveGoPath(pkgPath)
 
-	fe.Name = it.Name
-	fe.Docs = DocsWithDefault(it.Doc)
-	fe.PkgPath = pkgPath
-	fe.QualifiedName = scanner.StringRemoveGoPath(pkgPath) + "." + it.Name
-	fe.PkgPath = scanner.StringRemoveGoPath(pkgPath)
+	feInterfaces := make([]*FEInterfaceMethod, 0)
 	for _, mt := range it.Methods {
-		fe.Methods = append(fe.Methods, getFEInterfaceMethod(it, mt, pkgPath))
-	}
-	return &fe
-}
 
-func SelectionString(s *types.Selection, qf types.Qualifier) string {
-	var k string
-	switch s.Kind() {
-	case types.FieldVal:
-		k = "field "
-	case types.MethodVal:
-		k = "method "
-	case types.MethodExpr:
-		k = "method expr "
-	default:
-		panic("unreachable()")
+		feMethod := getFEInterfaceMethod(it, mt, pkgPath)
+		feInterfaces = append(feInterfaces, &FEInterfaceMethod{*feMethod})
 	}
-	var buf bytes.Buffer
-	buf.WriteString(k)
-	buf.WriteByte('(')
-	types.WriteType(&buf, s.Recv(), qf)
-	fmt.Fprintf(&buf, ") %s", s.Obj().Name())
-	if T := s.Type(); s.Kind() == types.FieldVal {
-		buf.WriteByte(' ')
-		types.WriteType(&buf, T, qf)
-	} else {
-		types.WriteSignature(&buf, T.(*types.Signature), qf)
-	}
-	return buf.String()
-}
-
-func debugTypeAsVar(tp scanner.Type) {
-	varName := tp.GetTypesVar().Name()
-	if varName != "" {
-		Ln(PurpleBG(varName))
-	} else {
-		Ln(PurpleBG("UNNAMED"))
-	}
-
-	named, ok := tp.GetTypesVar().Type().(*types.Named)
-	if ok {
-		Q("named package:", named.Obj().Pkg().Name())
-		Q("named package:", named.Obj().Pkg().Path())
-		Q("named package:", named.Obj().Pkg().Scope().Names())
-	} else {
-		Ln("NOT NAMED PACKAGE")
-	}
-	Ln(" ", tp.TypeString())
+	return feInterfaces
 }
