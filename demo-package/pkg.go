@@ -8,7 +8,7 @@ import (
 )
 
 // Doc of SomeFunc
-func SomeFunc(inputName0 string, w io.Writer, s strconv.NumError, gh jsonpb.AnyResolver) (out0 string) {
+func SomeFunc(in0 string, w io.Writer, s strconv.NumError, gh jsonpb.AnyResolver, st SomeStruct) (out0 string) {
 	return ""
 }
 

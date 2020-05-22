@@ -165,6 +165,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 			)
 			fn.Signature = StringRemoveGoPath(methObj.String())
 			fn.PkgPath = RemoveGoPath(methObj.Pkg())
+			fn.PkgName = methObj.Pkg().Name()
 
 			ctx.trySetDocsForInterfaceMethod(
 				nameForType(o.Type()),
@@ -216,6 +217,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 			fn := scanFunc(&Func{Name: o.Name()}, t)
 			fn.Signature = StringRemoveGoPath(o.String())
 			fn.PkgPath = RemoveGoPath(o.Pkg())
+			fn.PkgName = o.Pkg().Name()
 			ctx.trySetDocs(nameForFunc(o), fn)
 			p.Funcs = append(p.Funcs, fn)
 		}
@@ -324,6 +326,29 @@ func scanType(typ types.Type) (t Type) {
 			RemoveGoPath(u.Obj().Pkg()),
 			u.Obj().Name(),
 		)
+		{
+			switch typ.Underlying().(type) {
+			case *types.Interface:
+				t.SetNullable(true)
+			case *types.Struct:
+				t.SetIsStruct(true)
+			case *types.Basic:
+				t.SetIsBasic(true)
+			case *types.Named:
+				// TODO
+			case *types.Slice:
+				t.SetNullable(true)
+				t.SetRepeated(true)
+			case *types.Array:
+				t.SetNullable(true)
+				t.SetRepeated(true)
+			case *types.Pointer:
+				t.SetNullable(true)
+			case *types.Map:
+				t.SetNullable(true)
+			}
+		}
+
 	case *types.Slice:
 		t = scanType(u.Elem())
 		t.SetRepeated(true)

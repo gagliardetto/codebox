@@ -82,6 +82,9 @@ type Type interface {
 
 	IsVariadic() bool
 	SetIsVariadic(bool)
+
+	IsBasic() bool
+	SetIsBasic(v bool)
 }
 
 // BaseType contains the common fields for all the types.
@@ -93,6 +96,7 @@ type BaseType struct {
 	ID       string
 	TypesVar *types.Var
 	Variadic bool
+	Basic    bool
 }
 
 func newBaseType() *BaseType {
@@ -101,6 +105,9 @@ func newBaseType() *BaseType {
 		Nullable: false,
 	}
 }
+func (t *BaseType) IsBasic() bool     { return t.Basic }
+func (t *BaseType) SetIsBasic(v bool) { t.Basic = v }
+
 func (t *BaseType) IsVariadic() bool     { return t.Variadic }
 func (t *BaseType) SetIsVariadic(v bool) { t.Variadic = v }
 
@@ -150,6 +157,7 @@ func NewBasic(name string) Type {
 
 // IsNullable returns true. Basic types though cannot be nullable, they are considered so in protobuf.
 func (b Basic) IsNullable() bool { return true }
+func (b Basic) IsBasic() bool    { return true }
 
 // String returns a string representation for the type
 func (b Basic) String() string {
@@ -351,6 +359,7 @@ type Func struct {
 	IsVariadic bool
 	Signature  string
 	PkgPath    string
+	PkgName    string
 }
 
 // Interface is an interface.

@@ -7,9 +7,8 @@ import (
 )
 
 // TODO:
-// -  generate ad-hoc medium types.
+// -  generate ad-hoc medium types, and codeql for taintracking throught them in the tests.
 func main() {
-	// store[kind("func","method","interface")][qualified_name][array_of:{in:{elem:"",index:0},out:{elem:"",index:0}}]
 	if false {
 		f := NewFile("main")
 		f.Func().Id("main").Params().Block(
