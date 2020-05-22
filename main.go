@@ -281,6 +281,17 @@ func main() {
 	}
 }
 
+// ShouldUseAlias tells whether the package name and the base
+// of the backage path are the same; if they are not,
+// then the package should use an alias in the import.
+func ShouldUseAlias(pkgPath string, pkgName string) bool {
+	lastSlashAt := strings.LastIndex(pkgPath, "/")
+	if lastSlashAt == -1 {
+		return pkgPath != pkgName
+	}
+	return pkgPath[lastSlashAt:] != pkgName
+}
+
 func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem Element, intoElem Element) *Statement {
 
 	if medium == MediumFunc && fromElem == ElementParameter && intoElem == ElementParameter {
@@ -310,8 +321,6 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 
 								groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 								groupCase.Id(inParam.VarName).Op(":=").Id("sourceCQL").Assert(Qual(inParam.PkgPath, inParam.TypeName))
-								file.ImportName(inParam.PkgPath, inParam.PkgName)
-								file.ImportName(outParam.PkgPath, outParam.PkgName)
 
 								groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
 								groupCase.Var().Id(outParam.VarName).Qual(outParam.PkgPath, outParam.TypeName)
@@ -324,6 +333,15 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 									func(call *Group) {
 
 										for i, param := range fe.Parameters {
+											// Import packages; if the packages are not used,
+											// the imports will be omitted from the rendered
+											// code.
+											if ShouldUseAlias(param.PkgPath, param.PkgName) {
+												file.ImportAlias(param.PkgPath, param.PkgName)
+											} else {
+												file.ImportName(param.PkgPath, param.PkgName)
+											}
+
 											isConsidered := i == indexIn || i == indexOut
 											if isConsidered {
 												call.Id(param.VarName)

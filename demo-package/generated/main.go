@@ -7,29 +7,26 @@ import (
 	somepackage "github.com/gagliardetto/codebox/demo-package"
 )
 
-func sink(v interface{}) {
+func main()              {}
+func sink(v interface{}) {}
 
-}
-func main() {
-
-}
 func TaintStepTest_SomeFunc(sourceCQL interface{}) {
 	{
-		// The flow is from `st` into `w`.
+		// The flow is from `in0` into `s`.
 
-		// Assume that `sourceCQL` has the underlying type of `st`:
-		st := sourceCQL.(somepackage.SomeStruct)
+		// Assume that `sourceCQL` has the underlying type of `in0`:
+		in0 := sourceCQL.(string)
 
-		// Declare `into` variable:
-		var w io.Writer
+		// Declare `s` variable:
+		var s strconv.NumError
 
 		// Call medium method that transfers the taint
-		// from the parameter `st` to parameter `w`;
-		// `w` is now tainted.
-		somepackage.SomeFunc("", w, strconv.NumError{}, nil, st)
+		// from the parameter `in0` to parameter `s`;
+		// `s` is now tainted.
+		somepackage.SomeFunc(in0, nil, s, nil, somepackage.SomeStruct{})
 
-		// Sink the tainted `into`:
-		sink(w)
+		// Sink the tainted `s`:
+		sink(s)
 	}
 }
 
