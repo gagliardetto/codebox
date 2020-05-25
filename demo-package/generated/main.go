@@ -48,3 +48,22 @@ func TaintStepTest_Copy(source interface{}) {
 		sink(dst)
 	}
 }
+func TaintStepTest_SomeFunc1B(sourceCQL interface{}) {
+	{
+		// The flow is from `pings` into `pongs`.
+
+		// Assume that `sourceCQL` has the underlying type of `pings`:
+		pings := sourceCQL.(<-chan string)
+
+		// Declare `pongs` variable:
+		var pongs chan<- string
+
+		// Call medium method that transfers the taint
+		// from the parameter `pings` to parameter `pongs`;
+		// `pongs` is now tainted.
+		somepackage.SomeFunc1b(pings, pongs)
+
+		// Sink the tainted `pongs`:
+		sink(pongs)
+	}
+}

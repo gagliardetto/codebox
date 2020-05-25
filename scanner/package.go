@@ -77,14 +77,18 @@ type Type interface {
 	TypeString() string
 	// Name returns the unqualified name.
 	UnqualifiedName() string
+
 	GetTypesVar() *types.Var
 	SetTypesVar(*types.Var)
 
-	IsVariadic() bool
-	SetIsVariadic(bool)
+	GetType() types.Type
+	SetType(types.Type)
 
-	IsBasic() bool
+	SetIsVariadic(bool)
+	IsVariadic() bool
+
 	SetIsBasic(v bool)
+	IsBasic() bool
 }
 
 // BaseType contains the common fields for all the types.
@@ -97,6 +101,7 @@ type BaseType struct {
 	TypesVar *types.Var
 	Variadic bool
 	Basic    bool
+	Type     types.Type
 }
 
 func newBaseType() *BaseType {
@@ -113,6 +118,9 @@ func (t *BaseType) SetIsVariadic(v bool) { t.Variadic = v }
 
 func (t *BaseType) GetTypesVar() *types.Var  { return t.TypesVar }
 func (t *BaseType) SetTypesVar(v *types.Var) { t.TypesVar = v }
+
+func (t *BaseType) GetType() types.Type  { return t.Type }
+func (t *BaseType) SetType(v types.Type) { t.Type = v }
 
 // IsRepeated reports wether the type is repeated or not.
 func (t *BaseType) IsRepeated() bool { return t.Repeated }
@@ -155,7 +163,8 @@ func NewBasic(name string) Type {
 	}
 }
 
-// IsNullable returns false. Basic types are not nullable,
+// IsNullable returns true ONLY if it's also a pointer.
+// Otherwise, Basic types are not nullable,
 // and have just the zero values.
 //
 // Basic types:
@@ -169,7 +178,7 @@ func NewBasic(name string) Type {
 // complex64, complex128
 //
 // See: https://nilsmagnus.github.io/post/nillability-in-go/
-func (b Basic) IsNullable() bool { return false }
+func (b Basic) IsNullable() bool { return b.Nullable }
 func (b Basic) IsBasic() bool    { return true }
 
 // String returns a string representation for the type
@@ -278,11 +287,43 @@ func (m Map) String() string {
 
 // TypeString returns a string representation for the type casting
 func (m Map) TypeString() string {
-	return m.String()
+	// TODO: this should return map[somepackage.SomeType]somepackage1.SomeType1
+	// i.e. package name + UnqualifiedName()
+	// for key and value types.
+	return fmt.Sprintf("map[%s]%s", m.Key.TypeString(), m.Value.TypeString())
 }
 
 // UnqualifiedName returns the bare name, without the package.
 func (m Map) UnqualifiedName() string {
+	return m.String()
+}
+
+// Chan is a map type with a key and a value type.
+type Chan struct {
+	*BaseType
+	Elem *types.Chan
+}
+
+// NewChan creates a new map type with the given key and value types.
+func NewChan(elem *types.Chan) Type {
+	return &Chan{
+		newBaseType(),
+		elem,
+	}
+}
+
+// String returns a string representation for the type
+func (m Chan) String() string {
+	return StringRemoveGoPath(m.Elem.String())
+}
+
+// TypeString returns a string representation for the type casting
+func (m Chan) TypeString() string {
+	return m.String()
+}
+
+// UnqualifiedName returns the bare name, without the package.
+func (m Chan) UnqualifiedName() string {
 	return m.String()
 }
 
@@ -333,13 +374,36 @@ type EnumValue struct {
 // Struct represents a Go struct with its name and fields.
 // All structs
 type Struct struct {
+	*BaseType
 	Docs
-	Generate   bool
-	Name       string
-	Fields     []*Field
-	Methods    []*types.Func
-	Type       *types.Named
-	IsStringer bool
+	Generate      bool
+	Name          string
+	Fields        []*Field
+	Methods       []*types.Func
+	Type          *types.Named
+	AnonymousType *types.Struct
+	IsStringer    bool
+}
+
+// String returns a string representation for the type
+func (m Struct) String() string {
+	if m.Type != nil {
+		return m.Type.String()
+	}
+	if m.AnonymousType != nil {
+		return m.AnonymousType.String()
+	}
+	return ""
+}
+
+// TypeString returns a string representation for the type casting
+func (m Struct) TypeString() string {
+	return m.String()
+}
+
+// UnqualifiedName returns the bare name, without the package.
+func (m Struct) UnqualifiedName() string {
+	return m.String()
 }
 
 // HasField reports wether a struct has a given field name.
@@ -362,22 +426,54 @@ type Field struct {
 // Func is either a function or a method. Receiver will be nil in functions,
 // otherwise it is a method.
 type Func struct {
+	*BaseType
 	Docs
 	Name string
 	// Receiver will not be nil if it's a method.
 	Receiver Type
 	Input    []Type
 	Output   []Type
-	// IsVariadic will be true if the last input parameter is variadic.
-	IsVariadic bool
-	Signature  string
-	PkgPath    string
-	PkgName    string
+	// Variadic will be true if the last input parameter is variadic.
+	Variadic  bool
+	Signature string
+	PkgPath   string
+	PkgName   string
+}
+
+// String returns a string representation for the type
+func (m Func) String() string {
+	return StringRemoveGoPath(m.Signature)
+}
+
+// TypeString returns a string representation for the type casting
+func (m Func) TypeString() string {
+	return m.String()
+}
+
+// UnqualifiedName returns the bare name, without the package.
+func (m Func) UnqualifiedName() string {
+	return m.String()
 }
 
 // Interface is an interface.
 type Interface struct {
+	*BaseType
 	Docs
 	Name    string
 	Methods []*Func
+}
+
+// String returns a string representation for the type
+func (m Interface) String() string {
+	return StringRemoveGoPath(m.Name)
+}
+
+// TypeString returns a string representation for the type casting
+func (m Interface) TypeString() string {
+	return m.String()
+}
+
+// UnqualifiedName returns the bare name, without the package.
+func (m Interface) UnqualifiedName() string {
+	return m.String()
 }

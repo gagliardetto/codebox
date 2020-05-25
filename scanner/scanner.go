@@ -142,39 +142,15 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 	// Scan interface types:
 	switch t := o.Type().Underlying().(type) {
 	case *types.Interface:
-		it := &Interface{}
 
 		if !token.IsExported(nameForType(o.Type())) {
 			break
 		}
-		it.Name = nameForType(o.Type())
+
+		it := scanInterface(&Interface{Name: nameForType(o.Type())}, t, ctx.trySetDocsForInterfaceMethod)
 		ctx.trySetDocs(nameForType(o.Type()), it)
-	ExplicitMethodLoop:
-		for i := 0; i < t.NumExplicitMethods(); i++ {
 
-			methObj := t.ExplicitMethod(i)
-			meth := methObj.Type()
-
-			if !methObj.Exported() {
-				continue ExplicitMethodLoop
-			}
-
-			fn := scanFunc(
-				&Func{Name: methObj.Name()},
-				meth.(*types.Signature),
-			)
-			fn.Signature = StringRemoveGoPath(methObj.String())
-			fn.PkgPath = RemoveGoPath(methObj.Pkg())
-			fn.PkgName = methObj.Pkg().Name()
-
-			ctx.trySetDocsForInterfaceMethod(
-				nameForType(o.Type()),
-				methObj.Name(),
-				fn,
-			)
-
-			it.Methods = append(it.Methods, fn)
-		}
+		it.SetType(t)
 		p.Interfaces = append(p.Interfaces, it)
 	}
 
@@ -317,7 +293,70 @@ func nameForType(o types.Type) (name string) {
 	return
 }
 
+func setTypeParameters(typ types.Type, t Type) {
+	switch typ.(type) {
+	case *types.Basic:
+		{
+			t.SetIsBasic(true)
+		}
+	case *types.Array:
+		{
+			t.SetNullable(true)
+			t.SetRepeated(true)
+		}
+	case *types.Slice:
+		{
+			t.SetNullable(true)
+			t.SetRepeated(true)
+		}
+	case *types.Struct:
+		{
+			t.SetIsStruct(true)
+		}
+	case *types.Pointer:
+		{
+			t.SetNullable(true)
+		}
+	case *types.Tuple:
+		{
+			// TODO
+			t.SetNullable(true)
+		}
+	case *types.Signature:
+		{
+			t.SetNullable(true)
+		}
+	case *types.Interface:
+		{
+			t.SetNullable(true)
+		}
+	case *types.Map:
+		{
+			t.SetNullable(true)
+		}
+	case *types.Chan:
+		{
+			t.SetNullable(true)
+		}
+	case *types.Named:
+		{
+			// TODO
+			setTypeParameters(typ.Underlying(), t)
+		}
+	}
+}
 func scanType(typ types.Type) (t Type) {
+	// Basic
+	// Array
+	// Slice
+	// Struct
+	// Pointer
+	// Tuple //TODO
+	// Signature
+	// Interface
+	// Map
+	// Chan
+	// Named
 	switch u := typ.(type) {
 	case *types.Basic:
 		t = NewBasic(u.Name())
@@ -326,38 +365,65 @@ func scanType(typ types.Type) (t Type) {
 			RemoveGoPath(u.Obj().Pkg()),
 			u.Obj().Name(),
 		)
-		{
-			switch typ.Underlying().(type) {
-			case *types.Interface:
-				t.SetNullable(true)
-			case *types.Struct:
-				t.SetIsStruct(true)
-			case *types.Basic:
-				t.SetIsBasic(true)
-			case *types.Named:
-				// TODO
-			case *types.Slice:
-				t.SetNullable(true)
-				t.SetRepeated(true)
-			case *types.Array:
-				t.SetNullable(true)
-				t.SetRepeated(true)
-			case *types.Pointer:
-				t.SetNullable(true)
-			case *types.Map:
-				t.SetNullable(true)
-			}
-		}
 
+		// TODO: use in other switch case, too:
+		setTypeParameters(typ.Underlying(), t)
+
+	case *types.Struct:
+		st := &Struct{}
+		st.BaseType = newBaseType()
+		st.AnonymousType = u
+		t = scanStruct(st, u)
+		t.SetRepeated(false)
+		t.SetNullable(false)
+		//t.SetIsPtr(false) //TODO: see note for *types.Array
+		t.SetIsStruct(true)
 	case *types.Slice:
 		t = scanType(u.Elem())
 		t.SetRepeated(true)
+		t.SetNullable(true)
+		//t.SetIsPtr(false) //TODO: see note for *types.Array
+		t.SetIsStruct(false)
 	case *types.Array:
 		t = scanType(u.Elem())
+		t.SetNullable(true)
 		t.SetRepeated(true)
+		//t.SetIsPtr(false) // TODO: what if *[]*SomeType or *[]SomeType ???
+		t.SetIsStruct(false)
 	case *types.Pointer:
 		t = scanType(u.Elem())
 		t.SetNullable(true)
+		t.SetIsPtr(true)
+	case *types.Chan:
+		t = NewChan(u)
+		t.SetNullable(true)
+		t.SetRepeated(false)
+		t.SetIsPtr(false)
+		t.SetIsStruct(false)
+	case *types.Interface:
+		it := scanInterface(&Interface{Name: u.String()}, u, nil)
+		t = Type(it)
+		t.SetNullable(true)
+		t.SetRepeated(false)
+		t.SetIsPtr(false)
+		t.SetIsStruct(false)
+	case *types.Signature:
+
+		neF := &Func{
+			BaseType: newBaseType(),
+		}
+		fn := scanFunc(
+			neF,
+			u,
+		)
+		fn.Signature = StringRemoveGoPath(u.String())
+		//fn.PkgPath = RemoveGoPath(u.Pkg())
+		//fn.PkgName = u.Pkg().Name()
+		t = Type(fn)
+		t.SetNullable(true)
+		t.SetRepeated(false)
+		t.SetIsPtr(false)
+		t.SetIsStruct(false)
 	case *types.Map:
 		key := scanType(u.Key())
 		val := scanType(u.Elem())
@@ -366,10 +432,13 @@ func scanType(typ types.Type) (t Type) {
 			return nil
 		}
 		t = NewMap(key, val)
+		t.SetNullable(true)
 	default:
 		report.Warn("ignoring type %s", typ.String())
 		return nil
 	}
+
+	t.SetType(typ)
 
 	return
 }
@@ -429,11 +498,50 @@ func scanFunc(fn *Func, signature *types.Signature) *Func {
 		fn.Receiver = scanType(signature.Recv().Type())
 	}
 
+	if fn.BaseType == nil {
+		fn.BaseType = newBaseType()
+	}
+
+	fn.SetType(signature)
+
 	fn.Input = scanTuple(signature.Params(), signature.Variadic())
 	fn.Output = scanTuple(signature.Results(), false)
-	fn.IsVariadic = signature.Variadic()
+	fn.Variadic = signature.Variadic()
 
 	return fn
+}
+func scanInterface(it *Interface, t *types.Interface, docSetter func(it string, method string, obj Documentable)) *Interface {
+	it.BaseType = newBaseType()
+
+ExplicitMethodLoop:
+	for i := 0; i < t.NumExplicitMethods(); i++ {
+
+		methObj := t.ExplicitMethod(i)
+		meth := methObj.Type()
+
+		if !methObj.Exported() {
+			continue ExplicitMethodLoop
+		}
+
+		fn := scanFunc(
+			&Func{Name: methObj.Name()},
+			meth.(*types.Signature),
+		)
+		fn.Signature = StringRemoveGoPath(methObj.String())
+		fn.PkgPath = RemoveGoPath(methObj.Pkg())
+		fn.PkgName = methObj.Pkg().Name()
+
+		if docSetter != nil {
+			docSetter(
+				it.Name,
+				methObj.Name(),
+				fn,
+			)
+		}
+
+		it.Methods = append(it.Methods, fn)
+	}
+	return it
 }
 
 func scanTuple(tuple *types.Tuple, isVariadic bool) []Type {

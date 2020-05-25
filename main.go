@@ -170,7 +170,7 @@ func main() {
 		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
 	})
 
-	Q(feModule)
+	//Q(feModule)
 	Sfln(
 		"package %q has %v funcs, %v methods, and %v interfaces",
 		pk.Name,
@@ -320,15 +320,19 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 								groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 								groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-								groupCase.Id(inParam.VarName).Op(":=").Id("sourceCQL").Assert(Qual(inParam.PkgPath, inParam.TypeName))
+								composeTypeAssertion(file, groupCase, inParam.VarName, inParam.original.GetType())
 
 								groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-								groupCase.Var().Id(outParam.VarName).Qual(outParam.PkgPath, outParam.TypeName)
+								//groupCase.Var().Id(outParam.VarName).Qual(outParam.PkgPath, outParam.TypeName)
+								composeVarDeclaration(file, groupCase, outParam.VarName, outParam.original.GetType())
 
 								groupCase.
 									Line().Comment("Call medium method that transfers the taint").
 									Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
 									Line().Comment(Sf("`%s` is now tainted.", outVarName))
+
+								file.ImportAlias(fe.PkgPath, fe.PkgName)
+
 								groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
 									func(call *Group) {
 
@@ -363,6 +367,144 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 	}
 
 	return nil
+}
+
+// declare `name := sourceCQL.(Type)`
+func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type) {
+	assertContent := newStatement()
+	composeTypeDeclaration(file, assertContent, typ)
+	group.Id(varName).Op(":=").Id("sourceCQL").Assert(assertContent)
+}
+
+// declare `var name Type`
+func composeVarDeclaration(file *File, group *Group, varName string, typ types.Type) {
+	composeTypeDeclaration(file, group.Var().Id(varName), typ)
+}
+func newStatement() *Statement {
+	return &Statement{}
+}
+
+// composeTypeDeclaration adds the `Type` inside `var name Type`
+func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
+	switch t := typ.(type) {
+	case *types.Basic:
+		{
+			stat.Qual("", t.Name())
+		}
+	case *types.Array:
+		{
+			if t.Len() > 0 {
+				stat.Index(Lit(t.Len()))
+			} else {
+				stat.Index()
+			}
+			composeTypeDeclaration(file, stat, t.Elem())
+		}
+	case *types.Slice:
+		{
+			stat.Index()
+			composeTypeDeclaration(file, stat, t.Elem())
+		}
+	case *types.Struct:
+		{
+			fields := make([]Code, 0)
+			for i := 0; i < t.NumFields(); i++ {
+				field := t.Field(i)
+				fldStm := newStatement()
+				fldStm.Id(field.Name())
+
+				file.ImportName(scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
+
+				composeTypeDeclaration(file, fldStm, field.Type())
+				fields = append(fields, fldStm)
+			}
+			stat.Struct(fields...)
+		}
+	case *types.Pointer:
+		{
+			stat.Op("*")
+			composeTypeDeclaration(file, stat, t.Elem())
+		}
+	case *types.Tuple:
+		{
+			// TODO
+			tuple := scanTuple(file, t, false)
+			stat.Add(tuple...)
+		}
+	case *types.Signature:
+		{
+			paramsTuple := scanTuple(file, t.Params(), t.Variadic())
+			resultsTuple := scanTuple(file, t.Results(), false)
+
+			stat.Func().Params(paramsTuple...).List(resultsTuple...)
+		}
+	case *types.Interface:
+		{
+			if t.Empty() {
+				stat.Interface()
+			} else {
+				// TODO
+				methods := make([]Code, 0)
+				for i := 0; i < t.NumMethods(); i++ {
+					meth := t.Method(i)
+					fn := newStatement()
+					composeTypeDeclaration(file, fn, meth.Type())
+					methods = append(methods, fn)
+				}
+				stat.Interface(methods...)
+			}
+		}
+	case *types.Map:
+		{
+			mapKey := newStatement()
+			composeTypeDeclaration(file, mapKey, t.Key())
+			stat.Map(mapKey)
+			composeTypeDeclaration(file, stat, t.Elem())
+		}
+	case *types.Chan:
+		{
+
+			switch t.Dir() {
+			case types.SendRecv:
+				stat.Chan()
+			case types.RecvOnly:
+				stat.Op("<-").Chan()
+			case types.SendOnly:
+				stat.Chan().Op("<-")
+			}
+
+			composeTypeDeclaration(file, stat, t.Elem())
+		}
+	case *types.Named:
+		{
+			file.ImportName(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
+			stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name())
+		}
+	}
+
+}
+
+func scanTuple(file *File, tuple *types.Tuple, isVariadic bool) []Code {
+
+	result := make([]Code, 0)
+
+	for i := 0; i < tuple.Len(); i++ {
+		tp := newStatement()
+
+		if tp != nil {
+			// If this is the last element,
+			// and the function is variadic,
+			// then set it to true:
+			isLast := i == tuple.Len()-1
+			if isLast && isVariadic {
+				tp.Op("...")
+			}
+			composeTypeDeclaration(file, tp, tuple.At(i).Type())
+			result = append(result, tp)
+		}
+	}
+
+	return result
 }
 
 func setZeroOfParam(code *Group, param *FEType) {
@@ -554,6 +696,7 @@ type FEFunc struct {
 
 	Parameters []*FEType
 	Results    []*FEType
+	original   *scanner.Func
 }
 
 func DocsWithDefault(docs []string) []string {
@@ -573,6 +716,7 @@ const (
 
 func getFEFunc(fn *scanner.Func) *FEFunc {
 	var fe FEFunc
+	fe.original = fn
 	fe.CodeQL = NewCodeQlFinalVals()
 	fe.Name = fn.Name
 	fe.PkgName = fn.PkgName
@@ -645,31 +789,57 @@ type FEType struct {
 	IsVariadic    bool
 	IsNullable    bool
 	IsStruct      bool
+	IsRepeated    bool
+	original      scanner.Type
 }
 
 func getFEType(tp scanner.Type) *FEType {
 	var fe FEType
+	fe.original = tp
 	varName := tp.GetTypesVar().Name()
 	if varName != "" {
 		fe.VarName = varName
 	}
 	fe.IsVariadic = tp.IsVariadic()
-	//TODO: basic types are nullable???
 	fe.IsNullable = tp.IsNullable()
 	fe.IsPtr = tp.IsPtr()
 	fe.IsStruct = tp.IsStruct()
 	fe.IsBasic = tp.IsBasic()
+	fe.IsRepeated = tp.IsRepeated()
 
-	named, ok := tp.GetTypesVar().Type().(*types.Named)
-	if ok {
-		fe.TypeName = named.Obj().Name()
-		if pkg := named.Obj().Pkg(); pkg != nil {
-			fe.QualifiedName = scanner.StringRemoveGoPath(pkg.Path()) + "." + named.Obj().Name()
-			fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
-			fe.PkgName = named.Obj().Pkg().Name()
+	finalType := tp.GetTypesVar().Type()
+	{
+		slice, ok := tp.GetTypesVar().Type().(*types.Slice)
+		if ok {
+			finalType = slice.Elem()
 		}
-	} else {
-		fe.TypeName = tp.TypeString()
+	}
+	{
+		array, ok := tp.GetTypesVar().Type().(*types.Array)
+		if ok {
+			finalType = array.Elem()
+		}
+	}
+	// Check if pointer:
+	{
+		pointer, ok := finalType.(*types.Pointer)
+		if ok {
+			finalType = pointer.Elem()
+		}
+	}
+
+	{
+		named, ok := finalType.(*types.Named)
+		if ok {
+			fe.TypeName = named.Obj().Name()
+			if pkg := named.Obj().Pkg(); pkg != nil {
+				fe.QualifiedName = scanner.StringRemoveGoPath(pkg.Path()) + "." + named.Obj().Name()
+				fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
+				fe.PkgName = named.Obj().Pkg().Name()
+			}
+		} else {
+			fe.TypeName = tp.TypeString()
+		}
 	}
 
 	return &fe
@@ -725,6 +895,7 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 					if sameReceiverType && sameFuncName {
 						fe.Docs = DocsWithDefault(mtFn.Doc)
 						fe.Func = getFEFunc(mtFn)
+						fe.original = mtFn.GetType()
 						return true
 					}
 				}
@@ -751,19 +922,15 @@ type FETypeMethod struct {
 	Receiver  *FEReceiver
 	FEName    string
 	Func      *FEFunc
+	original  types.Type
 }
-type FEInterfaceMethod struct {
-	// TODO: alias instead of embed?
-	FETypeMethod
-}
+type FEInterfaceMethod FETypeMethod
 
-type FEReceiver struct {
-	// TODO: alias instead of embed?
-	FEType
-}
+type FEReceiver FEType
 
 func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETypeMethod {
 	var fe FETypeMethod
+	fe.original = it.GetType()
 
 	fe.CodeQL = NewCodeQlFinalVals()
 
@@ -806,7 +973,8 @@ func getAllFEInterfaceMethods(it *scanner.Interface) []*FEInterfaceMethod {
 	for _, mt := range it.Methods {
 
 		feMethod := getFEInterfaceMethod(it, mt)
-		feInterfaces = append(feInterfaces, &FEInterfaceMethod{*feMethod})
+		converted := FEInterfaceMethod(*feMethod)
+		feInterfaces = append(feInterfaces, &converted)
 	}
 	return feInterfaces
 }
