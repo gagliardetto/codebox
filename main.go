@@ -205,12 +205,14 @@ func main() {
 			err := c.BindJSON(&req)
 			if err != nil {
 				Errorf("error binding JSON: %s", err)
+				c.Status(400)
 				return
 			}
 			Q(req)
 
 			if err := req.Validate(); err != nil {
 				Errorf("invalid request: %s", err)
+				c.Status(400)
 				return
 			}
 
@@ -243,12 +245,74 @@ func main() {
 			case *FEFunc:
 				{
 					fe := stored.GetFEFunc()
+					{
+						// validate Inp:
+						switch req.Pointers.Inp.Element {
+						case ElementParameter:
+							if req.Pointers.Inp.Index > len(fe.Parameters)-1 {
+								Errorf(
+									"Inp index is %v, but func has only %v %ss",
+									req.Pointers.Inp.Index,
+									len(fe.Parameters),
+									req.Pointers.Inp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementResult:
+							if req.Pointers.Inp.Index > len(fe.Results)-1 {
+								Errorf(
+									"Inp index is %v, but func has only %v %ss",
+									req.Pointers.Inp.Index,
+									len(fe.Results),
+									req.Pointers.Inp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						default:
+							Errorf("unsupported Element for Inp: %q", req.Pointers.Inp.Element)
+							c.Status(400)
+							return
+						}
+						// validate Outp:
+						switch req.Pointers.Outp.Element {
+						case ElementParameter:
+							if req.Pointers.Outp.Index > len(fe.Parameters)-1 {
+								Errorf(
+									"Outp index is %v, but func has only %v %ss",
+									req.Pointers.Outp.Index,
+									len(fe.Parameters),
+									req.Pointers.Outp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementResult:
+							if req.Pointers.Outp.Index > len(fe.Results)-1 {
+								Errorf(
+									"Outp index is %v, but func has only %v %ss",
+									req.Pointers.Outp.Index,
+									len(fe.Results),
+									req.Pointers.Outp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						default:
+							Errorf("unsupported Element for Outp: %q", req.Pointers.Outp.Element)
+							c.Status(400)
+							return
+						}
+						// TODO: if Inp and Outp are the same, is that an error?
+					}
 					fe.CodeQL.Pointers = req.Pointers
+					// TODO: bind UI with fe.CodeQL.Pointers
+					fe.CodeQL.IsEnabled = true
 
-					code := generate_ParaFuncPara(
+					code := generate_MediumFunc(
 						file,
 						stored,
-						MediumFunc,
 						req.Pointers.Inp.Element,
 						req.Pointers.Outp.Element,
 					)
@@ -292,76 +356,92 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return pkgPath[lastSlashAt:] != pkgName
 }
 
-func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem Element, intoElem Element) *Statement {
+func generate_MediumFunc(file *File, item *IndexItem, from Element, into Element) *Statement {
+	Parameter := ElementParameter
+	Result := ElementResult
 
-	if medium == MediumFunc && fromElem == ElementParameter && intoElem == ElementParameter {
-		{ //OK
-			// from: param
-			// medium: func
-			// into: param
-			fe := item.GetFEFunc()
-			indexIn := fe.CodeQL.Pointers.Inp.Index
-			indexOut := fe.CodeQL.Pointers.Outp.Index
-			code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
-				ParamsFunc(
-					func(group *Group) {
-						group.Add(Id("sourceCQL").Interface())
-					}).
-				BlockFunc(
-					func(group *Group) {
-						group.BlockFunc(
-							func(groupCase *Group) {
-								inParam := fe.Parameters[indexIn]
-								outParam := fe.Parameters[indexOut]
-								// TODO: check if same index.
-
-								inVarName := inParam.VarName
-								outVarName := outParam.VarName
-								groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
-
-								groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-								composeTypeAssertion(file, groupCase, inParam.VarName, inParam.original.GetType())
-
-								groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-								//groupCase.Var().Id(outParam.VarName).Qual(outParam.PkgPath, outParam.TypeName)
-								composeVarDeclaration(file, groupCase, outParam.VarName, outParam.original.GetType())
-
-								groupCase.
-									Line().Comment("Call medium method that transfers the taint").
-									Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
-									Line().Comment(Sf("`%s` is now tainted.", outVarName))
-
-								importPackage(file, fe.PkgPath, fe.PkgName)
-
-								groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
-									func(call *Group) {
-
-										tpFun := fe.original.GetType().(*types.Signature)
-
-										zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
-
-										for i, zero := range zeroVals {
-											isConsidered := i == indexIn || i == indexOut
-											if isConsidered {
-												call.Id(fe.Parameters[i].VarName)
-											} else {
-												call.Add(zero)
-											}
-										}
-
-									},
-								)
-
-								groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-								groupCase.Id("sink").Call(Id(outParam.VarName))
-							})
-					})
-
-			return code.Line()
-		}
+	switch {
+	case from == Parameter && into == Parameter:
+		return generate_ParaFuncPara(file, item)
+	case from == Parameter && into == Result:
+		return generate_ParaFuncResu(file, item)
+	case from == Result && into == Parameter:
+		return generate_ResuFuncPara(file, item)
+	case from == Result && into == Result:
+		return generate_ResuFuncResu(file, item)
 	}
 
 	return nil
+}
+func generate_ParaFuncResu(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuFuncPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuFuncResu(file *File, item *IndexItem) *Statement { return nil }
+
+func generate_ParaFuncPara(file *File, item *IndexItem) *Statement {
+	// from: param
+	// medium: func
+	// into: param
+	fe := item.GetFEFunc()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("sourceCQL").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						inParam := fe.Parameters[indexIn]
+						outParam := fe.Parameters[indexOut]
+						// TODO: check if same index.
+
+						inVarName := inParam.VarName
+						outVarName := outParam.VarName
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, inParam.VarName, inParam.original.GetType())
+
+						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+						//groupCase.Var().Id(outParam.VarName).Qual(outParam.PkgPath, outParam.TypeName)
+						composeVarDeclaration(file, groupCase, outParam.VarName, outParam.original.GetType())
+
+						groupCase.
+							Line().Comment("Call medium method that transfers the taint").
+							Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
+							Line().Comment(Sf("`%s` is now tainted.", outVarName))
+
+						importPackage(file, fe.PkgPath, fe.PkgName)
+
+						groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for i, zero := range zeroVals {
+									isConsidered := i == indexIn || i == indexOut
+									if isConsidered {
+										call.Id(fe.Parameters[i].VarName)
+									} else {
+										call.Add(zero)
+									}
+								}
+
+							},
+						)
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+						groupCase.Id("sink").Call(Id(outParam.VarName))
+					})
+			})
+
+	return code.Line()
 }
 func scanTupleOfZeroValues(file *File, tuple *types.Tuple) []Code {
 
@@ -779,12 +859,12 @@ func (obj *CodeQLPointers) Validate() error {
 	return nil
 }
 func (obj *Identity) Validate() error {
-	if obj.Element == "" || obj.Element == TODO {
+	if obj.Element == "" || obj.Element == TODO || !IsValidElementName(obj.Element) {
 		return errors.New("obj.Element is not set")
 	}
 
-	// the Index can remain the default value only for the receiver:
-	if obj.Index == -1 && obj.Element != ElementReceiver {
+	// the Index can be non-valid only for the receiver:
+	if obj.Index < 0 && obj.Element != ElementReceiver {
 		return errors.New("obj.Index is not set")
 	}
 	return nil
