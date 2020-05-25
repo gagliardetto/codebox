@@ -747,58 +747,6 @@ func scanTupleOfTypes(file *File, tuple *types.Tuple, isVariadic bool) []Code {
 	return result
 }
 
-func setZeroOfParam(code *Group, param *FEType) {
-	if param.IsNullable && !param.IsBasic {
-		code.Nil()
-		return
-	}
-
-	if param.IsStruct {
-		code.Qual(param.PkgPath, param.TypeName).Block()
-		return
-	}
-
-	if param.IsBasic {
-		switch param.TypeName {
-		case "bool":
-			{
-				code.Lit(false)
-			}
-		case "string":
-			{
-				code.Lit("")
-			}
-		case "int", "int8", "int16", "int32", "int64",
-			"uint", "uint8", "uint16", "uint32", "uint64",
-			"uintptr":
-			{
-				code.Lit(0)
-			}
-		case "float32", "float64":
-			{
-				code.Lit(0.0)
-			}
-		case "byte":
-			{
-				code.Lit(0)
-			}
-		case "rune":
-			{
-				code.Lit(0)
-			}
-		case "complex64", "complex128":
-			{
-				code.Lit(0)
-			}
-		default:
-			Errorf("unknown typeName: %q from %q", param.TypeName, param.PkgPath)
-		}
-		return
-	}
-
-	Errorf("unknown typeName: %q from %q", param.TypeName, param.PkgPath)
-}
-
 type Medium string
 
 const (
