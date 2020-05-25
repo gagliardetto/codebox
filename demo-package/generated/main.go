@@ -29,6 +29,25 @@ func TaintStepTest_SomeFunc(sourceCQL interface{}) {
 		sink(s)
 	}
 }
+func TaintStepTest_SomeFuncA(sourceCQL interface{}) {
+	{
+		// The flow is from `in0` into `st`.
+
+		// Assume that `sourceCQL` has the underlying type of `in0`:
+		in0 := sourceCQL.(string)
+
+		// Declare `st` variable:
+		var st somepackage.SomeStruct
+
+		// Call medium method that transfers the taint
+		// from the parameter `in0` to parameter `st`;
+		// `st` is now tainted.
+		somepackage.SomeFunc(in0, nil, strconv.NumError{}, nil, st)
+
+		// Sink the tainted `st`:
+		sink(st)
+	}
+}
 
 func TaintStepTest_Copy(source interface{}) {
 	{

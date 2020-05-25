@@ -331,26 +331,21 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 									Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
 									Line().Comment(Sf("`%s` is now tainted.", outVarName))
 
-								file.ImportAlias(fe.PkgPath, fe.PkgName)
+								importPackage(file, fe.PkgPath, fe.PkgName)
 
 								groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
 									func(call *Group) {
 
-										for i, param := range fe.Parameters {
-											// Import packages; if the packages are not used,
-											// the imports will be omitted from the rendered
-											// code.
-											if ShouldUseAlias(param.PkgPath, param.PkgName) {
-												file.ImportAlias(param.PkgPath, param.PkgName)
-											} else {
-												file.ImportName(param.PkgPath, param.PkgName)
-											}
+										tpFun := fe.original.GetType().(*types.Signature)
 
+										zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+										for i, zero := range zeroVals {
 											isConsidered := i == indexIn || i == indexOut
 											if isConsidered {
-												call.Id(param.VarName)
+												call.Id(fe.Parameters[i].VarName)
 											} else {
-												setZeroOfParam(call, param)
+												call.Add(zero)
 											}
 										}
 
@@ -368,6 +363,163 @@ func generate_ParaFuncPara(file *File, item *IndexItem, medium Medium, fromElem 
 
 	return nil
 }
+func scanTupleOfZeroValues(file *File, tuple *types.Tuple) []Code {
+
+	result := make([]Code, 0)
+
+	for i := 0; i < tuple.Len(); i++ {
+		tp := newStatement()
+
+		if tp != nil {
+			composeZeroDeclaration(file, tp, tuple.At(i).Type())
+			result = append(result, tp)
+		}
+	}
+
+	return result
+}
+func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
+	switch t := typ.(type) {
+	case *types.Basic:
+		{
+			switch t.Name() {
+			case "bool":
+				{
+					stat.Lit(false)
+				}
+			case "string":
+				{
+					stat.Lit("")
+				}
+			case "int", "int8", "int16", "int32", "int64",
+				"uint", "uint8", "uint16", "uint32", "uint64",
+				"uintptr":
+				{
+					stat.Lit(0)
+				}
+			case "float32", "float64":
+				{
+					stat.Lit(0.0)
+				}
+			case "byte":
+				{
+					stat.Lit(0)
+				}
+			case "rune":
+				{
+					stat.Lit(0)
+				}
+			case "complex64", "complex128":
+				{
+					stat.Lit(0)
+				}
+			default:
+				Errorf("unknown typeName: %q of kind %q", t.String(), t.Kind())
+			}
+		}
+	case *types.Array:
+		{
+			stat.Nil()
+		}
+	case *types.Slice:
+		{
+			stat.Nil()
+		}
+	case *types.Struct:
+		{
+			fields := make([]Code, 0)
+			for i := 0; i < t.NumFields(); i++ {
+				field := t.Field(i)
+				fldStm := newStatement()
+				fldStm.Id(field.Name())
+
+				importPackage(file, scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
+
+				composeZeroDeclaration(file, fldStm, field.Type())
+				fields = append(fields, fldStm)
+			}
+			stat.Struct(fields...).Block()
+		}
+	case *types.Pointer:
+		{
+			stat.Nil()
+		}
+	case *types.Tuple:
+		{
+			// TODO
+			stat.Nil()
+		}
+	case *types.Signature:
+		{
+			stat.Nil()
+		}
+	case *types.Interface:
+		{
+			stat.Nil()
+		}
+	case *types.Map:
+		{
+			stat.Nil()
+		}
+	case *types.Chan:
+		{
+			stat.Nil()
+		}
+	case *types.Named:
+		{
+			importPackage(file, scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
+
+			switch named := t.Underlying().(type) {
+			case *types.Basic:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Array:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Slice:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Struct:
+				{
+					stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name()).Block()
+				}
+			case *types.Pointer:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Tuple:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Signature:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Interface:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Map:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Chan:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+			case *types.Named:
+				{
+					composeZeroDeclaration(file, stat, named)
+				}
+
+			}
+		}
+	}
+
+}
 
 // declare `name := sourceCQL.(Type)`
 func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type) {
@@ -382,6 +534,14 @@ func composeVarDeclaration(file *File, group *Group, varName string, typ types.T
 }
 func newStatement() *Statement {
 	return &Statement{}
+}
+
+func importPackage(file *File, pkgPath string, pkgName string) {
+	if ShouldUseAlias(pkgPath, pkgName) {
+		file.ImportAlias(pkgPath, pkgName)
+	} else {
+		file.ImportName(pkgPath, pkgName)
+	}
 }
 
 // composeTypeDeclaration adds the `Type` inside `var name Type`
@@ -413,7 +573,7 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 				fldStm := newStatement()
 				fldStm.Id(field.Name())
 
-				file.ImportName(scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
+				importPackage(file, scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
 
 				composeTypeDeclaration(file, fldStm, field.Type())
 				fields = append(fields, fldStm)
@@ -428,13 +588,13 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 	case *types.Tuple:
 		{
 			// TODO
-			tuple := scanTuple(file, t, false)
+			tuple := scanTupleOfTypes(file, t, false)
 			stat.Add(tuple...)
 		}
 	case *types.Signature:
 		{
-			paramsTuple := scanTuple(file, t.Params(), t.Variadic())
-			resultsTuple := scanTuple(file, t.Results(), false)
+			paramsTuple := scanTupleOfTypes(file, t.Params(), t.Variadic())
+			resultsTuple := scanTupleOfTypes(file, t.Results(), false)
 
 			stat.Func().Params(paramsTuple...).List(resultsTuple...)
 		}
@@ -477,14 +637,14 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 		}
 	case *types.Named:
 		{
-			file.ImportName(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
+			importPackage(file, scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
 			stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name())
 		}
 	}
 
 }
 
-func scanTuple(file *File, tuple *types.Tuple, isVariadic bool) []Code {
+func scanTupleOfTypes(file *File, tuple *types.Tuple, isVariadic bool) []Code {
 
 	result := make([]Code, 0)
 
