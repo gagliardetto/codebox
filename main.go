@@ -333,7 +333,87 @@ func main() {
 			case *FETypeMethod:
 				{
 					fe := stored.GetFETypeMethod()
+					{
+						// validate Inp:
+						switch req.Pointers.Inp.Element {
+						case ElementParameter:
+							if req.Pointers.Inp.Index > len(fe.Func.Parameters)-1 {
+								Errorf(
+									"Inp index is %v, but func has only %v %ss",
+									req.Pointers.Inp.Index,
+									len(fe.Func.Parameters),
+									req.Pointers.Inp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementResult:
+							if req.Pointers.Inp.Index > len(fe.Func.Results)-1 {
+								Errorf(
+									"Inp index is %v, but func has only %v %ss",
+									req.Pointers.Inp.Index,
+									len(fe.Func.Results),
+									req.Pointers.Inp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementReceiver:
+							// TODO
+						default:
+							Errorf("unsupported Element for Inp: %q", req.Pointers.Inp.Element)
+							c.Status(400)
+							return
+						}
+						// validate Outp:
+						switch req.Pointers.Outp.Element {
+						case ElementParameter:
+							if req.Pointers.Outp.Index > len(fe.Func.Parameters)-1 {
+								Errorf(
+									"Outp index is %v, but func has only %v %ss",
+									req.Pointers.Outp.Index,
+									len(fe.Func.Parameters),
+									req.Pointers.Outp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementResult:
+							if req.Pointers.Outp.Index > len(fe.Func.Results)-1 {
+								Errorf(
+									"Outp index is %v, but func has only %v %ss",
+									req.Pointers.Outp.Index,
+									len(fe.Func.Results),
+									req.Pointers.Outp.Element,
+								)
+								c.Status(400)
+								return
+							}
+						case ElementReceiver:
+							// TODO
+						default:
+							Errorf("unsupported Element for Outp: %q", req.Pointers.Outp.Element)
+							c.Status(400)
+							return
+						}
+						// TODO: if Inp and Outp are the same, is that an error?
+					}
 					fe.CodeQL.Pointers = req.Pointers
+					// TODO: bind UI with fe.CodeQL.Pointers
+					fe.CodeQL.IsEnabled = true
+
+					code := generate_Method(
+						file,
+						stored,
+						req.Pointers.Inp.Element,
+						req.Pointers.Outp.Element,
+					)
+					if code != nil {
+						// TODO: save `code` inside `fe` (add all to the file only at program exit).
+						file.Add(code.Line())
+					} else {
+						Warnf("NOTHING GENERATED")
+					}
 				}
 			case *FEInterfaceMethod:
 				{
@@ -411,7 +491,75 @@ func generate_Method(file *File, item *IndexItem, from Element, into Element) *S
 	return nil
 }
 
-func generate_ReceMethPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
+	// from: receiver
+	// medium: method (when there is a receiver, then it must be a method medium)
+	// into: param
+	fe := item.GetFETypeMethod()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+	_ = indexIn
+	_ = indexOut
+
+	in := fe.Receiver
+	out := fe.Func.Parameters[indexOut]
+
+	in.VarName = MustVarNameWithDefaultPrefix(in.VarName, "from")
+	out.VarName = MustVarNameWithDefaultPrefix(out.VarName, "into")
+
+	inVarName := in.VarName
+	outVarName := out.VarName
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("source").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, in.VarName, in.original)
+
+						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+
+						groupCase.
+							Line().Comment("Call medium method that transfers the taint").
+							Line().Comment(Sf("from the receiver `%s` to the argument `%s`", in.VarName, out.VarName)).
+							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+
+						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+
+						groupCase.Id(in.VarName).Dot(fe.Func.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.Func.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for i, zero := range zeroVals {
+									isConsidered := i == indexOut
+									if isConsidered {
+										call.Id(fe.Func.Parameters[i].VarName)
+									} else {
+										call.Add(zero)
+									}
+								}
+
+							},
+						)
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+						groupCase.Id("sink").Call(Id(out.VarName))
+					})
+			})
+	return code.Line()
+}
 func generate_ReceMethResu(file *File, item *IndexItem) *Statement { return nil }
 func generate_ParaMethRece(file *File, item *IndexItem) *Statement { return nil }
 func generate_ParaMethPara(file *File, item *IndexItem) *Statement { return nil }
@@ -466,7 +614,6 @@ func generate_ParaFuncPara(file *File, item *IndexItem) *Statement {
 						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
 						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						//groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
 						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 						groupCase.
@@ -1373,6 +1520,7 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 		} else {
 			named = mt.Recv().(*types.Named)
 		}
+		fe.Receiver.original = named
 		fe.Receiver.TypeName = named.Obj().Name()
 		fe.Receiver.QualifiedName = scanner.RemoveGoPath(named.Obj().Pkg()) + "." + named.Obj().Name()
 		fe.Receiver.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
@@ -1431,7 +1579,10 @@ type FETypeMethod struct {
 }
 type FEInterfaceMethod FETypeMethod
 
-type FEReceiver FEType
+type FEReceiver struct {
+	FEType
+	original *types.Named
+}
 
 func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETypeMethod {
 	var fe FETypeMethod
