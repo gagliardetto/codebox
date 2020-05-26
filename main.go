@@ -126,7 +126,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 func main() {
 	var pkg string
 	var runServer bool
-	flag.StringVar(&pkg, "pkg", "", "package you want to scan and convert to goa types")
+	flag.StringVar(&pkg, "pkg", "", "package you want to scan")
 	flag.BoolVar(&runServer, "http", false, "run http server")
 	flag.Parse()
 
@@ -1774,6 +1774,10 @@ func (obj *CodeQLPointers) Validate() error {
 	}
 	if err := obj.Outp.Validate(); err != nil {
 		return err
+	}
+
+	if obj.Inp.Element == obj.Outp.Element && (obj.Inp.Element == ElementReceiver || (obj.Inp.Index == obj.Outp.Index)) {
+		return errors.New("obj.Inp and obj.Outp have same values")
 	}
 
 	return nil
