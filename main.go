@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"go/types"
+	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -209,6 +210,105 @@ func main() {
 			index.MustSetUnique(v.Func.Signature, v)
 		}
 	}
+
+	go Notify(func(os.Signal) bool {
+		file := NewTestFile()
+		testFuncNames := make([]string, 0)
+		{
+			for _, fe := range feModule.Funcs {
+				if !fe.CodeQL.IsEnabled {
+					continue
+				}
+				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+					Errorf("invalid pointers for %q: %s", fe.Signature, err)
+					continue
+				}
+				code, testFuncName := generate_Func(
+					file,
+					fe,
+					fe.CodeQL.Pointers.Inp.Element,
+					fe.CodeQL.Pointers.Outp.Element,
+				)
+				if code != nil {
+					// TODO: save `code` inside `fe` (add all to the file only at program exit).
+					file.Add(code.Line())
+					testFuncNames = append(testFuncNames, testFuncName)
+				} else {
+					Warnf("NOTHING GENERATED")
+				}
+			}
+		}
+		{
+			for _, fe := range feModule.TypeMethods {
+				if !fe.CodeQL.IsEnabled {
+					continue
+				}
+				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+					continue
+				}
+				converted := FETypeMethod(*fe)
+				code, testFuncName := generate_Method(
+					file,
+					&converted,
+					fe.CodeQL.Pointers.Inp.Element,
+					fe.CodeQL.Pointers.Outp.Element,
+				)
+				if code != nil {
+					// TODO: save `code` inside `fe` (add all to the file only at program exit).
+					file.Add(code.Line())
+					testFuncNames = append(testFuncNames, testFuncName)
+				} else {
+					Warnf("NOTHING GENERATED")
+				}
+			}
+		}
+		{
+			for _, fe := range feModule.InterfaceMethods {
+				if !fe.CodeQL.IsEnabled {
+					continue
+				}
+				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+					continue
+				}
+				converted := FETypeMethod(*fe)
+				code, testFuncName := generate_Method(
+					file,
+					&converted,
+					fe.CodeQL.Pointers.Inp.Element,
+					fe.CodeQL.Pointers.Outp.Element,
+				)
+				if code != nil {
+					// TODO: save `code` inside `fe` (add all to the file only at program exit).
+					file.Add(code.Line())
+					testFuncNames = append(testFuncNames, testFuncName)
+				} else {
+					Warnf("NOTHING GENERATED")
+				}
+			}
+		}
+		{
+
+			code := Func().
+				Id("RunAllTaints").
+				Params(Id("v").Interface()).
+				BlockFunc(func(group *Group) {
+					for _, testFuncName := range testFuncNames {
+						group.BlockFunc(func(testBlock *Group) {
+							testBlock.Id("source").Op(":=").Id("newSource").Call()
+							testBlock.Id(testFuncName).Call(Id("source"))
+						})
+					}
+				})
+			file.Add(code.Line())
+		}
+		fmt.Printf("%#v", file)
+		// TODO: save to a file.
+		os.Exit(0)
+		return false
+	}, os.Kill, os.Interrupt)
+
 	if runServer {
 		r := gin.Default()
 		r.StaticFile("", "./index.html")
@@ -243,27 +343,7 @@ func main() {
 				return
 			}
 
-			file := NewFile("main")
-			{
-				// main function:
-				file.Func().Id("main").Params().Block()
-			}
-			{
-				// sink function:
-				code := Func().
-					Id("sink").
-					Params(Id("v").Interface()).
-					Block()
-				file.Add(code.Line())
-			}
-			{
-				// link function (Used in tests to transmit taint from param 0 into param 1):
-				code := Func().
-					Id("link").
-					Params(Id("from").Interface(), Id("into").Interface()).
-					Block()
-				file.Add(code.Line())
-			}
+			file := NewTestFile()
 			switch stored.original.(type) {
 			case *FEFunc:
 				{
@@ -333,7 +413,7 @@ func main() {
 					// TODO: bind UI with fe.CodeQL.Pointers
 					fe.CodeQL.IsEnabled = true
 
-					code := generate_Func(
+					code, _ := generate_Func(
 						file,
 						fe,
 						req.Pointers.Inp.Element,
@@ -419,7 +499,7 @@ func main() {
 					// TODO: bind UI with fe.CodeQL.Pointers
 					fe.CodeQL.IsEnabled = true
 
-					code := generate_Method(
+					code, _ := generate_Method(
 						file,
 						fe,
 						req.Pointers.Inp.Element,
@@ -443,6 +523,39 @@ func main() {
 	}
 }
 
+func NewTestFile() *File {
+	file := NewFile("main")
+	{
+		// main function:
+		file.Func().Id("main").Params().Block()
+	}
+	{
+		// sink function:
+		code := Func().
+			Id("sink").
+			Params(Id("v").Interface()).
+			Block()
+		file.Add(code.Line())
+	}
+	{
+		// link function (Used in tests to transmit taint from param 0 into param 1):
+		code := Func().
+			Id("link").
+			Params(Id("from").Interface(), Id("into").Interface()).
+			Block()
+		file.Add(code.Line())
+	}
+	{
+		// newSource functions returns a new tainted thing:
+		code := Func().
+			Id("newSource").
+			Params().
+			Interface().Block()
+		file.Add(code.Line())
+	}
+	return file
+}
+
 // ShouldUseAlias tells whether the package name and the base
 // of the backage path are the same; if they are not,
 // then the package should use an alias in the import.
@@ -454,7 +567,7 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return pkgPath[lastSlashAt:] != pkgName
 }
 
-func generate_Func(file *File, fe *FEFunc, from Element, into Element) *Statement {
+func generate_Func(file *File, fe *FEFunc, from Element, into Element) (*Statement, string) {
 	Parameter := ElementParameter
 	Result := ElementResult
 
@@ -471,10 +584,10 @@ func generate_Func(file *File, fe *FEFunc, from Element, into Element) *Statemen
 		panic(Sf("unhandled case: from %v, into %v", from, into))
 	}
 
-	return nil
+	return nil, ""
 }
 
-func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) *Statement {
+func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) (*Statement, string) {
 	Receiver := ElementReceiver
 	Parameter := ElementParameter
 	Result := ElementResult
@@ -500,10 +613,10 @@ func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) *
 		panic(Sf("unhandled case: from %v, into %v", from, into))
 	}
 
-	return nil
+	return nil, ""
 }
 
-func generate_ReceMethPara(file *File, fe *FETypeMethod) *Statement {
+func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
@@ -521,7 +634,8 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -565,9 +679,9 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ReceMethResu(file *File, fe *FETypeMethod) *Statement {
+func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
@@ -585,7 +699,8 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -629,9 +744,9 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ParaMethRece(file *File, fe *FETypeMethod) *Statement {
+func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: receiver
@@ -649,7 +764,8 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -693,9 +809,9 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ParaMethPara(file *File, fe *FETypeMethod) *Statement {
+func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
@@ -712,7 +828,8 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -759,9 +876,9 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ParaMethResu(file *File, fe *FETypeMethod) *Statement {
+func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
@@ -778,7 +895,8 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -833,9 +951,9 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ResuMethRece(file *File, fe *FETypeMethod) *Statement {
+func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: receiver
@@ -853,7 +971,8 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -904,9 +1023,9 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ResuMethPara(file *File, fe *FETypeMethod) *Statement {
+func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: parameter
@@ -923,7 +1042,8 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -985,9 +1105,9 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ResuMethResu(file *File, fe *FETypeMethod) *Statement {
+func generate_ResuMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: result
@@ -1004,7 +1124,8 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -1062,7 +1183,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
 
 func MustVarName(name string) string {
@@ -1078,7 +1199,7 @@ func MustVarNameWithDefaultPrefix(name string, prefix string) string {
 
 	return name
 }
-func generate_ParaFuncPara(file *File, fe *FEFunc) *Statement {
+func generate_ParaFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 	// from: param
 	// medium: func
 	// into: param
@@ -1095,7 +1216,8 @@ func generate_ParaFuncPara(file *File, fe *FEFunc) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("sourceCQL").Interface())
@@ -1140,10 +1262,10 @@ func generate_ParaFuncPara(file *File, fe *FEFunc) *Statement {
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 
-	return code.Line()
+	return code.Line(), testFuncID
 }
 
-func generate_ParaFuncResu(file *File, fe *FEFunc) *Statement {
+func generate_ParaFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 	// from: param
 	// medium: func
 	// into: result
@@ -1160,7 +1282,8 @@ func generate_ParaFuncResu(file *File, fe *FEFunc) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("sourceCQL").Interface())
@@ -1217,9 +1340,9 @@ func generate_ParaFuncResu(file *File, fe *FEFunc) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ResuFuncPara(file *File, fe *FEFunc) *Statement {
+func generate_ResuFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 	// from: result
 	// medium: func
 	// into: param
@@ -1237,7 +1360,8 @@ func generate_ResuFuncPara(file *File, fe *FEFunc) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("sourceCQL").Interface())
@@ -1294,9 +1418,9 @@ func generate_ResuFuncPara(file *File, fe *FEFunc) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
-func generate_ResuFuncResu(file *File, fe *FEFunc) *Statement {
+func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 	// from: result
 	// medium: func
 	// into: result
@@ -1313,7 +1437,8 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) *Statement {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
 				group.Add(Id("source").Interface())
@@ -1370,7 +1495,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) *Statement {
 				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
 				groupCase.Id("sink").Call(Id(out.VarName))
 			})
-	return code.Line()
+	return code.Line(), testFuncID
 }
 
 func scanTupleOfZeroValues(file *File, tuple *types.Tuple) []Code {
