@@ -106,6 +106,9 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 	index.Set(signature, v)
 }
 
+// TODO:
+// - reject invalid cases (e.g. from receiver to receiver)
+// - look for name collisions
 func main() {
 	var pkg string
 	var runServer bool
@@ -696,7 +699,76 @@ func generate_ParaMethRece(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ParaMethPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
+	// from: param
+	// medium: method (when there is a receiver, then it must be a method medium)
+	// into: param
+	fe := item.GetFETypeMethod()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+
+	in := fe.Func.Parameters[indexIn]
+	out := fe.Func.Parameters[indexOut]
+
+	in.VarName = MustVarNameWithDefaultPrefix(in.VarName, "from")
+	out.VarName = MustVarNameWithDefaultPrefix(out.VarName, "into")
+
+	inVarName := in.VarName
+	outVarName := out.VarName
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("source").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+
+						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+
+						groupCase.Line().Comment("Declare medium object/interface:")
+						groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+
+						groupCase.
+							Line().Comment("Call medium method that transfers the taint").
+							Line().Comment(Sf("from the parameter `%s` to the parameter `%s`", in.VarName, out.VarName)).
+							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+
+						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+
+						groupCase.Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.Func.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for i, zero := range zeroVals {
+									isConsidered := i == indexIn || i == indexOut
+									if isConsidered {
+										call.Id(fe.Func.Parameters[i].VarName)
+									} else {
+										call.Add(zero)
+									}
+								}
+
+							},
+						)
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+						groupCase.Id("sink").Call(Id(out.VarName))
+					})
+			})
+	return code.Line()
+}
 func generate_ParaMethResu(file *File, item *IndexItem) *Statement { return nil }
 func generate_ResuMethRece(file *File, item *IndexItem) *Statement { return nil }
 func generate_ResuMethPara(file *File, item *IndexItem) *Statement { return nil }
