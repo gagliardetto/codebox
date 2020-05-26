@@ -189,7 +189,7 @@ func main() {
 
 	//Q(feModule)
 	Sfln(
-		"package %q has %v funcs, %v methods, and %v interfaces",
+		"package %q has %v funcs, %v methods on types, and %v methods on interfaces",
 		pk.Name,
 		len(feModule.Funcs),
 		len(feModule.TypeMethods),
@@ -529,46 +529,43 @@ func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original)
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original)
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the receiver `%s` to the argument `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the receiver `%s` to the argument `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.Id(in.VarName).Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+				groupCase.Id(in.VarName).Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for i, zero := range zeroVals {
-									isConsidered := i == indexOut
-									if isConsidered {
-										call.Id(fe.Func.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
+						for i, zero := range zeroVals {
+							isConsidered := i == indexOut
+							if isConsidered {
+								call.Id(fe.Func.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
+							}
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -597,46 +594,43 @@ func generate_ReceMethResu(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original)
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the receiver `%s` to the result `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the receiver `%s` to the result `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, v := range fe.Func.Results {
-								if i == indexOut {
-									resGroup.Id(v.VarName)
-								} else {
-									resGroup.Id("_")
-								}
-							}
-						}).Op(":=").Id(in.VarName).Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, v := range fe.Func.Results {
+						if i == indexOut {
+							resGroup.Id(v.VarName)
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Id(in.VarName).Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for _, zero := range zeroVals {
-									call.Add(zero)
-								}
+						for _, zero := range zeroVals {
+							call.Add(zero)
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -665,46 +659,43 @@ func generate_ParaMethRece(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original)
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the parameter `%s` to the receiver `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the parameter `%s` to the receiver `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.Id(out.VarName).Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+				groupCase.Id(out.VarName).Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.original.(*types.Signature)
+						tpFun := fe.original.(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for i, zero := range zeroVals {
-									isConsidered := i == indexIn
-									if isConsidered {
-										call.Id(fe.Func.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
+						for i, zero := range zeroVals {
+							isConsidered := i == indexIn
+							if isConsidered {
+								call.Id(fe.Func.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
+							}
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -732,49 +723,46 @@ func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
-						groupCase.Line().Comment("Declare medium object/interface:")
-						groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Line().Comment("Declare medium object/interface:")
+				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the parameter `%s` to the parameter `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the parameter `%s` to the parameter `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.Id("mediumObj").Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+				groupCase.Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for i, zero := range zeroVals {
-									isConsidered := i == indexIn || i == indexOut
-									if isConsidered {
-										call.Id(fe.Func.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
+						for i, zero := range zeroVals {
+							isConsidered := i == indexIn || i == indexOut
+							if isConsidered {
+								call.Id(fe.Func.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
+							}
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -802,57 +790,54 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
-						groupCase.Line().Comment("Declare medium object/interface:")
-						groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Line().Comment("Declare medium object/interface:")
+				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the parameter `%s` to the result `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the parameter `%s` to the result `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, v := range fe.Func.Results {
-								if i == indexOut {
-									resGroup.Id(v.VarName)
-								} else {
-									resGroup.Id("_")
-								}
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, v := range fe.Func.Results {
+						if i == indexOut {
+							resGroup.Id(v.VarName)
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
+
+						tpFun := fe.Func.original.GetType().(*types.Signature)
+
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+						for i, zero := range zeroVals {
+							isConsidered := i == indexIn
+							if isConsidered {
+								call.Id(fe.Func.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
 							}
-						}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+						}
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+					},
+				)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
-
-								for i, zero := range zeroVals {
-									isConsidered := i == indexIn
-									if isConsidered {
-										call.Id(fe.Func.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
-
-							},
-						)
-
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -881,54 +866,50 @@ func generate_ResuMethRece(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original)
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original)
 
-						groupCase.
-							Line().Comment("Call medium method that will transfer the taint").
-							Line().Comment(Sf("from the result `intermediateCQL` to receiver `%s`:", outVarName))
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, _ := range fe.Func.Results {
-								if i == indexIn {
-									resGroup.Id("intermediateCQL")
-								} else {
-									resGroup.Id("_")
-								}
-							}
-						}).Op(":=").Id(out.VarName).Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+				groupCase.
+					Line().Comment("Call medium method that will transfer the taint").
+					Line().Comment(Sf("from the result `intermediateCQL` to receiver `%s`:", outVarName))
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, _ := range fe.Func.Results {
+						if i == indexIn {
+							resGroup.Id("intermediateCQL")
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Id(out.VarName).Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for _, zero := range zeroVals {
-									call.Add(zero)
-								}
+						for _, zero := range zeroVals {
+							call.Add(zero)
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.
-							Line().Comment(Sf(
-							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
-							in.VarName,
-							out.VarName,
-						))
-						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
+				groupCase.
+					Line().Comment(Sf(
+					"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+					in.VarName,
+					out.VarName,
+				))
+				groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -956,64 +937,61 @@ func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
-						groupCase.Line().Comment("Declare medium object/interface:")
-						groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Line().Comment("Declare medium object/interface:")
+				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the result `%s` to the parameter `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the result `%s` to the parameter `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, _ := range fe.Func.Results {
-								if i == indexIn {
-									resGroup.Id("intermediateCQL")
-								} else {
-									resGroup.Id("_")
-								}
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, _ := range fe.Func.Results {
+						if i == indexIn {
+							resGroup.Id("intermediateCQL")
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
+
+						tpFun := fe.Func.original.GetType().(*types.Signature)
+
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+						for i, zero := range zeroVals {
+							isConsidered := i == indexOut
+							if isConsidered {
+								call.Id(fe.Func.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
 							}
-						}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+						}
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+					},
+				)
+				groupCase.
+					Line().Comment(Sf(
+					"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+					in.VarName,
+					out.VarName,
+				))
+				groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
-
-								for i, zero := range zeroVals {
-									isConsidered := i == indexOut
-									if isConsidered {
-										call.Id(fe.Func.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
-
-							},
-						)
-						groupCase.
-							Line().Comment(Sf(
-							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
-							in.VarName,
-							out.VarName,
-						))
-						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
-
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -1041,60 +1019,57 @@ func generate_ResuMethResu(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment("Declare medium object/interface:")
-						groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Line().Comment("Declare medium object/interface:")
+				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the result `%s` to the result `%s`", in.VarName, out.VarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the result `%s` to the result `%s`", in.VarName, out.VarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
-						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, v := range fe.Func.Results {
-								if i == indexIn || i == indexOut {
-									if i == indexIn {
-										resGroup.Id("intermediateCQL")
-									} else {
-										resGroup.Id(v.VarName)
-									}
-								} else {
-									resGroup.Id("_")
-								}
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, v := range fe.Func.Results {
+						if i == indexIn || i == indexOut {
+							if i == indexIn {
+								resGroup.Id("intermediateCQL")
+							} else {
+								resGroup.Id(v.VarName)
 							}
-						}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
-							func(call *Group) {
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.Func.original.GetType().(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for _, zero := range zeroVals {
-									call.Add(zero)
-								}
+						for _, zero := range zeroVals {
+							call.Add(zero)
+						}
 
-							},
-						)
-						groupCase.
-							Line().Comment(Sf(
-							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
-							in.VarName,
-							out.VarName,
-						))
-						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
+					},
+				)
+				groupCase.
+					Line().Comment(Sf(
+					"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+					in.VarName,
+					out.VarName,
+				))
+				groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -1136,46 +1111,43 @@ func generate_ParaFuncPara(file *File, item *IndexItem) *Statement {
 				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-						composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
-							Line().Comment(Sf("`%s` is now tainted.", outVarName))
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
+					Line().Comment(Sf("`%s` is now tainted.", outVarName))
 
-						importPackage(file, fe.PkgPath, fe.PkgName)
+				importPackage(file, fe.PkgPath, fe.PkgName)
 
-						groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
-							func(call *Group) {
+				groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.original.GetType().(*types.Signature)
+						tpFun := fe.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for i, zero := range zeroVals {
-									isConsidered := i == indexIn || i == indexOut
-									if isConsidered {
-										call.Id(fe.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
+						for i, zero := range zeroVals {
+							isConsidered := i == indexIn || i == indexOut
+							if isConsidered {
+								call.Id(fe.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
+							}
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 
 	return code.Line()
@@ -1205,59 +1177,56 @@ func generate_ParaFuncResu(file *File, item *IndexItem) *Statement {
 				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						if in.original.IsVariadic() {
-							switch singleType := in.original.GetType().(type) {
-							case *types.Slice:
-								composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
-							case *types.Array:
-								composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
-							default:
-								panic(Sf("unknown variadic type %v", in.original))
-							}
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				if in.original.IsVariadic() {
+					switch singleType := in.original.GetType().(type) {
+					case *types.Slice:
+						composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
+					case *types.Array:
+						composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
+					default:
+						panic(Sf("unknown variadic type %v", in.original))
+					}
+				} else {
+					composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				}
+
+				groupCase.
+					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment(Sf("from the parameter `%s` to result `%s`", inVarName, outVarName)).
+					Line().Comment(Sf("(`%s` is now tainted).", outVarName))
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, v := range fe.Results {
+						if i == indexOut {
+							resGroup.Id(v.VarName)
 						} else {
-							composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
+					func(call *Group) {
+
+						tpFun := fe.original.GetType().(*types.Signature)
+
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+						for i, zero := range zeroVals {
+							isConsidered := i == indexIn
+							if isConsidered {
+								call.Id(fe.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
+							}
 						}
 
-						groupCase.
-							Line().Comment("Call medium method that transfers the taint").
-							Line().Comment(Sf("from the parameter `%s` to result `%s`", inVarName, outVarName)).
-							Line().Comment(Sf("(`%s` is now tainted).", outVarName))
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, v := range fe.Results {
-								if i == indexOut {
-									resGroup.Id(v.VarName)
-								} else {
-									resGroup.Id("_")
-								}
-							}
-						}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
-							func(call *Group) {
+					},
+				)
 
-								tpFun := fe.original.GetType().(*types.Signature)
-
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
-
-								for i, zero := range zeroVals {
-									isConsidered := i == indexIn
-									if isConsidered {
-										call.Id(fe.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
-
-							},
-						)
-
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -1287,59 +1256,56 @@ func generate_ResuFuncPara(file *File, item *IndexItem) *Statement {
 				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
-						groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
-						importPackage(file, out.PkgPath, out.PkgName)
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
+				groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
+				importPackage(file, out.PkgPath, out.PkgName)
 
-						groupCase.
-							Line().Comment("Call medium method that will transfer the taint").
-							Line().Comment(Sf("from the result `intermediateCQL` to parameter `%s`:", outVarName))
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, _ := range fe.Results {
-								if i == indexIn {
-									resGroup.Id("intermediateCQL")
-								} else {
-									resGroup.Id("_")
-								}
+				groupCase.
+					Line().Comment("Call medium method that will transfer the taint").
+					Line().Comment(Sf("from the result `intermediateCQL` to parameter `%s`:", outVarName))
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, _ := range fe.Results {
+						if i == indexIn {
+							resGroup.Id("intermediateCQL")
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
+					func(call *Group) {
+
+						tpFun := fe.original.GetType().(*types.Signature)
+
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+						for i, zero := range zeroVals {
+							isConsidered := i == indexOut
+							if isConsidered {
+								call.Id(fe.Parameters[i].VarName)
+							} else {
+								call.Add(zero)
 							}
-						}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
-							func(call *Group) {
+						}
 
-								tpFun := fe.original.GetType().(*types.Signature)
+					},
+				)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+				groupCase.
+					Line().Comment(Sf(
+					"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+					in.VarName,
+					out.VarName,
+				))
+				groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-								for i, zero := range zeroVals {
-									isConsidered := i == indexOut
-									if isConsidered {
-										call.Id(fe.Parameters[i].VarName)
-									} else {
-										call.Add(zero)
-									}
-								}
-
-							},
-						)
-
-						groupCase.
-							Line().Comment(Sf(
-							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
-							in.VarName,
-							out.VarName,
-						))
-						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
-
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
@@ -1367,60 +1333,56 @@ func generate_ResuFuncResu(file *File, item *IndexItem) *Statement {
 				group.Add(Id("source").Interface())
 			}).
 		BlockFunc(
-			func(group *Group) {
-				group.BlockFunc(
-					func(groupCase *Group) {
-						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			func(groupCase *Group) {
+				groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
-						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
-						groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
-						groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
-						importPackage(file, out.PkgPath, out.PkgName)
+				groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
+				groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
+				importPackage(file, out.PkgPath, out.PkgName)
 
-						groupCase.
-							Line().Comment("Call medium func that transfers the taint").
-							Line().Comment(Sf("from the result `%s` to result `%s`", inVarName, outVarName)).
-							Line().Comment("(extra steps needed)")
-						groupCase.ListFunc(func(resGroup *Group) {
-							for i, v := range fe.Results {
-								if i == indexIn || i == indexOut {
-									if i == indexIn {
-										resGroup.Id("intermediateCQL")
-									} else {
-										resGroup.Id(v.VarName)
-									}
-								} else {
-									resGroup.Id("_")
-								}
+				groupCase.
+					Line().Comment("Call medium func that transfers the taint").
+					Line().Comment(Sf("from the result `%s` to result `%s`", inVarName, outVarName)).
+					Line().Comment("(extra steps needed)")
+				groupCase.ListFunc(func(resGroup *Group) {
+					for i, v := range fe.Results {
+						if i == indexIn || i == indexOut {
+							if i == indexIn {
+								resGroup.Id("intermediateCQL")
+							} else {
+								resGroup.Id(v.VarName)
 							}
-						}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
-							func(call *Group) {
+						} else {
+							resGroup.Id("_")
+						}
+					}
+				}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
+					func(call *Group) {
 
-								tpFun := fe.original.GetType().(*types.Signature)
+						tpFun := fe.original.GetType().(*types.Signature)
 
-								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
-								for _, zero := range zeroVals {
-									call.Add(zero)
-								}
+						for _, zero := range zeroVals {
+							call.Add(zero)
+						}
 
-							},
-						)
+					},
+				)
 
-						groupCase.
-							Line().Comment(Sf(
-							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
-							in.VarName,
-							out.VarName,
-						))
-						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
+				groupCase.
+					Line().Comment(Sf(
+					"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+					in.VarName,
+					out.VarName,
+				))
+				groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-						groupCase.Id("sink").Call(Id(out.VarName))
-
-					})
+				groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+				groupCase.Id("sink").Call(Id(out.VarName))
 			})
 	return code.Line()
 }
