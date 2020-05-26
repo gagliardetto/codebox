@@ -143,14 +143,14 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 	switch t := o.Type().Underlying().(type) {
 	case *types.Interface:
 
-		if !token.IsExported(nameForType(o.Type())) {
+		if !token.IsExported(NameForType(o.Type())) {
 			break
 		}
 
-		it := scanInterface(&Interface{Name: nameForType(o.Type())}, t, ctx.trySetDocsForInterfaceMethod)
-		ctx.trySetDocs(nameForType(o.Type()), it)
+		it := scanInterface(&Interface{Name: NameForType(o.Type())}, t, ctx.trySetDocsForInterfaceMethod)
+		ctx.trySetDocs(NameForType(o.Type()), it)
 
-		it.SetType(t)
+		it.SetType(o.Type())
 		p.Interfaces = append(p.Interfaces, it)
 	}
 
@@ -277,7 +277,7 @@ func nameForFunc(o types.Object) (name string) {
 	s := o.Type().(*types.Signature)
 
 	if s.Recv() != nil {
-		name = nameForType(s.Recv().Type()) + "."
+		name = NameForType(s.Recv().Type()) + "."
 	}
 
 	name = name + o.Name()
@@ -285,7 +285,7 @@ func nameForFunc(o types.Object) (name string) {
 	return
 }
 
-func nameForType(o types.Type) (name string) {
+func NameForType(o types.Type) (name string) {
 	name = o.String()
 	i := strings.LastIndex(name, ".")
 	name = name[i+1:]

@@ -59,6 +59,19 @@ func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
 	return fe
 }
 
+func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
+	feTyp, ok := item.original.(*FETypeMethod)
+	if !ok {
+		feIt, ok := item.original.(*FEInterfaceMethod)
+		if !ok {
+			return nil
+		}
+		converted := FETypeMethod(*feIt)
+		return &converted
+	}
+	return feTyp
+}
+
 //
 func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
 	fe, ok := item.original.(*FEInterfaceMethod)
@@ -333,9 +346,9 @@ func main() {
 					}
 
 				}
-			case *FETypeMethod:
+			case *FETypeMethod, *FEInterfaceMethod:
 				{
-					fe := stored.GetFETypeMethod()
+					fe := stored.GetFETypeMethodOrInterfaceMethod()
 					{
 						// validate Inp:
 						switch req.Pointers.Inp.Element {
@@ -418,11 +431,6 @@ func main() {
 						Warnf("NOTHING GENERATED")
 					}
 				}
-			case *FEInterfaceMethod:
-				{
-					fe := stored.GetFEInterfaceMethod()
-					fe.CodeQL.Pointers = req.Pointers
-				}
 			default:
 				panic(Sf("unknown type for %v", stored.original))
 			}
@@ -498,7 +506,7 @@ func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -567,7 +575,7 @@ func generate_ReceMethResu(file *File, item *IndexItem) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -635,7 +643,7 @@ func generate_ParaMethRece(file *File, item *IndexItem) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: receiver
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -703,7 +711,7 @@ func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -773,7 +781,7 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -851,7 +859,7 @@ func generate_ResuMethRece(file *File, item *IndexItem) *Statement {
 	// from: result
 	// medium: method
 	// into: receiver
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -927,7 +935,7 @@ func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
 	// from: result
 	// medium: method
 	// into: parameter
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1012,7 +1020,7 @@ func generate_ResuMethResu(file *File, item *IndexItem) *Statement {
 	// from: result
 	// medium: method
 	// into: result
-	fe := item.GetFETypeMethod()
+	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1664,15 +1672,18 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 				if t.Empty() {
 					stat.Interface()
 				} else {
-					// TODO
-					methods := make([]Code, 0)
-					for i := 0; i < t.NumMethods(); i++ {
-						meth := t.Method(i)
-						fn := newStatement()
-						composeTypeDeclaration(file, fn, meth.Type())
-						methods = append(methods, fn)
+					{
+						// TODO: check if has at least one method?
+						// Get receiver info from the first explicit method:
+						meth := t.ExplicitMethod(0)
+						methFunc := meth.Type().(*types.Signature)
+						pkgPath := scanner.RemoveGoPath(methFunc.Recv().Pkg())
+						pkgName := methFunc.Recv().Pkg().Name()
+						typeName := methFunc.Recv().Name()
+
+						importPackage(file, pkgPath, pkgName)
+						stat.Qual(pkgPath, typeName)
 					}
-					stat.Interface(methods...)
 				}
 			}
 		}
@@ -1699,7 +1710,7 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 		}
 	case *types.Named:
 		{
-			if t.Obj().Name() == "error" {
+			if t.Obj() != nil && t.Obj().Name() == "error" {
 				stat.Error()
 			} else {
 				if t.Obj() != nil && t.Obj().Pkg() != nil {
@@ -2058,6 +2069,7 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 		fe.Receiver.TypeName = named.Obj().Name()
 		fe.Receiver.QualifiedName = scanner.RemoveGoPath(named.Obj().Pkg()) + "." + named.Obj().Name()
 		fe.Receiver.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
+		fe.Receiver.PkgName = named.Obj().Pkg().Name()
 		//fe.Receiver.VarName =
 	}
 
@@ -2115,7 +2127,7 @@ type FEInterfaceMethod FETypeMethod
 
 type FEReceiver struct {
 	FEType
-	original *types.Named
+	original types.Type
 }
 
 func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETypeMethod {
@@ -2135,10 +2147,11 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETy
 
 	feFunc := getFEFunc(methodFunc)
 	{
-
+		fe.Receiver.original = it.GetType()
 		fe.Receiver.TypeName = it.Name
 		fe.Receiver.QualifiedName = scanner.StringRemoveGoPath(feFunc.PkgPath) + "." + feFunc.Name
 		fe.Receiver.PkgPath = scanner.StringRemoveGoPath(feFunc.PkgPath)
+		fe.Receiver.PkgName = feFunc.PkgName
 	}
 
 	fe.Func = &FEFunc{}
