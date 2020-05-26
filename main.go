@@ -847,7 +847,82 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuMethRece(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuMethRece(file *File, item *IndexItem) *Statement {
+	// from: result
+	// medium: method
+	// into: receiver
+	fe := item.GetFETypeMethod()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+	_ = indexOut
+
+	in := fe.Func.Results[indexIn]
+	out := fe.Receiver
+
+	in.VarName = MustVarNameWithDefaultPrefix(in.VarName, "from")
+	out.VarName = MustVarNameWithDefaultPrefix(out.VarName, "into")
+
+	inVarName := in.VarName
+	outVarName := out.VarName
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("source").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+
+						groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
+						composeVarDeclaration(file, groupCase, out.VarName, out.original)
+
+						groupCase.
+							Line().Comment("Call medium method that will transfer the taint").
+							Line().Comment(Sf("from the result `intermediateCQL` to receiver `%s`:", outVarName))
+						groupCase.ListFunc(func(resGroup *Group) {
+							for i, _ := range fe.Func.Results {
+								if i == indexIn {
+									resGroup.Id("intermediateCQL")
+								} else {
+									resGroup.Id("_")
+								}
+							}
+						}).Op(":=").Id(out.VarName).Dot(fe.Func.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.Func.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for _, zero := range zeroVals {
+									call.Add(zero)
+								}
+
+							},
+						)
+
+						groupCase.
+							Line().Comment(Sf(
+							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+							in.VarName,
+							out.VarName,
+						))
+						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+						groupCase.Id("sink").Call(Id(out.VarName))
+
+					})
+			})
+	return code.Line()
+}
 func generate_ResuMethPara(file *File, item *IndexItem) *Statement { return nil }
 func generate_ResuMethResu(file *File, item *IndexItem) *Statement { return nil }
 
