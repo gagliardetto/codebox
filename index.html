@@ -175,7 +175,7 @@
                     <div class="type-indication text-success">FUNCTION</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
-                        <input type="checkbox" v-model="func.CodeQL.IsEnabled">
+                        <input type="checkbox" v-model="func.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, func.Signature)">
                         <span class="slider bg-success"></span>
                     </label>
                     <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="'code-func-'+func.Name">COPY</button>
@@ -271,7 +271,7 @@
                     <div class="type-indication text-primary">METHOD</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
-                        <input type="checkbox" v-model="method.CodeQL.IsEnabled">
+                        <input type="checkbox" v-model="method.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, method.Func.Signature)">
                         <span class="slider bg-primary"></span>
                     </label>
                     <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="'code-method-'+method.FEName">COPY</button>
@@ -387,7 +387,7 @@
                     <div class="type-indication text-warning">INTERFACE</div>
                     <!-- Rectangular switch -->
                     <label class="switch">
-                        <input type="checkbox" v-model="itMeth.CodeQL.IsEnabled">
+                        <input type="checkbox" v-model="itMeth.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, itMeth.Func.Signature)">
                         <span class="slider bg-warning"></span>
                     </label>
                     <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="'code-itMeth-'+itMeth.FEName">COPY</button>
@@ -603,6 +603,30 @@
                     alert('Oops, unable to copy');
                 }
 
+            },
+            onChangeIsEnabled(event, signature) {
+                var checkbox = event.target;
+
+                console.log(checkbox.checked);
+                console.log(signature);
+
+                if (!checkbox.checked) {
+                    let payload = {
+                        "Signature":signature,
+                    }
+                    console.log(payload);
+
+                    fetch('/api/disable', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(payload),
+                    })
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });
+                }
             },
             onChangeInp(event, fn) {
                 var radioButton = event.target;

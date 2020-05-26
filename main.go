@@ -317,6 +317,48 @@ func main() {
 		r.GET("/api/source", func(c *gin.Context) {
 			c.IndentedJSON(200, feModule)
 		})
+		r.POST("/api/disable", func(c *gin.Context) {
+			var req PayloadDisable
+			err := c.BindJSON(&req)
+			if err != nil {
+				Errorf("error binding JSON: %s", err)
+				c.Status(400)
+				return
+			}
+			Q(req)
+
+			if req.Signature == "" {
+				Errorf("invalid request: %s", err)
+				c.Status(400)
+				return
+			}
+
+			mu.Lock()
+			defer mu.Unlock()
+
+			stored := index.GetBySignature(req.Signature)
+			if stored == nil {
+				Errorf("not found: %q", req.Signature)
+				c.Status(404)
+				return
+			}
+
+			Infof("disabling %q", req.Signature)
+
+			switch stored.original.(type) {
+			case *FEFunc:
+				{
+					fe := stored.GetFEFunc()
+					fe.CodeQL.IsEnabled = false
+				}
+			case *FETypeMethod, *FEInterfaceMethod:
+				{
+					fe := stored.GetFETypeMethodOrInterfaceMethod()
+					fe.CodeQL.IsEnabled = false
+				}
+			}
+
+		})
 		r.POST("/api/pointers", func(c *gin.Context) {
 			var req PayloadSetPointers
 			err := c.BindJSON(&req)
@@ -1837,6 +1879,9 @@ const (
 	MediumMethod Medium = "method" // either TypeMethod or InterfaceMethod
 )
 
+type PayloadDisable struct {
+	Signature string
+}
 type PayloadSetPointers struct {
 	Signature string
 	Pointers  *CodeQLPointers
