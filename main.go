@@ -122,6 +122,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 // TODO:
 // - reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
+// - don't extend name changes to the frontend (new names must stay per-generation only)
 func main() {
 	var pkg string
 	var runServer bool
