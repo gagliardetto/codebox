@@ -560,7 +560,74 @@ func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ReceMethResu(file *File, item *IndexItem) *Statement { return nil }
+func generate_ReceMethResu(file *File, item *IndexItem) *Statement {
+	// from: receiver
+	// medium: method (when there is a receiver, then it must be a method medium)
+	// into: result
+	fe := item.GetFETypeMethod()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+	_ = indexIn
+
+	in := fe.Receiver
+	out := fe.Func.Results[indexOut]
+
+	in.VarName = MustVarNameWithDefaultPrefix(in.VarName, "from")
+	out.VarName = MustVarNameWithDefaultPrefix(out.VarName, "into")
+
+	inVarName := in.VarName
+	outVarName := out.VarName
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.ClassName)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("source").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, in.VarName, in.original)
+
+						groupCase.
+							Line().Comment("Call medium method that transfers the taint").
+							Line().Comment(Sf("from the receiver `%s` to the result `%s`", in.VarName, out.VarName)).
+							Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
+
+						importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+
+						groupCase.ListFunc(func(resGroup *Group) {
+							for i, v := range fe.Func.Results {
+								if i == indexOut {
+									resGroup.Id(v.VarName)
+								} else {
+									resGroup.Id("_")
+								}
+							}
+						}).Op(":=").Id(in.VarName).Dot(fe.Func.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.Func.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for _, zero := range zeroVals {
+									call.Add(zero)
+								}
+
+							},
+						)
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
+						groupCase.Id("sink").Call(Id(out.VarName))
+					})
+			})
+	return code.Line()
+}
 func generate_ParaMethRece(file *File, item *IndexItem) *Statement { return nil }
 func generate_ParaMethPara(file *File, item *IndexItem) *Statement { return nil }
 func generate_ParaMethResu(file *File, item *IndexItem) *Statement { return nil }
