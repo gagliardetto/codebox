@@ -316,7 +316,7 @@ func main() {
 					// TODO: bind UI with fe.CodeQL.Pointers
 					fe.CodeQL.IsEnabled = true
 
-					code := generate_MediumFunc(
+					code := generate_Func(
 						file,
 						stored,
 						req.Pointers.Inp.Element,
@@ -362,7 +362,7 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return pkgPath[lastSlashAt:] != pkgName
 }
 
-func generate_MediumFunc(file *File, item *IndexItem, from Element, into Element) *Statement {
+func generate_Func(file *File, item *IndexItem, from Element, into Element) *Statement {
 	Parameter := ElementParameter
 	Result := ElementResult
 
@@ -375,10 +375,50 @@ func generate_MediumFunc(file *File, item *IndexItem, from Element, into Element
 		return generate_ResuFuncPara(file, item)
 	case from == Result && into == Result:
 		return generate_ResuFuncResu(file, item)
+	default:
+		panic(Sf("unhandled case: from %v, into %v", from, into))
 	}
 
 	return nil
 }
+
+func generate_Method(file *File, item *IndexItem, from Element, into Element) *Statement {
+	Receiver := ElementReceiver
+	Parameter := ElementParameter
+	Result := ElementResult
+
+	switch {
+	case from == Receiver && into == Parameter:
+		return generate_ReceMethPara(file, item)
+	case from == Receiver && into == Result:
+		return generate_ReceMethResu(file, item)
+	case from == Parameter && into == Receiver:
+		return generate_ParaMethRece(file, item)
+	case from == Parameter && into == Parameter:
+		return generate_ParaMethPara(file, item)
+	case from == Parameter && into == Result:
+		return generate_ParaMethResu(file, item)
+	case from == Result && into == Receiver:
+		return generate_ResuMethRece(file, item)
+	case from == Result && into == Parameter:
+		return generate_ResuMethPara(file, item)
+	case from == Result && into == Result:
+		return generate_ResuMethResu(file, item)
+	default:
+		panic(Sf("unhandled case: from %v, into %v", from, into))
+	}
+
+	return nil
+}
+
+func generate_ReceMethPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ReceMethResu(file *File, item *IndexItem) *Statement { return nil }
+func generate_ParaMethRece(file *File, item *IndexItem) *Statement { return nil }
+func generate_ParaMethPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ParaMethResu(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuMethRece(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuMethPara(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuMethResu(file *File, item *IndexItem) *Statement { return nil }
 
 func MustVarName(name string) string {
 	return MustVarNameWithDefaultPrefix(name, "variable")
