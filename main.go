@@ -120,7 +120,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 }
 
 // TODO:
-// - reject invalid cases (e.g. from receiver to receiver)
+//OK- reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
 // - don't extend name changes to the frontend (new names must stay per-generation only)
 func main() {
@@ -335,7 +335,7 @@ func main() {
 
 					code := generate_Func(
 						file,
-						stored,
+						fe,
 						req.Pointers.Inp.Element,
 						req.Pointers.Outp.Element,
 					)
@@ -421,7 +421,7 @@ func main() {
 
 					code := generate_Method(
 						file,
-						stored,
+						fe,
 						req.Pointers.Inp.Element,
 						req.Pointers.Outp.Element,
 					)
@@ -454,19 +454,19 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return pkgPath[lastSlashAt:] != pkgName
 }
 
-func generate_Func(file *File, item *IndexItem, from Element, into Element) *Statement {
+func generate_Func(file *File, fe *FEFunc, from Element, into Element) *Statement {
 	Parameter := ElementParameter
 	Result := ElementResult
 
 	switch {
 	case from == Parameter && into == Parameter:
-		return generate_ParaFuncPara(file, item)
+		return generate_ParaFuncPara(file, fe)
 	case from == Parameter && into == Result:
-		return generate_ParaFuncResu(file, item)
+		return generate_ParaFuncResu(file, fe)
 	case from == Result && into == Parameter:
-		return generate_ResuFuncPara(file, item)
+		return generate_ResuFuncPara(file, fe)
 	case from == Result && into == Result:
-		return generate_ResuFuncResu(file, item)
+		return generate_ResuFuncResu(file, fe)
 	default:
 		panic(Sf("unhandled case: from %v, into %v", from, into))
 	}
@@ -474,28 +474,28 @@ func generate_Func(file *File, item *IndexItem, from Element, into Element) *Sta
 	return nil
 }
 
-func generate_Method(file *File, item *IndexItem, from Element, into Element) *Statement {
+func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) *Statement {
 	Receiver := ElementReceiver
 	Parameter := ElementParameter
 	Result := ElementResult
 
 	switch {
 	case from == Receiver && into == Parameter:
-		return generate_ReceMethPara(file, item)
+		return generate_ReceMethPara(file, fe)
 	case from == Receiver && into == Result:
-		return generate_ReceMethResu(file, item)
+		return generate_ReceMethResu(file, fe)
 	case from == Parameter && into == Receiver:
-		return generate_ParaMethRece(file, item)
+		return generate_ParaMethRece(file, fe)
 	case from == Parameter && into == Parameter:
-		return generate_ParaMethPara(file, item)
+		return generate_ParaMethPara(file, fe)
 	case from == Parameter && into == Result:
-		return generate_ParaMethResu(file, item)
+		return generate_ParaMethResu(file, fe)
 	case from == Result && into == Receiver:
-		return generate_ResuMethRece(file, item)
+		return generate_ResuMethRece(file, fe)
 	case from == Result && into == Parameter:
-		return generate_ResuMethPara(file, item)
+		return generate_ResuMethPara(file, fe)
 	case from == Result && into == Result:
-		return generate_ResuMethResu(file, item)
+		return generate_ResuMethResu(file, fe)
 	default:
 		panic(Sf("unhandled case: from %v, into %v", from, into))
 	}
@@ -503,16 +503,14 @@ func generate_Method(file *File, item *IndexItem, from Element, into Element) *S
 	return nil
 }
 
-func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
+func generate_ReceMethPara(file *File, fe *FETypeMethod) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
 	_ = indexIn
-	_ = indexOut
 
 	in := fe.Receiver
 	out := fe.Func.Parameters[indexOut]
@@ -569,11 +567,10 @@ func generate_ReceMethPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ReceMethResu(file *File, item *IndexItem) *Statement {
+func generate_ReceMethResu(file *File, fe *FETypeMethod) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -634,11 +631,10 @@ func generate_ReceMethResu(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ParaMethRece(file *File, item *IndexItem) *Statement {
+func generate_ParaMethRece(file *File, fe *FETypeMethod) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: receiver
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -699,11 +695,10 @@ func generate_ParaMethRece(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
+func generate_ParaMethPara(file *File, fe *FETypeMethod) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -766,11 +761,10 @@ func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
+func generate_ParaMethResu(file *File, fe *FETypeMethod) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -841,11 +835,10 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuMethRece(file *File, item *IndexItem) *Statement {
+func generate_ResuMethRece(file *File, fe *FETypeMethod) *Statement {
 	// from: result
 	// medium: method
 	// into: receiver
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -913,11 +906,10 @@ func generate_ResuMethRece(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
+func generate_ResuMethPara(file *File, fe *FETypeMethod) *Statement {
 	// from: result
 	// medium: method
 	// into: parameter
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -995,11 +987,10 @@ func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuMethResu(file *File, item *IndexItem) *Statement {
+func generate_ResuMethResu(file *File, fe *FETypeMethod) *Statement {
 	// from: result
 	// medium: method
 	// into: result
-	fe := item.GetFETypeMethodOrInterfaceMethod()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1087,11 +1078,10 @@ func MustVarNameWithDefaultPrefix(name string, prefix string) string {
 
 	return name
 }
-func generate_ParaFuncPara(file *File, item *IndexItem) *Statement {
+func generate_ParaFuncPara(file *File, fe *FEFunc) *Statement {
 	// from: param
 	// medium: func
 	// into: param
-	fe := item.GetFEFunc()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1153,11 +1143,10 @@ func generate_ParaFuncPara(file *File, item *IndexItem) *Statement {
 	return code.Line()
 }
 
-func generate_ParaFuncResu(file *File, item *IndexItem) *Statement {
+func generate_ParaFuncResu(file *File, fe *FEFunc) *Statement {
 	// from: param
 	// medium: func
 	// into: result
-	fe := item.GetFEFunc()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1230,13 +1219,11 @@ func generate_ParaFuncResu(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuFuncPara(file *File, item *IndexItem) *Statement {
+func generate_ResuFuncPara(file *File, fe *FEFunc) *Statement {
 	// from: result
 	// medium: func
 	// into: param
 	// NOTE: does this actually happen? It needs extra steps, right?
-
-	fe := item.GetFEFunc()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
@@ -1309,11 +1296,10 @@ func generate_ResuFuncPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuFuncResu(file *File, item *IndexItem) *Statement {
+func generate_ResuFuncResu(file *File, fe *FEFunc) *Statement {
 	// from: result
 	// medium: func
 	// into: result
-	fe := item.GetFEFunc()
 
 	indexIn := fe.CodeQL.Pointers.Inp.Index
 	indexOut := fe.CodeQL.Pointers.Outp.Index
