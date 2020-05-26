@@ -733,7 +733,7 @@ func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.Line().Comment("Declare medium object/interface:")
-				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
 					Line().Comment("Call medium method that transfers the taint").
@@ -742,7 +742,7 @@ func generate_ParaMethPara(file *File, item *IndexItem) *Statement {
 
 				importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
-				groupCase.Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+				groupCase.Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 					func(call *Group) {
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
@@ -800,7 +800,7 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.Line().Comment("Declare medium object/interface:")
-				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
 					Line().Comment("Call medium method that transfers the taint").
@@ -817,7 +817,7 @@ func generate_ParaMethResu(file *File, item *IndexItem) *Statement {
 							resGroup.Id("_")
 						}
 					}
-				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+				}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 					func(call *Group) {
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
@@ -947,7 +947,7 @@ func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.Line().Comment("Declare medium object/interface:")
-				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
 					Line().Comment("Call medium method that transfers the taint").
@@ -964,7 +964,7 @@ func generate_ResuMethPara(file *File, item *IndexItem) *Statement {
 							resGroup.Id("_")
 						}
 					}
-				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+				}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 					func(call *Group) {
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
@@ -1026,7 +1026,7 @@ func generate_ResuMethResu(file *File, item *IndexItem) *Statement {
 				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
 				groupCase.Line().Comment("Declare medium object/interface:")
-				groupCase.Var().Id("mediumObj").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
+				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
 					Line().Comment("Call medium method that transfers the taint").
@@ -1047,7 +1047,7 @@ func generate_ResuMethResu(file *File, item *IndexItem) *Statement {
 							resGroup.Id("_")
 						}
 					}
-				}).Op(":=").Id("mediumObj").Dot(fe.Func.Name).CallFunc(
+				}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 					func(call *Group) {
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
