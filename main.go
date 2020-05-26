@@ -610,6 +610,7 @@ func generate_ResuFuncPara(file *File, item *IndexItem) *Statement {
 
 							},
 						)
+
 						groupCase.
 							Line().Comment(Sf(
 							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
@@ -624,7 +625,87 @@ func generate_ResuFuncPara(file *File, item *IndexItem) *Statement {
 			})
 	return code.Line()
 }
-func generate_ResuFuncResu(file *File, item *IndexItem) *Statement { return nil }
+func generate_ResuFuncResu(file *File, item *IndexItem) *Statement {
+	// from: result
+	// medium: func
+	// into: result
+	fe := item.GetFEFunc()
+
+	indexIn := fe.CodeQL.Pointers.Inp.Index
+	indexOut := fe.CodeQL.Pointers.Outp.Index
+
+	in := fe.Results[indexIn]
+	out := fe.Results[indexOut]
+
+	in.VarName = MustVarNameWithDefaultPrefix(in.VarName, "from")
+	out.VarName = MustVarNameWithDefaultPrefix(out.VarName, "into")
+
+	inVarName := in.VarName
+	outVarName := out.VarName
+
+	code := Func().Id("TaintStepTest_" + FormatCodeQlName(fe.Name)).
+		ParamsFunc(
+			func(group *Group) {
+				group.Add(Id("source").Interface())
+			}).
+		BlockFunc(
+			func(group *Group) {
+				group.BlockFunc(
+					func(groupCase *Group) {
+						groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+
+						groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
+						composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+
+						groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
+						groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
+						importPackage(file, out.PkgPath, out.PkgName)
+
+						groupCase.
+							Line().Comment("Call medium func that transfers the taint").
+							Line().Comment(Sf("from the result `%s` to result `%s`", inVarName, outVarName)).
+							Line().Comment("(extra steps needed)")
+						groupCase.ListFunc(func(resGroup *Group) {
+							for i, v := range fe.Results {
+								if i == indexIn || i == indexOut {
+									if i == indexIn {
+										resGroup.Id("intermediateCQL")
+									} else {
+										resGroup.Id(v.VarName)
+									}
+								} else {
+									resGroup.Id("_")
+								}
+							}
+						}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
+							func(call *Group) {
+
+								tpFun := fe.original.GetType().(*types.Signature)
+
+								zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+
+								for _, zero := range zeroVals {
+									call.Add(zero)
+								}
+
+							},
+						)
+
+						groupCase.
+							Line().Comment(Sf(
+							"Extra step (`%s` taints `intermediateCQL`, which taints `%s`:",
+							in.VarName,
+							out.VarName,
+						))
+						groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
+
+						groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
+						groupCase.Id("sink").Call(Id(out.VarName))
+
+					})
+			})
+	return code.Line()
+}
 
 func scanTupleOfZeroValues(file *File, tuple *types.Tuple) []Code {
 
