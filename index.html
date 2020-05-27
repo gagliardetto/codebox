@@ -166,7 +166,7 @@
 <body>
     <div class="container-fluid" id="cb-source">
         <!-- Content here -->
-        <h4>Package <b>{{ source.FEName }}</b></h4>
+        <h4>Package <b>{{ source.ID }}</b></h4>
 
         <!-- functions -->
         <div v-for="func in source.Funcs" class="row">
@@ -178,7 +178,7 @@
                         <input type="checkbox" v-model="func.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, func.Signature)">
                         <span class="slider bg-success"></span>
                     </label>
-                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code-func',func.Name)">COPY</button>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',func.ID)">COPY</button>
                     <div class="col-md-12">
                         <span class="com">
                             <div v-for="comment in func.Docs">// {{ comment }}</div>
@@ -186,24 +186,24 @@
                         <table class="table-responsive table-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                               <defs>
-                                <marker :id="cc('arrowhead-func',func.Name)" viewBox="0 0 10 10" refX="3" refY="5"
+                                <marker :id="cc('arrowhead',func.ID)" viewBox="0 0 10 10" refX="3" refY="5"
                                     markerWidth="6" markerHeight="6" orient="auto">
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-func-'+func.Name+')'">
-                                <path :id="cc('arrowLeft-func',func.Name)"/>
-                                <path :id="cc('arrowRight-func',func.Name)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+func.ID+')'">
+                                <path :id="cc('arrowLeft',func.ID)"/>
+                                <path :id="cc('arrowRight',func.ID)"/>
                               </g>
                             </svg>
                             <tbody>
-                                <tr :id="cc('func',func.Name)">
+                                <tr :id="cc(func.ID)">
                                     <th scope="row">func {{ func.Name }}(</th>
-                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc('func',func.Name,'parameter',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
+                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'parameter',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
                                         {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
                                         <b>{{funParameter.TypeName}}</b>
                                         {{index < func.Parameters.length - 1 ? ", " : "" }} </td> <th>) (</th>
-                                    <td v-for="(funResult, index) in func.Results" :id="cc('func',func.Name,'result',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
+                                    <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'result',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
                                         {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
                                         <b>{{ funResult.TypeName }}</b>
                                         {{index < func.Results.length - 1 ? ", " : "" }} </td> <th>)</th>
@@ -213,15 +213,15 @@
                                     <td>FROM:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-func',func.Name,'inp')" :value="marshal(funParameter.Identity)" :parent="cc('func',func.Name)" @change="onChangeInp($event, func)" :colorfor="cc('func',func.Name,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, func)">
-                                            <label class="form-check-label" :for="cc('func',func.Name,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :colorfor="cc(func.ID,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, func)">
+                                            <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-func',func.Name,'inp')" :value="marshal(funResult.Identity)" :parent="cc('func',func.Name)" @change="onChangeInp($event, func)" :colorfor="cc('func',func.Name,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, func)">
-                                            <label class="form-check-label" :for="cc('func',func.Name,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :colorfor="cc(func.ID,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, func)">
+                                            <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
@@ -231,15 +231,15 @@
                                     <td>INTO:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-func',func.Name,'outp')" :value="marshal(funParameter.Identity)" :parent="cc('func',func.Name)" @change="onChangeOutp($event, func)" :colorfor="cc('func',func.Name,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, func)">
-                                            <label class="form-check-label" :for="cc('func',func.Name,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :colorfor="cc(func.ID,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, func)">
+                                            <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-func',func.Name,'outp')" :value="marshal(funResult.Identity)" :parent="cc('func',func.Name)" @change="onChangeOutp($event, func)" :colorfor="cc('func',func.Name,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, func)">
-                                            <label class="form-check-label" :for="cc('func',func.Name,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :colorfor="cc(func.ID,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, func)">
+                                            <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
@@ -251,10 +251,10 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
-                    <code :id="cc('code-func',func.Name)">
-                        private class {{ func.FEName }} extends TaintTracking::FunctionModel {
+                    <code :id="cc('code',func.ID)">
+                        private class {{ func.ID }} extends TaintTracking::FunctionModel {
                           // signature: {{func.Signature}}
-                          {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
+                          {{ func.ID }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
                             inp.{{ func.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ func.CodeQL.Pointers.Outp.Placeholder }}
@@ -274,7 +274,7 @@
                         <input type="checkbox" v-model="method.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, method.Func.Signature)">
                         <span class="slider bg-primary"></span>
                     </label>
-                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code-method',method.FEName)">COPY</button>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',method.ID)">COPY</button>
                     <div class="col-md-12">
                         <span class="com">
                             <div v-for="comment in method.Docs">// {{ comment }}</div>
@@ -282,29 +282,29 @@
                         <table class="table-responsive table-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                               <defs>
-                                <marker :id="cc('arrowhead-method',method.FEName)" viewBox="0 0 10 10" refX="3" refY="5"
+                                <marker :id="cc('arrowhead',method.ID)" viewBox="0 0 10 10" refX="3" refY="5"
                                     markerWidth="6" markerHeight="6" orient="auto">
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-method-'+method.FEName+')'">
-                                <path :id="cc('arrowLeft-method',method.FEName)"/>
-                                <path :id="cc('arrowRight-method',method.FEName)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+method.ID+')'">
+                                <path :id="cc('arrowLeft',method.ID)"/>
+                                <path :id="cc('arrowRight',method.ID)"/>
                               </g>
                             </svg>
                             <tbody>
-                                <tr :id="cc('method',method.FEName)">
+                                <tr :id="cc(method.ID)">
                                     <td></td>
-                                    <td class="method-type" :id="cc('method',method.FEName,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(method.Receiver, method), 'selected-outp': isCheckedOutp(method.Receiver, method) }">
+                                    <td class="method-type" :id="cc(method.ID,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(method.Receiver, method), 'selected-outp': isCheckedOutp(method.Receiver, method) }">
                                         ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
                                     </td>
                                     <td>func {{ method.Func.Name }}(</td>
-                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc('method',method.FEName,'parameter',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
+                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'parameter',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
                                         {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
                                         <b>{{funParameter.TypeName}}</b>
                                         {{index < method.Func.Parameters.length - 1 ? ", " : "" }} </td>
                                     <td>) (</td>
-                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc('method',method.FEName,'result',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
+                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'result',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
                                         {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
                                         <b>{{ funResult.TypeName }}</b>
                                         {{index < method.Func.Results.length - 1 ? ", " : "" }} </td>
@@ -315,22 +315,22 @@
                                     <td>FROM:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'inp')" :value="marshal(method.Receiver.Identity)" :parent="cc('method',method.FEName)" @change="onChangeInp($event, method)" :colorfor="cc('method',method.FEName,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(method.Receiver, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'receiver')"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(method.Receiver, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'inp')" :value="marshal(funParameter.Identity)" :parent="cc('method',method.FEName)" @change="onChangeInp($event, method)" :colorfor="cc('method',method.FEName,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'inp')" :value="marshal(funResult.Identity)" :parent="cc('method',method.FEName)" @change="onChangeInp($event, method)" :colorfor="cc('method',method.FEName,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
@@ -340,22 +340,22 @@
                                     <td>INTO:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'outp')" :value="marshal(method.Receiver.Identity)" :parent="cc('method',method.FEName)" @change="onChangeOutp($event, method)" :colorfor="cc('method',method.FEName,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(method.Receiver, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'receiver')"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(method.Receiver, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'outp')" :value="marshal(funParameter.Identity)" :parent="cc('method',method.FEName)" @change="onChangeOutp($event, method)" :colorfor="cc('method',method.FEName,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-method',method.FEName,'outp')" :value="marshal(funResult.Identity)" :parent="cc('method',method.FEName)" @change="onChangeOutp($event, method)" :colorfor="cc('method',method.FEName,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, method)">
-                                            <label class="form-check-label" :for="cc('method',method.FEName,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, method)">
+                                            <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
@@ -367,7 +367,7 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }">
-                    <code :id="cc('code-method',method.FEName)">
+                    <code :id="cc('code',method.ID)">
                         private class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
                           // signature: {{method.Func.Signature}}
                           {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
@@ -390,7 +390,7 @@
                         <input type="checkbox" v-model="itMeth.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, itMeth.Func.Signature)">
                         <span class="slider bg-warning"></span>
                     </label>
-                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code-itMeth',itMeth.FEName)">COPY</button>
+                    <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',itMeth.ID)">COPY</button>
                     <div class="col-md-12">
                         <span class="com">
                             <div v-for="comment in itMeth.Docs">// {{ comment }}</div>
@@ -398,29 +398,29 @@
                         <table class="table-responsive table-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                               <defs>
-                                <marker :id="cc('arrowhead-itMeth',itMeth.FEName)" viewBox="0 0 10 10" refX="3" refY="5"
+                                <marker :id="cc('arrowhead',itMeth.ID)" viewBox="0 0 10 10" refX="3" refY="5"
                                     markerWidth="6" markerHeight="6" orient="auto">
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-itMeth-'+itMeth.FEName+')'">
-                                <path :id="cc('arrowLeft-itMeth',itMeth.FEName)"/>
-                                <path :id="cc('arrowRight-itMeth',itMeth.FEName)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+itMeth.ID+')'">
+                                <path :id="cc('arrowLeft',itMeth.ID)"/>
+                                <path :id="cc('arrowRight',itMeth.ID)"/>
                               </g>
                             </svg>
                             <tbody>
-                                <tr :id="cc('itMeth',itMeth.FEName)">
+                                <tr :id="cc(itMeth.ID)">
                                     <td></td>
-                                    <td class="intmet-type" :id="cc('itMeth',itMeth.FEName,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
+                                    <td class="intmet-type" :id="cc(itMeth.ID,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
                                         (nil)(<b>{{itMeth.Receiver.TypeName}}</b>)
                                     </td>
                                     <td>func <b>{{ itMeth.Func.Name }}</b>(</td>
-                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc('itMeth',itMeth.FEName,'parameter',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
+                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'parameter',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
                                         {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
                                         <b>{{funParameter.TypeName}}</b>
                                         {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }} </td>
                                     <td>) (</td>
-                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc('itMeth',itMeth.FEName,'result',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
+                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'result',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
                                         {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
                                         <b>{{ funResult.TypeName }}</b>
                                         {{index < itMeth.Func.Results.length - 1 ? ", " : "" }} </td>
@@ -431,22 +431,22 @@
                                     <td>FROM:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'inp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeInp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(itMeth.Receiver, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'receiver')"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(itMeth.Receiver, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'inp')" :value="marshal(funParameter.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeInp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'inp')" :value="marshal(funResult.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeInp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
@@ -456,22 +456,22 @@
                                     <td>INTO:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'outp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeOutp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(itMeth.Receiver, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'receiver')"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(itMeth.Receiver, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'outp')" :value="marshal(funParameter.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeOutp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'parameter',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio-itMeth',itMeth.FEName,'outp')" :value="marshal(funResult.Identity)" :parent="cc('itMeth',itMeth.FEName)" @change="onChangeOutp($event, itMeth)" :colorfor="cc('itMeth',itMeth.FEName,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, itMeth)">
-                                            <label class="form-check-label" :for="cc('itMeth',itMeth.FEName,'result',index)"></label>
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, itMeth)">
+                                            <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
@@ -483,7 +483,7 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }">
-                    <code :id="cc('code-itMeth',itMeth.FEName)">
+                    <code :id="cc('code',itMeth.ID)">
                         private class {{ itMeth.ClassName }} extends TaintTracking::FunctionModel, Method {
                           // signature: {{itMeth.Func.Signature}}
                           {{ itMeth.ClassName }}() {

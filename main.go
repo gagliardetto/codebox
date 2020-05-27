@@ -151,7 +151,7 @@ func main() {
 	pk := pks[0]
 	{
 		feModule.Name = pk.Name
-		feModule.FEName = pk.Path
+		feModule.ID = pk.Path
 		feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
 		feModule.PkgName = pk.Name
 
@@ -2063,7 +2063,7 @@ type FEModule struct {
 	Name             string
 	PkgPath          string
 	PkgName          string
-	FEName           string
+	ID               string
 	Funcs            []*FEFunc
 	TypeMethods      []*FETypeMethod
 	InterfaceMethods []*FEInterfaceMethod
@@ -2072,7 +2072,7 @@ type FEModule struct {
 type FEFunc struct {
 	CodeQL    *CodeQlFinalVals
 	Signature string
-	FEName    string
+	ID        string
 	Docs      []string
 	Name      string
 	PkgPath   string
@@ -2104,7 +2104,7 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	fe.CodeQL = NewCodeQlFinalVals()
 	fe.Name = fn.Name
 	fe.PkgName = fn.PkgName
-	fe.FEName = FormatCodeQlName(fn.Name)
+	fe.ID = FormatCodeQlName("function-" + fn.Name)
 	fe.Docs = DocsWithDefault(fn.Doc)
 	fe.Signature = RemoveThisPackagePathFromSignature(fn.Signature, fn.PkgPath)
 	fe.PkgPath = fn.PkgPath
@@ -2295,7 +2295,7 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 		}
 	}
 
-	fe.FEName = fe.Receiver.TypeName + "-" + methodFuncName
+	fe.ID = "type-method-" + fe.Receiver.TypeName + "-" + methodFuncName
 	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
 	return &fe
 }
@@ -2306,7 +2306,7 @@ type FETypeMethod struct {
 	Docs      []string
 	IsOnPtr   bool
 	Receiver  *FEReceiver
-	FEName    string
+	ID        string
 	Func      *FEFunc
 	original  types.Type
 }
@@ -2353,7 +2353,7 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETy
 		fe.Func = feFunc
 	}
 
-	fe.FEName = fe.Receiver.TypeName + "-" + methodFuncName
+	fe.ID = "interface-method-" + fe.Receiver.TypeName + "-" + methodFuncName
 	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
 	return &fe
 }
