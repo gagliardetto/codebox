@@ -213,14 +213,14 @@
                                     <td>FROM:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :colorfor="cc(func.ID,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, func)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, func)">
                                             <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :colorfor="cc(func.ID,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, func)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeInp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, func)">
                                             <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -231,14 +231,14 @@
                                     <td>INTO:</td>
                                     <td v-for="(funParameter, index) in func.Parameters" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :colorfor="cc(func.ID,'parameter',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, func)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, func)">
                                             <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td> </td>
                                     <td v-for="(funResult, index) in func.Results" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :colorfor="cc(func.ID,'result',index)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, func)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(func.ID)" @change="onChangeOutp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, func)">
                                             <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -315,21 +315,21 @@
                                     <td>FROM:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(method.Receiver, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(method.Receiver, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :colorfor="cc(method.ID,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -340,21 +340,21 @@
                                     <td>INTO:</td>
                                     <td class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'receiver')" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(method.Receiver, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(method.Receiver.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(method.Receiver, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'parameter',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in method.Func.Results" class="method-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :colorfor="cc(method.ID,'result',index)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, method)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(method.ID)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, method)">
                                             <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -431,21 +431,21 @@
                                     <td>FROM:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(itMeth.Receiver, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(itMeth.Receiver, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :colorfor="cc(itMeth.ID,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -456,21 +456,21 @@
                                     <td>INTO:</td>
                                     <td class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'receiver')" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(itMeth.Receiver, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(itMeth.Receiver.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(itMeth.Receiver, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'parameter',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funParameter.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
                                         </div>
                                     </td>
                                     <td></td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :colorfor="cc(itMeth.ID,'result',index)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, itMeth)">
+                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funResult.Identity)" :parent="cc(itMeth.ID)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, itMeth)">
                                             <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
                                         </div>
                                     </td>
@@ -644,10 +644,13 @@
                 var radioButton = event.target;
 
                 var parentID = radioButton.getAttribute("parent");
-                var targetIDInView = radioButton.getAttribute("colorfor");
                 var parent = document.getElementById(parentID);
 
                 let identity = JSON.parse(radioButton.value);
+                let targetIDInView = this.cc(fn.ID, identity.Element, identity.Index)
+                if (identity.Element == "receiver") {
+                    targetIDInView = this.cc(fn.ID, identity.Element)
+                }
                 fn.CodeQL.InpID = targetIDInView;
                 // Draw arrow:
                 drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
@@ -680,10 +683,13 @@
                 var radioButton = event.target;
 
                 var parentID = radioButton.getAttribute("parent");
-                var targetIDInView = radioButton.getAttribute("colorfor");
                 var parent = document.getElementById(parentID);
 
                 let identity = JSON.parse(radioButton.value);
+                let targetIDInView = this.cc(fn.ID, identity.Element, identity.Index)
+                if (identity.Element == "receiver") {
+                    targetIDInView = this.cc(fn.ID, identity.Element)
+                }
                 fn.CodeQL.OutpID = targetIDInView;
                 // Draw arrow:
                 drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
