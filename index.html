@@ -501,79 +501,7 @@
     </div>
 
     <script type="text/javascript">
-    function drawArrow(fn){
 
-      let idFrom = cc(fn.ID, fn.CodeQL.Pointers.Inp.Element, fn.CodeQL.Pointers.Inp.Index)
-      if (fn.CodeQL.Pointers.Inp.Element == "receiver") {
-          idFrom = cc(fn.ID, fn.CodeQL.Pointers.Inp.Element)
-      }
-
-      let idInto = cc(fn.ID, fn.CodeQL.Pointers.Outp.Element, fn.CodeQL.Pointers.Outp.Index)
-      if (fn.CodeQL.Pointers.Outp.Element == "receiver") {
-          idInto = cc(fn.ID, fn.CodeQL.Pointers.Outp.Element)
-      }
-
-      console.log(idFrom, idInto);
-
-      if (idFrom == "" || idInto == "") {
-          return
-      }
-      var divFrom       = document.querySelector("#"+idFrom);
-      var divInto       = document.querySelector("#"+idInto);
-      var arrowLeft  = document.querySelector("#arrowLeft-"+fn.ID);
-      var arrowRight = document.querySelector("#arrowRight-"+fn.ID);
-
-      if (divFrom == null || divInto == null) {
-        return
-      }
-      let rectFrom = divFrom.getBoundingClientRect();
-      let rectInto = divInto.getBoundingClientRect();
-
-      var drawConnector = function() {
-        var posnALeft = {
-          x: divFrom.offsetLeft - 8,
-          y: divFrom.offsetTop  + divFrom.offsetHeight / 2
-        };
-        var posnBLeft = {
-          x: divInto.offsetLeft - 8,
-          y: divInto.offsetTop  + divInto.offsetHeight / 2
-        };
-
-        console.log(posnALeft);
-        console.log(posnBLeft);
-
-        var posnFrom = {
-          x: rectFrom.right - rectFrom.width/2,
-          y: rectFrom.bottom - rectFrom.height
-        };
-        var posnInto = {
-          x: rectInto.right - rectInto.width/2,
-          y: rectInto.bottom - rectInto.height
-        };
-        console.log(posnFrom);
-        console.log(posnInto);
-
-        let horizOffset = 0;
-        if (divInto.offsetLeft > divFrom.offsetLeft) {
-          horizOffset = divInto.offsetLeft - divFrom.offsetLeft
-        } else {
-          horizOffset = divFrom.offsetLeft - divInto.offsetLeft
-        }
-
-        horizOffset = horizOffset + rectFrom.width + rectInto.width
-
-        var dStrLeft =
-            "M" +
-            (divFrom.offsetLeft + rectFrom.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
-            "C "+
-             (posnALeft.x + rectInto.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
-             (Math.abs(horizOffset)) + "," + (divFrom.offsetParent.offsetHeight - 60) + " " +
-             (divInto.offsetLeft + rectInto.width/2 ) + "," + (divInto.offsetParent.offsetHeight) + " "
-        arrowLeft.setAttribute("d", dStrLeft);
-      };
-
-      drawConnector();
-    }
 
     function cc(...elems) {
       return elems.join("-")
@@ -605,7 +533,83 @@
                     this.source = json;
                 })
         },
+        updated() {
+            this.$data.source.Funcs.forEach(element => this.drawArrow(element));
+            this.$data.source.TypeMethods.forEach(element => this.drawArrow(element));
+            this.$data.source.InterfaceMethods.forEach(element => this.drawArrow(element));
+        },
         methods: {
+            drawArrow: function(fn){
+
+              let idFrom = cc(fn.ID, fn.CodeQL.Pointers.Inp.Element, fn.CodeQL.Pointers.Inp.Index)
+              if (fn.CodeQL.Pointers.Inp.Element == "receiver") {
+                  idFrom = cc(fn.ID, fn.CodeQL.Pointers.Inp.Element)
+              }
+
+              let idInto = cc(fn.ID, fn.CodeQL.Pointers.Outp.Element, fn.CodeQL.Pointers.Outp.Index)
+              if (fn.CodeQL.Pointers.Outp.Element == "receiver") {
+                  idInto = cc(fn.ID, fn.CodeQL.Pointers.Outp.Element)
+              }
+
+              if (idFrom == "" || idInto == "") {
+                  return
+              }
+              var divFrom       = document.querySelector("#"+idFrom);
+              var divInto       = document.querySelector("#"+idInto);
+              var arrowLeft  = document.querySelector("#arrowLeft-"+fn.ID);
+              var arrowRight = document.querySelector("#arrowRight-"+fn.ID);
+
+              if (divFrom == null || divInto == null) {
+                return
+              }
+              let rectFrom = divFrom.getBoundingClientRect();
+              let rectInto = divInto.getBoundingClientRect();
+
+              var drawConnector = function() {
+                var posnALeft = {
+                  x: divFrom.offsetLeft - 8,
+                  y: divFrom.offsetTop  + divFrom.offsetHeight / 2
+                };
+                var posnBLeft = {
+                  x: divInto.offsetLeft - 8,
+                  y: divInto.offsetTop  + divInto.offsetHeight / 2
+                };
+
+                console.log(posnALeft);
+                console.log(posnBLeft);
+
+                var posnFrom = {
+                  x: rectFrom.right - rectFrom.width/2,
+                  y: rectFrom.bottom - rectFrom.height
+                };
+                var posnInto = {
+                  x: rectInto.right - rectInto.width/2,
+                  y: rectInto.bottom - rectInto.height
+                };
+                console.log(posnFrom);
+                console.log(posnInto);
+
+                let horizOffset = 0;
+                if (divInto.offsetLeft > divFrom.offsetLeft) {
+                  horizOffset = divInto.offsetLeft - divFrom.offsetLeft
+                } else {
+                  horizOffset = divFrom.offsetLeft - divInto.offsetLeft
+                }
+
+                horizOffset = horizOffset + rectFrom.width + rectInto.width
+
+                var dStrLeft =
+                    "M" +
+                    (divFrom.offsetLeft + rectFrom.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+                    "C "+
+                     (posnALeft.x + rectInto.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+                     (Math.abs(horizOffset)) + "," + (divFrom.offsetParent.offsetHeight - 60) + " " +
+                     (divInto.offsetLeft + rectInto.width/2 ) + "," + (divInto.offsetParent.offsetHeight) + " "
+                arrowLeft.setAttribute("d", dStrLeft);
+              };
+
+              drawConnector();
+            },
             cc: function (...elems) {
               return elems.join("-")
             },
@@ -669,7 +673,7 @@
                     fn.CodeQL.Pointers.Inp.Index = parseInt(identity.Index, 10);
                     
                     // Draw arrow:
-                    drawArrow(fn);
+                    this.drawArrow(fn);
                     
                     let payload = {
                         "Signature":signature,
@@ -702,8 +706,8 @@
                     fn.CodeQL.Pointers.Outp.Index = parseInt(identity.Index, 10);
 
                     // Draw arrow:
-                    drawArrow(fn);
-                    
+                    this.drawArrow(fn);
+
                     let payload = {
                         "Signature":signature,
                         "Pointers":fn.CodeQL.Pointers,
