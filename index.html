@@ -658,7 +658,7 @@
                         "Pointers":fn.CodeQL.Pointers,
                     }
                     console.log(payload);
-                    if (fn.CodeQL.Inp != "TODO" && fn.CodeQL.Outp != "TODO") {
+                    if (fn.CodeQL.Pointers.Inp.Element != "TODO" && fn.CodeQL.Pointers.Outp.Element != "TODO") {
                         fetch('/api/pointers', {
                           method: 'POST',
                           headers: {
@@ -696,7 +696,7 @@
                         "Pointers":fn.CodeQL.Pointers,
                     }
                     console.log(payload);
-                    if (fn.CodeQL.Inp != "TODO" && fn.CodeQL.Outp != "TODO") {
+                    if (fn.CodeQL.Pointers.Inp.Element != "TODO" && fn.CodeQL.Pointers.Outp.Element != "TODO") {
                         fetch('/api/pointers', {
                           method: 'POST',
                           headers: {
