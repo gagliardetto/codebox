@@ -534,6 +534,7 @@
                 })
         },
         updated() {
+            // Draw arrows:
             this.$data.source.Funcs.forEach(element => this.drawArrow(element));
             this.$data.source.TypeMethods.forEach(element => this.drawArrow(element));
             this.$data.source.InterfaceMethods.forEach(element => this.drawArrow(element));
@@ -550,6 +551,8 @@
               if (fn.CodeQL.Pointers.Outp.Element == "receiver") {
                   idInto = cc(fn.ID, fn.CodeQL.Pointers.Outp.Element)
               }
+
+              console.log(idFrom, idInto);
 
               if (idFrom == "" || idInto == "") {
                   return
