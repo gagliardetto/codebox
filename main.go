@@ -315,6 +315,32 @@ func main() {
 		r.Static("/static", "./static")
 
 		r.GET("/api/source", func(c *gin.Context) {
+			// populate placeholder with value specified with the pointers:
+			for i := range feModule.Funcs {
+				fe := feModule.Funcs[i]
+				ptr := fe.CodeQL.Pointers
+				if err := ptr.Validate(); err == nil {
+					ptr.Inp.Placeholder = getPlaceholderFromFunc(fe, ptr.Inp)
+					ptr.Outp.Placeholder = getPlaceholderFromFunc(fe, ptr.Outp)
+				}
+			}
+			for i := range feModule.TypeMethods {
+				fe := feModule.TypeMethods[i]
+				ptr := fe.CodeQL.Pointers
+				if err := ptr.Validate(); err == nil {
+					ptr.Inp.Placeholder = getPlaceholderFromMethod(fe, ptr.Inp)
+					ptr.Outp.Placeholder = getPlaceholderFromMethod(fe, ptr.Outp)
+				}
+			}
+			for i := range feModule.InterfaceMethods {
+				fe := feModule.InterfaceMethods[i]
+				ptr := fe.CodeQL.Pointers
+				converted := FETypeMethod(*fe)
+				if err := ptr.Validate(); err == nil {
+					ptr.Inp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Inp)
+					ptr.Outp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Outp)
+				}
+			}
 			c.IndentedJSON(200, feModule)
 		})
 		r.POST("/api/disable", func(c *gin.Context) {
@@ -373,6 +399,10 @@ func main() {
 				Errorf("invalid request: %s", err)
 				c.Status(400)
 				return
+			}
+			{ // sanitize incoming placeholders:
+				req.Pointers.Inp.Placeholder = ""
+				req.Pointers.Outp.Placeholder = ""
 			}
 
 			mu.Lock()
@@ -449,10 +479,9 @@ func main() {
 							c.Status(400)
 							return
 						}
-						// TODO: if Inp and Outp are the same, is that an error?
 					}
+
 					fe.CodeQL.Pointers = req.Pointers
-					// TODO: bind UI with fe.CodeQL.Pointers
 					fe.CodeQL.IsEnabled = true
 
 					code, _ := generate_Func(
@@ -462,7 +491,6 @@ func main() {
 						req.Pointers.Outp.Element,
 					)
 					if code != nil {
-						// TODO: save `code` inside `fe` (add all to the file only at program exit).
 						file.Add(code.Line())
 					} else {
 						Warnf("NOTHING GENERATED")
@@ -535,10 +563,10 @@ func main() {
 							c.Status(400)
 							return
 						}
-						// TODO: if Inp and Outp are the same, is that an error?
 					}
+					// TODO: calculate func.CodeQL.Pointers.Inp.Placeholder from actual value,
+					// NOT from frontend-provided value.
 					fe.CodeQL.Pointers = req.Pointers
-					// TODO: bind UI with fe.CodeQL.Pointers
 					fe.CodeQL.IsEnabled = true
 
 					code, _ := generate_Method(
@@ -656,6 +684,36 @@ func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) (
 	}
 
 	return nil, ""
+}
+
+func getPlaceholder(element Element, index int, fe *FEFunc) string {
+	switch element {
+	case ElementParameter:
+		return fe.Parameters[index].Identity.Placeholder
+	case ElementResult:
+		return fe.Results[index].Identity.Placeholder
+	default:
+		panic(Sf("not valid pointers.Inp.Element: %s", element))
+	}
+}
+
+func getPlaceholderFromFunc(fe *FEFunc, ident *CodeQlIdentity) string {
+	element := ident.Element
+	index := ident.Index
+	return getPlaceholder(element, index, fe)
+}
+
+func getPlaceholderFromMethod(fe *FETypeMethod, ident *CodeQlIdentity) string {
+	element := ident.Element
+	index := ident.Index
+	switch element {
+	case ElementReceiver:
+		return fe.Receiver.Identity.Placeholder
+	case ElementParameter, ElementResult:
+		return getPlaceholder(element, index, fe.Func)
+	default:
+		panic(Sf("not valid pointers.Inp.Element: %s", element))
+	}
 }
 
 func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
@@ -1913,8 +1971,8 @@ func FormatCodeQlName(name string) string {
 const TODO = "TODO"
 
 type CodeQLPointers struct {
-	Inp  *Identity
-	Outp *Identity
+	Inp  *CodeQlIdentity
+	Outp *CodeQlIdentity
 }
 
 func (obj *CodeQLPointers) Validate() error {
@@ -1925,14 +1983,14 @@ func (obj *CodeQLPointers) Validate() error {
 		return errors.New("obj.Outp is not set")
 	}
 
-	if err := obj.Inp.Validate(); err != nil {
+	if err := obj.Inp.Identity.Validate(); err != nil {
 		return err
 	}
 	if err := obj.Outp.Validate(); err != nil {
 		return err
 	}
 
-	if obj.Inp.Element == obj.Outp.Element && (obj.Inp.Element == ElementReceiver || (obj.Inp.Index == obj.Outp.Index)) {
+	if obj.Inp.Identity.Element == obj.Outp.Identity.Element && (obj.Inp.Identity.Element == ElementReceiver || (obj.Inp.Identity.Index == obj.Outp.Identity.Index)) {
 		return errors.New("obj.Inp and obj.Outp have same values")
 	}
 
@@ -1968,13 +2026,19 @@ func NewCodeQlFinalVals() *CodeQlFinalVals {
 		Inp:  TODO,
 		Outp: TODO,
 		Pointers: &CodeQLPointers{
-			Inp: &Identity{
-				Element: TODO,
-				Index:   -1,
+			Inp: &CodeQlIdentity{
+				Placeholder: TODO,
+				Identity: Identity{
+					Element: TODO,
+					Index:   -1,
+				},
 			},
-			Outp: &Identity{
-				Element: TODO,
-				Index:   -1,
+			Outp: &CodeQlIdentity{
+				Placeholder: TODO,
+				Identity: Identity{
+					Element: TODO,
+					Index:   -1,
+				},
 			},
 		},
 	}

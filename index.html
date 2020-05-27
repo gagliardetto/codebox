@@ -257,7 +257,7 @@
                           {{ func.FEName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                            inp.{{ func.CodeQL.Inp }} and outp.{{ func.CodeQL.Outp }}
+                            inp.{{ func.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ func.CodeQL.Pointers.Outp.Placeholder }}
                           }
                         }
                     </code>
@@ -373,7 +373,7 @@
                           {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                            inp.{{ method.CodeQL.Inp }} and outp.{{ method.CodeQL.Outp }}
+                            inp.{{ method.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ method.CodeQL.Pointers.Outp.Placeholder }}
                           }
                         }
                     </code>
@@ -491,7 +491,7 @@
                           }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                            inp.{{ itMeth.CodeQL.Inp }} and outp.{{ itMeth.CodeQL.Outp }}
+                            inp.{{ itMeth.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ itMeth.CodeQL.Pointers.Outp.Placeholder }}
                           }
                         }
                     </code>
@@ -501,6 +501,9 @@
     </div>
 
     <script type="text/javascript">
+    function cc(...elems) {
+      return elems.join("")
+    }
     function drawArrow(idFrom, idInto, arrowID){
         if (idFrom == "" || idInto == "" || arrowID == "") {
             return
@@ -645,14 +648,13 @@
                 var parent = document.getElementById(parentID);
 
                 let identity = JSON.parse(radioButton.value);
-                // Set the placeholder value:
-                fn.CodeQL.Inp = identity.Placeholder;
                 fn.CodeQL.InpID = targetIDInView;
                 // Draw arrow:
                 drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
 
                 {
                     let signature = fn.Signature || fn.Func.Signature;
+                    fn.CodeQL.Pointers.Inp.Placeholder = identity.Placeholder;
                     fn.CodeQL.Pointers.Inp.Element = identity.Element;
                     fn.CodeQL.Pointers.Inp.Index = parseInt(identity.Index, 10);
                     let payload = {
@@ -682,14 +684,13 @@
                 var parent = document.getElementById(parentID);
 
                 let identity = JSON.parse(radioButton.value);
-                // Set the placeholder value:
-                fn.CodeQL.Outp = identity.Placeholder;
                 fn.CodeQL.OutpID = targetIDInView;
                 // Draw arrow:
                 drawArrow(fn.CodeQL.InpID,fn.CodeQL.OutpID,parentID);
 
                 {
                     let signature = fn.Signature || fn.Func.Signature;
+                    fn.CodeQL.Pointers.Outp.Placeholder = identity.Placeholder;
                     fn.CodeQL.Pointers.Outp.Element = identity.Element;
                     fn.CodeQL.Pointers.Outp.Index = parseInt(identity.Index, 10);
                     let payload = {
