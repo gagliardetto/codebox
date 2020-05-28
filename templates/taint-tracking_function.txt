@@ -1,0 +1,8 @@
+	private class {{ .ClassName }} extends TaintTracking::FunctionModel {
+	  // signature: {{.Signature}}
+	  {{ .ClassName }}() { hasQualifiedName("{{ .PkgPath }}", "{{ .Name }}") }
+
+	  override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+	    inp.{{ .CodeQL.Pointers.Inp.Placeholder }} and outp.{{ .CodeQL.Pointers.Outp.Placeholder }}
+	  }
+	}

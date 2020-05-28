@@ -252,9 +252,9 @@
             <div class="col-md-6">
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
                     <code :id="cc('code',func.ID)">
-                        private class {{ func.ID }} extends TaintTracking::FunctionModel {
+                        private class {{ func.ClassName }} extends TaintTracking::FunctionModel {
                           // signature: {{func.Signature}}
-                          {{ func.ID }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
+                          {{ func.ClassName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
 
                           override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
                             inp.{{ func.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ func.CodeQL.Pointers.Outp.Placeholder }}

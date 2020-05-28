@@ -299,7 +299,20 @@ func main() {
 	}
 
 	go Notify(func(os.Signal) bool {
-		// Generate tests:
+		mu.Lock()
+		defer mu.Unlock()
+
+		{
+			// Save cache:
+			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".json")
+			Infof("Saving cache to %q", MustAbs(cacheFilepath))
+			err := SaveAsJSON(feModule, cacheFilepath)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		// Generate golang tests:
 		file := NewTestFile()
 		testFuncNames := make([]string, 0)
 		{
@@ -393,14 +406,14 @@ func main() {
 		}
 		fmt.Printf("%#v", file)
 
+		ts := time.Now()
+		assetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
+		assetFolderPath := path.Join(generatedDir, assetFolderName)
+		// Create a new assets folder inside the main assets folder:
+		MustCreateFolderIfNotExists(assetFolderPath, 0750)
+
 		{
 			// Save golang assets:
-			ts := time.Now()
-			assetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
-			assetFolderPath := path.Join(generatedDir, assetFolderName)
-			// Create a new assets folder inside the main assets folder:
-			MustCreateFolderIfNotExists(assetFolderPath, 0750)
-
 			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
 			assetFilepath := path.Join(assetFolderPath, assetFileName)
 
@@ -418,15 +431,59 @@ func main() {
 				panic(err)
 			}
 		}
+
 		{
-			// Save cache:
-			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".json")
-			Infof("Saving cache to %q", MustAbs(cacheFilepath))
-			err := SaveAsJSON(feModule, cacheFilepath)
+			// Generate codeQL tain-tracking classes and qll file:
+			var buf bytes.Buffer
+
+			fileHeader := `/**
+ * Provides classes modeling security-relevant aspects of the standard libraries.
+ */
+
+import go` + "\n\n"
+
+			moduleHeader := Sf(
+				"/** Provides models of commonly used functions in the `%s` package. */\nmodule %s {",
+				feModule.PkgPath,
+				FormatCodeQlName(feModule.PkgPath),
+			)
+			buf.WriteString(fileHeader + moduleHeader)
+			err := GenerateCodeQLTT_Functions(&buf, feModule.Funcs)
+			if err != nil {
+				panic(err)
+			}
+			err = GenerateCodeQLTT_TypeMethods(&buf, feModule.TypeMethods)
+			if err != nil {
+				panic(err)
+			}
+			err = GenerateCodeQLTT_InterfaceMethods(&buf, feModule.InterfaceMethods)
+			if err != nil {
+				panic(err)
+			}
+
+			buf.WriteString("\n}")
+
+			fmt.Println(buf.String())
+
+			// Save codeql assets:
+			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
+			assetFilepath := path.Join(assetFolderPath, assetFileName)
+
+			// Create file qll file:
+			qllFile, err := os.Create(assetFilepath)
+			if err != nil {
+				panic(err)
+			}
+			defer qllFile.Close()
+
+			// write generated codeql code to file:
+			Infof("Saving codeql assets to %q", MustAbs(assetFilepath))
+			_, err = buf.WriteTo(qllFile)
 			if err != nil {
 				panic(err)
 			}
 		}
+
 		os.Exit(0)
 		return false
 	}, os.Kill, os.Interrupt)
@@ -734,16 +791,70 @@ func main() {
 	}
 }
 
-func GenerateCodeQLTT_Function(buf *bytes.Buffer, fes []*FEFunc) error {
+func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*FEFunc) error {
 	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_function.txt")
 	if err != nil {
 		return err
 	}
 
 	for _, fe := range fes {
+		if !fe.CodeQL.IsEnabled {
+			continue
+		}
+		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+			Errorf("invalid pointers for %q: %s", fe.Signature, err)
+			continue
+		}
+		buf.WriteString("\n")
 		err := tpl.Execute(buf, fe)
 		if err != nil {
-			return fmt.Errorf("error while executing template for func %q: %s", fe.Name, err)
+			return fmt.Errorf("error while executing template for func %q: %s", fe.ID, err)
+		}
+	}
+
+	return nil
+}
+func GenerateCodeQLTT_TypeMethods(buf *bytes.Buffer, fes []*FETypeMethod) error {
+	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_type-method.txt")
+	if err != nil {
+		return err
+	}
+
+	for _, fe := range fes {
+		if !fe.CodeQL.IsEnabled {
+			continue
+		}
+		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+			Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+			continue
+		}
+		buf.WriteString("\n")
+		err := tpl.Execute(buf, fe)
+		if err != nil {
+			return fmt.Errorf("error while executing template for type-method %q: %s", fe.ID, err)
+		}
+	}
+
+	return nil
+}
+func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMethod) error {
+	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_interface-method.txt")
+	if err != nil {
+		return err
+	}
+
+	for _, fe := range fes {
+		if !fe.CodeQL.IsEnabled {
+			continue
+		}
+		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+			Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+			continue
+		}
+		buf.WriteString("\n")
+		err := tpl.Execute(buf, fe)
+		if err != nil {
+			return fmt.Errorf("error while executing template for interface-method %q: %s", fe.ID, err)
 		}
 	}
 
@@ -2224,6 +2335,7 @@ type FEModule struct {
 
 type FEFunc struct {
 	CodeQL    *CodeQlFinalVals
+	ClassName string
 	Signature string
 	ID        string
 	Docs      []string
@@ -2255,6 +2367,7 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	var fe FEFunc
 	fe.original = fn
 	fe.CodeQL = NewCodeQlFinalVals()
+	fe.ClassName = FormatCodeQlName(fn.Name)
 	fe.Name = fn.Name
 	fe.PkgName = fn.PkgName
 	fe.ID = FormatCodeQlName("function-" + fn.Name)
