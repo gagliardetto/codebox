@@ -127,7 +127,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 //OK- reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
 // - don't extend name changes to the frontend (new names must stay per-generation only)
-// - add api to "enable" without having to modify pointers.
+//OK- add api to "enable" without having to modify pointers.
 func main() {
 	var pkg string
 	var runServer bool
@@ -276,12 +276,17 @@ func main() {
 	}
 
 	//Q(feModule)
+	lenFuncs := len(feModule.Funcs)
+	lenTypeMethods := len(feModule.TypeMethods)
+	lenInterfaceMethods := len(feModule.InterfaceMethods)
+	lenTotal := lenFuncs + lenTypeMethods + lenInterfaceMethods
 	Sfln(
-		"package %q has %v funcs, %v methods on types, and %v methods on interfaces",
+		IndigoBG("package %q has %v funcs, %v methods on types, and %v methods on interfaces (total=%v)"),
 		pk.Name,
-		len(feModule.Funcs),
-		len(feModule.TypeMethods),
-		len(feModule.InterfaceMethods),
+		lenFuncs,
+		lenTypeMethods,
+		lenInterfaceMethods,
+		lenTotal,
 	)
 
 	// Create index, and load values to it:
