@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
@@ -163,45 +164,31 @@ func main() {
 	}
 
 	pk := pks[0]
+
+	// compose the feModule:
+	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
 	{
-		// try to use cache:
-		cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
-		cacheExists := MustFileExists(cacheFilepath)
+		feModule.Name = pk.Name
+		feModule.ID = pk.Path
+		feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
+		feModule.PkgName = pk.Name
 
-		if cacheExists {
-			// Load cache:
-			Infof("Loading cached feModule from %q", cacheFilepath)
-			err := LoadJSON(feModule, cacheFilepath)
-			if err != nil {
-				panic(err)
+		for _, fn := range pk.Funcs {
+			if fn.Receiver == nil {
+				f := getFEFunc(fn)
+				// TODO: what to do with aliases???
+				f.PkgPath = feModule.PkgPath
+				feModule.Funcs = append(feModule.Funcs, f)
 			}
-		} else {
-			// compose the feModule:
-			Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
-			{
-				feModule.Name = pk.Name
-				feModule.ID = pk.Path
-				feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
-				feModule.PkgName = pk.Name
-
-				for _, fn := range pk.Funcs {
-					if fn.Receiver == nil {
-						f := getFEFunc(fn)
-						// TODO: what to do with aliases???
-						f.PkgPath = feModule.PkgPath
-						feModule.Funcs = append(feModule.Funcs, f)
-					}
-				}
-				for _, mt := range pk.Methods {
-					meth := getFETypeMethod(mt, pk.Funcs)
-					if meth != nil {
-						feModule.TypeMethods = append(feModule.TypeMethods, meth)
-					}
-				}
-				for _, it := range pk.Interfaces {
-					feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it)...)
-				}
+		}
+		for _, mt := range pk.Methods {
+			meth := getFETypeMethod(mt, pk.Funcs)
+			if meth != nil {
+				feModule.TypeMethods = append(feModule.TypeMethods, meth)
 			}
+		}
+		for _, it := range pk.Interfaces {
+			feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it)...)
 		}
 	}
 
@@ -218,6 +205,75 @@ func main() {
 	sort.Slice(feModule.Funcs, func(i, j int) bool {
 		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
 	})
+
+	{
+		// try to use cache:
+		cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
+		cacheExists := MustFileExists(cacheFilepath)
+
+		if cacheExists {
+			tempFeModule := &FEModule{}
+			// Load cache:
+			Infof("Loading cached feModule from %q", cacheFilepath)
+			err := LoadJSON(tempFeModule, cacheFilepath)
+			if err != nil {
+				panic(err)
+			}
+
+			findLatestFunc := func(signature string) *FEFunc {
+				for _, latest := range feModule.Funcs {
+					if latest.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+			findLatestTypeMethod := func(signature string) *FETypeMethod {
+				for _, latest := range feModule.TypeMethods {
+					if latest.Func.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+			findLatestInterfaceMethod := func(signature string) *FEInterfaceMethod {
+				for _, latest := range feModule.InterfaceMethods {
+					if latest.Func.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+
+			for _, cached := range tempFeModule.Funcs {
+				latest := findLatestFunc(cached.Signature)
+				if latest == nil {
+					Errorf("latest FEFunc not found for signature %q", cached.Signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached.CodeQL
+				}
+			}
+			for _, cached := range tempFeModule.TypeMethods {
+				latest := findLatestTypeMethod(cached.Func.Signature)
+				if latest == nil {
+					Errorf("latest FETypeMethod not found for signature %q", cached.Func.Signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached.CodeQL
+				}
+			}
+			for _, cached := range tempFeModule.InterfaceMethods {
+				latest := findLatestInterfaceMethod(cached.Func.Signature)
+				if latest == nil {
+					Errorf("latest FEInterfaceMethod not found for signature %q", cached.Func.Signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached.CodeQL
+				}
+			}
+		}
+	}
 
 	//Q(feModule)
 	Sfln(
@@ -678,6 +734,21 @@ func main() {
 	}
 }
 
+func GenerateCodeQLTT_Function(buf *bytes.Buffer, fes []*FEFunc) error {
+	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_function.txt")
+	if err != nil {
+		return err
+	}
+
+	for _, fe := range fes {
+		err := tpl.Execute(buf, fe)
+		if err != nil {
+			return fmt.Errorf("error while executing template for func %q: %s", fe.Name, err)
+		}
+	}
+
+	return nil
+}
 func NewTestFile() *File {
 	file := NewFile("main")
 	{
