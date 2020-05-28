@@ -1016,7 +1016,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1081,7 +1081,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1146,7 +1146,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1210,7 +1210,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1277,7 +1277,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1353,7 +1353,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1424,7 +1424,7 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1506,7 +1506,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.ClassName)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1598,7 +1598,7 @@ func generate_ParaFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.PkgPath+"-"+fe.Name)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1664,7 +1664,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.PkgPath+"-"+fe.Name)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1742,7 +1742,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.PkgPath+"-"+fe.Name)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
@@ -1819,7 +1819,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 	inVarName := in.VarName
 	outVarName := out.VarName
 
-	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Name)
+	testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.PkgPath+"-"+fe.Name)
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
