@@ -1,1 +1,3 @@
 /src/*
+/cache/*
+/generated/*

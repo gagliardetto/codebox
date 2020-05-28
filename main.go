@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"go/types"
 	"os"
+	"path"
 	"sort"
 	"strings"
 	"sync"
+	"time"
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/codebox/scanner"
@@ -128,7 +130,11 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 func main() {
 	var pkg string
 	var runServer bool
-	flag.StringVar(&pkg, "pkg", "", "package you want to scan")
+	var cacheDir string
+	var generatedDir string
+	flag.StringVar(&pkg, "pkg", "", "package you want to scan (relative to $GOPATH)")
+	flag.StringVar(&cacheDir, "cache-dir", "./cache", "folder that contains cache of scanned packages and set pointers")
+	flag.StringVar(&generatedDir, "out-dir", "./generated", "folder that contains the generated assets (each run has its own timestamped folder)")
 	flag.BoolVar(&runServer, "http", false, "run http server")
 	flag.Parse()
 
@@ -143,6 +149,13 @@ func main() {
 		panic(err)
 	}
 
+	{ // Create folders:
+		// folder for all cache:
+		MustCreateFolderIfNotExists(cacheDir, 0750)
+		// folder for all folders for assets:
+		MustCreateFolderIfNotExists(generatedDir, 0750)
+	}
+
 	feModule := &FEModule{
 		Funcs:            make([]*FEFunc, 0),
 		TypeMethods:      make([]*FETypeMethod, 0),
@@ -151,27 +164,44 @@ func main() {
 
 	pk := pks[0]
 	{
-		feModule.Name = pk.Name
-		feModule.ID = pk.Path
-		feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
-		feModule.PkgName = pk.Name
+		// try to use cache:
+		cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
+		cacheExists := MustFileExists(cacheFilepath)
 
-		for _, fn := range pk.Funcs {
-			if fn.Receiver == nil {
-				f := getFEFunc(fn)
-				// TODO: what to do with aliases???
-				f.PkgPath = feModule.PkgPath
-				feModule.Funcs = append(feModule.Funcs, f)
+		if cacheExists {
+			// Load cache:
+			Infof("Loading cached feModule from %q", cacheFilepath)
+			err := LoadJSON(feModule, cacheFilepath)
+			if err != nil {
+				panic(err)
 			}
-		}
-		for _, mt := range pk.Methods {
-			meth := getFETypeMethod(mt, pk.Funcs)
-			if meth != nil {
-				feModule.TypeMethods = append(feModule.TypeMethods, meth)
+		} else {
+			// compose the feModule:
+			Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
+			{
+				feModule.Name = pk.Name
+				feModule.ID = pk.Path
+				feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
+				feModule.PkgName = pk.Name
+
+				for _, fn := range pk.Funcs {
+					if fn.Receiver == nil {
+						f := getFEFunc(fn)
+						// TODO: what to do with aliases???
+						f.PkgPath = feModule.PkgPath
+						feModule.Funcs = append(feModule.Funcs, f)
+					}
+				}
+				for _, mt := range pk.Methods {
+					meth := getFETypeMethod(mt, pk.Funcs)
+					if meth != nil {
+						feModule.TypeMethods = append(feModule.TypeMethods, meth)
+					}
+				}
+				for _, it := range pk.Interfaces {
+					feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it)...)
+				}
 			}
-		}
-		for _, it := range pk.Interfaces {
-			feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it)...)
 		}
 	}
 
@@ -306,7 +336,41 @@ func main() {
 			file.Add(code.Line())
 		}
 		fmt.Printf("%#v", file)
-		// TODO: save to a file.
+
+		{
+			// Save golang assets:
+			ts := time.Now()
+			assetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
+			assetFolderPath := path.Join(generatedDir, assetFolderName)
+			// Create a new assets folder inside the main assets folder:
+			MustCreateFolderIfNotExists(assetFolderPath, 0750)
+
+			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
+			assetFilepath := path.Join(assetFolderPath, assetFileName)
+
+			// Create file go test file:
+			goFile, err := os.Create(assetFilepath)
+			if err != nil {
+				panic(err)
+			}
+			defer goFile.Close()
+
+			// write generated Golang code to file:
+			Infof("Saving golang assets to %q", MustAbs(assetFilepath))
+			err = file.Render(goFile)
+			if err != nil {
+				panic(err)
+			}
+		}
+		{
+			// Save cache:
+			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".json")
+			Infof("Saving cache to %q", MustAbs(cacheFilepath))
+			err := SaveAsJSON(feModule, cacheFilepath)
+			if err != nil {
+				panic(err)
+			}
+		}
 		os.Exit(0)
 		return false
 	}, os.Kill, os.Interrupt)
@@ -641,7 +705,7 @@ func NewTestFile() *File {
 		code := Func().
 			Id("newSource").
 			Params().
-			Interface().Block()
+			Interface().Block(Return(Nil()))
 		file.Add(code.Line())
 	}
 	return file
@@ -759,7 +823,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -824,7 +888,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -889,7 +953,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -953,7 +1017,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -1020,7 +1084,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -1096,7 +1160,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -1167,7 +1231,7 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -1249,7 +1313,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
@@ -1562,7 +1626,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 	code := Func().Id(testFuncID).
 		ParamsFunc(
 			func(group *Group) {
-				group.Add(Id("source").Interface())
+				group.Add(Id("sourceCQL").Interface())
 			}).
 		BlockFunc(
 			func(groupCase *Group) {
