@@ -307,6 +307,8 @@ func main() {
 		mu.Lock()
 		defer mu.Unlock()
 
+		PopulatePlaceholders(feModule)
+
 		{
 			// Save cache:
 			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".json")
@@ -499,32 +501,12 @@ import go` + "\n\n"
 		r.Static("/static", "./static")
 
 		r.GET("/api/source", func(c *gin.Context) {
+			mu.Lock()
+			defer mu.Unlock()
+
 			// populate placeholder with value specified with the pointers:
-			for i := range feModule.Funcs {
-				fe := feModule.Funcs[i]
-				ptr := fe.CodeQL.Pointers
-				if err := ptr.Validate(); err == nil {
-					ptr.Inp.Placeholder = getPlaceholderFromFunc(fe, ptr.Inp)
-					ptr.Outp.Placeholder = getPlaceholderFromFunc(fe, ptr.Outp)
-				}
-			}
-			for i := range feModule.TypeMethods {
-				fe := feModule.TypeMethods[i]
-				ptr := fe.CodeQL.Pointers
-				if err := ptr.Validate(); err == nil {
-					ptr.Inp.Placeholder = getPlaceholderFromMethod(fe, ptr.Inp)
-					ptr.Outp.Placeholder = getPlaceholderFromMethod(fe, ptr.Outp)
-				}
-			}
-			for i := range feModule.InterfaceMethods {
-				fe := feModule.InterfaceMethods[i]
-				ptr := fe.CodeQL.Pointers
-				converted := FETypeMethod(*fe)
-				if err := ptr.Validate(); err == nil {
-					ptr.Inp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Inp)
-					ptr.Outp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Outp)
-				}
-			}
+			PopulatePlaceholders(feModule)
+
 			c.IndentedJSON(200, feModule)
 		})
 		r.POST("/api/disable", func(c *gin.Context) {
@@ -793,6 +775,34 @@ import go` + "\n\n"
 		})
 
 		r.Run() // listen and serve on 0.0.0.0:8080
+	}
+}
+
+func PopulatePlaceholders(feModule *FEModule) {
+	for i := range feModule.Funcs {
+		fe := feModule.Funcs[i]
+		ptr := fe.CodeQL.Pointers
+		if err := ptr.Validate(); err == nil {
+			ptr.Inp.Placeholder = getPlaceholderFromFunc(fe, ptr.Inp)
+			ptr.Outp.Placeholder = getPlaceholderFromFunc(fe, ptr.Outp)
+		}
+	}
+	for i := range feModule.TypeMethods {
+		fe := feModule.TypeMethods[i]
+		ptr := fe.CodeQL.Pointers
+		if err := ptr.Validate(); err == nil {
+			ptr.Inp.Placeholder = getPlaceholderFromMethod(fe, ptr.Inp)
+			ptr.Outp.Placeholder = getPlaceholderFromMethod(fe, ptr.Outp)
+		}
+	}
+	for i := range feModule.InterfaceMethods {
+		fe := feModule.InterfaceMethods[i]
+		ptr := fe.CodeQL.Pointers
+		converted := FETypeMethod(*fe)
+		if err := ptr.Validate(); err == nil {
+			ptr.Inp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Inp)
+			ptr.Outp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Outp)
+		}
 	}
 }
 
