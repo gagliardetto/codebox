@@ -117,10 +117,10 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 
 	existing := index.GetBySignature(signature)
 	if existing != nil {
-		panic(Sf("%q already in the index"))
+		Errorf(Sf("%q already in the index", signature))
+	} else {
+		index.Set(signature, v)
 	}
-
-	index.Set(signature, v)
 }
 
 // TODO:
