@@ -415,15 +415,20 @@ func main() {
 		fmt.Printf("%#v", file)
 
 		ts := time.Now()
-		assetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
-		assetFolderPath := path.Join(generatedDir, assetFolderName)
+		// Create subfolder for package for generated assets:
+		packageAssetFolderName := FormatCodeQlName(feModule.PkgPath)
+		packageAssetFolderPath := path.Join(generatedDir, packageAssetFolderName)
+		MustCreateFolderIfNotExists(packageAssetFolderPath, 0750)
+		// Create folder for assets generated during this run:
+		thisRunAssetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
+		thisRunAssetFolderPath := path.Join(packageAssetFolderPath, thisRunAssetFolderName)
 		// Create a new assets folder inside the main assets folder:
-		MustCreateFolderIfNotExists(assetFolderPath, 0750)
+		MustCreateFolderIfNotExists(thisRunAssetFolderPath, 0750)
 
 		{
 			// Save golang assets:
 			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
-			assetFilepath := path.Join(assetFolderPath, assetFileName)
+			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file go test file:
 			goFile, err := os.Create(assetFilepath)
@@ -475,7 +480,7 @@ import go` + "\n\n"
 
 			// Save codeql assets:
 			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
-			assetFilepath := path.Join(assetFolderPath, assetFileName)
+			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file qll file:
 			qllFile, err := os.Create(assetFilepath)
