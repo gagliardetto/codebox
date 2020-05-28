@@ -1,5 +1,7 @@
 ## standard library (from list available at https://godoc.org/-/go)
 
+Go version: go version go1.14.1 linux/amd64
+
 NOTE: removed all with `internal`, and `vendor` in the path.
 
 Each item in the list is a package on its own:
