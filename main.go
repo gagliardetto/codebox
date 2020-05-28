@@ -213,6 +213,7 @@ func main() {
 	}
 
 	go Notify(func(os.Signal) bool {
+		// Generate tests:
 		file := NewTestFile()
 		testFuncNames := make([]string, 0)
 		{
@@ -370,18 +371,37 @@ func main() {
 				return
 			}
 
-			Infof("disabling %q", req.Signature)
+			if req.Enabled {
+				Infof("enabling %q", req.Signature)
+			} else {
+				Infof("disabling %q", req.Signature)
+			}
 
 			switch stored.original.(type) {
 			case *FEFunc:
 				{
 					fe := stored.GetFEFunc()
-					fe.CodeQL.IsEnabled = false
+					if req.Enabled {
+						// partially validate before enabling:
+						if err := fe.CodeQL.Pointers.Validate(); err == nil {
+							fe.CodeQL.IsEnabled = true
+						}
+					} else {
+						fe.CodeQL.IsEnabled = false
+					}
+
 				}
 			case *FETypeMethod, *FEInterfaceMethod:
 				{
 					fe := stored.GetFETypeMethodOrInterfaceMethod()
-					fe.CodeQL.IsEnabled = false
+					if req.Enabled {
+						// partially validate before enabling:
+						if err := fe.CodeQL.Pointers.Validate(); err == nil {
+							fe.CodeQL.IsEnabled = true
+						}
+					} else {
+						fe.CodeQL.IsEnabled = false
+					}
 				}
 			}
 
@@ -1940,6 +1960,7 @@ const (
 
 type PayloadDisable struct {
 	Signature string
+	Enabled   bool
 }
 type PayloadSetPointers struct {
 	Signature string
@@ -2024,8 +2045,6 @@ func IsValidElementName(name Element) bool {
 
 func NewCodeQlFinalVals() *CodeQlFinalVals {
 	return &CodeQlFinalVals{
-		Inp:  TODO,
-		Outp: TODO,
 		Pointers: &CodeQLPointers{
 			Inp: &CodeQlIdentity{
 				Placeholder: TODO,
@@ -2046,8 +2065,6 @@ func NewCodeQlFinalVals() *CodeQlFinalVals {
 }
 
 type CodeQlFinalVals struct {
-	Inp       string // string representation of the CodeQlIdentity.Placeholder
-	Outp      string // string representation of the CodeQlIdentity.Placeholder
 	IsEnabled bool
 	Pointers  *CodeQLPointers // Pointers is where the current pointers will be stored
 }
