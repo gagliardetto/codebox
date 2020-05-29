@@ -1053,7 +1053,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the receiver `%s` to the argument `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1115,7 +1115,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 				composeTypeAssertion(file, groupCase, in.VarName, in.original)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the receiver `%s` to the result `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1183,7 +1183,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the parameter `%s` to the receiver `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1250,7 +1250,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the parameter `%s` to the parameter `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1317,7 +1317,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the parameter `%s` to the result `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1390,7 +1390,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original)
 
 				groupCase.
-					Line().Comment("Call medium method that will transfer the taint").
+					Line().Comment("Call the method that will transfer the taint").
 					Line().Comment(Sf("from the result `intermediateCQL` to receiver `%s`:", outVarName))
 				groupCase.ListFunc(func(resGroup *Group) {
 					for i, _ := range fe.Func.Results {
@@ -1464,7 +1464,7 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the result `%s` to the parameter `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1543,7 +1543,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the method that transfers the taint").
 					Line().Comment(Sf("from the result `%s` to the result `%s`", in.VarName, out.VarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", out.VarName))
 
@@ -1635,7 +1635,7 @@ func generate_ParaFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the function that transfers the taint").
 					Line().Comment(Sf("from the parameter `%s` to parameter `%s`;", inVarName, outVarName)).
 					Line().Comment(Sf("`%s` is now tainted.", outVarName))
 
@@ -1709,7 +1709,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 				}
 
 				groupCase.
-					Line().Comment("Call medium method that transfers the taint").
+					Line().Comment("Call the function that transfers the taint").
 					Line().Comment(Sf("from the parameter `%s` to result `%s`", inVarName, outVarName)).
 					Line().Comment(Sf("(`%s` is now tainted).", outVarName))
 				groupCase.ListFunc(func(resGroup *Group) {
@@ -1780,7 +1780,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 				importPackage(file, out.PkgPath, out.PkgName)
 
 				groupCase.
-					Line().Comment("Call medium method that will transfer the taint").
+					Line().Comment("Call the function that will transfer the taint").
 					Line().Comment(Sf("from the result `intermediateCQL` to parameter `%s`:", outVarName))
 				groupCase.ListFunc(func(resGroup *Group) {
 					for i, _ := range fe.Results {
@@ -1857,7 +1857,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 				importPackage(file, out.PkgPath, out.PkgName)
 
 				groupCase.
-					Line().Comment("Call medium func that transfers the taint").
+					Line().Comment("Call the function that transfers the taint").
 					Line().Comment(Sf("from the result `%s` to result `%s`", inVarName, outVarName)).
 					Line().Comment("(extra steps needed)")
 				groupCase.ListFunc(func(resGroup *Group) {
