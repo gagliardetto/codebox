@@ -7,6 +7,8 @@ mkdir stdlib
 # - Put the qll files inside stdlib (e.g. stdlib/SomeLibrary.qll)
 # - The imports will look like this:
 # import semmle.go.frameworks.stdlib.SomeLibrary
+# - Add import to ~/vscode-codeql-starter/codeql-go/ql/src/semmle/go/frameworks/stdlib/ImportAll.qll
+# so to be able to import them all with a single line (by `import semmle.go.frameworks.stdlib.ImportAll`)
 
 # - Tests:
 cd ~/vscode-codeql-starter/codeql-go/ql/test/library-tests/semmle/go/frameworks
