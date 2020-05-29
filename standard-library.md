@@ -1,4 +1,4 @@
-## standard library (from list available at https://godoc.org/-/go)
+## standard library (from list available at https://godoc.org/-/go; see also https://golang.org/pkg/)
 
 Go version: go version go1.14.1 linux/amd64
 

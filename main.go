@@ -132,12 +132,19 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 func main() {
 	var pkg string
 	var runServer bool
+
 	var cacheDir string
 	var generatedDir string
+
+	var toStdout bool
+	var includeBoilerplace bool
+
 	flag.StringVar(&pkg, "pkg", "", "package you want to scan (relative to $GOPATH)")
 	flag.StringVar(&cacheDir, "cache-dir", "./cache", "folder that contains cache of scanned packages and set pointers")
 	flag.StringVar(&generatedDir, "out-dir", "./generated", "folder that contains the generated assets (each run has its own timestamped folder)")
 	flag.BoolVar(&runServer, "http", false, "run http server")
+	flag.BoolVar(&toStdout, "stdout", false, "print generated to stdout")
+	flag.BoolVar(&includeBoilerplace, "boilerplate", true, "include in go test files the utility functions (main, sink, link, etc.)")
 	flag.Parse()
 
 	// One package at a time:
@@ -321,7 +328,7 @@ func main() {
 		}
 
 		// Generate golang tests:
-		file := NewTestFile()
+		file := NewTestFile(includeBoilerplace)
 		testFuncNames := make([]string, 0)
 		{
 			for _, fe := range feModule.Funcs {
@@ -412,7 +419,9 @@ func main() {
 				})
 			file.Add(code.Line())
 		}
-		fmt.Printf("%#v", file)
+		if toStdout {
+			fmt.Printf("%#v", file)
+		}
 
 		ts := time.Now()
 		// Create subfolder for package for generated assets:
@@ -476,7 +485,9 @@ import go` + "\n\n"
 
 			buf.WriteString("\n}")
 
-			fmt.Println(buf.String())
+			if toStdout {
+				fmt.Println(buf.String())
+			}
 
 			// Save codeql assets:
 			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
@@ -606,7 +617,7 @@ import go` + "\n\n"
 				return
 			}
 
-			file := NewTestFile()
+			file := NewTestFile(includeBoilerplace)
 			switch stored.original.(type) {
 			case *FEFunc:
 				{
@@ -881,35 +892,38 @@ func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMeth
 
 	return nil
 }
-func NewTestFile() *File {
+func NewTestFile(includeBoilerplace bool) *File {
 	file := NewFile("main")
-	{
-		// main function:
-		file.Func().Id("main").Params().Block()
-	}
-	{
-		// sink function:
-		code := Func().
-			Id("sink").
-			Params(Id("v").Interface()).
-			Block()
-		file.Add(code.Line())
-	}
-	{
-		// link function (Used in tests to transmit taint from param 0 into param 1):
-		code := Func().
-			Id("link").
-			Params(Id("from").Interface(), Id("into").Interface()).
-			Block()
-		file.Add(code.Line())
-	}
-	{
-		// newSource functions returns a new tainted thing:
-		code := Func().
-			Id("newSource").
-			Params().
-			Interface().Block(Return(Nil()))
-		file.Add(code.Line())
+
+	if includeBoilerplace {
+		{
+			// main function:
+			file.Func().Id("main").Params().Block()
+		}
+		{
+			// sink function:
+			code := Func().
+				Id("sink").
+				Params(Id("v").Interface()).
+				Block()
+			file.Add(code.Line())
+		}
+		{
+			// link function (Used in tests to transmit taint from param 0 into param 1):
+			code := Func().
+				Id("link").
+				Params(Id("from").Interface(), Id("into").Interface()).
+				Block()
+			file.Add(code.Line())
+		}
+		{
+			// newSource functions returns a new tainted thing:
+			code := Func().
+				Id("newSource").
+				Params().
+				Interface().Block(Return(Nil()))
+			file.Add(code.Line())
+		}
 	}
 	return file
 }
