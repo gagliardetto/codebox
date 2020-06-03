@@ -201,7 +201,11 @@ func main() {
 		}
 	}
 
-	// Sort methods by receiver:
+	// Sort funcs by name:
+	sort.Slice(feModule.Funcs, func(i, j int) bool {
+		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
+	})
+	// Sort type methods by receiver:
 	sort.Slice(feModule.TypeMethods, func(i, j int) bool {
 		// If same receiver...
 		if feModule.TypeMethods[i].Receiver.QualifiedName == feModule.TypeMethods[j].Receiver.QualifiedName {
@@ -210,9 +214,14 @@ func main() {
 		}
 		return feModule.TypeMethods[i].Receiver.QualifiedName < feModule.TypeMethods[j].Receiver.QualifiedName
 	})
-	// Sort funcs by name:
-	sort.Slice(feModule.Funcs, func(i, j int) bool {
-		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
+	// Sort interface methods by receiver:
+	sort.Slice(feModule.InterfaceMethods, func(i, j int) bool {
+		// If same receiver...
+		if feModule.InterfaceMethods[i].Receiver.QualifiedName == feModule.InterfaceMethods[j].Receiver.QualifiedName {
+			// ... sort by func name:
+			return feModule.InterfaceMethods[i].Func.Name < feModule.InterfaceMethods[j].Func.Name
+		}
+		return feModule.InterfaceMethods[i].Receiver.QualifiedName < feModule.InterfaceMethods[j].Receiver.QualifiedName
 	})
 
 	{ // Deduplicate:
