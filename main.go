@@ -215,6 +215,21 @@ func main() {
 		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
 	})
 
+	{ // Deduplicate:
+
+		feModule.Funcs = DeduplicateSlice(feModule.Funcs, func(i int) string {
+			return feModule.Funcs[i].Signature
+		}).([]*FEFunc)
+
+		feModule.TypeMethods = DeduplicateSlice(feModule.TypeMethods, func(i int) string {
+			return feModule.TypeMethods[i].Func.Signature
+		}).([]*FETypeMethod)
+
+		feModule.InterfaceMethods = DeduplicateSlice(feModule.InterfaceMethods, func(i int) string {
+			return feModule.InterfaceMethods[i].Func.Signature
+		}).([]*FEInterfaceMethod)
+	}
+
 	{
 		// try to use cache:
 		cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
@@ -538,7 +553,7 @@ import go` + "\n\n"
 			Q(req)
 
 			if req.Signature == "" {
-				Errorf("invalid request: %s", err)
+				Errorf("req.Signature not set")
 				c.Status(400)
 				return
 			}
@@ -599,7 +614,7 @@ import go` + "\n\n"
 			Q(req)
 
 			if err := req.Validate(); err != nil {
-				Errorf("invalid request: %s", err)
+				Errorf("invalid request for %q: %s", req.Signature, err)
 				c.Status(400)
 				return
 			}

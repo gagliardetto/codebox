@@ -196,7 +196,9 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 			fn := scanFunc(&Func{Name: o.Name()}, t)
 			fn.Signature = StringRemoveGoPath(o.String())
 			fn.PkgPath = RemoveGoPath(o.Pkg())
-			fn.PkgName = o.Pkg().Name()
+			if o.Pkg() != nil {
+				fn.PkgName = o.Pkg().Name()
+			}
 			ctx.trySetDocs(nameForFunc(o), fn)
 			p.Funcs = append(p.Funcs, fn)
 		}
