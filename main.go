@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/token"
 	"go/types"
 	"os"
 	"path"
@@ -787,7 +788,9 @@ import go` + "\n\n"
 			default:
 				panic(Sf("unknown type for %v", stored.original))
 			}
-			fmt.Printf("%#v", file)
+			if toStdout {
+				fmt.Printf("%#v", file)
+			}
 			c.Status(200)
 		})
 
@@ -1192,7 +1195,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 				groupCase.Id(out.VarName).Dot(fe.Func.Name).CallFunc(
 					func(call *Group) {
 
-						tpFun := fe.original.(*types.Signature)
+						tpFun := fe.Func.original.GetType().(*types.Signature)
 
 						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
 
@@ -2559,6 +2562,10 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 		fe.Receiver.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
 		fe.Receiver.PkgName = named.Obj().Pkg().Name()
 		//fe.Receiver.VarName =
+	}
+	// Skip methods on non-exported types:
+	if !token.IsExported(fe.Receiver.TypeName) {
+		return nil
 	}
 
 	fe.Func = &FEFunc{}

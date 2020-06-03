@@ -99,10 +99,13 @@ func (s *Scanner) scanPackage(p string) (*Package, error) {
 			func(pkg, file string, typ parseutil.FileType) bool {
 				return !strings.HasSuffix(file, ".proteus.go")
 			},
+			func(pkg, file string, typ parseutil.FileType) bool {
+				return !strings.HasSuffix(file, "_test.go")
+			},
 		},
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error while ImportWithFilters: %s", err)
 	}
 
 	ctx, err := newContext(p)
