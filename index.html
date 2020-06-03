@@ -200,13 +200,12 @@
                                 <tr :id="cc(func.ID)">
                                     <th scope="row">func {{ func.Name }}(</th>
                                     <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'parameter',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
-                                        {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
-                                        <b>{{funParameter.TypeName}}</b>
-                                        {{index < func.Parameters.length - 1 ? ", " : "" }} </td> <th>) (</th>
+                                        {{funParameter.VarName + " "}}{{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[ ]":""}}{{funParameter.IsPtr?"*":""}}<b>{{funParameter.TypeName}}</b>
+                                        {{index < func.Parameters.length - 1 ? ", " : "" }}</td><th>) (</th>
                                     <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'result',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
-                                        {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
-                                        <b>{{ funResult.TypeName }}</b>
-                                        {{index < func.Results.length - 1 ? ", " : "" }} </td> <th>)</th>
+                                        {{funResult.VarName + " "}}{{funResult.IsRepeated?"[ ]":""}}{{funResult.IsPtr?"*":""}}<b>{{ funResult.TypeName }}</b>
+                                        {{index < func.Results.length - 1 ? ", " : "" }}
+                                    </td><th>)</th>
                                 </tr>
                                 <!--checkboxes for inp -->
                                 <tr>
@@ -300,14 +299,12 @@
                                     </td>
                                     <td>func {{ method.Func.Name }}(</td>
                                     <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'parameter',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
-                                        {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
-                                        <b>{{funParameter.TypeName}}</b>
-                                        {{index < method.Func.Parameters.length - 1 ? ", " : "" }} </td>
+                                        {{funParameter.VarName + " "}}{{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[ ]":""}}{{funParameter.IsPtr?"*":""}}<b>{{funParameter.TypeName}}</b>
+                                        {{index < method.Func.Parameters.length - 1 ? ", " : "" }}</td>
                                     <td>) (</td>
                                     <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'result',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
-                                        {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
-                                        <b>{{ funResult.TypeName }}</b>
-                                        {{index < method.Func.Results.length - 1 ? ", " : "" }} </td>
+                                        {{funResult.VarName + " "}}{{funResult.IsRepeated?"[ ]":""}}{{funResult.IsPtr?"*":""}}<b>{{ funResult.TypeName }}</b>
+                                        {{index < method.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
                                 </tr>
                                 <!--checkboxes for inp -->
@@ -412,18 +409,16 @@
                                 <tr :id="cc(itMeth.ID)">
                                     <td></td>
                                     <td class="intmet-type" :id="cc(itMeth.ID,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
-                                        (nil)(<b>{{itMeth.Receiver.TypeName}}</b>)
+                                        (<b>{{itMeth.Receiver.TypeName}}</b>)
                                     </td>
                                     <td>func <b>{{ itMeth.Func.Name }}</b>(</td>
                                     <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'parameter',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
-                                        {{funParameter.VarName}} {{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[]":""}}{{funParameter.IsPtr?"*":""}}
-                                        <b>{{funParameter.TypeName}}</b>
-                                        {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }} </td>
+                                        {{funParameter.VarName + " "}}{{funParameter.IsVariadic?"...":""}}{{funParameter.IsRepeated?"[ ]":""}}{{funParameter.IsPtr?"*":""}}<b>{{funParameter.TypeName}}</b>
+                                        {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}</td>
                                     <td>) (</td>
                                     <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'result',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
-                                        {{funResult.VarName}} {{funResult.IsPtr?"*":""}}
-                                        <b>{{ funResult.TypeName }}</b>
-                                        {{index < itMeth.Func.Results.length - 1 ? ", " : "" }} </td>
+                                        {{funResult.VarName + " "}}{{funResult.IsRepeated?"[ ]":""}}{{funResult.IsPtr?"*":""}}<b>{{ funResult.TypeName }}</b>
+                                        {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
                                 </tr>
                                 <!--checkboxes for inp -->
