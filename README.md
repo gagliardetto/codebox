@@ -12,8 +12,24 @@ mkdir stdlib
 
 # - Tests:
 cd ~/vscode-codeql-starter/codeql-go/ql/test/library-tests/semmle/go/frameworks
-mkdir stdlib
+mkdir StdlibTaintFlow
 # - Either make a folder for each std library where you put the go file and the query,
 # OR
 # - add the go files and the .expected files to this same folder, and use just one query file.
+
+
+# Run test
+codeql test run \
+	--search-path=/home/withparty/vscode-codeql-starter/ \
+	/home/withparty/vscode-codeql-starter/codeql-go/ql/test/library-tests/semmle/go/frameworks/StdlibTaintFlow
+
+```
+
+
+```bash
+find . -mindepth 2 -type f -print -exec mv {} . \;
+
+#for f in *.qll; do printf '%s\n' "${f%.qll}TaintTracking.qll"; done
+
+rename 's/\.qll$/TaintTracking.qll/' *qll
 ```
