@@ -132,7 +132,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 // - make sure vars and package name are not the same
 // - don't extend name changes to the frontend (new names must stay per-generation only)
 //OK- add api to "enable" without having to modify pointers.
-// - Zero value of variadic string parameter: Options(opts ...string)
+// - Zero value of variadic string parameters is not nil: Options(opts ...string)
 // - TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
 // - unsafe.Pointer in type assertion
 func main() {
@@ -2120,7 +2120,11 @@ func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 	switch t := typ.(type) {
 	case *types.Basic:
 		{
-			stat.Qual("", t.Name())
+			if t.Name() == "Pointer" {
+				stat.Qual("unsafe", t.Name())
+			} else {
+				stat.Qual("", t.Name())
+			}
 		}
 	case *types.Array:
 		{
