@@ -33,3 +33,36 @@ find . -mindepth 2 -type f -print -exec mv {} . \;
 
 rename 's/\.qll$/TaintTracking.qll/' *qll
 ```
+
+
+---
+
+# standard library
+
+### place where to put miscelaneous stuff
+import semmle.go.frameworks.stdlib.Misc
+OR
+import semmle.go.frameworks.stdlib.Stdlib
+
+### taint-tracking for a package of stdlib
+import semmle.go.frameworks.stdlib.IoTaintTracking
+
+### in case you need a file for other structures for a specific package of std lib:
+import semmle.go.frameworks.stdlib.Io
+
+
+# other libraries
+
+### taint-tracking for package
+import semmle.go.frameworks.gin.GinTaintTracking
+
+#### taint-tracking for another gin package
+import semmle.go.frameworks.gin.GinContribTaintTracking
+
+### misc stuff of gin package
+import semmle.go.frameworks.gin.Gin
+
+### misc stuff of gin contrib package (could go to semmle.go.frameworks.gin.Gin if not a lot)
+import semmle.go.frameworks.gin.GinContrib
+
+
