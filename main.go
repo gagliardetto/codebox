@@ -9,6 +9,7 @@ import (
 	"go/types"
 	"os"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -128,8 +129,12 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 //OK- reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
 // - make sure that varInName and varOutName are not the same.
+// - make sure vars and package name are not the same
 // - don't extend name changes to the frontend (new names must stay per-generation only)
 //OK- add api to "enable" without having to modify pointers.
+// - Zero value of variadic string parameter: Options(opts ...string)
+// - TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
+// - unsafe.Pointer in type assertion
 func main() {
 	var pkg string
 	var runServer bool
@@ -432,8 +437,8 @@ func main() {
 		{
 
 			code := Func().
-				Id("RunAllTaints").
-				Params(Id("v").Interface()).
+				Id("RunAllTaints_" + FormatCodeQlName(feModule.PkgPath)).
+				Params().
 				BlockFunc(func(group *Group) {
 					for _, testFuncName := range testFuncNames {
 						group.BlockFunc(func(testBlock *Group) {
@@ -461,7 +466,7 @@ func main() {
 
 		{
 			// Save golang assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
+			assetFileName := FormatCodeQlName(feModule.PkgPath+"-TaintTracking") + ".go"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file go test file:
@@ -492,7 +497,7 @@ import go` + "\n\n"
 			moduleHeader := Sf(
 				"/** Provides models of commonly used functions in the `%s` package. */\nmodule %s {",
 				feModule.PkgPath,
-				FormatCodeQlName(feModule.PkgPath),
+				FormatCodeQlName(feModule.PkgPath+"-TaintTracking"),
 			)
 			buf.WriteString(fileHeader + moduleHeader)
 			err := GenerateCodeQLTT_Functions(&buf, feModule.Funcs)
@@ -959,11 +964,7 @@ func NewTestFile(includeBoilerplace bool) *File {
 // of the backage path are the same; if they are not,
 // then the package should use an alias in the import.
 func ShouldUseAlias(pkgPath string, pkgName string) bool {
-	lastSlashAt := strings.LastIndex(pkgPath, "/")
-	if lastSlashAt == -1 {
-		return pkgPath != pkgName
-	}
-	return pkgPath[lastSlashAt:] != pkgName
+	return filepath.Base(pkgPath) != pkgName
 }
 
 func generate_Func(file *File, fe *FEFunc, from Element, into Element) (*Statement, string) {
@@ -1336,9 +1337,6 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 
 				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
-
-				groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 
 				groupCase.Line().Comment("Declare medium object/interface:")
 				groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1977,8 +1975,12 @@ func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 				{
 					stat.Lit(0)
 				}
+			case "Pointer":
+				{
+					stat.Nil()
+				}
 			default:
-				Errorf("unknown typeName: %q of kind %q", t.String(), t.Kind())
+				Errorf("unknown typeName: %q (%q) of kind %s", t.Name(), t.String(), t.Kind())
 			}
 		}
 	case *types.Array:
