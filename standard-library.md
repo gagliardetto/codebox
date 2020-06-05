@@ -6,172 +6,240 @@ NOTE: removed all with `internal`, and `vendor` in the path.
 
 Each item in the list is a package on its own:
 
-- [ ] `archive/tar`
-- [ ] `archive/zip`
-- [ ] `bufio`
-- [ ] `builtin`
-- [ ] `bytes`
-- [ ] `cmd/api`
-- [ ] `cmd/asm`
-- [ ] `cmd/buildid`
-- [ ] `cmd/cgo`
-- [ ] `cmd/compile`
-- [ ] `cmd/cover`
-- [ ] `cmd/dist`
-- [ ] `cmd/doc`
-- [ ] `cmd/fix`
-- [ ] `cmd/go`
-- [ ] `cmd/gofmt`
-- [ ] `cmd/link`
-- [ ] `cmd/nm`
-- [ ] `cmd/objdump`
-- [ ] `cmd/pack`
-- [ ] `cmd/pprof`
-- [ ] `cmd/test2json`
-- [ ] `cmd/trace`
-- [ ] `cmd/vet`
-- [ ] `compress/bzip2`
-- [ ] `compress/flate`
-- [ ] `compress/gzip`
-- [ ] `compress/lzw`
-- [ ] `compress/zlib`
-- [ ] `container/heap`
-- [ ] `container/list`
-- [ ] `container/ring`
-- [ ] `context`
-- [ ] `crypto`
-- [ ] `crypto/aes`
-- [ ] `crypto/cipher`
-- [ ] `crypto/des`
-- [ ] `crypto/dsa`
-- [ ] `crypto/ecdsa`
-- [ ] `crypto/ed25519`
-- [ ] `crypto/elliptic`
-- [ ] `crypto/hmac`
-- [ ] `crypto/md5`
-- [ ] `crypto/rand`
-- [ ] `crypto/rc4`
-- [ ] `crypto/rsa`
-- [ ] `crypto/sha1`
-- [ ] `crypto/sha256`
-- [ ] `crypto/sha512`
-- [ ] `crypto/subtle`
-- [ ] `crypto/tls`
-- [ ] `crypto/x509`
-- [ ] `crypto/x509/pkix`
-- [ ] `database/sql`
-- [ ] `database/sql/driver`
-- [ ] `debug/dwarf`
-- [ ] `debug/elf`
-- [ ] `debug/gosym`
-- [ ] `debug/macho`
-- [ ] `debug/pe`
-- [ ] `debug/plan9obj`
-- [ ] `encoding`
-- [ ] `encoding/ascii85`
-- [ ] `encoding/asn1`
-- [ ] `encoding/base32`
-- [ ] `encoding/base64`
-- [ ] `encoding/binary`
-- [ ] `encoding/csv`
-- [ ] `encoding/gob`
-- [ ] `encoding/hex`
-- [ ] `encoding/json`
-- [ ] `encoding/pem`
-- [ ] `encoding/xml`
-- [ ] `errors`
-- [ ] `expvar`
-- [ ] `flag`
-- [ ] `fmt`
-- [ ] `go/ast`
-- [ ] `go/build`
-- [ ] `go/constant`
-- [ ] `go/doc`
-- [ ] `go/format`
-- [ ] `go/importer`
-- [ ] `go/parser`
-- [ ] `go/printer`
-- [ ] `go/scanner`
-- [ ] `go/token`
-- [ ] `go/types`
-- [ ] `hash`
-- [ ] `hash/adler32`
-- [ ] `hash/crc32`
-- [ ] `hash/crc64`
-- [ ] `hash/fnv`
-- [ ] `hash/maphash`
-- [ ] `html`
-- [ ] `html/template`
-- [ ] `image`
-- [ ] `image/color`
-- [ ] `image/color/palette`
-- [ ] `image/draw`
-- [ ] `image/gif`
-- [ ] `image/jpeg`
-- [ ] `image/png`
-- [ ] `index/suffixarray`
-- [ ] `io`
-- [ ] `io/ioutil`
-- [ ] `log`
-- [ ] `log/syslog`
-- [ ] `math`
-- [ ] `math/big`
-- [ ] `math/bits`
-- [ ] `math/cmplx`
-- [ ] `math/rand`
-- [ ] `mime`
-- [ ] `mime/multipart`
-- [ ] `mime/quotedprintable`
-- [ ] `net`
-- [ ] `net/http`
-- [ ] `net/http/cgi`
-- [ ] `net/http/cookiejar`
-- [ ] `net/http/fcgi`
-- [ ] `net/http/httptest`
-- [ ] `net/http/httptrace`
-- [ ] `net/http/httputil`
-- [ ] `net/http/pprof`
-- [ ] `net/mail`
-- [ ] `net/rpc`
-- [ ] `net/rpc/jsonrpc`
-- [ ] `net/smtp`
-- [ ] `net/textproto`
-- [ ] `net/url`
-- [ ] `os`
-- [ ] `os/exec`
-- [ ] `os/signal`
-- [ ] `os/user`
-- [ ] `path`
-- [ ] `path/filepath`
-- [ ] `plugin`
-- [ ] `reflect`
-- [ ] `regexp`
-- [ ] `regexp/syntax`
-- [ ] `runtime`
-- [ ] `runtime/cgo`
-- [ ] `runtime/debug`
-- [ ] `runtime/pprof`
-- [ ] `runtime/race`
-- [ ] `runtime/trace`
-- [ ] `sort`
-- [ ] `strconv`
-- [ ] `strings`
-- [ ] `sync`
-- [ ] `sync/atomic`
-- [ ] `syscall`
-- [ ] `syscall/js`
-- [ ] `testing`
-- [ ] `testing/iotest`
-- [ ] `testing/quick`
-- [ ] `text/scanner`
-- [ ] `text/tabwriter`
-- [ ] `text/template`
-- [ ] `text/template/parse`
-- [ ] `time`
-- [ ] `unicode`
-- [ ] `unicode/utf16`
-- [ ] `unicode/utf8`
-- [ ] `unsafe`
+# [generated][tested and integrated] `package`
+- [x][x] `archive/tar`
+- [x][x] `archive/zip`
+- [x][x] `bufio`
+			- NewReadWriter
+- [][] `builtin`
+- [x][x] `bytes`
+			- Join
+			- Replace
+			- ReplaceAll
+			- ToValidUTF8
+- [][] `cmd/api`
+- [][] `cmd/asm`
+- [][] `cmd/buildid`
+- [][] `cmd/cgo`
+- [][] `cmd/compile`
+- [][] `cmd/cover`
+- [][] `cmd/dist`
+- [][] `cmd/doc`
+- [][] `cmd/fix`
+- [][] `cmd/go`
+- [][] `cmd/gofmt`
+- [][] `cmd/link`
+- [][] `cmd/nm`
+- [][] `cmd/objdump`
+- [][] `cmd/pack`
+- [][] `cmd/pprof`
+- [][] `cmd/test2json`
+- [][] `cmd/trace`
+- [][] `cmd/vet`
+- [x][x] `compress/bzip2`
+- [x][x] `compress/flate`
+- [x][x] `compress/gzip`
+- [x][x] `compress/lzw`
+- [x][x] `compress/zlib`
+- [x][x] `container/heap`
+- [x][x] `container/list`
+			- List.InsertAfter
+			- List.InsertBefore
+			- List.PushBack
+			- List.PushFront
+- [x][x] `container/ring`
+- [x][x] `context`
+- [x][x] `crypto`
+- [][] `crypto/aes`
+- [x][x] `crypto/cipher`
+			- AEAD.Open
+			- AEAD.Seal
+- [][] `crypto/des`
+- [][] `crypto/dsa`
+- [x][x] `crypto/ecdsa`
+- [x][x] `crypto/ed25519`
+- [][] `crypto/elliptic`
+- [][] `crypto/hmac`
+- [][] `crypto/md5`
+- [][] `crypto/rand`
+- [][] `crypto/rc4`
+- [x][x] `crypto/rsa`
+- [][] `crypto/sha1`
+- [][] `crypto/sha256`
+- [][] `crypto/sha512`
+- [][] `crypto/subtle`
+- [x][x] `crypto/tls`
+			- Client
+			- NewListener
+			- Server
+- [x][x] `crypto/x509`
+- [][] `crypto/x509/pkix`
+- [x][x] `database/sql`
+- [x][x] `database/sql/driver`
+- [][] `debug/dwarf`
+- [][] `debug/elf`
+- [][] `debug/gosym`
+- [][] `debug/macho`
+- [][] `debug/pe`
+- [][] `debug/plan9obj`
+- [x][x] `encoding`
+- [x][x] `encoding/ascii85`
+- [x][x] `encoding/asn1`
+- [x][x] `encoding/base32`
+- [x][x] `encoding/base64`
+- [x][x] `encoding/binary`
+- [x][x] `encoding/csv`
+- [x][x] `encoding/gob`
+- [x][x] `encoding/hex`
+- [x][x] `encoding/json`
+- [x][x] `encoding/pem`
+- [x][x] `encoding/xml`
+- [x][x] `errors`
+- [x][x] `expvar`
+- [][] `flag`
+- [x][x] `fmt`
+			- Errorf
+			- Fprintf
+			- Sprintf
+- [][] `go/ast`
+- [][] `go/build`
+- [][] `go/constant`
+- [][] `go/doc`
+- [][] `go/format`
+- [][] `go/importer`
+- [][] `go/parser`
+- [][] `go/printer`
+- [][] `go/scanner`
+- [][] `go/token`
+- [][] `go/types`
+- [][] `hash`
+- [][] `hash/adler32`
+- [][] `hash/crc32`
+- [][] `hash/crc64`
+- [][] `hash/fnv`
+- [][] `hash/maphash`
+- [x][x] `html`
+- [x][x] `html/template`
+- [][] `image`
+- [][] `image/color`
+- [][] `image/color/palette`
+- [][] `image/draw`
+- [][] `image/gif`
+- [][] `image/jpeg`
+- [][] `image/png`
+- [][] `index/suffixarray`
+- [x][x] `io`
+			- TeeReader
+- [x][x] `io/ioutil`
+- [x][x] `log`
+			- Logger.Fatalf
+			- Logger.Panicf
+			- Logger.Printf
+- [][] `log/syslog`
+- [][] `math`
+- [][] `math/big`
+- [][] `math/bits`
+- [][] `math/cmplx`
+- [][] `math/rand`
+- [x][x] `mime`
+			- FormatMediaType
+			- ParseMediaType
+- [x][x] `mime/multipart`
+			- WriteField
+- [x][x] `mime/quotedprintable`
+- [][] `net`
+- [x][x] `net/http`
+			- Header.Add
+			- Header.Set
+- [][] `net/http/cgi`
+- [][] `net/http/cookiejar`
+- [][] `net/http/fcgi`
+- [][] `net/http/httptest`
+- [][] `net/http/httptrace`
+- [x][x] `net/http/httputil`
+			- NewClientConn
+			- NewProxyClientConn
+			- NewServerConn
+- [][] `net/http/pprof`
+- [x][x] `net/mail`
+- [][] `net/rpc`
+- [][] `net/rpc/jsonrpc`
+- [][] `net/smtp`
+- [x][x] `net/textproto`
+			- Writer.PrintfLine
+- [x][x] `net/url`
+			- UserPassword
+			- ResolveReference
+			- URL.Parse
+			- Values.Add
+			- Values.Set
+- [x][x] `os`
+- [][] `os/exec`
+- [][] `os/signal`
+- [][] `os/user`
+- [x][x] `path`
+			- Split
+- [x][x] `path/filepath`
+			- Rel
+			- Split
+- [][] `plugin`
+- [x][x] `reflect`
+			- Append
+			- AppendSlice
+			- Value.SetMapIndex
+			NOTES:
+				- Only tracked Value related stuff.
+- [x][x] `regexp`
+			- Regexp.ReplaceAll
+			- Regexp.ReplaceAllLiteral
+			- Regexp.ReplaceAllLiteralString
+			- Regexp.ReplaceAllString
+- [][] `regexp/syntax`
+- [][] `runtime`
+- [][] `runtime/cgo`
+- [][] `runtime/debug`
+- [][] `runtime/pprof`
+- [][] `runtime/race`
+- [][] `runtime/trace`
+- [x][x] `sort`
+- [x][x] `strconv`
+			- AppendQuote
+			- AppendQuoteRune
+			- AppendQuoteRuneToASCII
+			- AppendQuoteRuneToGraphic
+			- AppendQuoteToASCII
+			- AppendQuoteToGraphic
+			- UnquoteChar
+- [x][x] `strings`
+			- Join
+			- Replace
+			- ReplaceAll
+			- ToValidUTF8
+- [x][x] `sync`
+			- Map.LoadOrStore
+			- Map.Store
+- [x][x] `sync/atomic`
+			- AddUintptr
+			- SwapPointer
+			- SwapUintptr
+- [x][x] `syscall`
+- [][] `syscall/js`
+- [][] `testing`
+- [][] `testing/iotest`
+- [][] `testing/quick`
+- [x][x] `text/scanner`
+			- Scanner.Init
+- [x][x] `text/tabwriter`
+			- Writer.Init
+- [x][x] `text/template`
+- [][] `text/template/parse`
+- [][] `time`
+- [x][x] `unicode`
+- [x][x] `unicode/utf16`
+			- DecodeRune
+			- EncodeRune
+- [x][x] `unicode/utf8`
+- [][] `unsafe`
 
 ---
 
