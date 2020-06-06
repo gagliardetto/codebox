@@ -5,8 +5,6 @@ import (
 	"go/ast"
 	"go/token"
 	"strings"
-
-	parseutil "gopkg.in/src-d/go-parse-utils.v1"
 )
 
 // context holds all the scanning context of a single package. Contains all
@@ -32,41 +30,37 @@ type context struct {
 	enumWithString []string
 }
 
-func newContext(path string) (*context, error) {
-	pkg, err := parseutil.PackageAST(path)
-	if err != nil {
-		return nil, err
-	}
-
-	types, funcs := findPkgTypesAndFuncs(pkg)
+func newContext(astFiles []*ast.File) (*context, error) {
+	types, funcs := findPkgTypesAndFuncs(astFiles)
 	return &context{
 		types:          types,
 		funcs:          funcs,
-		consts:         findObjectsOfType(pkg, ast.Con),
+		consts:         findObjectsOfType(astFiles, ast.Con),
 		enumValues:     make(map[string][]string),
 		enumWithString: []string{},
 	}, nil
 }
 
-func findPkgTypesAndFuncs(pkg *ast.Package) (map[string]*ast.TypeSpec, map[string]*ast.FuncDecl) {
-	f := ast.MergePackageFiles(pkg, 0)
-
+func findPkgTypesAndFuncs(astFiles []*ast.File) (map[string]*ast.TypeSpec, map[string]*ast.FuncDecl) {
 	var types = make(map[string]*ast.TypeSpec)
 	var funcs = make(map[string]*ast.FuncDecl)
-	for _, d := range f.Decls {
-		switch decl := d.(type) {
-		case *ast.GenDecl:
-			if decl.Tok == token.TYPE {
-				for _, s := range decl.Specs {
-					spec := s.(*ast.TypeSpec)
-					if spec.Doc == nil {
-						spec.Doc = decl.Doc
+
+	for _, f := range astFiles {
+		for _, d := range f.Decls {
+			switch decl := d.(type) {
+			case *ast.GenDecl:
+				if decl.Tok == token.TYPE {
+					for _, s := range decl.Specs {
+						spec := s.(*ast.TypeSpec)
+						if spec.Doc == nil {
+							spec.Doc = decl.Doc
+						}
+						types[spec.Name.Name] = spec
 					}
-					types[spec.Name.Name] = spec
 				}
+			case *ast.FuncDecl:
+				funcs[findName(decl)] = decl
 			}
-		case *ast.FuncDecl:
-			funcs[findName(decl)] = decl
 		}
 	}
 
@@ -95,10 +89,10 @@ func findName(decl *ast.FuncDecl) (name string) {
 	return
 }
 
-func findObjectsOfType(pkg *ast.Package, kind ast.ObjKind) map[string]*ast.Object {
+func findObjectsOfType(astFiles []*ast.File, kind ast.ObjKind) map[string]*ast.Object {
 	var objects = make(map[string]*ast.Object)
 
-	for _, f := range pkg.Files {
+	for _, f := range astFiles {
 		for k, o := range f.Scope.Objects {
 			if o.Kind == kind {
 				objects[k] = o

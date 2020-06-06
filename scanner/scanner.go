@@ -12,6 +12,8 @@ import (
 	"strings"
 	"sync"
 
+	pkgerrors "github.com/pkg/errors"
+	"golang.org/x/tools/go/packages"
 	"gopkg.in/src-d/proteus.v1/report"
 
 	parseutil "gopkg.in/src-d/go-parse-utils.v1"
@@ -32,13 +34,16 @@ var ErrNoGoPathSet = errors.New("GOPATH environment variable is not set")
 
 // New creates a new Scanner that will look for types and structs
 // only in the given packages.
-func New(packages ...string) (*Scanner, error) {
+func New(addGoPath bool, packages ...string) (*Scanner, error) {
 	if goPath == "" {
 		return nil, ErrNoGoPathSet
 	}
 
 	for _, pkg := range packages {
-		p := filepath.Join(goPath, "src", pkg)
+		p := pkg
+		if addGoPath {
+			p = filepath.Join(goPath, "src", pkg)
+		}
 		fi, err := os.Stat(p)
 		switch {
 		case err != nil:
@@ -89,31 +94,36 @@ func (s *Scanner) Scan() ([]*Package, error) {
 	return pkgs, nil
 }
 
-func (s *Scanner) scanPackage(p string) (*Package, error) {
-	pkg, err := s.importer.ImportWithFilters(
-		p,
-		parseutil.FileFilters{
-			func(pkg, file string, typ parseutil.FileType) bool {
-				return !strings.HasSuffix(file, ".pb.go")
-			},
-			func(pkg, file string, typ parseutil.FileType) bool {
-				return !strings.HasSuffix(file, ".proteus.go")
-			},
-			func(pkg, file string, typ parseutil.FileType) bool {
-				return !strings.HasSuffix(file, "_test.go")
-			},
-		},
-	)
+func scanPackage(path string) (*packages.Package, error) {
+	// NEW way of parsing a go package:
+	//path = "/usr/local/go/src/net"
+	fmt.Println(path)
+
+	config := &packages.Config{
+		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
+			packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile |
+			packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedTypesSizes,
+		//Dir:  path,
+	}
+	pkgs, err := packages.Load(config, path)
 	if err != nil {
-		return nil, fmt.Errorf("error while ImportWithFilters: %s", err)
+		return nil, pkgerrors.Wrapf(err, "Error loading package %s", path)
 	}
 
-	ctx, err := newContext(p)
+	return pkgs[0], nil
+}
+func (s *Scanner) scanPackage(p string) (*Package, error) {
+	pkg, err := scanPackage(p)
+	if err != nil {
+		return nil, fmt.Errorf("error while scanPackage: %s", err)
+	}
+
+	ctx, err := newContext(pkg.Syntax)
 	if err != nil {
 		return nil, err
 	}
 
-	return buildPackage(ctx, pkg)
+	return buildPackage(ctx, pkg.Types)
 }
 
 func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
