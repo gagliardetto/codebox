@@ -154,7 +154,7 @@ func main() {
 	flag.Parse()
 
 	// One package at a time:
-	sc, err := scanner.New(pkg)
+	sc, err := scanner.New(false, pkg)
 	if err != nil {
 		panic(err)
 	}
@@ -2508,6 +2508,7 @@ type FEType struct {
 	IsNullable    bool
 	IsStruct      bool
 	IsRepeated    bool
+	TypeString    string
 	original      scanner.Type
 }
 
@@ -2524,6 +2525,12 @@ func getFEType(tp scanner.Type) *FEType {
 	fe.IsStruct = tp.IsStruct()
 	fe.IsBasic = tp.IsBasic()
 	fe.IsRepeated = tp.IsRepeated()
+	if tp.IsVariadic() {
+		// TODO: calculate from here the IsRepeated?
+		fe.TypeString = "..." + tp.GetType().(*types.Slice).Elem().String()
+	} else {
+		fe.TypeString = tp.GetType().String()
+	}
 
 	finalType := tp.GetTypesVar().Type()
 	{
