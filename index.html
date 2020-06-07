@@ -30,6 +30,10 @@
         width: 30px;
         height: 30px;
     }
+    input[type=checkbox] {
+        width: 30px;
+        height: 30px;
+    }
 
     code {
         white-space: pre-wrap;
@@ -191,57 +195,37 @@
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+func.ID+')'">
-                                <path :id="cc('arrowLeft',func.ID)"/>
-                                <path :id="cc('arrowRight',func.ID)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+func.ID+')'" :id="cc(func.ID,'arrows')">
                               </g>
                             </svg>
                             <tbody>
                                 <tr :id="cc(func.ID)">
                                     <th scope="row">func {{ func.Name }}(</th>
-                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'parameter',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
+                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                        {{index < func.Parameters.length - 1 ? ", " : "" }}</td><th>) (</th>
-                                    <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'result',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
-                                        {{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
-                                        {{index < func.Results.length - 1 ? ", " : "" }}
-                                    </td><th>)</th>
+                                        {{index < func.Parameters.length - 1 ? ", " : "" }}{{index == func.Parameters.length - 1 ?")":""}}</td>
+                                    <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
+                                        {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                        {{index < func.Results.length - 1 ? ", " : "" }}{{index == func.Results.length - 1 ? ")" : "" }}
+                                    </td> 
                                 </tr>
                                 <!--checkboxes for inp -->
                                 <tr>
                                     <td>FROM:</td>
-                                    <td v-for="(funParameter, index) in func.Parameters" class="func-type">
+                                    <td v-for="(blockElemVal, index) in func.CodeQL.Blocks[0].Inp" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funParameter.Identity)" @change="onChangeInp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, func)">
-                                            <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
+                                            <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'inp')" @change="onChangeBlock($event, func)" :disabled="!func.CodeQL.IsEnabled" v-model="func.CodeQL.Blocks[0].Inp[index]">
                                         </div>
                                     </td>
-                                    <td> </td>
-                                    <td v-for="(funResult, index) in func.Results" class="func-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'inp')" :value="marshal(funResult.Identity)" @change="onChangeInp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, func)">
-                                            <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td> </td>
                                 </tr>
                                 <!--checkboxes for outp -->
                                 <tr>
                                     <td>INTO:</td>
-                                    <td v-for="(funParameter, index) in func.Parameters" class="func-type">
+                                    <td v-for="(blockElemVal, index) in func.CodeQL.Blocks[0].Outp" class="func-type">
                                         <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funParameter.Identity)" @change="onChangeOutp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, func)">
-                                            <label class="form-check-label" :for="cc(func.ID,'parameter',index)"></label>
+                                            <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'outp')" @change="onChangeBlock($event, func)" :disabled="!func.CodeQL.IsEnabled" v-model="func.CodeQL.Blocks[0].Outp[index]">
                                         </div>
                                     </td>
-                                    <td> </td>
-                                    <td v-for="(funResult, index) in func.Results" class="func-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',func.ID,'outp')" :value="marshal(funResult.Identity)" @change="onChangeOutp($event, func)" :disabled="!func.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, func)">
-                                            <label class="form-check-label" :for="cc(func.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td> </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -286,76 +270,51 @@
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+method.ID+')'">
-                                <path :id="cc('arrowLeft',method.ID)"/>
-                                <path :id="cc('arrowRight',method.ID)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+method.ID+')'" :id="cc(method.ID,'arrows')">
                               </g>
                             </svg>
                             <tbody>
                                 <tr :id="cc(method.ID)">
                                     <td></td>
-                                    <td class="method-type" :id="cc(method.ID,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(method.Receiver, method), 'selected-outp': isCheckedOutp(method.Receiver, method) }">
+                                    <td class="method-type" :id="cc(method.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(method.Receiver, method), 'selected-outp': isCheckedOutp(method.Receiver, method) }">
                                         ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
                                     </td>
-                                    <td>func {{ method.Func.Name }}(</td>
-                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'parameter',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
+                                    <td>func <b>{{ method.Func.Name }}</b>{{method.Func.Parameters == null ? "( )" : "(" }}</td>
+                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                        {{index < method.Func.Parameters.length - 1 ? ", " : "" }}</td>
-                                    <td>) (</td>
-                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'result',index)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
-                                        {{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                        {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index == method.Func.Parameters.length - 1 ?")":""}}</td>
+                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
+                                        {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                         {{index < method.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
                                 </tr>
                                 <!--checkboxes for inp -->
                                 <tr>
                                     <td>FROM:</td>
-                                    <td class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(method.Receiver.Identity)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(method.Receiver, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funParameter.Identity)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funResult, index) in method.Func.Results" class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'inp')" :value="marshal(funResult.Identity)" @change="onChangeInp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
+                                    <template v-for="(blockElemVal, index) in method.CodeQL.Blocks[0].Inp">
+                                        <template v-if="index == 1 ">
+                                            </td><td>
+                                        </template>
+                                        <td class="method-type">
+                                            <div class="form-check form-check-inline col">
+                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'inp')" @change="onChangeBlock($event, method)" :disabled="!method.CodeQL.IsEnabled" v-model="method.CodeQL.Blocks[0].Inp[index]">
+                                            </div>
+                                        </td>
+                                    </template>
                                 </tr>
                                 <!--checkboxes for outp -->
                                 <tr>
                                     <td>INTO:</td>
-                                    <td class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(method.Receiver.Identity)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(method.Receiver, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'receiver')"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funParameter, index) in method.Func.Parameters" class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funParameter.Identity)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'parameter',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funResult, index) in method.Func.Results" class="method-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',method.ID,'outp')" :value="marshal(funResult.Identity)" @change="onChangeOutp($event, method)" :disabled="!method.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, method)">
-                                            <label class="form-check-label" :for="cc(method.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
+                                    <template v-for="(blockElemVal, index) in method.CodeQL.Blocks[0].Outp">
+                                        <template v-if="index == 1 ">
+                                            </td><td>
+                                        </template>
+                                        <td class="method-type">
+                                            <div class="form-check form-check-inline col">
+                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'outp')" @change="onChangeBlock($event, method)" :disabled="!method.CodeQL.IsEnabled" v-model="method.CodeQL.Blocks[0].Outp[index]">
+                                            </div>
+                                        </td>
+                                    </template>
                                 </tr>
                             </tbody>
                         </table>
@@ -400,76 +359,52 @@
                                   <path d="M 0 0 L 10 5 L 0 10 z" />
                                 </marker>
                               </defs>
-                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+itMeth.ID+')'">
-                                <path :id="cc('arrowLeft',itMeth.ID)"/>
-                                <path :id="cc('arrowRight',itMeth.ID)"/>
+                              <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#arrowhead-'+itMeth.ID+')'" :id="cc(itMeth.ID,'arrows')">
                               </g>
                             </svg>
                             <tbody>
                                 <tr :id="cc(itMeth.ID)">
                                     <td></td>
-                                    <td class="intmet-type" :id="cc(itMeth.ID,'receiver')" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
+                                    <td class="intmet-type" :id="cc(itMeth.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
                                         (<b>{{itMeth.Receiver.TypeName}}</b>)
                                     </td>
-                                    <td>func <b>{{ itMeth.Func.Name }}</b>(</td>
-                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'parameter',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
+                                    <td>func <b>{{ itMeth.Func.Name }}</b>{{itMeth.Func.Parameters == null ? "( )" : "(" }}</td>
+                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                        {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}</td>
-                                    <td>) (</td>
-                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'result',index)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
-                                        {{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                        {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index == itMeth.Func.Parameters.length - 1 ?")":""}}
+                                    </td>
+                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
+                                        {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                         {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
                                 </tr>
                                 <!--checkboxes for inp -->
                                 <tr>
                                     <td>FROM:</td>
-                                    <td class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(itMeth.Receiver.Identity)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(itMeth.Receiver, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funParameter.Identity)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funParameter, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'inp')" :value="marshal(funResult.Identity)" @change="onChangeInp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedInp(funResult, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
+                                    <template v-for="(blockElemVal, index) in itMeth.CodeQL.Blocks[0].Inp">
+                                        <template v-if="index == 1 ">
+                                            </td><td>
+                                        </template>
+                                        <td class="intmet-type">
+                                            <div class="form-check form-check-inline col">
+                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'inp')" @change="onChangeBlock($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="itMeth.CodeQL.Blocks[0].Inp[index]">
+                                            </div>
+                                        </td>
+                                    </template>
                                 </tr>
                                 <!--checkboxes for outp -->
                                 <tr>
                                     <td>INTO:</td>
-                                    <td class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(itMeth.Receiver.Identity)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(itMeth.Receiver, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'receiver')"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funParameter.Identity)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funParameter, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'parameter',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td v-for="(funResult, index) in itMeth.Func.Results" class="intmet-type">
-                                        <div class="form-check form-check-inline col">
-                                            <input class="form-check-input" type="radio" :name="cc('radio',itMeth.ID,'outp')" :value="marshal(funResult.Identity)" @change="onChangeOutp($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" :checked="isCheckedOutp(funResult, itMeth)">
-                                            <label class="form-check-label" :for="cc(itMeth.ID,'result',index)"></label>
-                                        </div>
-                                    </td>
-                                    <td></td>
+                                    <template v-for="(blockElemVal, index) in itMeth.CodeQL.Blocks[0].Outp">
+                                        <template v-if="index == 1 ">
+                                            </td><td>
+                                        </template>
+                                        <td class="intmet-type">
+                                            <div class="form-check form-check-inline col">
+                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'outp')" @change="onChangeBlock($event, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="itMeth.CodeQL.Blocks[0].Outp[index]">
+                                            </div>
+                                        </td>
+                                    </template>
                                 </tr>
                             </tbody>
                         </table>
@@ -501,6 +436,81 @@
     function cc(...elems) {
       return elems.join("-")
     }
+    function newEdge(parentID, id) {
+      let path = document.createElement('path');
+      path.setAttribute("id", id);
+      let parentNode = document.getElementById(parentID);
+      parentNode.appendChild(path)
+    }
+    function remChildren(parentID) {
+      const myNode = document.getElementById(parentID);
+      while (myNode.lastElementChild) {
+        myNode.removeChild(myNode.lastElementChild);
+      }
+    }
+
+    function drawAnArrow(idFrom, idInto, idArrowLeft, idArrowRight){
+      console.log(idFrom, idInto, idArrowLeft, idArrowRight);
+
+      if (idFrom == "" || idInto == "") {
+          return
+      }
+      var divFrom       = document.getElementById(idFrom);
+      var divInto       = document.getElementById(idInto);
+      var arrowLeft  = document.getElementById(idArrowLeft);
+      var arrowRight = document.getElementById(idArrowRight);
+
+      if (divFrom == null || divInto == null) {
+        return
+      }
+      let rectFrom = divFrom.getBoundingClientRect();
+      let rectInto = divInto.getBoundingClientRect();
+
+      var drawConnector = function() {
+        var posnALeft = {
+          x: divFrom.offsetLeft - 8,
+          y: divFrom.offsetTop  + divFrom.offsetHeight / 2
+        };
+        var posnBLeft = {
+          x: divInto.offsetLeft - 8,
+          y: divInto.offsetTop  + divInto.offsetHeight / 2
+        };
+
+        console.log(posnALeft);
+        console.log(posnBLeft);
+
+        var posnFrom = {
+          x: rectFrom.right - rectFrom.width/2,
+          y: rectFrom.bottom - rectFrom.height
+        };
+        var posnInto = {
+          x: rectInto.right - rectInto.width/2,
+          y: rectInto.bottom - rectInto.height
+        };
+        console.log(posnFrom);
+        console.log(posnInto);
+
+        let horizOffset = 0;
+        if (divInto.offsetLeft > divFrom.offsetLeft) {
+          horizOffset = divInto.offsetLeft - divFrom.offsetLeft
+        } else {
+          horizOffset = divFrom.offsetLeft - divInto.offsetLeft
+        }
+
+        horizOffset = horizOffset + rectFrom.width + rectInto.width
+
+        var dStrLeft =
+            "M" +
+            (divFrom.offsetLeft + rectFrom.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+            "C "+
+             (posnALeft.x + rectInto.width/2) + "," + (divInto.offsetParent.offsetHeight+7) + " " +
+             (Math.abs(horizOffset)) + "," + (divFrom.offsetParent.offsetHeight - 60) + " " +
+             (divInto.offsetLeft + rectInto.width/2 ) + "," + (divInto.offsetParent.offsetHeight) + " "
+        arrowLeft.setAttribute("d", dStrLeft);
+      };
+
+      drawConnector();
+    }
 
 
     function selectText(containerid) {
@@ -530,9 +540,9 @@
         },
         updated() {
             // Draw arrows:
-            this.$data.source.Funcs.forEach(element => this.drawArrow(element));
-            this.$data.source.TypeMethods.forEach(element => this.drawArrow(element));
-            this.$data.source.InterfaceMethods.forEach(element => this.drawArrow(element));
+            this.$data.source.Funcs.forEach(element => this.drawAllArrows(element));
+            this.$data.source.TypeMethods.forEach(element => this.drawAllArrows(element));
+            this.$data.source.InterfaceMethods.forEach(element => this.drawAllArrows(element));
         },
         methods: {
             drawArrow: function(fn){
@@ -608,8 +618,40 @@
 
               drawConnector();
             },
+            drawAllArrows: function(fn){
+                // Remove any existing arrows:
+                let parentID = cc(fn.ID,'arrows');
+                remChildren(parentID);
+
+                let block = fn.CodeQL.Blocks[0];
+                block.Inp.forEach(function (itemInp, indexInp) {
+
+                  block.Outp.forEach(function (itemOutp, indexOutp) {
+                  if (!itemInp || !itemOutp) {
+                    return
+                  }
+                  console.log(itemOutp, indexOutp);
+                  console.log(itemInp, indexInp);
+
+                  let leftArrowID = cc(fn.ID,"arrow","left","from",indexInp,"to",indexOutp);
+                  let rigthArrowID = cc(fn.ID,"arrow","right","from",indexInp,"to",indexOutp);
+                  newEdge(parentID,leftArrowID);
+                  newEdge(parentID,rigthArrowID);
+
+                  let idFrom = cc(fn.ID,"bl",indexInp)
+                  let idInto = cc(fn.ID,"bl",indexOutp)
+
+                  drawAnArrow(idFrom, idInto, leftArrowID, rigthArrowID);
+                    
+                  });
+                });
+            },
             cc: function (...elems) {
               return elems.join("-")
+            },
+            len: function (elem) {
+              if (elem == null) {return 0}
+                return elem.length
             },
             isCheckedInp: function (elem, func) {
               return elem.Identity.Element == func.CodeQL.Pointers.Inp.Element && elem.Identity.Index == func.CodeQL.Pointers.Inp.Index
@@ -658,73 +700,33 @@
             marshal(obj){
                 return JSON.stringify(obj)
             },
-            onChangeInp(event, fn) {
-                var radioButton = event.target;
-
-                let identity = JSON.parse(radioButton.value);
+            onChangeBlock(event, fn) {
+                var checkbox = event.target;
 
                 {
                     let signature = fn.Signature || fn.Func.Signature;
-                    fn.CodeQL.Pointers.Inp.Placeholder = identity.Placeholder;
-                    fn.CodeQL.Pointers.Inp.Element = identity.Element;
-                    fn.CodeQL.Pointers.Inp.Index = parseInt(identity.Index, 10);
                     
                     // Draw arrow:
-                    this.drawArrow(fn);
+                    this.drawAllArrows(fn);
                     
                     let payload = {
+                        "Blocks":fn.CodeQL.Blocks,
                         "Signature":signature,
                         "Pointers":fn.CodeQL.Pointers,
                     }
                     console.log(payload);
-                    if (fn.CodeQL.Pointers.Inp.Element != "TODO" && fn.CodeQL.Pointers.Outp.Element != "TODO") {
-                        fetch('/api/pointers', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify(payload),
-                        })
-                        .catch((error) => {
-                          console.error('Error:', error);
-                        });
-                    }
+                    fetch('/api/pointers', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(payload),
+                    })
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });
                 }
             },
-            onChangeOutp(event, fn) {
-                var radioButton = event.target;
-
-                let identity = JSON.parse(radioButton.value);
-
-                {
-                    let signature = fn.Signature || fn.Func.Signature;
-                    fn.CodeQL.Pointers.Outp.Placeholder = identity.Placeholder;
-                    fn.CodeQL.Pointers.Outp.Element = identity.Element;
-                    fn.CodeQL.Pointers.Outp.Index = parseInt(identity.Index, 10);
-
-                    // Draw arrow:
-                    this.drawArrow(fn);
-
-                    let payload = {
-                        "Signature":signature,
-                        "Pointers":fn.CodeQL.Pointers,
-                    }
-                    console.log(payload);
-                    if (fn.CodeQL.Pointers.Inp.Element != "TODO" && fn.CodeQL.Pointers.Outp.Element != "TODO") {
-                        fetch('/api/pointers', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify(payload),
-                        })
-                        .catch((error) => {
-                          console.error('Error:', error);
-                        });
-                    }
-
-                }
-            }
         }
     })
     Vue.component('func-item', {

@@ -283,13 +283,51 @@ func main() {
 				return nil
 			}
 
+			doCopy := true
+
 			for _, cached := range tempFeModule.Funcs {
 				latest := findLatestFunc(cached.Signature)
 				if latest == nil {
 					Errorf("latest FEFunc not found for signature %q", cached.Signature)
 				} else {
 					// Copy CodeQL object:
-					latest.CodeQL = cached.CodeQL
+					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
+					latest.CodeQL.Pointers = cached.CodeQL.Pointers
+					if doCopy {
+						{
+							// Initialize block:
+							width := len(latest.Parameters) + len(latest.Results)
+							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = append(
+								latest.CodeQL.Blocks,
+								&FlowBlock{
+									Inp:  make([]bool, width),
+									Outp: make([]bool, width),
+								},
+							)
+
+							// Copy legacy pointers into first block:
+							{
+								inp := latest.CodeQL.Pointers.Inp
+								switch inp.Element {
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Inp[inp.Index] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Parameters)] = true
+								}
+							}
+							{
+								outp := latest.CodeQL.Pointers.Outp
+								switch outp.Element {
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Outp[outp.Index] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Parameters)] = true
+								}
+							}
+						}
+					}
+
 				}
 			}
 			for _, cached := range tempFeModule.TypeMethods {
@@ -298,7 +336,46 @@ func main() {
 					Errorf("latest FETypeMethod not found for signature %q", cached.Func.Signature)
 				} else {
 					// Copy CodeQL object:
-					latest.CodeQL = cached.CodeQL
+					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
+					latest.CodeQL.Pointers = cached.CodeQL.Pointers
+					if doCopy {
+						{
+							// Initialize block:
+							width := 1 + len(latest.Func.Parameters) + len(latest.Func.Results)
+							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = append(
+								latest.CodeQL.Blocks,
+								&FlowBlock{
+									Inp:  make([]bool, width),
+									Outp: make([]bool, width),
+								},
+							)
+
+							// Copy legacy pointers into first block:
+							{
+								inp := latest.CodeQL.Pointers.Inp
+								switch inp.Element {
+								case ElementReceiver:
+									latest.CodeQL.Blocks[0].Inp[0] = true
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Inp[inp.Index+1] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Func.Parameters)+1] = true
+								}
+							}
+							{
+								outp := latest.CodeQL.Pointers.Outp
+								switch outp.Element {
+								case ElementReceiver:
+									latest.CodeQL.Blocks[0].Outp[0] = true
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Outp[outp.Index+1] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Func.Parameters)+1] = true
+								}
+							}
+						}
+					}
 				}
 			}
 			for _, cached := range tempFeModule.InterfaceMethods {
@@ -307,7 +384,46 @@ func main() {
 					Errorf("latest FEInterfaceMethod not found for signature %q", cached.Func.Signature)
 				} else {
 					// Copy CodeQL object:
-					latest.CodeQL = cached.CodeQL
+					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
+					latest.CodeQL.Pointers = cached.CodeQL.Pointers
+					if doCopy {
+						{
+							// Initialize block:
+							width := 1 + len(latest.Func.Parameters) + len(latest.Func.Results)
+							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = append(
+								latest.CodeQL.Blocks,
+								&FlowBlock{
+									Inp:  make([]bool, width),
+									Outp: make([]bool, width),
+								},
+							)
+
+							// Copy legacy pointers into first block:
+							{
+								inp := latest.CodeQL.Pointers.Inp
+								switch inp.Element {
+								case ElementReceiver:
+									latest.CodeQL.Blocks[0].Inp[0] = true
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Inp[inp.Index+1] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Func.Parameters)+1] = true
+								}
+							}
+							{
+								outp := latest.CodeQL.Pointers.Outp
+								switch outp.Element {
+								case ElementReceiver:
+									latest.CodeQL.Blocks[0].Outp[0] = true
+								case ElementParameter:
+									latest.CodeQL.Blocks[0].Outp[outp.Index+1] = true
+								case ElementResult:
+									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Func.Parameters)+1] = true
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -714,6 +830,7 @@ import go` + "\n\n"
 					}
 
 					fe.CodeQL.Pointers = req.Pointers
+					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
 
 					code, _ := generate_Func(
@@ -799,6 +916,7 @@ import go` + "\n\n"
 					// TODO: calculate func.CodeQL.Pointers.Inp.Placeholder from actual value,
 					// NOT from frontend-provided value.
 					fe.CodeQL.Pointers = req.Pointers
+					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
 
 					code, _ := generate_Method(
@@ -926,6 +1044,8 @@ func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMeth
 }
 func NewTestFile(includeBoilerplace bool) *File {
 	file := NewFile("main")
+	// Set a prefix to avoid collision between variable names and packages:
+	file.PackagePrefix = "cql"
 
 	if includeBoilerplace {
 		{
@@ -2278,6 +2398,7 @@ type PayloadDisable struct {
 }
 type PayloadSetPointers struct {
 	Signature string
+	Blocks    []*FlowBlock
 	Pointers  *CodeQLPointers
 }
 
@@ -2379,6 +2500,7 @@ func NewCodeQlFinalVals() *CodeQlFinalVals {
 }
 
 type CodeQlFinalVals struct {
+	Blocks    []*FlowBlock
 	IsEnabled bool
 	Pointers  *CodeQLPointers // Pointers is where the current pointers will be stored
 }
@@ -2487,6 +2609,17 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 			}
 		}
 		fe.Results = append(fe.Results, v)
+	}
+	{
+		width := len(fe.Parameters) + len(fe.Results)
+		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
+		fe.CodeQL.Blocks = append(
+			fe.CodeQL.Blocks,
+			&FlowBlock{
+				Inp:  make([]bool, width),
+				Outp: make([]bool, width),
+			},
+		)
 	}
 	return &fe
 }
@@ -2626,6 +2759,7 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 					if sameReceiverType && sameFuncName {
 						fe.Docs = DocsWithDefault(mtFn.Doc)
 						fe.Func = getFEFunc(mtFn)
+						fe.Func.CodeQL = nil
 						fe.original = mtFn.GetType()
 						return true
 					}
@@ -2642,6 +2776,18 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 
 	fe.ID = "type-method-" + fe.Receiver.TypeName + "-" + methodFuncName
 	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
+
+	{
+		width := 1 + len(fe.Func.Parameters) + len(fe.Func.Results)
+		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
+		fe.CodeQL.Blocks = append(
+			fe.CodeQL.Blocks,
+			&FlowBlock{
+				Inp:  make([]bool, width),
+				Outp: make([]bool, width),
+			},
+		)
+	}
 	return &fe
 }
 
@@ -2678,6 +2824,7 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETy
 	}
 
 	feFunc := getFEFunc(methodFunc)
+	feFunc.CodeQL = nil
 	{
 		fe.Receiver.original = it.GetType()
 		fe.Receiver.TypeName = it.Name
@@ -2700,6 +2847,18 @@ func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETy
 
 	fe.ID = "interface-method-" + fe.Receiver.TypeName + "-" + methodFuncName
 	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
+
+	{
+		width := 1 + len(fe.Func.Parameters) + len(fe.Func.Results)
+		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
+		fe.CodeQL.Blocks = append(
+			fe.CodeQL.Blocks,
+			&FlowBlock{
+				Inp:  make([]bool, width),
+				Outp: make([]bool, width),
+			},
+		)
+	}
 	return &fe
 }
 func getAllFEInterfaceMethods(it *scanner.Interface) []*FEInterfaceMethod {
@@ -2712,4 +2871,99 @@ func getAllFEInterfaceMethods(it *scanner.Interface) []*FEInterfaceMethod {
 		feInterfaces = append(feInterfaces, &converted)
 	}
 	return feInterfaces
+}
+
+type FlowBlock struct {
+	Inp  []bool
+	Outp []bool
+}
+
+func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, block *FlowBlock) ([]byte, error) {
+	lenParameters := len(fn.Parameters)
+	lenResults := len(fn.Results)
+	_ = lenParameters
+	_ = lenResults
+
+	inp, outp, err := getIdentities_FEFunc(fn, block)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := new(bytes.Buffer)
+	{
+		buf.WriteString("(")
+		for i, in := range inp {
+			if i == 0 {
+				buf.WriteString("inp." + in.Placeholder)
+			} else {
+				buf.WriteString(" or ")
+				buf.WriteString("inp." + in.Placeholder)
+			}
+		}
+		buf.WriteString(")")
+	}
+
+	buf.WriteString("\nand\n")
+	{
+		buf.WriteString("(")
+		for i, out := range outp {
+			if i == 0 {
+				buf.WriteString("outp." + out.Placeholder)
+			} else {
+				buf.WriteString(" or ")
+				buf.WriteString("outp." + out.Placeholder)
+			}
+		}
+		buf.WriteString(")")
+	}
+
+	return buf.Bytes(), nil
+}
+func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+
+	// check width:
+	lenParameters := len(fn.Parameters)
+	lenResults := len(fn.Results)
+	totalWidth := lenParameters + lenResults
+
+	if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
+		return nil, nil, fmt.Errorf("block.Inp has wrong len: %v", blockInpLen)
+	}
+	if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
+		return nil, nil, fmt.Errorf("block.Outp has wrong len: %v", blockOutpLen)
+	}
+
+	identitiesInp := make([]*CodeQlIdentity, 0)
+	for index, v := range block.Inp {
+		if v == false {
+			continue
+		}
+		if index < lenParameters {
+			// get identity from parameters:
+			id := fn.Parameters[index].Identity
+			identitiesInp = append(identitiesInp, &id)
+		} else {
+			// get identity from results:
+			id := fn.Results[index-lenParameters].Identity
+			identitiesInp = append(identitiesInp, &id)
+		}
+	}
+
+	identitiesOutp := make([]*CodeQlIdentity, 0)
+	for index, v := range block.Outp {
+		if v == false {
+			continue
+		}
+		if index < lenParameters {
+			// get identity from parameters:
+			id := fn.Parameters[index].Identity
+			identitiesOutp = append(identitiesOutp, &id)
+		} else {
+			// get identity from results:
+			id := fn.Results[index-lenParameters].Identity
+			identitiesOutp = append(identitiesOutp, &id)
+		}
+	}
+
+	return identitiesInp, identitiesOutp, nil
 }
