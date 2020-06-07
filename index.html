@@ -201,10 +201,10 @@
                             <tbody>
                                 <tr :id="cc(func.ID)">
                                     <th scope="row">func {{ func.Name }}(</th>
-                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, func), 'selected-outp': isCheckedOutp(funParameter, func) }">
+                                    <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(index, func), 'selected-outp': isCheckedOutp(index, func) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                         {{index < func.Parameters.length - 1 ? ", " : "" }}{{index == func.Parameters.length - 1 ?")":""}}</td>
-                                    <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, func), 'selected-outp': isCheckedOutp(funResult, func) }">
+                                    <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(index+len(func.Parameters), func), 'selected-outp': isCheckedOutp(index+len(func.Parameters), func) }">
                                         {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                         {{index < func.Results.length - 1 ? ", " : "" }}{{index == func.Results.length - 1 ? ")" : "" }}
                                     </td> 
@@ -276,14 +276,14 @@
                             <tbody>
                                 <tr :id="cc(method.ID)">
                                     <td></td>
-                                    <td class="method-type" :id="cc(method.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(method.Receiver, method), 'selected-outp': isCheckedOutp(method.Receiver, method) }">
+                                    <td class="method-type" :id="cc(method.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(0, method), 'selected-outp': isCheckedOutp(0, method) }">
                                         ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
                                     </td>
                                     <td>func <b>{{ method.Func.Name }}</b>{{method.Func.Parameters == null ? "( )" : "(" }}</td>
-                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, method), 'selected-outp': isCheckedOutp(funParameter, method) }">
+                                    <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(index+1, method), 'selected-outp': isCheckedOutp(index+1, method) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                         {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index == method.Func.Parameters.length - 1 ?")":""}}</td>
-                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, method), 'selected-outp': isCheckedOutp(funResult, method) }">
+                                    <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(index+1+len(method.Func.Parameters), method), 'selected-outp': isCheckedOutp(index+1+len(method.Func.Parameters), method) }">
                                         {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                         {{index < method.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
@@ -365,15 +365,15 @@
                             <tbody>
                                 <tr :id="cc(itMeth.ID)">
                                     <td></td>
-                                    <td class="intmet-type" :id="cc(itMeth.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(itMeth.Receiver, itMeth), 'selected-outp': isCheckedOutp(itMeth.Receiver, itMeth) }">
+                                    <td class="intmet-type" :id="cc(itMeth.ID,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(0, itMeth), 'selected-outp': isCheckedOutp(0, itMeth) }">
                                         (<b>{{itMeth.Receiver.TypeName}}</b>)
                                     </td>
                                     <td>func <b>{{ itMeth.Func.Name }}</b>{{itMeth.Func.Parameters == null ? "( )" : "(" }}</td>
-                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funParameter, itMeth), 'selected-outp': isCheckedOutp(funParameter, itMeth) }">
+                                    <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(index+1, itMeth), 'selected-outp': isCheckedOutp(index+1, itMeth) }">
                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                         {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index == itMeth.Func.Parameters.length - 1 ?")":""}}
                                     </td>
-                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(funResult, itMeth), 'selected-outp': isCheckedOutp(funResult, itMeth) }">
+                                    <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(index+1+len(itMeth.Func.Parameters), itMeth), 'selected-outp': isCheckedOutp(index+1+len(itMeth.Func.Parameters), itMeth) }">
                                         {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                         {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}</td>
                                     <td>)</td>
@@ -580,11 +580,11 @@
               if (elem == null) {return 0}
                 return elem.length
             },
-            isCheckedInp: function (elem, func) {
-              return elem.Identity.Element == func.CodeQL.Pointers.Inp.Element && elem.Identity.Index == func.CodeQL.Pointers.Inp.Index
+            isCheckedInp: function (i, func) {
+              return func.CodeQL.Blocks[0].Inp[i] == true
             },
-            isCheckedOutp: function (elem, func) {
-              return elem.Identity.Element == func.CodeQL.Pointers.Outp.Element && elem.Identity.Index == func.CodeQL.Pointers.Outp.Index
+            isCheckedOutp: function (i, func) {
+              return func.CodeQL.Blocks[0].Outp[i] == true
             },
             copyTestingCode(event) {
                 var radioButton = event.target;
