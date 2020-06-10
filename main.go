@@ -833,6 +833,16 @@ import go` + "\n\n"
 					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
 
+					{
+						genCQL, err := generateCodeQLFlowConditions_FEFunc(fe, req.Blocks)
+						if err != nil {
+							Errorf("error generating codeql: %s", err)
+							c.Status(400)
+							return
+						}
+						Ln(genCQL)
+					}
+
 					code, _ := generate_Func(
 						file,
 						fe,
@@ -918,6 +928,16 @@ import go` + "\n\n"
 					fe.CodeQL.Pointers = req.Pointers
 					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
+
+					{
+						genCQL, err := generateCodeQLFlowConditions_FEMethod(fe, req.Blocks)
+						if err != nil {
+							Errorf("error generating codeql: %s", err)
+							c.Status(400)
+							return
+						}
+						Ln(genCQL)
+					}
 
 					code, _ := generate_Method(
 						file,
@@ -2878,46 +2898,76 @@ type FlowBlock struct {
 	Outp []bool
 }
 
-func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, block *FlowBlock) ([]byte, error) {
-	lenParameters := len(fn.Parameters)
-	lenResults := len(fn.Results)
-	_ = lenParameters
-	_ = lenResults
+type IdentityGetter func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error)
 
-	inp, outp, err := getIdentities_FEFunc(fn, block)
-	if err != nil {
-		return nil, err
-	}
-
-	buf := new(bytes.Buffer)
-	{
-		buf.WriteString("(")
-		for i, in := range inp {
-			if i == 0 {
-				buf.WriteString("inp." + in.Placeholder)
-			} else {
-				buf.WriteString(" or ")
-				buf.WriteString("inp." + in.Placeholder)
-			}
+func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, blocks []*FlowBlock) (string, error) {
+	return generateCodeQLFlowCondition(
+		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+			return getIdentities_FEFunc(fn, block)
+		},
+		blocks,
+	)
+}
+func generateCodeQLFlowConditions_FEMethod(fn *FETypeMethod, blocks []*FlowBlock) (string, error) {
+	return generateCodeQLFlowCondition(
+		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+			return getIdentities_FEMethod(fn, block)
+		},
+		blocks,
+	)
+}
+func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
+	finalBuf := new(bytes.Buffer)
+	for blockIndex, block := range blocks {
+		inp, outp, err := idGetter(block)
+		if err != nil {
+			return "", err
 		}
-		buf.WriteString(")")
-	}
-
-	buf.WriteString("\nand\n")
-	{
-		buf.WriteString("(")
-		for i, out := range outp {
-			if i == 0 {
-				buf.WriteString("outp." + out.Placeholder)
-			} else {
-				buf.WriteString(" or ")
-				buf.WriteString("outp." + out.Placeholder)
-			}
+		if len(inp) == 0 {
+			return "", fmt.Errorf("error: no inp specified for block %v", blockIndex)
 		}
-		buf.WriteString(")")
-	}
+		if len(outp) == 0 {
+			return "", fmt.Errorf("error: no outp specified for block %v", blockIndex)
+		}
 
-	return buf.Bytes(), nil
+		buf := new(bytes.Buffer)
+		{
+			buf.WriteString("(")
+			for i, in := range inp {
+				// TODO: add logic to do things like inp.isParameter([0,1,3])
+				if i == 0 {
+					buf.WriteString("inp." + in.Placeholder)
+				} else {
+					buf.WriteString(" or ")
+					buf.WriteString("inp." + in.Placeholder)
+				}
+			}
+			buf.WriteString(")")
+		}
+
+		buf.WriteString(" and ")
+		{
+			buf.WriteString("(")
+			for i, out := range outp {
+				if i == 0 {
+					buf.WriteString("outp." + out.Placeholder)
+				} else {
+					buf.WriteString(" or ")
+					buf.WriteString("outp." + out.Placeholder)
+				}
+			}
+			buf.WriteString(")")
+		}
+
+		// write to finalBuf
+		if blockIndex > 0 {
+			finalBuf.WriteString("\nor\n")
+		}
+		finalBuf.WriteString("(")
+		buf.WriteTo(finalBuf)
+		finalBuf.WriteString(")")
+	}
+	return finalBuf.String(), nil
 }
 func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 
@@ -2961,6 +3011,67 @@ func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*C
 		} else {
 			// get identity from results:
 			id := fn.Results[index-lenParameters].Identity
+			identitiesOutp = append(identitiesOutp, &id)
+		}
+	}
+
+	return identitiesInp, identitiesOutp, nil
+}
+func getIdentities_FEMethod(fn *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+
+	// check width:
+	lenReceiver := 1
+	lenParameters := len(fn.Func.Parameters)
+	lenResults := len(fn.Func.Results)
+	totalWidth := lenReceiver + lenParameters + lenResults
+
+	if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
+		return nil, nil, fmt.Errorf("block.Inp has wrong len: %v", blockInpLen)
+	}
+	if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
+		return nil, nil, fmt.Errorf("block.Outp has wrong len: %v", blockOutpLen)
+	}
+
+	identitiesInp := make([]*CodeQlIdentity, 0)
+	for index, v := range block.Inp {
+		if v == false {
+			continue
+		}
+		if index == 0 {
+			// get identity from receiver:
+			id := fn.Receiver.Identity
+			identitiesInp = append(identitiesInp, &id)
+		}
+		if index > 0 && index <= lenParameters {
+			// get identity from parameters:
+			id := fn.Func.Parameters[index-1].Identity
+			identitiesInp = append(identitiesInp, &id)
+		}
+		if index > lenParameters {
+			// get identity from results:
+			id := fn.Func.Results[index-lenParameters-1].Identity
+			identitiesInp = append(identitiesInp, &id)
+		}
+	}
+
+	identitiesOutp := make([]*CodeQlIdentity, 0)
+	for index, v := range block.Outp {
+		if v == false {
+			continue
+		}
+		if index == 0 {
+			// get identity from receiver:
+			id := fn.Receiver.Identity
+			identitiesOutp = append(identitiesOutp, &id)
+		}
+		if index > 0 && index <= lenParameters {
+			// get identity from parameters:
+			id := fn.Func.Parameters[index-1].Identity
+			identitiesOutp = append(identitiesOutp, &id)
+		}
+		if index > lenParameters {
+			// get identity from results:
+			id := fn.Func.Results[index-lenParameters-1].Identity
 			identitiesOutp = append(identitiesOutp, &id)
 		}
 	}
