@@ -1,8 +1,8 @@
-	private class {{ .ClassName }} extends TaintTracking::FunctionModel, Method {
-	  // signature: {{.Func.Signature}}
-	  {{ .ClassName }}() { this.(Method).hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") }
+    private class {{ .ClassName }} extends TaintTracking::FunctionModel, Method {
+      // signature: {{.Func.Signature}}
+      {{ .ClassName }}() { this.(Method).hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") }
 
-	  override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-	    inp.{{ .CodeQL.Pointers.Inp.Placeholder }} and outp.{{ .CodeQL.Pointers.Outp.Placeholder }}
-	  }
-	}
+      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
+        {{ .CodeQL.GeneratedConditions }}
+      }
+    }

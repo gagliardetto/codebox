@@ -136,6 +136,29 @@
         -webkit-outline-radius: 10px;
     }
 
+    .codebox-block {
+        margin: 5px;
+        padding: 15px;
+        border: 1px solid;
+        -moz-outline-radius: 10px;
+        -webkit-outline-radius: 10px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .block-bg-func {
+        background-color: rgba(40, 167, 69, .03);
+    }
+
+    .block-bg-typeMethod {
+        background-color: rgba(0, 123, 255, .03);
+    }
+
+    .block-bg-interfaceMethod {
+        background-color: rgba(255, 193, 7, .03);
+    }
+
     .copy-btn {
         width: 60px;
         height: 34px;
@@ -199,47 +222,52 @@
                             <div v-for="comment in func.Docs">// {{ comment }}</div>
                         </span>
                         <template v-for="(block, blockIndex) in func.CodeQL.Blocks">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                                <defs>
-                                    <marker :id="cc('arrowhead',func.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                                        <path d="M 0 0 L 10 5 L 0 10 z" />
-                                    </marker>
-                                </defs>
-                                <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',func.ID,'block',blockIndex)+')'" :id="cc(func.ID,'block',blockIndex,'arrows')">
-                                </g>
-                            </svg>
-                            <table class="table-responsive table-sm">
-                                <tbody>
-                                    <tr :id="cc(func.ID,'block',blockIndex)">
-                                        <th scope="row">func {{ func.Name }}(</th>
-                                        <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'block',blockIndex,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index, func), 'selected-outp': isCheckedOutp(blockIndex, index, func) }">
-                                            {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                            {{index < func.Parameters.length - 1 ? ", " : "" }}{{index==func.Parameters.length - 1 ?")":""}}</td> <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'block',blockIndex,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+len(func.Parameters), func), 'selected-outp': isCheckedOutp(blockIndex, index+len(func.Parameters), func) }">
-                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
-                                                {{index < func.Results.length - 1 ? ", " : "" }}{{index==func.Results.length - 1 ? ")" : "" }} </td> </tr> <!--checkboxes for inp -->
-                                    <tr>
-                                        <td>FROM:</td>
-                                        <td v-for="(blockElemVal, index) in block.Inp" class="func-type">
-                                            <div class="form-check form-check-inline col">
-                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'inp')" @change="onChangeBlock($event, blockIndex, func)" :disabled="!func.CodeQL.IsEnabled" v-model="block.Inp[index]">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!--checkboxes for outp -->
-                                    <tr>
-                                        <td>INTO:</td>
-                                        <td v-for="(blockElemVal, index) in block.Outp" class="func-type">
-                                            <div class="form-check form-check-inline col">
-                                                <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'outp')" @change="onChangeBlock($event, blockIndex, func)" :disabled="!func.CodeQL.IsEnabled" v-model="block.Outp[index]">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr />
-                            <div class="text-center" v-if="blockIndex == func.CodeQL.Blocks.length - 1">
-                                <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(func)">Add "OR" </button>
-                                <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, func)"> Remove </button>
+                            <div class="codebox-block border-success block-bg-func">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                                    <defs>
+                                        <marker :id="cc('arrowhead',func.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" />
+                                        </marker>
+                                    </defs>
+                                    <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',func.ID,'block',blockIndex)+')'" :id="cc(func.ID,'block',blockIndex,'arrows')">
+                                    </g>
+                                </svg>
+                                <table class="table-responsive table-sm">
+                                    <tbody>
+                                        <tr :id="cc(func.ID,'block',blockIndex)">
+                                            <td><b>func {{ func.Name }}</b>{{func.Parameters == null ? "( )" : "(" }}</td>
+                                            <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'block',blockIndex,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index, func), 'selected-outp': isCheckedOutp(blockIndex, index, func) }">
+                                                {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
+                                                {{index < func.Parameters.length - 1 ? ", " : "" }}{{index==func.Parameters.length - 1 ?")":""}}</td> <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'block',blockIndex,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+len(func.Parameters), func), 'selected-outp': isCheckedOutp(blockIndex, index+len(func.Parameters), func) }">
+                                                    {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                    {{index < func.Results.length - 1 ? ", " : "" }}{{index==func.Results.length - 1 ? ")" : "" }} </td> </tr> <!--checkboxes for inp -->
+                                        <tr>
+                                            <td>FROM:</td>
+                                            <td v-for="(blockElemVal, index) in block.Inp" class="func-type">
+                                                <div class="form-check form-check-inline col">
+                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'inp')" @change="onChangeBlock($event, blockIndex, func)" :disabled="!func.CodeQL.IsEnabled" v-model="block.Inp[index]">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!--checkboxes for outp -->
+                                        <tr>
+                                            <td>INTO:</td>
+                                            <td v-for="(blockElemVal, index) in block.Outp" class="func-type">
+                                                <div class="form-check form-check-inline col">
+                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',func.ID,'outp')" @change="onChangeBlock($event, blockIndex, func)" :disabled="!func.CodeQL.IsEnabled" v-model="block.Outp[index]">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="text-center" v-if="blockIndex == func.CodeQL.Blocks.length - 1">
+                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(func)" :disabled="!func.CodeQL.IsEnabled">Add "OR" </button>
+                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, func)" :disabled="!func.CodeQL.IsEnabled"> Remove block </button>
+                                </div>
+                            </div>
+                            <div class="text-center" v-if="func.CodeQL.Blocks.length > 0 && blockIndex != func.CodeQL.Blocks.length - 1">
+                                <span><b>OR</b></span>
                             </div>
                         </template>
                     </div>
@@ -248,13 +276,7 @@
             <div class="col-md-6">
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
                     <code :id="cc('code',func.ID)">
-                        private class {{ func.ClassName }} extends TaintTracking::FunctionModel {
-                        // signature: {{func.Signature}}
-                        {{ func.ClassName }}() { hasQualifiedName("{{ source.PkgPath }}", "{{ func.Name }}") }
-                        override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                        inp.{{ func.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ func.CodeQL.Pointers.Outp.Placeholder }}
-                        }
-                        }
+                        {{ func.CodeQL.GeneratedClass }}
                     </code>
                 </div>
             </div>
@@ -275,65 +297,70 @@
                             <div v-for="comment in method.Docs">// {{ comment }}</div>
                         </span>
                         <template v-for="(block, blockIndex) in method.CodeQL.Blocks">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                                <defs>
-                                    <marker :id="cc('arrowhead',method.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                                        <path d="M 0 0 L 10 5 L 0 10 z" />
-                                    </marker>
-                                </defs>
-                                <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',method.ID,'block',blockIndex)+')'" :id="cc(method.ID,'block',blockIndex,'arrows')">
-                                </g>
-                            </svg>
-                            <table class="table-responsive table-sm">
-                                <tbody>
-                                    <tr :id="cc(method.ID,'block',blockIndex)">
-                                        <td></td>
-                                        <td class="method-type" :id="cc(method.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, method), 'selected-outp': isCheckedOutp(blockIndex, 0, method) }">
-                                            ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
-                                        </td>
-                                        <td>func <b>{{ method.Func.Name }}</b>{{method.Func.Parameters == null ? "( )" : "(" }}</td>
-                                        <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'block',blockIndex,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, method), 'selected-outp': isCheckedOutp(blockIndex, index+1, method) }">
-                                            {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                            {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index==method.Func.Parameters.length - 1 ?")":""}}</td> <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'block',blockIndex,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(method.Func.Parameters), method), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(method.Func.Parameters), method) }">
-                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
-                                                {{index < method.Func.Results.length - 1 ? ", " : "" }}</td> <td>)</td>
-                                    </tr>
-                                    <!--checkboxes for inp -->
-                                    <tr>
-                                        <td>FROM:</td>
-                                        <template v-for="(blockElemVal, index) in block.Inp">
-                                            <template v-if="index == 1 ">
-                                                </td>
-                                                <td>
-                                            </template>
-                                            <td class="method-type">
-                                                <div class="form-check form-check-inline col">
-                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'inp')" @change="onChangeBlock($event, blockIndex, method)" :disabled="!method.CodeQL.IsEnabled" v-model="block.Inp[index]">
-                                                </div>
+                            <div class="codebox-block border-primary block-bg-typeMethod">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                                    <defs>
+                                        <marker :id="cc('arrowhead',method.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" />
+                                        </marker>
+                                    </defs>
+                                    <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',method.ID,'block',blockIndex)+')'" :id="cc(method.ID,'block',blockIndex,'arrows')">
+                                    </g>
+                                </svg>
+                                <table class="table-responsive table-sm">
+                                    <tbody>
+                                        <tr :id="cc(method.ID,'block',blockIndex)">
+                                            <td></td>
+                                            <td class="method-type" :id="cc(method.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, method), 'selected-outp': isCheckedOutp(blockIndex, 0, method) }">
+                                                ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
                                             </td>
-                                        </template>
-                                    </tr>
-                                    <!--checkboxes for outp -->
-                                    <tr>
-                                        <td>INTO:</td>
-                                        <template v-for="(blockElemVal, index) in block.Outp">
-                                            <template v-if="index == 1 ">
+                                            <td>func <b>{{ method.Func.Name }}</b>{{method.Func.Parameters == null ? "( )" : "(" }}</td>
+                                            <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'block',blockIndex,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, method), 'selected-outp': isCheckedOutp(blockIndex, index+1, method) }">
+                                                {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
+                                                {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index==method.Func.Parameters.length - 1 ?")":""}}</td> <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'block',blockIndex,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(method.Func.Parameters), method), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(method.Func.Parameters), method) }">
+                                                    {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                    {{index < method.Func.Results.length - 1 ? ", " : "" }}</td> <td>)</td>
+                                        </tr>
+                                        <!--checkboxes for inp -->
+                                        <tr>
+                                            <td>FROM:</td>
+                                            <template v-for="(blockElemVal, index) in block.Inp">
+                                                <template v-if="index == 1 ">
+                                                    </td>
+                                                    <td>
+                                                </template>
+                                                <td class="method-type">
+                                                    <div class="form-check form-check-inline col">
+                                                        <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'inp')" @change="onChangeBlock($event, blockIndex, method)" :disabled="!method.CodeQL.IsEnabled" v-model="block.Inp[index]">
+                                                    </div>
                                                 </td>
-                                                <td>
                                             </template>
-                                            <td class="method-type">
-                                                <div class="form-check form-check-inline col">
-                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'outp')" @change="onChangeBlock($event, blockIndex, method)" :disabled="!method.CodeQL.IsEnabled" v-model="block.Outp[index]">
-                                                </div>
-                                            </td>
-                                        </template>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr />
-                            <div class="text-center" v-if="blockIndex == method.CodeQL.Blocks.length - 1">
-                                <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(method)"> OR </button>
-                                <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, method)"> Remove </button>
+                                        </tr>
+                                        <!--checkboxes for outp -->
+                                        <tr>
+                                            <td>INTO:</td>
+                                            <template v-for="(blockElemVal, index) in block.Outp">
+                                                <template v-if="index == 1 ">
+                                                    </td>
+                                                    <td>
+                                                </template>
+                                                <td class="method-type">
+                                                    <div class="form-check form-check-inline col">
+                                                        <input class="form-check-input" type="checkbox" :name="cc('checkbox',method.ID,'outp')" @change="onChangeBlock($event, blockIndex, method)" :disabled="!method.CodeQL.IsEnabled" v-model="block.Outp[index]">
+                                                    </div>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="text-center" v-if="blockIndex == method.CodeQL.Blocks.length - 1">
+                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(method)" :disabled="!method.CodeQL.IsEnabled">Add "OR"</button>
+                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, method)" :disabled="!method.CodeQL.IsEnabled"> Remove block </button>
+                                </div>
+                                <div class="text-center" v-if="method.CodeQL.Blocks.length > 0 && blockIndex != method.CodeQL.Blocks.length - 1">
+                                    <span><b>OR</b></span>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -342,13 +369,7 @@
             <div class="col-md-6">
                 <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }">
                     <code :id="cc('code',method.ID)">
-                        private class {{ method.ClassName }} extends TaintTracking::FunctionModel, Method {
-                        // signature: {{method.Func.Signature}}
-                        {{ method.ClassName }}() { this.(Method).hasQualifiedName("{{ source.PkgPath }}", "{{ method.Receiver.TypeName }}", "{{ method.Func.Name }}") }
-                        override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                        inp.{{ method.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ method.CodeQL.Pointers.Outp.Placeholder }}
-                        }
-                        }
+                        {{ method.CodeQL.GeneratedClass }}
                     </code>
                 </div>
             </div>
@@ -369,65 +390,70 @@
                             <div v-for="comment in itMeth.Docs">// {{ comment }}</div>
                         </span>
                         <template v-for="(block, blockIndex) in itMeth.CodeQL.Blocks">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                                <defs>
-                                    <marker :id="cc('arrowhead',itMeth.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                                        <path d="M 0 0 L 10 5 L 0 10 z" />
-                                    </marker>
-                                </defs>
-                                <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',itMeth.ID,'block',blockIndex)+')'" :id="cc(itMeth.ID,'block',blockIndex,'arrows')">
-                                </g>
-                            </svg>
-                            <table class="table-responsive table-sm">
-                                <tbody>
-                                    <tr :id="cc(itMeth.ID,'block',blockIndex)">
-                                        <td></td>
-                                        <td class="intmet-type" :id="cc(itMeth.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, itMeth), 'selected-outp': isCheckedOutp(blockIndex, 0, itMeth) }">
-                                            (<b>{{itMeth.Receiver.TypeName}}</b>)
-                                        </td>
-                                        <td>func <b>{{ itMeth.Func.Name }}</b>{{itMeth.Func.Parameters == null ? "( )" : "(" }}</td>
-                                        <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1, itMeth) }">
-                                            {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
-                                            {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index==itMeth.Func.Parameters.length - 1 ?")":""}} </td> <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth) }">
-                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
-                                                {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}</td> <td>)</td>
-                                    </tr>
-                                    <!--checkboxes for inp -->
-                                    <tr>
-                                        <td>FROM:</td>
-                                        <template v-for="(blockElemVal, index) in block.Inp">
-                                            <template v-if="index == 1 ">
-                                                </td>
-                                                <td>
-                                            </template>
-                                            <td class="intmet-type">
-                                                <div class="form-check form-check-inline col">
-                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'inp')" @change="onChangeBlock($event, blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="block.Inp[index]">
-                                                </div>
+                            <div class="codebox-block border-warning block-bg-interfaceMethod">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                                    <defs>
+                                        <marker :id="cc('arrowhead',itMeth.ID,'block',blockIndex)" viewBox="0 0 10 10" refX="3" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" />
+                                        </marker>
+                                    </defs>
+                                    <g fill="none" stroke="black" stroke-width="2" :marker-end="'url(#'+cc('arrowhead',itMeth.ID,'block',blockIndex)+')'" :id="cc(itMeth.ID,'block',blockIndex,'arrows')">
+                                    </g>
+                                </svg>
+                                <table class="table-responsive table-sm">
+                                    <tbody>
+                                        <tr :id="cc(itMeth.ID,'block',blockIndex)">
+                                            <td></td>
+                                            <td class="intmet-type" :id="cc(itMeth.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, itMeth), 'selected-outp': isCheckedOutp(blockIndex, 0, itMeth) }">
+                                                (<b>{{itMeth.Receiver.TypeName}}</b>)
                                             </td>
-                                        </template>
-                                    </tr>
-                                    <!--checkboxes for outp -->
-                                    <tr>
-                                        <td>INTO:</td>
-                                        <template v-for="(blockElemVal, index) in block.Outp">
-                                            <template v-if="index == 1 ">
+                                            <td>func <b>{{ itMeth.Func.Name }}</b>{{itMeth.Func.Parameters == null ? "( )" : "(" }}</td>
+                                            <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1, itMeth) }">
+                                                {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
+                                                {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index==itMeth.Func.Parameters.length - 1 ?")":""}} </td> <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth) }">
+                                                    {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                    {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}</td> <td>)</td>
+                                        </tr>
+                                        <!--checkboxes for inp -->
+                                        <tr>
+                                            <td>FROM:</td>
+                                            <template v-for="(blockElemVal, index) in block.Inp">
+                                                <template v-if="index == 1 ">
+                                                    </td>
+                                                    <td>
+                                                </template>
+                                                <td class="intmet-type">
+                                                    <div class="form-check form-check-inline col">
+                                                        <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'inp')" @change="onChangeBlock($event, blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="block.Inp[index]">
+                                                    </div>
                                                 </td>
-                                                <td>
                                             </template>
-                                            <td class="intmet-type">
-                                                <div class="form-check form-check-inline col">
-                                                    <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'outp')" @change="onChangeBlock($event, blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="block.Outp[index]">
-                                                </div>
-                                            </td>
-                                        </template>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr />
-                            <div class="text-center" v-if="blockIndex == itMeth.CodeQL.Blocks.length - 1">
-                                <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(itMeth)"> OR </button>
-                                <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, itMeth)"> Remove </button>
+                                        </tr>
+                                        <!--checkboxes for outp -->
+                                        <tr>
+                                            <td>INTO:</td>
+                                            <template v-for="(blockElemVal, index) in block.Outp">
+                                                <template v-if="index == 1 ">
+                                                    </td>
+                                                    <td>
+                                                </template>
+                                                <td class="intmet-type">
+                                                    <div class="form-check form-check-inline col">
+                                                        <input class="form-check-input" type="checkbox" :name="cc('checkbox',itMeth.ID,'outp')" @change="onChangeBlock($event, blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled" v-model="block.Outp[index]">
+                                                    </div>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="text-center" v-if="blockIndex == itMeth.CodeQL.Blocks.length - 1">
+                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(itMeth)" :disabled="!itMeth.CodeQL.IsEnabled">Add "OR"</button>
+                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled"> Remove block </button>
+                                </div>
+                                <div class="text-center" v-if="itMeth.CodeQL.Blocks.length > 0 && blockIndex != itMeth.CodeQL.Blocks.length - 1">
+                                    <span><b>OR</b></span>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -436,15 +462,7 @@
             <div class="col-md-6">
                 <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }">
                     <code :id="cc('code',itMeth.ID)">
-                        private class {{ itMeth.ClassName }} extends TaintTracking::FunctionModel, Method {
-                        // signature: {{itMeth.Func.Signature}}
-                        {{ itMeth.ClassName }}() {
-                        this.implements("{{ source.PkgPath }}", "{{ itMeth.Receiver.TypeName }}", "{{ itMeth.Func.Name }}")
-                        }
-                        override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {
-                        inp.{{ itMeth.CodeQL.Pointers.Inp.Placeholder }} and outp.{{ itMeth.CodeQL.Pointers.Outp.Placeholder }}
-                        }
-                        }
+                        {{ itMeth.CodeQL.GeneratedClass }}
                     </code>
                 </div>
             </div>
@@ -692,7 +710,11 @@
                         })
                         .catch((error) => {
                             console.error('Error:', error);
-                        });
+                        })
+                        .then(response => response.json())
+                        .then((data) => {
+                            fn.CodeQL.GeneratedClass = data.GeneratedClass;
+                        });;
                 }
             },
             addBlock(fn) {

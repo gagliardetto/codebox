@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"flag"
@@ -72,10 +73,14 @@ func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
 		if !ok {
 			return nil
 		}
-		converted := FETypeMethod(*feIt)
-		return &converted
+		return FEIToFET(feIt)
 	}
 	return feTyp
+}
+
+func FEIToFET(feIt *FEInterfaceMethod) *FETypeMethod {
+	converted := FETypeMethod(*feIt)
+	return &converted
 }
 
 //
@@ -250,10 +255,10 @@ func main() {
 		cacheExists := MustFileExists(cacheFilepath)
 
 		if cacheExists {
-			tempFeModule := &FEModule{}
+			tempDeprecatedFeModule := &DEPRECATEDFEModule{}
 			// Load cache:
 			Infof("Loading cached feModule from %q", cacheFilepath)
-			err := LoadJSON(tempFeModule, cacheFilepath)
+			err := LoadJSON(tempDeprecatedFeModule, cacheFilepath)
 			if err != nil {
 				panic(err)
 			}
@@ -285,14 +290,13 @@ func main() {
 
 			doCopy := true
 
-			for _, cached := range tempFeModule.Funcs {
+			for _, cached := range tempDeprecatedFeModule.Funcs {
 				latest := findLatestFunc(cached.Signature)
 				if latest == nil {
 					Errorf("latest FEFunc not found for signature %q", cached.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
-					latest.CodeQL.Pointers = cached.CodeQL.Pointers
 					if doCopy {
 						{
 							// Initialize block:
@@ -308,7 +312,7 @@ func main() {
 
 							// Copy legacy pointers into first block:
 							{
-								inp := latest.CodeQL.Pointers.Inp
+								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
 								case ElementParameter:
 									latest.CodeQL.Blocks[0].Inp[inp.Index] = true
@@ -317,7 +321,7 @@ func main() {
 								}
 							}
 							{
-								outp := latest.CodeQL.Pointers.Outp
+								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
 								case ElementParameter:
 									latest.CodeQL.Blocks[0].Outp[outp.Index] = true
@@ -330,14 +334,13 @@ func main() {
 
 				}
 			}
-			for _, cached := range tempFeModule.TypeMethods {
+			for _, cached := range tempDeprecatedFeModule.TypeMethods {
 				latest := findLatestTypeMethod(cached.Func.Signature)
 				if latest == nil {
 					Errorf("latest FETypeMethod not found for signature %q", cached.Func.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
-					latest.CodeQL.Pointers = cached.CodeQL.Pointers
 					if doCopy {
 						{
 							// Initialize block:
@@ -353,7 +356,7 @@ func main() {
 
 							// Copy legacy pointers into first block:
 							{
-								inp := latest.CodeQL.Pointers.Inp
+								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
 								case ElementReceiver:
 									latest.CodeQL.Blocks[0].Inp[0] = true
@@ -364,7 +367,7 @@ func main() {
 								}
 							}
 							{
-								outp := latest.CodeQL.Pointers.Outp
+								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
 								case ElementReceiver:
 									latest.CodeQL.Blocks[0].Outp[0] = true
@@ -378,14 +381,13 @@ func main() {
 					}
 				}
 			}
-			for _, cached := range tempFeModule.InterfaceMethods {
+			for _, cached := range tempDeprecatedFeModule.InterfaceMethods {
 				latest := findLatestInterfaceMethod(cached.Func.Signature)
 				if latest == nil {
 					Errorf("latest FEInterfaceMethod not found for signature %q", cached.Func.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL.IsEnabled = cached.CodeQL.IsEnabled
-					latest.CodeQL.Pointers = cached.CodeQL.Pointers
 					if doCopy {
 						{
 							// Initialize block:
@@ -401,7 +403,7 @@ func main() {
 
 							// Copy legacy pointers into first block:
 							{
-								inp := latest.CodeQL.Pointers.Inp
+								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
 								case ElementReceiver:
 									latest.CodeQL.Blocks[0].Inp[0] = true
@@ -412,7 +414,7 @@ func main() {
 								}
 							}
 							{
-								outp := latest.CodeQL.Pointers.Outp
+								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
 								case ElementReceiver:
 									latest.CodeQL.Blocks[0].Outp[0] = true
@@ -461,13 +463,25 @@ func main() {
 		mu.Lock()
 		defer mu.Unlock()
 
-		PopulatePlaceholders(feModule)
+		PopulateGeneratedClassCodeQL(feModule)
 
 		{
 			// Save cache:
-			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".json")
+			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".v2.json")
+			cacheMap := make(map[string]*CodeQlFinalVals)
+			{
+				for _, v := range feModule.Funcs {
+					cacheMap[v.Signature] = v.CodeQL
+				}
+				for _, v := range feModule.TypeMethods {
+					cacheMap[v.Func.Signature] = v.CodeQL
+				}
+				for _, v := range feModule.InterfaceMethods {
+					cacheMap[v.Func.Signature] = v.CodeQL
+				}
+			}
 			Infof("Saving cache to %q", MustAbs(cacheFilepath))
-			err := SaveAsJSON(feModule, cacheFilepath)
+			err := SaveAsJSON(cacheMap, cacheFilepath)
 			if err != nil {
 				panic(err)
 			}
@@ -481,15 +495,15 @@ func main() {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
-				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+				if err := fe.CodeQL.Validate(); err != nil {
 					Errorf("invalid pointers for %q: %s", fe.Signature, err)
 					continue
 				}
 				code, testFuncName := generate_Func(
 					file,
 					fe,
-					fe.CodeQL.Pointers.Inp.Element,
-					fe.CodeQL.Pointers.Outp.Element,
+					mustGetFirstIdentity_Inp_FEFunc(fe),
+					mustGetFirstIdentity_Outp_FEFunc(fe),
 				)
 				if code != nil {
 					// TODO: save `code` inside `fe` (add all to the file only at program exit).
@@ -505,16 +519,15 @@ func main() {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
-				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+				if err := fe.CodeQL.Validate(); err != nil {
 					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 					continue
 				}
-				converted := FETypeMethod(*fe)
 				code, testFuncName := generate_Method(
 					file,
-					&converted,
-					fe.CodeQL.Pointers.Inp.Element,
-					fe.CodeQL.Pointers.Outp.Element,
+					fe,
+					mustGetFirstIdentity_Inp_FEMethod(fe),
+					mustGetFirstIdentity_Outp_FEMethod(fe),
 				)
 				if code != nil {
 					// TODO: save `code` inside `fe` (add all to the file only at program exit).
@@ -530,16 +543,16 @@ func main() {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
-				if err := fe.CodeQL.Pointers.Validate(); err != nil {
+				if err := fe.CodeQL.Validate(); err != nil {
 					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 					continue
 				}
-				converted := FETypeMethod(*fe)
+				converted := FEIToFET(fe)
 				code, testFuncName := generate_Method(
 					file,
-					&converted,
-					fe.CodeQL.Pointers.Inp.Element,
-					fe.CodeQL.Pointers.Outp.Element,
+					converted,
+					mustGetFirstIdentity_Inp_FEMethod(converted),
+					mustGetFirstIdentity_Outp_FEMethod(converted),
 				)
 				if code != nil {
 					// TODO: save `code` inside `fe` (add all to the file only at program exit).
@@ -667,8 +680,7 @@ import go` + "\n\n"
 			mu.Lock()
 			defer mu.Unlock()
 
-			// populate placeholder with value specified with the pointers:
-			PopulatePlaceholders(feModule)
+			PopulateGeneratedClassCodeQL(feModule)
 
 			c.IndentedJSON(200, feModule)
 		})
@@ -710,7 +722,7 @@ import go` + "\n\n"
 					fe := stored.GetFEFunc()
 					if req.Enabled {
 						// partially validate before enabling:
-						if err := fe.CodeQL.Pointers.Validate(); err == nil {
+						if err := fe.CodeQL.Validate(); err == nil {
 							fe.CodeQL.IsEnabled = true
 						}
 					} else {
@@ -723,7 +735,7 @@ import go` + "\n\n"
 					fe := stored.GetFETypeMethodOrInterfaceMethod()
 					if req.Enabled {
 						// partially validate before enabling:
-						if err := fe.CodeQL.Pointers.Validate(); err == nil {
+						if err := fe.CodeQL.Validate(); err == nil {
 							fe.CodeQL.IsEnabled = true
 						}
 					} else {
@@ -748,10 +760,6 @@ import go` + "\n\n"
 				c.Status(400)
 				return
 			}
-			{ // sanitize incoming placeholders:
-				req.Pointers.Inp.Placeholder = ""
-				req.Pointers.Outp.Placeholder = ""
-			}
 
 			mu.Lock()
 			defer mu.Unlock()
@@ -769,90 +777,51 @@ import go` + "\n\n"
 				{
 					fe := stored.GetFEFunc()
 					{
-						// validate Inp:
-						switch req.Pointers.Inp.Element {
-						case ElementParameter:
-							if req.Pointers.Inp.Index > len(fe.Parameters)-1 {
-								Errorf(
-									"Inp index is %v, but func has only %v %ss",
-									req.Pointers.Inp.Index,
-									len(fe.Parameters),
-									req.Pointers.Inp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementResult:
-							if req.Pointers.Inp.Index > len(fe.Results)-1 {
-								Errorf(
-									"Inp index is %v, but func has only %v %ss",
-									req.Pointers.Inp.Index,
-									len(fe.Results),
-									req.Pointers.Inp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						default:
-							Errorf("unsupported Element for Inp: %q", req.Pointers.Inp.Element)
-							c.Status(400)
-							return
-						}
-						// validate Outp:
-						switch req.Pointers.Outp.Element {
-						case ElementParameter:
-							if req.Pointers.Outp.Index > len(fe.Parameters)-1 {
-								Errorf(
-									"Outp index is %v, but func has only %v %ss",
-									req.Pointers.Outp.Index,
-									len(fe.Parameters),
-									req.Pointers.Outp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementResult:
-							if req.Pointers.Outp.Index > len(fe.Results)-1 {
-								Errorf(
-									"Outp index is %v, but func has only %v %ss",
-									req.Pointers.Outp.Index,
-									len(fe.Results),
-									req.Pointers.Outp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						default:
-							Errorf("unsupported Element for Outp: %q", req.Pointers.Outp.Element)
+						if err := validateBlockLen_FEFunc(fe, req.Blocks...); err != nil {
+							Errorf(
+								"error validating block: %s", err,
+							)
 							c.Status(400)
 							return
 						}
 					}
 
-					fe.CodeQL.Pointers = req.Pointers
 					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
 
 					{
-						genCQL, err := generateCodeQLFlowConditions_FEFunc(fe, req.Blocks)
+						generatedCodeql := new(bytes.Buffer)
+						err := GenerateCodeQLTT_Functions(generatedCodeql, []*FEFunc{fe})
 						if err != nil {
 							Errorf("error generating codeql: %s", err)
 							c.Status(400)
 							return
 						}
-						Ln(genCQL)
-					}
+						Ln(generatedCodeql)
 
-					code, _ := generate_Func(
-						file,
-						fe,
-						req.Pointers.Inp.Element,
-						req.Pointers.Outp.Element,
-					)
-					if code != nil {
-						file.Add(code.Line())
-					} else {
-						Warnf("NOTHING GENERATED")
+						code, _ := generate_Func(
+							file,
+							fe,
+							mustGetFirstIdentity_Inp_FEFunc(fe),
+							mustGetFirstIdentity_Outp_FEFunc(fe),
+						)
+						if code != nil {
+							file.Add(code.Line())
+						} else {
+							Warnf("NOTHING GENERATED")
+						}
+						{
+							if toStdout {
+								fmt.Printf("%#v", file)
+							}
+							c.IndentedJSON(
+								200,
+								GeneratedClassResponse{
+									GeneratedClass: generatedCodeql.String(),
+								},
+							)
+							return
+						}
 					}
 
 				}
@@ -860,137 +829,116 @@ import go` + "\n\n"
 				{
 					fe := stored.GetFETypeMethodOrInterfaceMethod()
 					{
-						// validate Inp:
-						switch req.Pointers.Inp.Element {
-						case ElementParameter:
-							if req.Pointers.Inp.Index > len(fe.Func.Parameters)-1 {
-								Errorf(
-									"Inp index is %v, but func has only %v %ss",
-									req.Pointers.Inp.Index,
-									len(fe.Func.Parameters),
-									req.Pointers.Inp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementResult:
-							if req.Pointers.Inp.Index > len(fe.Func.Results)-1 {
-								Errorf(
-									"Inp index is %v, but func has only %v %ss",
-									req.Pointers.Inp.Index,
-									len(fe.Func.Results),
-									req.Pointers.Inp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementReceiver:
-							// TODO
-						default:
-							Errorf("unsupported Element for Inp: %q", req.Pointers.Inp.Element)
-							c.Status(400)
-							return
-						}
-						// validate Outp:
-						switch req.Pointers.Outp.Element {
-						case ElementParameter:
-							if req.Pointers.Outp.Index > len(fe.Func.Parameters)-1 {
-								Errorf(
-									"Outp index is %v, but func has only %v %ss",
-									req.Pointers.Outp.Index,
-									len(fe.Func.Parameters),
-									req.Pointers.Outp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementResult:
-							if req.Pointers.Outp.Index > len(fe.Func.Results)-1 {
-								Errorf(
-									"Outp index is %v, but func has only %v %ss",
-									req.Pointers.Outp.Index,
-									len(fe.Func.Results),
-									req.Pointers.Outp.Element,
-								)
-								c.Status(400)
-								return
-							}
-						case ElementReceiver:
-							// TODO
-						default:
-							Errorf("unsupported Element for Outp: %q", req.Pointers.Outp.Element)
+						if err := validateBlockLen_FEMethod(fe, req.Blocks...); err != nil {
+							Errorf(
+								"error validating block: %s", err,
+							)
 							c.Status(400)
 							return
 						}
 					}
-					// TODO: calculate func.CodeQL.Pointers.Inp.Placeholder from actual value,
-					// NOT from frontend-provided value.
-					fe.CodeQL.Pointers = req.Pointers
 					fe.CodeQL.Blocks = req.Blocks
 					fe.CodeQL.IsEnabled = true
 
 					{
-						genCQL, err := generateCodeQLFlowConditions_FEMethod(fe, req.Blocks)
-						if err != nil {
-							Errorf("error generating codeql: %s", err)
-							c.Status(400)
+						generatedCodeql := new(bytes.Buffer)
+						st := stored.GetFETypeMethod()
+						if st != nil {
+							err := GenerateCodeQLTT_TypeMethods(generatedCodeql, []*FETypeMethod{st})
+							if err != nil {
+								Errorf("error generating codeql: %s", err)
+								c.Status(400)
+								return
+							}
+						} else {
+							st := stored.GetFEInterfaceMethod()
+							err := GenerateCodeQLTT_InterfaceMethods(generatedCodeql, []*FEInterfaceMethod{st})
+							if err != nil {
+								Errorf("error generating codeql: %s", err)
+								c.Status(400)
+								return
+							}
+						}
+
+						Ln(generatedCodeql)
+
+						code, _ := generate_Method(
+							file,
+							fe,
+							mustGetFirstIdentity_Inp_FEMethod(fe),
+							mustGetFirstIdentity_Outp_FEMethod(fe),
+						)
+						if code != nil {
+							// TODO: save `code` inside `fe` (add all to the file only at program exit).
+							file.Add(code.Line())
+						} else {
+							Warnf("NOTHING GENERATED")
+						}
+
+						{
+							if toStdout {
+								fmt.Printf("%#v", file)
+							}
+							c.IndentedJSON(
+								200,
+								GeneratedClassResponse{
+									GeneratedClass: generatedCodeql.String(),
+								},
+							)
 							return
 						}
-						Ln(genCQL)
-					}
-
-					code, _ := generate_Method(
-						file,
-						fe,
-						req.Pointers.Inp.Element,
-						req.Pointers.Outp.Element,
-					)
-					if code != nil {
-						// TODO: save `code` inside `fe` (add all to the file only at program exit).
-						file.Add(code.Line())
-					} else {
-						Warnf("NOTHING GENERATED")
 					}
 				}
 			default:
 				panic(Sf("unknown type for %v", stored.original))
 			}
-			if toStdout {
-				fmt.Printf("%#v", file)
-			}
-			c.Status(200)
+
 		})
 
 		r.Run() // listen and serve on 0.0.0.0:8080
 	}
 }
 
-func PopulatePlaceholders(feModule *FEModule) {
+type GeneratedClassResponse struct {
+	GeneratedClass string
+}
+
+func PopulateGeneratedClassCodeQL(feModule *FEModule) error {
 	for i := range feModule.Funcs {
 		fe := feModule.Funcs[i]
-		ptr := fe.CodeQL.Pointers
-		if err := ptr.Validate(); err == nil {
-			ptr.Inp.Placeholder = getPlaceholderFromFunc(fe, ptr.Inp)
-			ptr.Outp.Placeholder = getPlaceholderFromFunc(fe, ptr.Outp)
+		if err := fe.CodeQL.Validate(); err == nil {
+			generatedCodeqlClass := new(bytes.Buffer)
+			err := GenerateCodeQLTT_Functions(generatedCodeqlClass, []*FEFunc{fe})
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Signature, err)
+			}
+			fe.CodeQL.GeneratedClass = generatedCodeqlClass.String()
 		}
 	}
 	for i := range feModule.TypeMethods {
 		fe := feModule.TypeMethods[i]
-		ptr := fe.CodeQL.Pointers
-		if err := ptr.Validate(); err == nil {
-			ptr.Inp.Placeholder = getPlaceholderFromMethod(fe, ptr.Inp)
-			ptr.Outp.Placeholder = getPlaceholderFromMethod(fe, ptr.Outp)
+		if err := fe.CodeQL.Validate(); err == nil {
+			generatedCodeqlClass := new(bytes.Buffer)
+			err := GenerateCodeQLTT_TypeMethods(generatedCodeqlClass, []*FETypeMethod{fe})
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+			}
+			fe.CodeQL.GeneratedClass = generatedCodeqlClass.String()
 		}
 	}
 	for i := range feModule.InterfaceMethods {
 		fe := feModule.InterfaceMethods[i]
-		ptr := fe.CodeQL.Pointers
-		converted := FETypeMethod(*fe)
-		if err := ptr.Validate(); err == nil {
-			ptr.Inp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Inp)
-			ptr.Outp.Placeholder = getPlaceholderFromMethod(&converted, ptr.Outp)
+		if err := fe.CodeQL.Validate(); err == nil {
+			generatedCodeqlClass := new(bytes.Buffer)
+			err := GenerateCodeQLTT_InterfaceMethods(generatedCodeqlClass, []*FEInterfaceMethod{fe})
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+			}
+			fe.CodeQL.GeneratedClass = generatedCodeqlClass.String()
 		}
 	}
+
+	return nil
 }
 
 func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*FEFunc) error {
@@ -1003,12 +951,19 @@ func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*FEFunc) error {
 		if !fe.CodeQL.IsEnabled {
 			continue
 		}
-		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+		if err := fe.CodeQL.Validate(); err != nil {
 			Errorf("invalid pointers for %q: %s", fe.Signature, err)
 			continue
 		}
 		buf.WriteString("\n")
-		err := tpl.Execute(buf, fe)
+
+		generatedConditions, err := generateCodeQLFlowConditions_FEFunc(fe, fe.CodeQL.Blocks)
+		if err != nil {
+			return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Signature, err)
+		}
+		fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+		err = tpl.Execute(buf, fe)
 		if err != nil {
 			return fmt.Errorf("error while executing template for func %q: %s", fe.ID, err)
 		}
@@ -1026,12 +981,19 @@ func GenerateCodeQLTT_TypeMethods(buf *bytes.Buffer, fes []*FETypeMethod) error 
 		if !fe.CodeQL.IsEnabled {
 			continue
 		}
-		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+		if err := fe.CodeQL.Validate(); err != nil {
 			Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 			continue
 		}
 		buf.WriteString("\n")
-		err := tpl.Execute(buf, fe)
+
+		generatedConditions, err := generateCodeQLFlowConditions_FEMethod(fe, fe.CodeQL.Blocks)
+		if err != nil {
+			return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+		}
+		fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+		err = tpl.Execute(buf, fe)
 		if err != nil {
 			return fmt.Errorf("error while executing template for type-method %q: %s", fe.ID, err)
 		}
@@ -1049,18 +1011,43 @@ func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMeth
 		if !fe.CodeQL.IsEnabled {
 			continue
 		}
-		if err := fe.CodeQL.Pointers.Validate(); err != nil {
+		if err := fe.CodeQL.Validate(); err != nil {
 			Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 			continue
 		}
 		buf.WriteString("\n")
-		err := tpl.Execute(buf, fe)
+
+		generatedConditions, err := generateCodeQLFlowConditions_FEMethod(FEIToFET(fe), fe.CodeQL.Blocks)
+		if err != nil {
+			return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+		}
+		fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+		err = tpl.Execute(buf, fe)
 		if err != nil {
 			return fmt.Errorf("error while executing template for interface-method %q: %s", fe.ID, err)
 		}
 	}
 
 	return nil
+}
+
+func PadNewLines(s string) string {
+	var res string
+	scanner := bufio.NewScanner(strings.NewReader(s))
+	tot := strings.Count(s, "\n")
+	for i := 0; scanner.Scan(); i++ {
+		var padding = ""
+		if i > 0 {
+			padding = RepeatString(8, " ")
+		}
+		res += Sf("%s%s", padding, scanner.Text())
+		isLast := i == tot
+		if !isLast {
+			res += "\n"
+		}
+	}
+	return res
 }
 func NewTestFile(includeBoilerplace bool) *File {
 	file := NewFile("main")
@@ -1107,50 +1094,50 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return filepath.Base(pkgPath) != pkgName
 }
 
-func generate_Func(file *File, fe *FEFunc, from Element, into Element) (*Statement, string) {
+func generate_Func(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	Parameter := ElementParameter
 	Result := ElementResult
 
 	switch {
-	case from == Parameter && into == Parameter:
-		return generate_ParaFuncPara(file, fe)
-	case from == Parameter && into == Result:
-		return generate_ParaFuncResu(file, fe)
-	case from == Result && into == Parameter:
-		return generate_ResuFuncPara(file, fe)
-	case from == Result && into == Result:
-		return generate_ResuFuncResu(file, fe)
+	case identityInp.Element == Parameter && identityOutp.Element == Parameter:
+		return generate_ParaFuncPara(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Parameter && identityOutp.Element == Result:
+		return generate_ParaFuncResu(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Result && identityOutp.Element == Parameter:
+		return generate_ResuFuncPara(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Result && identityOutp.Element == Result:
+		return generate_ResuFuncResu(file, fe, identityInp, identityOutp)
 	default:
-		panic(Sf("unhandled case: from %v, into %v", from, into))
+		panic(Sf("unhandled case: identityInp.Element %v, identityOutp.Element %v", identityInp.Element, identityOutp.Element))
 	}
 
 	return nil, ""
 }
 
-func generate_Method(file *File, fe *FETypeMethod, from Element, into Element) (*Statement, string) {
+func generate_Method(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	Receiver := ElementReceiver
 	Parameter := ElementParameter
 	Result := ElementResult
 
 	switch {
-	case from == Receiver && into == Parameter:
-		return generate_ReceMethPara(file, fe)
-	case from == Receiver && into == Result:
-		return generate_ReceMethResu(file, fe)
-	case from == Parameter && into == Receiver:
-		return generate_ParaMethRece(file, fe)
-	case from == Parameter && into == Parameter:
-		return generate_ParaMethPara(file, fe)
-	case from == Parameter && into == Result:
-		return generate_ParaMethResu(file, fe)
-	case from == Result && into == Receiver:
-		return generate_ResuMethRece(file, fe)
-	case from == Result && into == Parameter:
-		return generate_ResuMethPara(file, fe)
-	case from == Result && into == Result:
-		return generate_ResuMethResu(file, fe)
+	case identityInp.Element == Receiver && identityOutp.Element == Parameter:
+		return generate_ReceMethPara(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Receiver && identityOutp.Element == Result:
+		return generate_ReceMethResu(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Parameter && identityOutp.Element == Receiver:
+		return generate_ParaMethRece(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Parameter && identityOutp.Element == Parameter:
+		return generate_ParaMethPara(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Parameter && identityOutp.Element == Result:
+		return generate_ParaMethResu(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Result && identityOutp.Element == Receiver:
+		return generate_ResuMethRece(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Result && identityOutp.Element == Parameter:
+		return generate_ResuMethPara(file, fe, identityInp, identityOutp)
+	case identityInp.Element == Result && identityOutp.Element == Result:
+		return generate_ResuMethResu(file, fe, identityInp, identityOutp)
 	default:
-		panic(Sf("unhandled case: from %v, into %v", from, into))
+		panic(Sf("unhandled case: identityInp.Element %v,  identityOutp.Element %v", identityInp.Element, identityOutp.Element))
 	}
 
 	return nil, ""
@@ -1186,13 +1173,13 @@ func getPlaceholderFromMethod(fe *FETypeMethod, ident *CodeQlIdentity) string {
 	}
 }
 
-func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 	_ = indexIn
 
 	in := fe.Receiver
@@ -1251,13 +1238,13 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 	_ = indexIn
 
 	in := fe.Receiver
@@ -1316,13 +1303,13 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: receiver
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 	_ = indexOut
 
 	in := fe.Func.Parameters[indexIn]
@@ -1381,13 +1368,13 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Func.Parameters[indexIn]
 	out := fe.Func.Parameters[indexOut]
@@ -1448,13 +1435,13 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Func.Parameters[indexIn]
 	out := fe.Func.Results[indexOut]
@@ -1520,13 +1507,13 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: receiver
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 	_ = indexOut
 
 	in := fe.Func.Results[indexIn]
@@ -1592,13 +1579,13 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: parameter
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Func.Results[indexIn]
 	out := fe.Func.Parameters[indexOut]
@@ -1674,13 +1661,13 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ResuMethResu(file *File, fe *FETypeMethod) (*Statement, string) {
+func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: result
 	// medium: method
 	// into: result
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Func.Results[indexIn]
 	out := fe.Func.Results[indexOut]
@@ -1766,13 +1753,13 @@ func MustVarNameWithDefaultPrefix(name string, prefix string) string {
 
 	return name
 }
-func generate_ParaFuncPara(file *File, fe *FEFunc) (*Statement, string) {
+func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: param
 	// medium: func
 	// into: param
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Parameters[indexIn]
 	out := fe.Parameters[indexOut]
@@ -1832,13 +1819,13 @@ func generate_ParaFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 	return code.Line(), testFuncID
 }
 
-func generate_ParaFuncResu(file *File, fe *FEFunc) (*Statement, string) {
+func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: param
 	// medium: func
 	// into: result
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Parameters[indexIn]
 	out := fe.Results[indexOut]
@@ -1909,14 +1896,14 @@ func generate_ParaFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ResuFuncPara(file *File, fe *FEFunc) (*Statement, string) {
+func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: result
 	// medium: func
 	// into: param
 	// NOTE: does this actually happen? It needs extra steps, right?
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Results[indexIn]
 	out := fe.Parameters[indexOut]
@@ -1987,13 +1974,13 @@ func generate_ResuFuncPara(file *File, fe *FEFunc) (*Statement, string) {
 			})
 	return code.Line(), testFuncID
 }
-func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
+func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) (*Statement, string) {
 	// from: result
 	// medium: func
 	// into: result
 
-	indexIn := fe.CodeQL.Pointers.Inp.Index
-	indexOut := fe.CodeQL.Pointers.Outp.Index
+	indexIn := identityInp.Index
+	indexOut := identityOutp.Index
 
 	in := fe.Results[indexIn]
 	out := fe.Results[indexOut]
@@ -2016,9 +2003,6 @@ func generate_ResuFuncResu(file *File, fe *FEFunc) (*Statement, string) {
 
 				groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
-
-				groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
-				groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
 				importPackage(file, out.PkgPath, out.PkgName)
 
 				groupCase.
@@ -2419,7 +2403,6 @@ type PayloadDisable struct {
 type PayloadSetPointers struct {
 	Signature string
 	Blocks    []*FlowBlock
-	Pointers  *CodeQLPointers
 }
 
 //
@@ -2427,12 +2410,10 @@ func (req *PayloadSetPointers) Validate() error {
 	if req.Signature == "" {
 		return errors.New("req.Signature is not set")
 	}
-	if req.Pointers == nil {
-		return errors.New("req.Pointers is not set")
-	}
-
-	if err := req.Pointers.Validate(); err != nil {
-		return err
+	if err := validateBlocksAreActive(req.Blocks...); err != nil {
+		return fmt.Errorf(
+			"error validating block: %s", err,
+		)
 	}
 
 	return nil
@@ -2499,28 +2480,59 @@ func IsValidElementName(name Element) bool {
 }
 
 func NewCodeQlFinalVals() *CodeQlFinalVals {
-	return &CodeQlFinalVals{
-		Pointers: &CodeQLPointers{
-			Inp: &CodeQlIdentity{
-				Placeholder: TODO,
-				Identity: Identity{
-					Element: TODO,
-					Index:   -1,
-				},
-			},
-			Outp: &CodeQlIdentity{
-				Placeholder: TODO,
-				Identity: Identity{
-					Element: TODO,
-					Index:   -1,
-				},
-			},
-		},
+	return &CodeQlFinalVals{}
+}
+func (obj *CodeQlFinalVals) Validate() error {
+	if obj.Blocks == nil || len(obj.Blocks) == 0 {
+		return errors.New("obj.Blocks is not set")
 	}
+	if err := validateBlocksAreActive(obj.Blocks...); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func validateBlocksAreActive(blocks ...*FlowBlock) error {
+	if len(blocks) == 0 {
+		return errors.New("no blocks provided")
+	}
+	for blockIndex, block := range blocks {
+		if AllFalse(block.Inp...) {
+			return fmt.Errorf("error: Inp of block %v is all false", blockIndex)
+		}
+		if AllFalse(block.Outp...) {
+			return fmt.Errorf("error: Outp of block %v is all false", blockIndex)
+		}
+	}
+	return nil
 }
 
 type CodeQlFinalVals struct {
-	Blocks    []*FlowBlock
+	// Generated generated contains the generated class:
+	GeneratedClass string
+	// GeneratedConditions contains the generated conditions of the flow:
+	GeneratedConditions string
+	Blocks              []*FlowBlock
+	IsEnabled           bool
+	//Pointers            *CodeQLPointers // Pointers is where the current pointers will be stored
+}
+
+type DEPRECATEDFEModule struct {
+	Funcs            []*DEPRECATEDFEFunc
+	TypeMethods      []*DEPRECATEDFETypeMethod
+	InterfaceMethods []*DEPRECATEDFETypeMethod
+}
+
+type DEPRECATEDFEFunc struct {
+	CodeQL    *DEPRECATEDCodeQlFinalVals
+	Signature string
+}
+type DEPRECATEDFETypeMethod struct {
+	CodeQL *DEPRECATEDCodeQlFinalVals
+	Func   *DEPRECATEDFEFunc
+}
+type DEPRECATEDCodeQlFinalVals struct {
 	IsEnabled bool
 	Pointers  *CodeQLPointers // Pointers is where the current pointers will be stored
 }
@@ -2969,20 +2981,32 @@ func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (
 	}
 	return finalBuf.String(), nil
 }
+
+func validateBlockLen_FEFunc(fn *FEFunc, blocks ...*FlowBlock) error {
+	for blockIndex, block := range blocks {
+		// check width:
+		lenParameters := len(fn.Parameters)
+		lenResults := len(fn.Results)
+		totalWidth := lenParameters + lenResults
+
+		if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
+			return fmt.Errorf("block %v: .Inp has wrong len: %v", blockIndex, blockInpLen)
+		}
+		if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
+			return fmt.Errorf("block %v: .Outp has wrong len: %v", blockIndex, blockOutpLen)
+		}
+	}
+
+	return nil
+}
+
 func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 
-	// check width:
 	lenParameters := len(fn.Parameters)
-	lenResults := len(fn.Results)
-	totalWidth := lenParameters + lenResults
 
-	if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
-		return nil, nil, fmt.Errorf("block.Inp has wrong len: %v", blockInpLen)
+	if err := validateBlockLen_FEFunc(fn, block); err != nil {
+		return nil, nil, err
 	}
-	if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
-		return nil, nil, fmt.Errorf("block.Outp has wrong len: %v", blockOutpLen)
-	}
-
 	identitiesInp := make([]*CodeQlIdentity, 0)
 	for index, v := range block.Inp {
 		if v == false {
@@ -3017,19 +3041,32 @@ func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*C
 
 	return identitiesInp, identitiesOutp, nil
 }
-func getIdentities_FEMethod(fn *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 
-	// check width:
-	lenReceiver := 1
-	lenParameters := len(fn.Func.Parameters)
-	lenResults := len(fn.Func.Results)
-	totalWidth := lenReceiver + lenParameters + lenResults
+func validateBlockLen_FEMethod(fn *FETypeMethod, blocks ...*FlowBlock) error {
+	for blockIndex, block := range blocks {
+		// check width:
+		lenReceiver := 1
+		lenParameters := len(fn.Func.Parameters)
+		lenResults := len(fn.Func.Results)
+		totalWidth := lenReceiver + lenParameters + lenResults
 
-	if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
-		return nil, nil, fmt.Errorf("block.Inp has wrong len: %v", blockInpLen)
+		if blockInpLen := len(block.Inp); blockInpLen != totalWidth {
+			return fmt.Errorf("block %v: .Inp has wrong len: %v", blockIndex, blockInpLen)
+		}
+		if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
+			return fmt.Errorf("block %v: .Outp has wrong len: %v", blockIndex, blockOutpLen)
+		}
+
 	}
-	if blockOutpLen := len(block.Outp); blockOutpLen != totalWidth {
-		return nil, nil, fmt.Errorf("block.Outp has wrong len: %v", blockOutpLen)
+
+	return nil
+}
+func getIdentities_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+
+	lenParameters := len(fe.Func.Parameters)
+
+	if err := validateBlockLen_FEMethod(fe, block); err != nil {
+		return nil, nil, err
 	}
 
 	identitiesInp := make([]*CodeQlIdentity, 0)
@@ -3039,17 +3076,17 @@ func getIdentities_FEMethod(fn *FETypeMethod, block *FlowBlock) ([]*CodeQlIdenti
 		}
 		if index == 0 {
 			// get identity from receiver:
-			id := fn.Receiver.Identity
+			id := fe.Receiver.Identity
 			identitiesInp = append(identitiesInp, &id)
 		}
 		if index > 0 && index <= lenParameters {
 			// get identity from parameters:
-			id := fn.Func.Parameters[index-1].Identity
+			id := fe.Func.Parameters[index-1].Identity
 			identitiesInp = append(identitiesInp, &id)
 		}
 		if index > lenParameters {
 			// get identity from results:
-			id := fn.Func.Results[index-lenParameters-1].Identity
+			id := fe.Func.Results[index-lenParameters-1].Identity
 			identitiesInp = append(identitiesInp, &id)
 		}
 	}
@@ -3061,20 +3098,48 @@ func getIdentities_FEMethod(fn *FETypeMethod, block *FlowBlock) ([]*CodeQlIdenti
 		}
 		if index == 0 {
 			// get identity from receiver:
-			id := fn.Receiver.Identity
+			id := fe.Receiver.Identity
 			identitiesOutp = append(identitiesOutp, &id)
 		}
 		if index > 0 && index <= lenParameters {
 			// get identity from parameters:
-			id := fn.Func.Parameters[index-1].Identity
+			id := fe.Func.Parameters[index-1].Identity
 			identitiesOutp = append(identitiesOutp, &id)
 		}
 		if index > lenParameters {
 			// get identity from results:
-			id := fn.Func.Results[index-lenParameters-1].Identity
+			id := fe.Func.Results[index-lenParameters-1].Identity
 			identitiesOutp = append(identitiesOutp, &id)
 		}
 	}
 
 	return identitiesInp, identitiesOutp, nil
+}
+func mustGetFirstIdentity_Inp_FEFunc(fn *FEFunc) *CodeQlIdentity {
+	inp, _, err := getIdentities_FEFunc(fn, fn.CodeQL.Blocks[0])
+	if err != nil {
+		panic(err)
+	}
+	return inp[0]
+}
+func mustGetFirstIdentity_Outp_FEFunc(fn *FEFunc) *CodeQlIdentity {
+	_, outp, err := getIdentities_FEFunc(fn, fn.CodeQL.Blocks[0])
+	if err != nil {
+		panic(err)
+	}
+	return outp[0]
+}
+func mustGetFirstIdentity_Inp_FEMethod(fn *FETypeMethod) *CodeQlIdentity {
+	inp, _, err := getIdentities_FEMethod(fn, fn.CodeQL.Blocks[0])
+	if err != nil {
+		panic(err)
+	}
+	return inp[0]
+}
+func mustGetFirstIdentity_Outp_FEMethod(fn *FETypeMethod) *CodeQlIdentity {
+	_, outp, err := getIdentities_FEMethod(fn, fn.CodeQL.Blocks[0])
+	if err != nil {
+		panic(err)
+	}
+	return outp[0]
 }
