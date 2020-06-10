@@ -481,7 +481,7 @@ func main() {
 				}
 			}
 			Infof("Saving cache to %q", MustAbs(cacheFilepath))
-			err := SaveAsJSON(cacheMap, cacheFilepath)
+			err := SaveAsIndentedJSON(cacheMap, cacheFilepath)
 			if err != nil {
 				panic(err)
 			}
