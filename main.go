@@ -23,6 +23,8 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
+type CacheType map[string]*CodeQlFinalVals
+
 var (
 	mu = &sync.RWMutex{}
 )
@@ -249,16 +251,19 @@ func main() {
 		}).([]*FEInterfaceMethod)
 	}
 
+	cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".v2.json")
+	cacheExists := MustFileExists(cacheFilepath)
 	{
-		// try to use cache:
-		cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
-		cacheExists := MustFileExists(cacheFilepath)
+		// try to use DEPRECATED cache:
+		deprecatedCacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
+		deprecatedCacheExists := MustFileExists(deprecatedCacheFilepath)
 
-		if cacheExists {
+		canLoadFromDeprecatedCache := !cacheExists && deprecatedCacheExists
+		if canLoadFromDeprecatedCache {
 			tempDeprecatedFeModule := &DEPRECATEDFEModule{}
 			// Load cache:
-			Infof("Loading cached feModule from %q", cacheFilepath)
-			err := LoadJSON(tempDeprecatedFeModule, cacheFilepath)
+			Infof("Loading cached feModule from %q", deprecatedCacheFilepath)
+			err := LoadJSON(tempDeprecatedFeModule, deprecatedCacheFilepath)
 			if err != nil {
 				panic(err)
 			}
@@ -431,6 +436,73 @@ func main() {
 		}
 	}
 
+	{
+		// try to use v2 cache:
+		if cacheExists {
+			cachedMap := make(CacheType)
+			// Load cache:
+			Infof("Loading cached feModule from %q", cacheFilepath)
+			err := LoadJSON(&cachedMap, cacheFilepath)
+			if err != nil {
+				panic(err)
+			}
+
+			findLatestFunc := func(signature string) *FEFunc {
+				for _, latest := range feModule.Funcs {
+					if latest.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+			findLatestTypeMethod := func(signature string) *FETypeMethod {
+				for _, latest := range feModule.TypeMethods {
+					if latest.Func.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+			findLatestInterfaceMethod := func(signature string) *FEInterfaceMethod {
+				for _, latest := range feModule.InterfaceMethods {
+					if latest.Func.Signature == signature {
+						return latest
+					}
+				}
+				return nil
+			}
+
+			// NOTE: we are searching all-to-some, so there will be a lot of "not found" messages here:
+			for signature, cached := range cachedMap {
+				latest := findLatestFunc(signature)
+				if latest == nil {
+					Warnf("latest FEFunc not found for signature %q", signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached
+				}
+			}
+			for signature, cached := range cachedMap {
+				latest := findLatestTypeMethod(signature)
+				if latest == nil {
+					Warnf("latest FETypeMethod not found for signature %q", signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached
+				}
+			}
+			for signature, cached := range cachedMap {
+				latest := findLatestInterfaceMethod(signature)
+				if latest == nil {
+					Warnf("latest FEInterfaceMethod not found for signature %q", signature)
+				} else {
+					// Copy CodeQL object:
+					latest.CodeQL = cached
+				}
+			}
+		}
+	}
+
 	//Q(feModule)
 	lenFuncs := len(feModule.Funcs)
 	lenTypeMethods := len(feModule.TypeMethods)
@@ -468,7 +540,7 @@ func main() {
 		{
 			// Save cache:
 			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".v2.json")
-			cacheMap := make(map[string]*CodeQlFinalVals)
+			cacheMap := make(CacheType)
 			{
 				for _, v := range feModule.Funcs {
 					cacheMap[v.Signature] = v.CodeQL
