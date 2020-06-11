@@ -578,7 +578,6 @@ func main() {
 					mustGetFirstIdentity_Outp_FEFunc(fe),
 				)
 				if code != nil {
-					// TODO: save `code` inside `fe` (add all to the file only at program exit).
 					file.Add(code.Line())
 					testFuncNames = append(testFuncNames, testFuncName)
 				} else {
@@ -602,7 +601,6 @@ func main() {
 					mustGetFirstIdentity_Outp_FEMethod(fe),
 				)
 				if code != nil {
-					// TODO: save `code` inside `fe` (add all to the file only at program exit).
 					file.Add(code.Line())
 					testFuncNames = append(testFuncNames, testFuncName)
 				} else {
@@ -627,7 +625,6 @@ func main() {
 					mustGetFirstIdentity_Outp_FEMethod(converted),
 				)
 				if code != nil {
-					// TODO: save `code` inside `fe` (add all to the file only at program exit).
 					file.Add(code.Line())
 					testFuncNames = append(testFuncNames, testFuncName)
 				} else {
@@ -941,7 +938,6 @@ import go` + "\n\n"
 							mustGetFirstIdentity_Outp_FEMethod(fe),
 						)
 						if code != nil {
-							// TODO: save `code` inside `fe` (add all to the file only at program exit).
 							file.Add(code.Line())
 						} else {
 							Warnf("NOTHING GENERATED")
@@ -2613,8 +2609,9 @@ type DEPRECATEDCodeQlFinalVals struct {
 }
 
 type Identity struct {
-	Element Element
-	Index   int
+	Element    Element
+	Index      int
+	IsVariadic bool
 }
 type CodeQlIdentity struct {
 	Placeholder string
@@ -2689,8 +2686,9 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 		v.Identity = CodeQlIdentity{
 			Placeholder: placeholder,
 			Identity: Identity{
-				Element: ElementParameter,
-				Index:   i,
+				Element:    ElementParameter,
+				Index:      i,
+				IsVariadic: v.IsVariadic,
 			},
 		}
 		fe.Parameters = append(fe.Parameters, v)
@@ -2698,22 +2696,17 @@ func getFEFunc(fn *scanner.Func) *FEFunc {
 	for i, out := range fn.Output {
 		v := getFEType(out)
 
+		placeholder := Sf("isResult(%v)", i)
 		if len(fn.Output) == 1 {
-			v.Identity = CodeQlIdentity{
-				Placeholder: "isResult()",
-				Identity: Identity{
-					Element: ElementResult,
-					Index:   i,
-				},
-			}
-		} else {
-			v.Identity = CodeQlIdentity{
-				Placeholder: Sf("isResult(%v)", i),
-				Identity: Identity{
-					Element: ElementResult,
-					Index:   i,
-				},
-			}
+			placeholder = "isResult()"
+		}
+		v.Identity = CodeQlIdentity{
+			Placeholder: placeholder,
+			Identity: Identity{
+				Element:    ElementResult,
+				Index:      i,
+				IsVariadic: v.IsVariadic,
+			},
 		}
 		fe.Results = append(fe.Results, v)
 	}
@@ -2988,7 +2981,8 @@ type FlowBlock struct {
 type IdentityGetter func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error)
 
 func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, blocks []*FlowBlock) (string, error) {
-	return generateCodeQLFlowCondition(
+	return generateCodeQLFlowCondition_V2(
+		fn,
 		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 			return getIdentities_FEFunc(fn, block)
 		},
@@ -2996,12 +2990,26 @@ func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, blocks []*FlowBlock) (strin
 	)
 }
 func generateCodeQLFlowConditions_FEMethod(fn *FETypeMethod, blocks []*FlowBlock) (string, error) {
-	return generateCodeQLFlowCondition(
+	return generateCodeQLFlowCondition_V2(
+		fn.Func,
 		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 			return getIdentities_FEMethod(fn, block)
 		},
 		blocks,
 	)
+}
+func gatherIdentitiesPerType(ids []*CodeQlIdentity) (recv *CodeQlIdentity, params []*CodeQlIdentity, results []*CodeQlIdentity) {
+	for _, id := range ids {
+		switch id.Element {
+		case ElementReceiver:
+			recv = id
+		case ElementParameter:
+			params = append(params, id)
+		case ElementResult:
+			results = append(results, id)
+		}
+	}
+	return
 }
 func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
 	finalBuf := new(bytes.Buffer)
@@ -3018,7 +3026,7 @@ func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (
 		}
 
 		buf := new(bytes.Buffer)
-		{
+		{ //inp:
 			buf.WriteString("(")
 			for i, in := range inp {
 				// TODO: add logic to do things like inp.isParameter([0,1,3])
@@ -3033,7 +3041,7 @@ func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (
 		}
 
 		buf.WriteString(" and ")
-		{
+		{ // outp:
 			buf.WriteString("(")
 			for i, out := range outp {
 				if i == 0 {
@@ -3043,6 +3051,174 @@ func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (
 					buf.WriteString("outp." + out.Placeholder)
 				}
 			}
+			buf.WriteString(")")
+		}
+
+		// write to finalBuf
+		if blockIndex > 0 {
+			finalBuf.WriteString("\nor\n")
+		}
+		finalBuf.WriteString("(")
+		buf.WriteTo(finalBuf)
+		finalBuf.WriteString(")")
+	}
+	return finalBuf.String(), nil
+}
+func generateCodeQLFlowCondition_V2(fn *FEFunc, idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
+	finalBuf := new(bytes.Buffer)
+	for blockIndex, block := range blocks {
+		inp, outp, err := idGetter(block)
+		if err != nil {
+			return "", err
+		}
+		if len(inp) == 0 {
+			return "", fmt.Errorf("error: no inp specified for block %v", blockIndex)
+		}
+		if len(outp) == 0 {
+			return "", fmt.Errorf("error: no outp specified for block %v", blockIndex)
+		}
+
+		buf := new(bytes.Buffer)
+		{ //inp:
+			buf.WriteString("(")
+
+			recv, params, results := gatherIdentitiesPerType(inp)
+
+			{ // recv:
+				if recv != nil {
+					buf.WriteString("inp." + recv.Placeholder)
+				}
+			}
+
+			if len(params) > 0 {
+				if recv != nil {
+					buf.WriteString(" or ")
+				}
+				if len(params) == len(fn.Parameters) {
+					if len(params) == 1 {
+						if params[0].IsVariadic {
+							buf.WriteString("inp.isParameter(_)")
+						} else {
+							buf.WriteString(Sf("inp.isParameter(%v)", params[0].Index))
+						}
+					} else {
+						buf.WriteString("inp.isParameter(_)")
+					}
+				} else {
+					if len(params) == 1 {
+						if params[0].IsVariadic {
+							buf.WriteString(Sf("inp.isParameter(%v)", Sf("any(int i | i >= %v)", params[0].Index)))
+						} else {
+							buf.WriteString(Sf("inp.isParameter(%v)", params[0].Index))
+						}
+					} else {
+						paramsBuf := make([]string, 0)
+						for _, param := range params {
+							if param.IsVariadic {
+								paramsBuf = append(paramsBuf, Sf("any(int i | i >= %v)", param.Index))
+							} else {
+								paramsBuf = append(paramsBuf, Itoa(param.Index))
+							}
+						}
+						buf.WriteString(Sf("inp.isParameter([%s])", strings.Join(paramsBuf, ", ")))
+					}
+				}
+			}
+			if len(results) > 0 {
+				if recv != nil || len(params) > 0 {
+					buf.WriteString(" or ")
+				}
+				if len(results) == len(fn.Results) {
+					if len(results) == 1 {
+						buf.WriteString("inp.isResult()")
+					} else {
+						buf.WriteString("inp.isResult(_)")
+					}
+				} else {
+					if len(results) == 1 {
+						buf.WriteString(Sf("inp.isResult(%v)", results[0].Index))
+					} else {
+						resultsBuf := make([]string, 0)
+						for _, param := range results {
+							resultsBuf = append(resultsBuf, Itoa(param.Index))
+						}
+						buf.WriteString(Sf("inp.isResult([%s])", strings.Join(resultsBuf, ", ")))
+					}
+				}
+			}
+
+			buf.WriteString(")")
+		}
+
+		buf.WriteString(" and ")
+		{ // outp:
+			buf.WriteString("(")
+
+			recv, params, results := gatherIdentitiesPerType(outp)
+
+			{ // recv:
+				if recv != nil {
+					buf.WriteString("outp." + recv.Placeholder)
+				}
+			}
+
+			if len(params) > 0 {
+				if recv != nil {
+					buf.WriteString(" or ")
+				}
+				if len(params) == len(fn.Parameters) {
+					if len(params) == 1 {
+						if params[0].IsVariadic {
+							buf.WriteString("outp.isParameter(_)")
+						} else {
+							buf.WriteString(Sf("outp.isParameter(%v)", params[0].Index))
+						}
+					} else {
+						buf.WriteString("outp.isParameter(_)")
+					}
+				} else {
+					if len(params) == 1 {
+						if params[0].IsVariadic {
+							buf.WriteString(Sf("outp.isParameter(%v)", Sf("any(int i | i >= %v)", params[0].Index)))
+						} else {
+							buf.WriteString(Sf("outp.isParameter(%v)", params[0].Index))
+						}
+					} else {
+						paramsBuf := make([]string, 0)
+						for _, param := range params {
+							if param.IsVariadic {
+								paramsBuf = append(paramsBuf, Sf("any(int i | i >= %v)", param.Index))
+							} else {
+								paramsBuf = append(paramsBuf, Itoa(param.Index))
+							}
+						}
+						buf.WriteString(Sf("outp.isParameter([%s])", strings.Join(paramsBuf, ", ")))
+					}
+				}
+			}
+			if len(results) > 0 {
+				if recv != nil || len(params) > 0 {
+					buf.WriteString(" or ")
+				}
+				if len(results) == len(fn.Results) {
+					if len(results) == 1 {
+						buf.WriteString("outp.isResult()")
+					} else {
+						buf.WriteString("outp.isResult(_)")
+					}
+				} else {
+					if len(results) == 1 {
+						buf.WriteString(Sf("outp.isResult(%v)", results[0].Index))
+					} else {
+						resultsBuf := make([]string, 0)
+						for _, param := range results {
+							resultsBuf = append(resultsBuf, Itoa(param.Index))
+						}
+						buf.WriteString(Sf("outp.isResult([%s])", strings.Join(resultsBuf, ", ")))
+					}
+				}
+			}
+
 			buf.WriteString(")")
 		}
 
