@@ -139,8 +139,8 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 // - don't extend name changes to the frontend (new names must stay per-generation only)
 //OK- make sure vars and package name are not the same
 //OK- add api to "enable" without having to modify pointers.
-// - Zero value of variadic string parameters is not nil: Options(opts ...string)
-// - TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
+//OK- Zero value of variadic string parameters is not nil: Options(opts ...string)
+//OK- TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
 //OK- unsafe.Pointer in type assertion
 func main() {
 	var pkg string
@@ -2000,7 +2000,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
 
 				groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
-				groupCase.Var().Id(out.VarName).Qual(out.PkgPath, out.TypeName)
+				composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
 				importPackage(file, out.PkgPath, out.PkgName)
 
 				groupCase.
