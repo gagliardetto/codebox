@@ -518,6 +518,7 @@ func scanFunc(fn *Func, signature *types.Signature) *Func {
 	}
 
 	fn.SetType(signature)
+	fn.SetIsVariadic(signature.Variadic())
 
 	fn.Input = scanTuple(signature.Params(), signature.Variadic())
 	fn.Output = scanTuple(signature.Results(), false)

@@ -111,3 +111,8 @@ func (st *SomeType) TypePtrMethod(b bool) string {
 func (st SomeType) TypeValueMethod(b *bool) string {
 	return ""
 }
+
+// variadic function
+func Options(opts ...string) (string, string) {
+	return "", ""
+}

@@ -136,12 +136,12 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 //OK- reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
 // - make sure that varInName and varOutName are not the same.
-// - make sure vars and package name are not the same
 // - don't extend name changes to the frontend (new names must stay per-generation only)
+//OK- make sure vars and package name are not the same
 //OK- add api to "enable" without having to modify pointers.
 // - Zero value of variadic string parameters is not nil: Options(opts ...string)
 // - TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
-// - unsafe.Pointer in type assertion
+//OK- unsafe.Pointer in type assertion
 func main() {
 	var pkg string
 	var runServer bool
@@ -1291,7 +1291,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexOut
@@ -1361,7 +1361,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for _, zero := range zeroVals {
 							call.Add(zero)
@@ -1421,7 +1421,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexIn
@@ -1488,7 +1488,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexIn || i == indexOut
@@ -1560,7 +1560,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexIn
@@ -1629,7 +1629,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for _, zero := range zeroVals {
 							call.Add(zero)
@@ -1707,7 +1707,7 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexOut
@@ -1790,7 +1790,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 						tpFun := fe.Func.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
 
 						for _, zero := range zeroVals {
 							call.Add(zero)
@@ -1870,7 +1870,7 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 						tpFun := fe.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexIn || i == indexOut
@@ -1949,7 +1949,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 						tpFun := fe.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexIn
@@ -2019,7 +2019,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 						tpFun := fe.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
 
 						for i, zero := range zeroVals {
 							isConsidered := i == indexOut
@@ -2098,7 +2098,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 						tpFun := fe.original.GetType().(*types.Signature)
 
-						zeroVals := scanTupleOfZeroValues(file, tpFun.Params())
+						zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
 
 						for _, zero := range zeroVals {
 							call.Add(zero)
@@ -2121,17 +2121,20 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 	return code.Line(), testFuncID
 }
 
-func scanTupleOfZeroValues(file *File, tuple *types.Tuple) []Code {
+func scanTupleOfZeroValues(file *File, tuple *types.Tuple, isVariadic bool) []Code {
 
 	result := make([]Code, 0)
 
 	for i := 0; i < tuple.Len(); i++ {
 		tp := newStatement()
 
-		if tp != nil {
+		isLast := i == tuple.Len()-1
+		if isLast && isVariadic {
+			composeZeroDeclaration(file, tp, tuple.At(i).Type().(*types.Slice).Elem())
+		} else {
 			composeZeroDeclaration(file, tp, tuple.At(i).Type())
-			result = append(result, tp)
 		}
+		result = append(result, tp)
 	}
 
 	return result
