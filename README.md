@@ -32,7 +32,7 @@ codeql test run \
 
 #for f in *.qll; do printf '%s\n' "${f%.qll}TaintTracking.qll"; done
 
-rename 's/\.qll$/TaintTracking.qll/' *qll
+rename 's/\.qll$/TaintTracking.qll/' *.qll
 
 # format a codeql file:
 codeql query format -qq -i file.qll

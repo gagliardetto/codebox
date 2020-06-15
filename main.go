@@ -718,7 +718,7 @@ import go` + "\n\n"
 			}
 
 			// Save codeql assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
+			assetFileName := FormatCodeQlName(feModule.PkgPath) + "TaintTracking" + ".qll"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file qll file:
@@ -1234,10 +1234,10 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original)
+			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
 
 			groupCase.
 				Line().Comment("Call the method that transfers the taint").
@@ -1293,7 +1293,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original)
+			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
 
 			groupCase.
 				Line().Comment("Call the method that transfers the taint").
@@ -1352,10 +1352,10 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original)
+			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
 
 			groupCase.
 				Line().Comment("Call the method that transfers the taint").
@@ -1410,10 +1410,10 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
 
 			groupCase.Line().Comment("Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1471,7 +1471,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment("Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1538,10 +1538,10 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original)
+			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
 
 			groupCase.
 				Line().Comment("Call the method that will transfer the taint").
@@ -1603,10 +1603,10 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
 
 			groupCase.Line().Comment("Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1695,7 +1695,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment("Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1784,10 +1784,10 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
 
 			groupCase.
 				Line().Comment("Call the function that transfers the taint").
@@ -1844,18 +1844,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			if in.original.IsVariadic() {
-				switch singleType := in.original.GetType().(type) {
-				case *types.Slice:
-					composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
-				case *types.Array:
-					composeTypeAssertion(file, groupCase, in.VarName, singleType.Elem())
-				default:
-					panic(Sf("unknown variadic type %v", in.original))
-				}
-			} else {
-				composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
-			}
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.
 				Line().Comment("Call the function that transfers the taint").
@@ -1916,10 +1905,10 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 
 			groupCase.Line().Comment(Sf("Declare `%s` variable:", out.VarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType())
+			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
 			importPackage(file, out.PkgPath, out.PkgName)
 
 			groupCase.
@@ -1987,7 +1976,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			groupCase.Comment(Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
 
 			groupCase.Comment(Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType())
+			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
 			importPackage(file, out.PkgPath, out.PkgName)
 
 			groupCase.
@@ -2202,15 +2191,23 @@ func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 }
 
 // declare `name := sourceCQL.(Type)`
-func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type) {
+func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
 	assertContent := newStatement()
-	composeTypeDeclaration(file, assertContent, typ)
+	if isVariadic {
+		composeTypeDeclaration(file, assertContent, typ.(*types.Slice).Elem())
+	} else {
+		composeTypeDeclaration(file, assertContent, typ)
+	}
 	group.Id(varName).Op(":=").Id("sourceCQL").Assert(assertContent)
 }
 
 // declare `var name Type`
-func composeVarDeclaration(file *File, group *Group, varName string, typ types.Type) {
-	composeTypeDeclaration(file, group.Var().Id(varName), typ)
+func composeVarDeclaration(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
+	if isVariadic {
+		composeTypeDeclaration(file, group.Var().Id(varName), typ.(*types.Slice).Elem())
+	} else {
+		composeTypeDeclaration(file, group.Var().Id(varName), typ)
+	}
 }
 func newStatement() *Statement {
 	return &Statement{}
