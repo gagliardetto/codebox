@@ -135,8 +135,8 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 // TODO:
 //OK- reject invalid cases (e.g. from receiver to receiver)
 // - look for name collisions
-// - make sure that varInName and varOutName are not the same.
-// - don't extend name changes to the frontend (new names must stay per-generation only)
+//OK- make sure that varInName and varOutName are not the same.
+//OK- don't extend name changes to the frontend (new names must stay per-generation only)
 //OK- make sure vars and package name are not the same
 //OK- add api to "enable" without having to modify pointers.
 //OK- Zero value of variadic string parameters is not nil: Options(opts ...string)
