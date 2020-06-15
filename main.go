@@ -152,12 +152,12 @@ func main() {
 	var toStdout bool
 	var includeBoilerplace bool
 
-	flag.StringVar(&pkg, "pkg", "", "package you want to scan (relative to $GOPATH)")
-	flag.StringVar(&cacheDir, "cache-dir", "./cache", "folder that contains cache of scanned packages and set pointers")
-	flag.StringVar(&generatedDir, "out-dir", "./generated", "folder that contains the generated assets (each run has its own timestamped folder)")
-	flag.BoolVar(&runServer, "http", false, "run http server")
-	flag.BoolVar(&toStdout, "stdout", false, "print generated to stdout")
-	flag.BoolVar(&includeBoilerplace, "boilerplate", true, "include in go test files the utility functions (main, sink, link, etc.)")
+	flag.StringVar(&pkg, "pkg", "", "Package you want to scan (absolute path)")
+	flag.StringVar(&cacheDir, "cache-dir", "./cache", "Folder that contains cache of scanned packages and set pointers")
+	flag.StringVar(&generatedDir, "out-dir", "./generated", "Folder that contains the generated assets (each run has its own timestamped folder)")
+	flag.BoolVar(&runServer, "http", false, "Run http server")
+	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
+	flag.BoolVar(&includeBoilerplace, "boilerplate", false, "Include in go test files the utility functions (main, sink, link, etc.)")
 	flag.Parse()
 
 	// One package at a time:
