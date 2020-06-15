@@ -840,7 +840,6 @@ import go` + "\n\n"
 				return
 			}
 
-			file := NewTestFile(includeBoilerplace)
 			switch stored.original.(type) {
 			case *FEFunc:
 				{
@@ -868,21 +867,7 @@ import go` + "\n\n"
 						}
 						Ln(generatedCodeql)
 
-						allCode := generateAll_Func(
-							file,
-							fe,
-						)
-						for _, codeEnvelope := range allCode {
-							if codeEnvelope.Statement != nil {
-								file.Add(codeEnvelope.Statement.Line())
-							} else {
-								Warnf("NOTHING GENERATED")
-							}
-						}
 						{
-							if toStdout {
-								fmt.Printf("%#v", file)
-							}
 							c.IndentedJSON(
 								200,
 								GeneratedClassResponse{
@@ -931,22 +916,7 @@ import go` + "\n\n"
 
 						Ln(generatedCodeql)
 
-						allCode := generateAll_Method(
-							file,
-							fe,
-						)
-						for _, codeEnvelope := range allCode {
-							if codeEnvelope.Statement != nil {
-								file.Add(codeEnvelope.Statement.Line())
-							} else {
-								Warnf("NOTHING GENERATED")
-							}
-						}
-
 						{
-							if toStdout {
-								fmt.Printf("%#v", file)
-							}
 							c.IndentedJSON(
 								200,
 								GeneratedClassResponse{
