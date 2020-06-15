@@ -261,9 +261,9 @@
                                     </tbody>
                                 </table>
                                 <hr />
-                                <div class="text-center" v-if="blockIndex == func.CodeQL.Blocks.length - 1">
-                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(func)" :disabled="!func.CodeQL.IsEnabled">Add "OR" </button>
-                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, func)" :disabled="!func.CodeQL.IsEnabled"> Remove block </button>
+                                <div class="text-center">
+                                    <button type="button" v-if="blockIndex == func.CodeQL.Blocks.length - 1" class="btn btn-outline-dark btn-sm" @click="addBlock(func)" :disabled="!func.CodeQL.IsEnabled">Add "OR" </button>
+                                    <button type="button" v-if="func.CodeQL.Blocks.length > 1" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, func)" :disabled="!func.CodeQL.IsEnabled"> Remove block </button>
                                 </div>
                             </div>
                             <div class="text-center" v-if="func.CodeQL.Blocks.length > 0 && blockIndex != func.CodeQL.Blocks.length - 1">
@@ -354,14 +354,14 @@
                                     </tbody>
                                 </table>
                                 <hr />
-                                <div class="text-center" v-if="blockIndex == method.CodeQL.Blocks.length - 1">
-                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(method)" :disabled="!method.CodeQL.IsEnabled">Add "OR"</button>
-                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, method)" :disabled="!method.CodeQL.IsEnabled"> Remove block </button>
+                                <div class="text-center">
+                                    <button type="button" v-if="blockIndex == method.CodeQL.Blocks.length - 1" class="btn btn-outline-dark btn-sm" @click="addBlock(method)" :disabled="!method.CodeQL.IsEnabled">Add "OR"</button>
+                                    <button type="button" v-if="method.CodeQL.Blocks.length > 1" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, method)" :disabled="!method.CodeQL.IsEnabled"> Remove block </button>
                                 </div>
+                            </div>
                                 <div class="text-center" v-if="method.CodeQL.Blocks.length > 0 && blockIndex != method.CodeQL.Blocks.length - 1">
                                     <span><b>OR</b></span>
                                 </div>
-                            </div>
                         </template>
                     </div>
                 </div>
@@ -447,14 +447,14 @@
                                     </tbody>
                                 </table>
                                 <hr />
-                                <div class="text-center" v-if="blockIndex == itMeth.CodeQL.Blocks.length - 1">
-                                    <button type="button" class="btn btn-outline-dark btn-sm" @click="addBlock(itMeth)" :disabled="!itMeth.CodeQL.IsEnabled">Add "OR"</button>
-                                    <button type="button" v-if="blockIndex != 0" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled"> Remove block </button>
+                                <div class="text-center">
+                                    <button type="button" v-if="blockIndex == itMeth.CodeQL.Blocks.length - 1" class="btn btn-outline-dark btn-sm" @click="addBlock(itMeth)" :disabled="!itMeth.CodeQL.IsEnabled">Add "OR"</button>
+                                    <button type="button" v-if="itMeth.CodeQL.Blocks.length > 1" class="btn btn-danger btn-sm" @click="removeBlock(blockIndex, itMeth)" :disabled="!itMeth.CodeQL.IsEnabled"> Remove block </button>
                                 </div>
+                            </div>
                                 <div class="text-center" v-if="itMeth.CodeQL.Blocks.length > 0 && blockIndex != itMeth.CodeQL.Blocks.length - 1">
                                     <span><b>OR</b></span>
                                 </div>
-                            </div>
                         </template>
                     </div>
                 </div>
