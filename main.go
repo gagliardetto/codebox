@@ -2684,7 +2684,6 @@ type FEType struct {
 	IsVariadic    bool
 	IsNullable    bool
 	IsStruct      bool
-	IsRepeated    bool
 	TypeString    string
 	original      scanner.Type
 }
@@ -2701,9 +2700,7 @@ func getFEType(tp scanner.Type) *FEType {
 	fe.IsPtr = tp.IsPtr()
 	fe.IsStruct = tp.IsStruct()
 	fe.IsBasic = tp.IsBasic()
-	fe.IsRepeated = tp.IsRepeated()
 	if tp.IsVariadic() {
-		// TODO: calculate from here the IsRepeated?
 		fe.TypeString = "..." + tp.GetType().(*types.Slice).Elem().String()
 	} else {
 		fe.TypeString = tp.GetType().String()

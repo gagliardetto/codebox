@@ -58,8 +58,6 @@ func containsString(arr []string, s string) bool {
 // All types can be repeated (or not).
 type Type interface {
 	fmt.Stringer
-	SetRepeated(bool)
-	IsRepeated() bool
 
 	SetNullable(bool)
 	IsNullable() bool
@@ -121,9 +119,6 @@ func (t *BaseType) SetTypesVar(v *types.Var) { t.TypesVar = v }
 
 func (t *BaseType) GetType() types.Type  { return t.Type }
 func (t *BaseType) SetType(v types.Type) { t.Type = v }
-
-// IsRepeated reports wether the type is repeated or not.
-func (t *BaseType) IsRepeated() bool { return t.Repeated }
 
 // SetRepeated sets the type as repeated or not repeated.
 func (t *BaseType) SetRepeated(v bool) { t.Repeated = v }
@@ -247,7 +242,6 @@ func NewAlias(typ, underlying Type) Type {
 }
 
 func (a Alias) IsNullable() bool { return a.Type.IsNullable() || a.Underlying.IsNullable() }
-func (a Alias) IsRepeated() bool { return a.Type.IsRepeated() || a.Underlying.IsRepeated() }
 
 // String returns a string representation for the type
 func (a Alias) String() string {
