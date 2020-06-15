@@ -317,12 +317,10 @@ func setTypeParameters(typ types.Type, t Type) {
 	case *types.Array:
 		{
 			t.SetNullable(true)
-			t.SetRepeated(true)
 		}
 	case *types.Slice:
 		{
 			t.SetNullable(true)
-			t.SetRepeated(true)
 		}
 	case *types.Struct:
 		{
@@ -389,20 +387,17 @@ func scanType(typ types.Type) (t Type) {
 		st.BaseType = newBaseType()
 		st.AnonymousType = u
 		t = scanStruct(st, u)
-		t.SetRepeated(false)
 		t.SetNullable(false)
 		//t.SetIsPtr(false) //TODO: see note for *types.Array
 		t.SetIsStruct(true)
 	case *types.Slice:
 		t = scanType(u.Elem())
-		t.SetRepeated(true)
 		t.SetNullable(true)
 		//t.SetIsPtr(false) //TODO: see note for *types.Array
 		t.SetIsStruct(false)
 	case *types.Array:
 		t = scanType(u.Elem())
 		t.SetNullable(true)
-		t.SetRepeated(true)
 		//t.SetIsPtr(false) // TODO: what if *[]*SomeType or *[]SomeType ???
 		t.SetIsStruct(false)
 	case *types.Pointer:
@@ -412,14 +407,12 @@ func scanType(typ types.Type) (t Type) {
 	case *types.Chan:
 		t = NewChan(u)
 		t.SetNullable(true)
-		t.SetRepeated(false)
 		t.SetIsPtr(false)
 		t.SetIsStruct(false)
 	case *types.Interface:
 		it := scanInterface(&Interface{Name: u.String()}, u, nil)
 		t = Type(it)
 		t.SetNullable(true)
-		t.SetRepeated(false)
 		t.SetIsPtr(false)
 		t.SetIsStruct(false)
 	case *types.Signature:
@@ -436,7 +429,6 @@ func scanType(typ types.Type) (t Type) {
 		//fn.PkgName = u.Pkg().Name()
 		t = Type(fn)
 		t.SetNullable(true)
-		t.SetRepeated(false)
 		t.SetIsPtr(false)
 		t.SetIsStruct(false)
 	case *types.Map:
