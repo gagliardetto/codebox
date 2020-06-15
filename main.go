@@ -640,8 +640,14 @@ func main() {
 				BlockFunc(func(group *Group) {
 					for _, testFuncName := range testFuncNames {
 						group.BlockFunc(func(testBlock *Group) {
+							testBlock.Comment("Create a new source:")
 							testBlock.Id("source").Op(":=").Id("newSource").Call()
-							testBlock.Id(testFuncName).Call(Id("source"))
+
+							testBlock.Comment("Run the taint scenario:")
+							testBlock.Id("out").Op(":=").Id(testFuncName).Call(Id("source"))
+
+							testBlock.Comment("Sink the tainted `out`:")
+							testBlock.Id("sink").Call(Id("out"))
 						})
 					}
 				})
@@ -1118,7 +1124,8 @@ func NewTestFile(includeBoilerplace bool) *File {
 			code := Func().
 				Id("newSource").
 				Params().
-				Interface().Block(Return(Nil()))
+				Interface().
+				Block(Return(Nil()))
 			file.Add(code.Line())
 		}
 	}
@@ -1265,8 +1272,8 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1324,8 +1331,8 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1383,8 +1390,8 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1444,8 +1451,8 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1510,8 +1517,8 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1576,8 +1583,8 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			))
 			groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", out.VarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1652,8 +1659,8 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			))
 			groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", out.VarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1740,8 +1747,8 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			))
 			groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", out.VarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1815,8 +1822,8 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 
 	return code.Line()
@@ -1877,8 +1884,8 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 				},
 			)
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", outVarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", outVarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -1949,8 +1956,8 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			))
 			groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", out.VarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -2017,8 +2024,8 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			))
 			groupCase.Id("link").Call(Id(in.VarName), Id("intermediateCQL"))
 
-			groupCase.Line().Comment(Sf("Sink the tainted `%s`:", out.VarName))
-			groupCase.Id("sink").Call(Id(out.VarName))
+			groupCase.Line().Comment(Sf("Return the tainted `%s`:", out.VarName))
+			groupCase.Return(Id(out.VarName))
 		})
 	return code.Line()
 }
@@ -3337,6 +3344,7 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 									group.Add(Id("sourceCQL").Interface())
 								},
 							).
+							Interface().
 							Add(childBlock)
 
 						children = append(children, &StatementAndName{
@@ -3383,6 +3391,7 @@ func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 									group.Add(Id("sourceCQL").Interface())
 								},
 							).
+							Interface().
 							Add(childBlock)
 
 						children = append(children, &StatementAndName{
