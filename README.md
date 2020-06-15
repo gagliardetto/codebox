@@ -27,11 +27,24 @@ codeql test run \
 
 
 ```bash
+# move all files from child directories to parent directory:
 find . -mindepth 2 -type f -print -exec mv {} . \;
 
 #for f in *.qll; do printf '%s\n' "${f%.qll}TaintTracking.qll"; done
 
 rename 's/\.qll$/TaintTracking.qll/' *qll
+
+# format a codeql file:
+codeql query format -qq -i file.qll
+
+# format all codeql files:
+
+echo /home/withparty/.config/Code/User/globalStorage/github.vscode-codeql/distribution*/codeql/codeql
+find . -type f -name "*.ql" -or -name "*.qll" -exec /home/withparty/.config/Code/User/globalStorage/github.vscode-codeql/distribution11/codeql/codeql query format -qq -i {} ';' -print
+
+find . -type f -name "*.ql" -or -name "*.qll" | while read cqlFile; do echo $cqlFile && codeql query format -qq -i $cqlFile; done
+
+
 ```
 
 
