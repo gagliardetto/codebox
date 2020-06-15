@@ -531,7 +531,7 @@ func main() {
 		}
 	}
 
-	go Notify(func(os.Signal) bool {
+	onExitCallback := func() {
 		mu.Lock()
 		defer mu.Unlock()
 
@@ -743,8 +743,18 @@ import go` + "\n\n"
 		}
 
 		os.Exit(0)
-		return false
-	}, os.Kill, os.Interrupt)
+	}
+
+	var once sync.Once
+	go Notify(
+		func(os.Signal) bool {
+			once.Do(onExitCallback)
+			return false
+		},
+		os.Kill,
+		os.Interrupt,
+	)
+	defer once.Do(onExitCallback)
 
 	if runServer {
 		r := gin.Default()
