@@ -157,7 +157,7 @@ func main() {
 	flag.StringVar(&generatedDir, "out-dir", "./generated", "Folder that contains the generated assets (each run has its own timestamped folder)")
 	flag.BoolVar(&runServer, "http", false, "Run http server")
 	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
-	flag.BoolVar(&includeBoilerplace, "boilerplate", true, "Include in go test files the utility functions (main, sink, link, etc.)")
+	flag.BoolVar(&includeBoilerplace, "stub", false, "Include in go test files the utility functions (main, sink, link, etc.)")
 	flag.Parse()
 
 	// One package at a time:
