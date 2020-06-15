@@ -1,0 +1,182 @@
+{
+   "func (*Decoder).Decode(e interface{}) error": {
+      "GeneratedClass": "\n    private class DecoderDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Decode(e interface{}) error\n      DecoderDecode() { this.(Method).hasQualifiedName(\"encoding/gob\", \"Decoder\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).DecodeValue(v reflect.Value) error": {
+      "GeneratedClass": "\n    private class DecoderDecodeValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).DecodeValue(v reflect.Value) error\n      DecoderDecodeValue() { this.(Method).hasQualifiedName(\"encoding/gob\", \"Decoder\", \"DecodeValue\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).Encode(e interface{}) error": {
+      "GeneratedClass": "\n    private class EncoderEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).Encode(e interface{}) error\n      EncoderEncode() { this.(Method).hasQualifiedName(\"encoding/gob\", \"Encoder\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).EncodeValue(value reflect.Value) error": {
+      "GeneratedClass": "\n    private class EncoderEncodeValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).EncodeValue(value reflect.Value) error\n      EncoderEncodeValue() { this.(Method).hasQualifiedName(\"encoding/gob\", \"Encoder\", \"EncodeValue\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (GobDecoder).GobDecode([]byte) error": {
+      "GeneratedClass": "\n    private class GobDecoderGobDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (GobDecoder).GobDecode([]byte) error\n      GobDecoderGobDecode() {\n        this.implements(\"encoding/gob\", \"GobDecoder\", \"GobDecode\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (GobEncoder).GobEncode() ([]byte, error)": {
+      "GeneratedClass": "\n    private class GobEncoderGobEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (GobEncoder).GobEncode() ([]byte, error)\n      GobEncoderGobEncode() {\n        this.implements(\"encoding/gob\", \"GobEncoder\", \"GobEncode\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewDecoder(r io.Reader) *Decoder": {
+      "GeneratedClass": "\n    private class NewDecoder extends TaintTracking::FunctionModel {\n      // signature: func NewDecoder(r io.Reader) *Decoder\n      NewDecoder() { hasQualifiedName(\"encoding/gob\", \"NewDecoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewEncoder(w io.Writer) *Encoder": {
+      "GeneratedClass": "\n    private class NewEncoder extends TaintTracking::FunctionModel {\n      // signature: func NewEncoder(w io.Writer) *Encoder\n      NewEncoder() { hasQualifiedName(\"encoding/gob\", \"NewEncoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Register(value interface{})": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func RegisterName(name string, value interface{})": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}

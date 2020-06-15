@@ -1,0 +1,895 @@
+{
+   "func (ColumnConverter).ColumnConverter(idx int) ValueConverter": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Conn).Begin() (Tx, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Conn).Close() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Conn).Prepare(query string) (Stmt, error)": {
+      "GeneratedClass": "\n    private class ConnPrepare extends TaintTracking::FunctionModel, Method {\n      // signature: func (Conn).Prepare(query string) (Stmt, error)\n      ConnPrepare() {\n        this.implements(\"database/sql/driver\", \"Conn\", \"Prepare\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (ConnBeginTx).BeginTx(ctx context.Context, opts TxOptions) (Tx, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ConnPrepareContext).PrepareContext(ctx context.Context, query string) (Stmt, error)": {
+      "GeneratedClass": "\n    private class ConnPrepareContextPrepareContext extends TaintTracking::FunctionModel, Method {\n      // signature: func (ConnPrepareContext).PrepareContext(ctx context.Context, query string) (Stmt, error)\n      ConnPrepareContextPrepareContext() {\n        this.implements(\"database/sql/driver\", \"ConnPrepareContext\", \"PrepareContext\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Connector).Connect(context.Context) (Conn, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Connector).Driver() Driver": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Driver).Open(name string) (Conn, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (DriverContext).OpenConnector(name string) (Connector, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Execer).Exec(query string, args []Value) (Result, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ExecerContext).ExecContext(ctx context.Context, query string, args []NamedValue) (Result, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (NamedValueChecker).CheckNamedValue(*NamedValue) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (NotNull).ConvertValue(v interface{}) (Value, error)": {
+      "GeneratedClass": "\n    private class NotNullConvertValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (NotNull).ConvertValue(v interface{}) (Value, error)\n      NotNullConvertValue() { this.(Method).hasQualifiedName(\"database/sql/driver\", \"NotNull\", \"ConvertValue\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Null).ConvertValue(v interface{}) (Value, error)": {
+      "GeneratedClass": "\n    private class NullConvertValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (Null).ConvertValue(v interface{}) (Value, error)\n      NullConvertValue() { this.(Method).hasQualifiedName(\"database/sql/driver\", \"Null\", \"ConvertValue\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Pinger).Ping(ctx context.Context) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Queryer).Query(query string, args []Value) (Rows, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (QueryerContext).QueryContext(ctx context.Context, query string, args []NamedValue) (Rows, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Result).LastInsertId() (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Result).RowsAffected() (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Rows).Close() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Rows).Columns() []string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Rows).Next(dest []Value) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsAffected).LastInsertId() (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsAffected).RowsAffected() (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsColumnTypeDatabaseTypeName).ColumnTypeDatabaseTypeName(index int) string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsColumnTypeLength).ColumnTypeLength(index int) (length int64, ok bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsColumnTypeNullable).ColumnTypeNullable(index int) (nullable bool, ok bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsColumnTypePrecisionScale).ColumnTypePrecisionScale(index int) (precision int64, scale int64, ok bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsColumnTypeScanType).ColumnTypeScanType(index int) reflect.Type": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsNextResultSet).HasNextResultSet() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RowsNextResultSet).NextResultSet() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (SessionResetter).ResetSession(ctx context.Context) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Stmt).Close() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Stmt).Exec(args []Value) (Result, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Stmt).NumInput() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Stmt).Query(args []Value) (Rows, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StmtExecContext).ExecContext(ctx context.Context, args []NamedValue) (Result, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StmtQueryContext).QueryContext(ctx context.Context, args []NamedValue) (Rows, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Tx).Commit() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Tx).Rollback() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ValueConverter).ConvertValue(v interface{}) (Value, error)": {
+      "GeneratedClass": "\n    private class ValueConverterConvertValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (ValueConverter).ConvertValue(v interface{}) (Value, error)\n      ValueConverterConvertValue() {\n        this.implements(\"database/sql/driver\", \"ValueConverter\", \"ConvertValue\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Valuer).Value() (Value, error)": {
+      "GeneratedClass": "\n    private class ValuerValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (Valuer).Value() (Value, error)\n      ValuerValue() {\n        this.implements(\"database/sql/driver\", \"Valuer\", \"Value\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func IsScanValue(v interface{}) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IsValue(v interface{}) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}

@@ -1,0 +1,621 @@
+{
+   "func (Float64Slice).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Float64Slice).Less(i int, j int) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Float64Slice).Search(x float64) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Float64Slice).Sort()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Float64Slice).Swap(i int, j int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (IntSlice).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (IntSlice).Less(i int, j int) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (IntSlice).Search(x int) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (IntSlice).Sort()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (IntSlice).Swap(i int, j int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Interface).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Interface).Less(i int, j int) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Interface).Swap(i int, j int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StringSlice).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StringSlice).Less(i int, j int) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StringSlice).Search(x string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StringSlice).Sort()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (StringSlice).Swap(i int, j int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Float64s(a []float64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Float64sAreSorted(a []float64) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Ints(a []int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IntsAreSorted(a []int) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IsSorted(data Interface) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Reverse(data Interface) Interface": {
+      "GeneratedClass": "\n    private class Reverse extends TaintTracking::FunctionModel {\n      // signature: func Reverse(data Interface) Interface\n      Reverse() { hasQualifiedName(\"sort\", \"Reverse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Search(n int, f func(int) bool) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SearchFloat64s(a []float64, x float64) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SearchInts(a []int, x int) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SearchStrings(a []string, x string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Slice(slice interface{}, less func(i int, j int) bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SliceIsSorted(slice interface{}, less func(i int, j int) bool) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SliceStable(slice interface{}, less func(i int, j int) bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sort(data Interface)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Stable(data Interface)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Strings(a []string)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StringsAreSorted(a []string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}

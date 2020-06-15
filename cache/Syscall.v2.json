@@ -1,0 +1,5098 @@
+{
+   "func (*Cmsghdr).SetLen(length int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Iovec).SetLen(length int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Msghdr).SetControllen(length int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*PtraceRegs).PC() uint64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*PtraceRegs).SetPC(pc uint64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RWMutex).Lock()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RWMutex).RLock()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RWMutex).RLocker() Locker": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RWMutex).RUnlock()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RWMutex).Unlock()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Timespec).Nano() int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Timespec).Unix() (sec int64, nsec int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Timeval).Nano() int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Timeval).Unix() (sec int64, nsec int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Conn).SyscallConn() (RawConn, error)": {
+      "GeneratedClass": "\n    private class ConnSyscallConn extends TaintTracking::FunctionModel, Method {\n      // signature: func (Conn).SyscallConn() (RawConn, error)\n      ConnSyscallConn() {\n        this.implements(\"syscall\", \"Conn\", \"SyscallConn\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n        or\n        ((inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))\n        or\n        ((inp.isResult(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Errno).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Errno).Is(target error) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Errno).Temporary() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Errno).Timeout() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RawConn).Control(f func(fd uintptr)) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RawConn).Read(f func(fd uintptr) (done bool)) error": {
+      "GeneratedClass": "\n    private class RawConnRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (RawConn).Read(f func(fd uintptr) (done bool)) error\n      RawConnRead() {\n        this.implements(\"syscall\", \"RawConn\", \"Read\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (RawConn).Write(f func(fd uintptr) (done bool)) error": {
+      "GeneratedClass": "\n    private class RawConnWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (RawConn).Write(f func(fd uintptr) (done bool)) error\n      RawConnWrite() {\n        this.implements(\"syscall\", \"RawConn\", \"Write\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Signal).Signal()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Signal).String() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).Continued() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).CoreDump() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).ExitStatus() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).Exited() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).Signal() Signal": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).Signaled() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).StopSignal() Signal": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).Stopped() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (WaitStatus).TrapCause() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Accept(fd int) (nfd int, sa Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Accept4(fd int, flags int) (nfd int, sa Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Access(path string, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Acct(path string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Adjtimex(buf *Timex) (state int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func AttachLsf(fd int, i []SockFilter) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Bind(fd int, sa Sockaddr) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func BindToDevice(fd int, device string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func BytePtrFromString(s string) (*byte, error)": {
+      "GeneratedClass": "\n    private class BytePtrFromString extends TaintTracking::FunctionModel {\n      // signature: func BytePtrFromString(s string) (*byte, error)\n      BytePtrFromString() { hasQualifiedName(\"syscall\", \"BytePtrFromString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ByteSliceFromString(s string) ([]byte, error)": {
+      "GeneratedClass": "\n    private class ByteSliceFromString extends TaintTracking::FunctionModel {\n      // signature: func ByteSliceFromString(s string) ([]byte, error)\n      ByteSliceFromString() { hasQualifiedName(\"syscall\", \"ByteSliceFromString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Chdir(path string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Chmod(path string, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Chown(path string, uid int, gid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Chroot(path string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Clearenv()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [],
+            "Outp": []
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Close(fd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CloseOnExec(fd int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CmsgLen(datalen int) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CmsgSpace(datalen int) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Connect(fd int, sa Sockaddr) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Creat(path string, mode uint32) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func DetachLsf(fd int) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Dup(oldfd int) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Dup2(oldfd int, newfd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Dup3(oldfd int, newfd int, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Environ() []string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func EpollCreate(size int) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func EpollCreate1(flag int) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func EpollCtl(epfd int, op int, fd int, event *EpollEvent) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func EpollWait(epfd int, events []EpollEvent, msec int) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Exec(argv0 string, argv []string, envv []string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Exit(code int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Faccessat(dirfd int, path string, mode uint32, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fallocate(fd int, mode uint32, off int64, len int64) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fchdir(fd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fchmod(fd int, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fchmodat(dirfd int, path string, mode uint32, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fchown(fd int, uid int, gid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fchownat(dirfd int, path string, uid int, gid int, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func FcntlFlock(fd uintptr, cmd int, lk *Flock_t) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fdatasync(fd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Flock(fd int, how int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ForkExec(argv0 string, argv []string, attr *ProcAttr) (pid int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fstat(fd int, stat *Stat_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fstatfs(fd int, buf *Statfs_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fsync(fd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Ftruncate(fd int, length int64) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Futimes(fd int, tv []Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Futimesat(dirfd int, path string, tv []Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getcwd(buf []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getdents(fd int, buf []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getegid() (egid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getenv(key string) (value string, found bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Geteuid() (euid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getgid() (gid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getgroups() (gids []int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpagesize() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpeername(fd int) (sa Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpgid(pid int) (pgid int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpgrp() (pid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpid() (pid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getppid() (ppid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getpriority(which int, who int) (prio int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getrlimit(resource int, rlim *Rlimit) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getrusage(who int, rusage *Rusage) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getsockname(fd int) (sa Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptICMPv6Filter(fd int, level int, opt int) (*ICMPv6Filter, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptIPMreq(fd int, level int, opt int) (*IPMreq, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptIPMreqn(fd int, level int, opt int) (*IPMreqn, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptIPv6MTUInfo(fd int, level int, opt int) (*IPv6MTUInfo, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptIPv6Mreq(fd int, level int, opt int) (*IPv6Mreq, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptInet4Addr(fd int, level int, opt int) (value [4]byte, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptInt(fd int, level int, opt int) (value int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func GetsockoptUcred(fd int, level int, opt int) (*Ucred, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Gettid() (tid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Gettimeofday(tv *Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getuid() (uid int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getwd() (wd string, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Getxattr(path string, attr string, dest []byte) (sz int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func InotifyAddWatch(fd int, pathname string, mask uint32) (watchdesc int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func InotifyInit() (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func InotifyInit1(flags int) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func InotifyRmWatch(fd int, watchdesc uint32) (success int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Ioperm(from int, num int, on int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Iopl(level int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Kill(pid int, sig Signal) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Klogctl(typ int, buf []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Lchown(path string, uid int, gid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Link(oldpath string, newpath string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Listen(s int, n int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Listxattr(path string, dest []byte) (sz int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LsfJump(code int, k int, jt int, jf int) *SockFilter": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LsfSocket(ifindex int, proto int) (int, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LsfStmt(code int, k int) *SockFilter": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Lstat(path string, stat *Stat_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Madvise(b []byte, advice int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mkdir(path string, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mkdirat(dirfd int, path string, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mkfifo(path string, mode uint32) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mknod(path string, mode uint32, dev int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mknodat(dirfd int, path string, mode uint32, dev int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mlock(b []byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mlockall(flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mount(source string, target string, fstype string, flags uintptr, data string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Mprotect(b []byte, prot int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Munlock(b []byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Munlockall() (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Munmap(b []byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Nanosleep(time *Timespec, leftover *Timespec) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func NetlinkRIB(proto int, family int) ([]byte, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func NsecToTimespec(nsec int64) Timespec": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func NsecToTimeval(nsec int64) Timeval": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Open(path string, mode int, perm uint32) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Openat(dirfd int, path string, flags int, mode uint32) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseDirent(buf []byte, max int, names []string) (consumed int, count int, newnames []string)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseNetlinkMessage(b []byte) ([]NetlinkMessage, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseNetlinkRouteAttr(m *NetlinkMessage) ([]NetlinkRouteAttr, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseSocketControlMessage(b []byte) ([]SocketControlMessage, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseUnixCredentials(m *SocketControlMessage) (*Ucred, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ParseUnixRights(m *SocketControlMessage) ([]int, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pause() (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pipe(p []int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pipe2(p []int, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PivotRoot(newroot string, putold string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pread(fd int, p []byte, offset int64) (n int, err error)": {
+      "GeneratedClass": "\n    private class Pread extends TaintTracking::FunctionModel {\n      // signature: func Pread(fd int, p []byte, offset int64) (n int, err error)\n      Pread() { hasQualifiedName(\"syscall\", \"Pread\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func PtraceAttach(pid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceCont(pid int, signal int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceDetach(pid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceGetEventMsg(pid int) (msg uint, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceGetRegs(pid int, regsout *PtraceRegs) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtracePeekData(pid int, addr uintptr, out []byte) (count int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtracePeekText(pid int, addr uintptr, out []byte) (count int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtracePokeData(pid int, addr uintptr, data []byte) (count int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtracePokeText(pid int, addr uintptr, data []byte) (count int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceSetOptions(pid int, options int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceSetRegs(pid int, regs *PtraceRegs) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceSingleStep(pid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func PtraceSyscall(pid int, signal int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pwrite(fd int, p []byte, offset int64) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func RawSyscall(trap uintptr, a1 uintptr, a2 uintptr, a3 uintptr) (r1 uintptr, r2 uintptr, err Errno)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func RawSyscall6(trap uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr) (r1 uintptr, r2 uintptr, err Errno)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Read(fd int, p []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ReadDirent(fd int, buf []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Readlink(path string, buf []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Reboot(cmd int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Recvfrom(fd int, p []byte, flags int) (n int, from Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Recvmsg(fd int, p []byte, oob []byte, flags int) (n int, oobn int, recvflags int, from Sockaddr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Removexattr(path string, attr string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Rename(oldpath string, newpath string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Renameat(olddirfd int, oldpath string, newdirfd int, newpath string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Rmdir(path string) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Seek(fd int, offset int64, whence int) (off int64, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Select(nfd int, r *FdSet, w *FdSet, e *FdSet, timeout *Timeval) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sendmsg(fd int, p []byte, oob []byte, to Sockaddr, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SendmsgN(fd int, p []byte, oob []byte, to Sockaddr, flags int) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sendto(fd int, p []byte, flags int, to Sockaddr) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetLsfPromisc(name string, m bool) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetNonblock(fd int, nonblocking bool) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setdomainname(p []byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setenv(key string, value string) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setfsgid(gid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setfsuid(uid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setgid(gid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setgroups(gids []int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sethostname(p []byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setpgid(pid int, pgid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setpriority(which int, who int, prio int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setregid(rgid int, egid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setresgid(rgid int, egid int, sgid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setresuid(ruid int, euid int, suid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setreuid(ruid int, euid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setrlimit(resource int, rlim *Rlimit) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setsid() (pid int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptByte(fd int, level int, opt int, value byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptICMPv6Filter(fd int, level int, opt int, filter *ICMPv6Filter) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptIPMreq(fd int, level int, opt int, mreq *IPMreq) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptIPMreqn(fd int, level int, opt int, mreq *IPMreqn) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptIPv6Mreq(fd int, level int, opt int, mreq *IPv6Mreq) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptInet4Addr(fd int, level int, opt int, value [4]byte) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptInt(fd int, level int, opt int, value int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptLinger(fd int, level int, opt int, l *Linger) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptString(fd int, level int, opt int, s string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SetsockoptTimeval(fd int, level int, opt int, tv *Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Settimeofday(tv *Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setuid(uid int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Setxattr(path string, attr string, data []byte, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Shutdown(fd int, how int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SlicePtrFromStrings(ss []string) ([]*byte, error)": {
+      "GeneratedClass": "\n    private class SlicePtrFromStrings extends TaintTracking::FunctionModel {\n      // signature: func SlicePtrFromStrings(ss []string) ([]*byte, error)\n      SlicePtrFromStrings() { hasQualifiedName(\"syscall\", \"SlicePtrFromStrings\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Socket(domain int, typ int, proto int) (fd int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Socketpair(domain int, typ int, proto int) (fd [2]int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Splice(rfd int, roff *int64, wfd int, woff *int64, len int, flags int) (n int64, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StartProcess(argv0 string, argv []string, attr *ProcAttr) (pid int, handle uintptr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Stat(path string, stat *Stat_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Statfs(path string, buf *Statfs_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StringBytePtr(s string) *byte": {
+      "GeneratedClass": "\n    private class StringBytePtr extends TaintTracking::FunctionModel {\n      // signature: func StringBytePtr(s string) *byte\n      StringBytePtr() { hasQualifiedName(\"syscall\", \"StringBytePtr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func StringByteSlice(s string) []byte": {
+      "GeneratedClass": "\n    private class StringByteSlice extends TaintTracking::FunctionModel {\n      // signature: func StringByteSlice(s string) []byte\n      StringByteSlice() { hasQualifiedName(\"syscall\", \"StringByteSlice\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func StringSlicePtr(ss []string) []*byte": {
+      "GeneratedClass": "\n    private class StringSlicePtr extends TaintTracking::FunctionModel {\n      // signature: func StringSlicePtr(ss []string) []*byte\n      StringSlicePtr() { hasQualifiedName(\"syscall\", \"StringSlicePtr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Symlink(oldpath string, newpath string) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sync()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [],
+            "Outp": []
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SyncFileRange(fd int, off int64, n int64, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Syscall(trap uintptr, a1 uintptr, a2 uintptr, a3 uintptr) (r1 uintptr, r2 uintptr, err Errno)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Syscall6(trap uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr) (r1 uintptr, r2 uintptr, err Errno)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Sysinfo(info *Sysinfo_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Tee(rfd int, wfd int, len int, flags int) (n int64, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Tgkill(tgid int, tid int, sig Signal) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Time(t *Time_t) (tt Time_t, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Times(tms *Tms) (ticks uintptr, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func TimespecToNsec(ts Timespec) int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func TimevalToNsec(tv Timeval) int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Truncate(path string, length int64) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Umask(mask int) (oldmask int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Uname(buf *Utsname) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func UnixCredentials(ucred *Ucred) []byte": {
+      "GeneratedClass": "\n    private class UnixCredentials extends TaintTracking::FunctionModel {\n      // signature: func UnixCredentials(ucred *Ucred) []byte\n      UnixCredentials() { hasQualifiedName(\"syscall\", \"UnixCredentials\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func UnixRights(fds ...int) []byte": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Unlink(path string) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Unlinkat(dirfd int, path string) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Unmount(target string, flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Unsetenv(key string) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Unshare(flags int) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Ustat(dev int, ubuf *Ustat_t) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Utime(path string, buf *Utimbuf) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Utimes(path string, tv []Timeval) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func UtimesNano(path string, ts []Timespec) (err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Wait4(pid int, wstatus *WaitStatus, options int, rusage *Rusage) (wpid int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Write(fd int, p []byte) (n int, err error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}

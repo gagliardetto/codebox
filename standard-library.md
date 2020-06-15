@@ -147,7 +147,7 @@ Each item in the list is a package on its own:
 - [x][x] `mime/multipart`
 			- WriteField
 - [x][x] `mime/quotedprintable`
-- [][] `net`
+- [x][x] `net`
 - [x][x] `net/http`
 			- Header.Add
 			- Header.Set

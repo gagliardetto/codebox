@@ -1,0 +1,599 @@
+{
+   "func (*Value).Load() (x interface{})": {
+      "GeneratedClass": "\n    private class ValueLoad extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Value).Load() (x interface{})\n      ValueLoad() { this.(Method).hasQualifiedName(\"sync/atomic\", \"Value\", \"Load\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Value).Store(x interface{})": {
+      "GeneratedClass": "\n    private class ValueStore extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Value).Store(x interface{})\n      ValueStore() { this.(Method).hasQualifiedName(\"sync/atomic\", \"Value\", \"Store\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func AddInt32(addr *int32, delta int32) (new int32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func AddInt64(addr *int64, delta int64) (new int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func AddUint32(addr *uint32, delta uint32) (new uint32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func AddUint64(addr *uint64, delta uint64) (new uint64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func AddUintptr(addr *uintptr, delta uintptr) (new uintptr)": {
+      "GeneratedClass": "\n    private class AddUintptr extends TaintTracking::FunctionModel {\n      // signature: func AddUintptr(addr *uintptr, delta uintptr) (new uintptr)\n      AddUintptr() { hasQualifiedName(\"sync/atomic\", \"AddUintptr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0) or outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0) or outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func CompareAndSwapInt32(addr *int32, old int32, new int32) (swapped bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CompareAndSwapInt64(addr *int64, old int64, new int64) (swapped bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CompareAndSwapPointer(addr *unsafe.Pointer, old unsafe.Pointer, new unsafe.Pointer) (swapped bool)": {
+      "GeneratedClass": "\n    private class CompareAndSwapPointer extends TaintTracking::FunctionModel {\n      // signature: func CompareAndSwapPointer(addr *unsafe.Pointer, old unsafe.Pointer, new unsafe.Pointer) (swapped bool)\n      CompareAndSwapPointer() { hasQualifiedName(\"sync/atomic\", \"CompareAndSwapPointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func CompareAndSwapUint32(addr *uint32, old uint32, new uint32) (swapped bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CompareAndSwapUint64(addr *uint64, old uint64, new uint64) (swapped bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CompareAndSwapUintptr(addr *uintptr, old uintptr, new uintptr) (swapped bool)": {
+      "GeneratedClass": "\n    private class CompareAndSwapUintptr extends TaintTracking::FunctionModel {\n      // signature: func CompareAndSwapUintptr(addr *uintptr, old uintptr, new uintptr) (swapped bool)\n      CompareAndSwapUintptr() { hasQualifiedName(\"sync/atomic\", \"CompareAndSwapUintptr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func LoadInt32(addr *int32) (val int32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LoadInt64(addr *int64) (val int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LoadPointer(addr *unsafe.Pointer) (val unsafe.Pointer)": {
+      "GeneratedClass": "\n    private class LoadPointer extends TaintTracking::FunctionModel {\n      // signature: func LoadPointer(addr *unsafe.Pointer) (val unsafe.Pointer)\n      LoadPointer() { hasQualifiedName(\"sync/atomic\", \"LoadPointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func LoadUint32(addr *uint32) (val uint32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LoadUint64(addr *uint64) (val uint64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LoadUintptr(addr *uintptr) (val uintptr)": {
+      "GeneratedClass": "\n    private class LoadUintptr extends TaintTracking::FunctionModel {\n      // signature: func LoadUintptr(addr *uintptr) (val uintptr)\n      LoadUintptr() { hasQualifiedName(\"sync/atomic\", \"LoadUintptr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func StoreInt32(addr *int32, val int32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StoreInt64(addr *int64, val int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StorePointer(addr *unsafe.Pointer, val unsafe.Pointer)": {
+      "GeneratedClass": "\n    private class StorePointer extends TaintTracking::FunctionModel {\n      // signature: func StorePointer(addr *unsafe.Pointer, val unsafe.Pointer)\n      StorePointer() { hasQualifiedName(\"sync/atomic\", \"StorePointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func StoreUint32(addr *uint32, val uint32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StoreUint64(addr *uint64, val uint64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func StoreUintptr(addr *uintptr, val uintptr)": {
+      "GeneratedClass": "\n    private class StoreUintptr extends TaintTracking::FunctionModel {\n      // signature: func StoreUintptr(addr *uintptr, val uintptr)\n      StoreUintptr() { hasQualifiedName(\"sync/atomic\", \"StoreUintptr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func SwapInt32(addr *int32, new int32) (old int32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SwapInt64(addr *int64, new int64) (old int64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SwapPointer(addr *unsafe.Pointer, new unsafe.Pointer) (old unsafe.Pointer)": {
+      "GeneratedClass": "\n    private class SwapPointer extends TaintTracking::FunctionModel {\n      // signature: func SwapPointer(addr *unsafe.Pointer, new unsafe.Pointer) (old unsafe.Pointer)\n      SwapPointer() { hasQualifiedName(\"sync/atomic\", \"SwapPointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n        or\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))\n        or\n        ((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         },
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func SwapUint32(addr *uint32, new uint32) (old uint32)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SwapUint64(addr *uint64, new uint64) (old uint64)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func SwapUintptr(addr *uintptr, new uintptr) (old uintptr)": {
+      "GeneratedClass": "\n    private class SwapUintptr extends TaintTracking::FunctionModel {\n      // signature: func SwapUintptr(addr *uintptr, new uintptr) (old uintptr)\n      SwapUintptr() { hasQualifiedName(\"sync/atomic\", \"SwapUintptr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n        or\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))\n        or\n        ((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         },
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

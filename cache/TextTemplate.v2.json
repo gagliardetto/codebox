@@ -1,0 +1,545 @@
+{
+   "func (*Template).AddParseTree(name string, tree *text/template/parse.Tree) (*Template, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Clone() (*Template, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).DefinedTemplates() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Delims(left string, right string) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Execute(wr io.Writer, data interface{}) error": {
+      "GeneratedClass": "\n    private class TemplateExecute extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Template).Execute(wr io.Writer, data interface{}) error\n      TemplateExecute() { this.(Method).hasQualifiedName(\"text/template\", \"Template\", \"Execute\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver() or inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver() or inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Template).ExecuteTemplate(wr io.Writer, name string, data interface{}) error": {
+      "GeneratedClass": "\n    private class TemplateExecuteTemplate extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Template).ExecuteTemplate(wr io.Writer, name string, data interface{}) error\n      TemplateExecuteTemplate() { this.(Method).hasQualifiedName(\"text/template\", \"Template\", \"ExecuteTemplate\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver() or inp.isParameter(2)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver() or inp.isParameter(2)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Template).Funcs(funcMap FuncMap) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Lookup(name string) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Name() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).New(name string) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Option(opt ...string) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Parse(text string) (*Template, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).ParseFiles(filenames ...string) (*Template, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).ParseGlob(pattern string) (*Template, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Template).Templates() []*Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ExecError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ExecError).Unwrap() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func HTMLEscape(w io.Writer, b []byte)": {
+      "GeneratedClass": "\n    private class HTMLEscape extends TaintTracking::FunctionModel {\n      // signature: func HTMLEscape(w io.Writer, b []byte)\n      HTMLEscape() { hasQualifiedName(\"text/template\", \"HTMLEscape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func HTMLEscapeString(s string) string": {
+      "GeneratedClass": "\n    private class HTMLEscapeString extends TaintTracking::FunctionModel {\n      // signature: func HTMLEscapeString(s string) string\n      HTMLEscapeString() { hasQualifiedName(\"text/template\", \"HTMLEscapeString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func HTMLEscaper(args ...interface{}) string": {
+      "GeneratedClass": "\n    private class HTMLEscaper extends TaintTracking::FunctionModel {\n      // signature: func HTMLEscaper(args ...interface{}) string\n      HTMLEscaper() { hasQualifiedName(\"text/template\", \"HTMLEscaper\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func IsTrue(val interface{}) (truth bool, ok bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func JSEscape(w io.Writer, b []byte)": {
+      "GeneratedClass": "\n    private class JSEscape extends TaintTracking::FunctionModel {\n      // signature: func JSEscape(w io.Writer, b []byte)\n      JSEscape() { hasQualifiedName(\"text/template\", \"JSEscape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func JSEscapeString(s string) string": {
+      "GeneratedClass": "\n    private class JSEscapeString extends TaintTracking::FunctionModel {\n      // signature: func JSEscapeString(s string) string\n      JSEscapeString() { hasQualifiedName(\"text/template\", \"JSEscapeString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func JSEscaper(args ...interface{}) string": {
+      "GeneratedClass": "\n    private class JSEscaper extends TaintTracking::FunctionModel {\n      // signature: func JSEscaper(args ...interface{}) string\n      JSEscaper() { hasQualifiedName(\"text/template\", \"JSEscaper\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Must(t *Template, err error) *Template": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func New(name string) *Template": {
+      "GeneratedClass": "\n    private class New extends TaintTracking::FunctionModel {\n      // signature: func New(name string) *Template\n      New() { hasQualifiedName(\"text/template\", \"New\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ParseFiles(filenames ...string) (*Template, error)": {
+      "GeneratedClass": "\n    private class ParseFiles extends TaintTracking::FunctionModel {\n      // signature: func ParseFiles(filenames ...string) (*Template, error)\n      ParseFiles() { hasQualifiedName(\"text/template\", \"ParseFiles\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ParseGlob(pattern string) (*Template, error)": {
+      "GeneratedClass": "\n    private class ParseGlob extends TaintTracking::FunctionModel {\n      // signature: func ParseGlob(pattern string) (*Template, error)\n      ParseGlob() { hasQualifiedName(\"text/template\", \"ParseGlob\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func URLQueryEscaper(args ...interface{}) string": {
+      "GeneratedClass": "\n    private class URLQueryEscaper extends TaintTracking::FunctionModel {\n      // signature: func URLQueryEscaper(args ...interface{}) string\n      URLQueryEscaper() { hasQualifiedName(\"text/template\", \"URLQueryEscaper\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

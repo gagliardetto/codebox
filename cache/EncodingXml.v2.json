@@ -1,0 +1,645 @@
+{
+   "func (*Decoder).Decode(v interface{}) error": {
+      "GeneratedClass": "\n    private class DecoderDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Decode(v interface{}) error\n      DecoderDecode() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Decoder\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).DecodeElement(v interface{}, start *StartElement) error": {
+      "GeneratedClass": "\n    private class DecoderDecodeElement extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).DecodeElement(v interface{}, start *StartElement) error\n      DecoderDecodeElement() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Decoder\", \"DecodeElement\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).InputOffset() int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Decoder).RawToken() (Token, error)": {
+      "GeneratedClass": "\n    private class DecoderRawToken extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).RawToken() (Token, error)\n      DecoderRawToken() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Decoder\", \"RawToken\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).Skip() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Decoder).Token() (Token, error)": {
+      "GeneratedClass": "\n    private class DecoderToken extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Token() (Token, error)\n      DecoderToken() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Decoder\", \"Token\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).Encode(v interface{}) error": {
+      "GeneratedClass": "\n    private class EncoderEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).Encode(v interface{}) error\n      EncoderEncode() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Encoder\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).EncodeElement(v interface{}, start StartElement) error": {
+      "GeneratedClass": "\n    private class EncoderEncodeElement extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).EncodeElement(v interface{}, start StartElement) error\n      EncoderEncodeElement() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Encoder\", \"EncodeElement\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).EncodeToken(t Token) error": {
+      "GeneratedClass": "\n    private class EncoderEncodeToken extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).EncodeToken(t Token) error\n      EncoderEncodeToken() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Encoder\", \"EncodeToken\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).Flush() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Encoder).Indent(prefix string, indent string)": {
+      "GeneratedClass": "\n    private class EncoderIndent extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).Indent(prefix string, indent string)\n      EncoderIndent() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Encoder\", \"Indent\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               true
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*SyntaxError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*TagPathError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*UnsupportedTypeError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (CharData).Copy() CharData": {
+      "GeneratedClass": "\n    private class CharDataCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (CharData).Copy() CharData\n      CharDataCopy() { this.(Method).hasQualifiedName(\"encoding/xml\", \"CharData\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Comment).Copy() Comment": {
+      "GeneratedClass": "\n    private class CommentCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (Comment).Copy() Comment\n      CommentCopy() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Comment\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Directive).Copy() Directive": {
+      "GeneratedClass": "\n    private class DirectiveCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (Directive).Copy() Directive\n      DirectiveCopy() { this.(Method).hasQualifiedName(\"encoding/xml\", \"Directive\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Marshaler).MarshalXML(e *Encoder, start StartElement) error": {
+      "GeneratedClass": "\n    private class MarshalerMarshalXML extends TaintTracking::FunctionModel, Method {\n      // signature: func (Marshaler).MarshalXML(e *Encoder, start StartElement) error\n      MarshalerMarshalXML() {\n        this.implements(\"encoding/xml\", \"Marshaler\", \"MarshalXML\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (MarshalerAttr).MarshalXMLAttr(name Name) (Attr, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ProcInst).Copy() ProcInst": {
+      "GeneratedClass": "\n    private class ProcInstCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (ProcInst).Copy() ProcInst\n      ProcInstCopy() { this.(Method).hasQualifiedName(\"encoding/xml\", \"ProcInst\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (StartElement).Copy() StartElement": {
+      "GeneratedClass": "\n    private class StartElementCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (StartElement).Copy() StartElement\n      StartElementCopy() { this.(Method).hasQualifiedName(\"encoding/xml\", \"StartElement\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (StartElement).End() EndElement": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (TokenReader).Token() (Token, error)": {
+      "GeneratedClass": "\n    private class TokenReaderToken extends TaintTracking::FunctionModel, Method {\n      // signature: func (TokenReader).Token() (Token, error)\n      TokenReaderToken() {\n        this.implements(\"encoding/xml\", \"TokenReader\", \"Token\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (UnmarshalError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Unmarshaler).UnmarshalXML(d *Decoder, start StartElement) error": {
+      "GeneratedClass": "\n    private class UnmarshalerUnmarshalXML extends TaintTracking::FunctionModel, Method {\n      // signature: func (Unmarshaler).UnmarshalXML(d *Decoder, start StartElement) error\n      UnmarshalerUnmarshalXML() {\n        this.implements(\"encoding/xml\", \"Unmarshaler\", \"UnmarshalXML\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (UnmarshalerAttr).UnmarshalXMLAttr(attr Attr) error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func CopyToken(t Token) Token": {
+      "GeneratedClass": "\n    private class CopyToken extends TaintTracking::FunctionModel {\n      // signature: func CopyToken(t Token) Token\n      CopyToken() { hasQualifiedName(\"encoding/xml\", \"CopyToken\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Escape(w io.Writer, s []byte)": {
+      "GeneratedClass": "\n    private class Escape extends TaintTracking::FunctionModel {\n      // signature: func Escape(w io.Writer, s []byte)\n      Escape() { hasQualifiedName(\"encoding/xml\", \"Escape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func EscapeText(w io.Writer, s []byte) error": {
+      "GeneratedClass": "\n    private class EscapeText extends TaintTracking::FunctionModel {\n      // signature: func EscapeText(w io.Writer, s []byte) error\n      EscapeText() { hasQualifiedName(\"encoding/xml\", \"EscapeText\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Marshal(v interface{}) ([]byte, error)": {
+      "GeneratedClass": "\n    private class Marshal extends TaintTracking::FunctionModel {\n      // signature: func Marshal(v interface{}) ([]byte, error)\n      Marshal() { hasQualifiedName(\"encoding/xml\", \"Marshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func MarshalIndent(v interface{}, prefix string, indent string) ([]byte, error)": {
+      "GeneratedClass": "\n    private class MarshalIndent extends TaintTracking::FunctionModel {\n      // signature: func MarshalIndent(v interface{}, prefix string, indent string) ([]byte, error)\n      MarshalIndent() { hasQualifiedName(\"encoding/xml\", \"MarshalIndent\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               true,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewDecoder(r io.Reader) *Decoder": {
+      "GeneratedClass": "\n    private class NewDecoder extends TaintTracking::FunctionModel {\n      // signature: func NewDecoder(r io.Reader) *Decoder\n      NewDecoder() { hasQualifiedName(\"encoding/xml\", \"NewDecoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewEncoder(w io.Writer) *Encoder": {
+      "GeneratedClass": "\n    private class NewEncoder extends TaintTracking::FunctionModel {\n      // signature: func NewEncoder(w io.Writer) *Encoder\n      NewEncoder() { hasQualifiedName(\"encoding/xml\", \"NewEncoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewTokenDecoder(t TokenReader) *Decoder": {
+      "GeneratedClass": "\n    private class NewTokenDecoder extends TaintTracking::FunctionModel {\n      // signature: func NewTokenDecoder(t TokenReader) *Decoder\n      NewTokenDecoder() { hasQualifiedName(\"encoding/xml\", \"NewTokenDecoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Unmarshal(data []byte, v interface{}) error": {
+      "GeneratedClass": "\n    private class Unmarshal extends TaintTracking::FunctionModel {\n      // signature: func Unmarshal(data []byte, v interface{}) error\n      Unmarshal() { hasQualifiedName(\"encoding/xml\", \"Unmarshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

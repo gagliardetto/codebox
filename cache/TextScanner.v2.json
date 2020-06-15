@@ -1,0 +1,157 @@
+{
+   "func (*Position).IsValid() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Scanner).Init(src io.Reader) *Scanner": {
+      "GeneratedClass": "\n    private class ScannerInit extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Scanner).Init(src io.Reader) *Scanner\n      ScannerInit() { this.(Method).hasQualifiedName(\"text/scanner\", \"Scanner\", \"Init\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Scanner).Next() rune": {
+      "GeneratedClass": "\n    private class ScannerNext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Scanner).Next() rune\n      ScannerNext() { this.(Method).hasQualifiedName(\"text/scanner\", \"Scanner\", \"Next\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Scanner).Peek() rune": {
+      "GeneratedClass": "\n    private class ScannerPeek extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Scanner).Peek() rune\n      ScannerPeek() { this.(Method).hasQualifiedName(\"text/scanner\", \"Scanner\", \"Peek\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Scanner).Pos() (pos Position)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Scanner).Scan() rune": {
+      "GeneratedClass": "\n    private class ScannerScan extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Scanner).Scan() rune\n      ScannerScan() { this.(Method).hasQualifiedName(\"text/scanner\", \"Scanner\", \"Scan\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Scanner).TokenText() string": {
+      "GeneratedClass": "\n    private class ScannerTokenText extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Scanner).TokenText() string\n      ScannerTokenText() { this.(Method).hasQualifiedName(\"text/scanner\", \"Scanner\", \"TokenText\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Position).String() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func TokenString(tok rune) string": {
+      "GeneratedClass": "\n    private class TokenString extends TaintTracking::FunctionModel {\n      // signature: func TokenString(tok rune) string\n      TokenString() { hasQualifiedName(\"text/scanner\", \"TokenString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

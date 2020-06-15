@@ -1,0 +1,121 @@
+{
+   "func (Interface).Pop() interface{}": {
+      "GeneratedClass": "\n    private class InterfacePop extends TaintTracking::FunctionModel, Method {\n      // signature: func (Interface).Pop() interface{}\n      InterfacePop() {\n        this.implements(\"container/heap\", \"Interface\", \"Pop\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Interface).Push(x interface{})": {
+      "GeneratedClass": "\n    private class InterfacePush extends TaintTracking::FunctionModel, Method {\n      // signature: func (Interface).Push(x interface{})\n      InterfacePush() {\n        this.implements(\"container/heap\", \"Interface\", \"Push\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Fix(h Interface, i int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Init(h Interface)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Pop(h Interface) interface{}": {
+      "GeneratedClass": "\n    private class Pop extends TaintTracking::FunctionModel {\n      // signature: func Pop(h Interface) interface{}\n      Pop() { hasQualifiedName(\"container/heap\", \"Pop\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Push(h Interface, x interface{})": {
+      "GeneratedClass": "\n    private class Push extends TaintTracking::FunctionModel {\n      // signature: func Push(h Interface, x interface{})\n      Push() { hasQualifiedName(\"container/heap\", \"Push\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Remove(h Interface, i int) interface{}": {
+      "GeneratedClass": "\n    private class Remove extends TaintTracking::FunctionModel {\n      // signature: func Remove(h Interface, i int) interface{}\n      Remove() { hasQualifiedName(\"container/heap\", \"Remove\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

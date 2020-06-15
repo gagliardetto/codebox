@@ -1,0 +1,1309 @@
+{
+   "func (*Builder).Cap() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Builder).Grow(n int)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Builder).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Builder).Reset()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Builder).String() string": {
+      "GeneratedClass": "\n    private class BuilderString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Builder).String() string\n      BuilderString() { this.(Method).hasQualifiedName(\"strings\", \"Builder\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Builder).Write(p []byte) (int, error)": {
+      "GeneratedClass": "\n    private class BuilderWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Builder).Write(p []byte) (int, error)\n      BuilderWrite() { this.(Method).hasQualifiedName(\"strings\", \"Builder\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Builder).WriteByte(c byte) error": {
+      "GeneratedClass": "\n    private class BuilderWriteByte extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Builder).WriteByte(c byte) error\n      BuilderWriteByte() { this.(Method).hasQualifiedName(\"strings\", \"Builder\", \"WriteByte\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Builder).WriteRune(r rune) (int, error)": {
+      "GeneratedClass": "\n    private class BuilderWriteRune extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Builder).WriteRune(r rune) (int, error)\n      BuilderWriteRune() { this.(Method).hasQualifiedName(\"strings\", \"Builder\", \"WriteRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Builder).WriteString(s string) (int, error)": {
+      "GeneratedClass": "\n    private class BuilderWriteString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Builder).WriteString(s string) (int, error)\n      BuilderWriteString() { this.(Method).hasQualifiedName(\"strings\", \"Builder\", \"WriteString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).Len() int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Reader).Read(b []byte) (n int, err error)": {
+      "GeneratedClass": "\n    private class ReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Read(b []byte) (n int, err error)\n      ReaderRead() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).ReadAt(b []byte, off int64) (n int, err error)": {
+      "GeneratedClass": "\n    private class ReaderReadAt extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadAt(b []byte, off int64) (n int, err error)\n      ReaderReadAt() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"ReadAt\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).ReadByte() (byte, error)": {
+      "GeneratedClass": "\n    private class ReaderReadByte extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadByte() (byte, error)\n      ReaderReadByte() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"ReadByte\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).ReadRune() (ch rune, size int, err error)": {
+      "GeneratedClass": "\n    private class ReaderReadRune extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadRune() (ch rune, size int, err error)\n      ReaderReadRune() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"ReadRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).Reset(s string)": {
+      "GeneratedClass": "\n    private class ReaderReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Reset(s string)\n      ReaderReset() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"Reset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Reader).Seek(offset int64, whence int) (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Reader).Size() int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Reader).UnreadByte() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Reader).UnreadRune() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Reader).WriteTo(w io.Writer) (n int64, err error)": {
+      "GeneratedClass": "\n    private class ReaderWriteTo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).WriteTo(w io.Writer) (n int64, err error)\n      ReaderWriteTo() { this.(Method).hasQualifiedName(\"strings\", \"Reader\", \"WriteTo\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Replacer).Replace(s string) string": {
+      "GeneratedClass": "\n    private class ReplacerReplace extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Replacer).Replace(s string) string\n      ReplacerReplace() { this.(Method).hasQualifiedName(\"strings\", \"Replacer\", \"Replace\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Replacer).WriteString(w io.Writer, s string) (n int, err error)": {
+      "GeneratedClass": "\n    private class ReplacerWriteString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Replacer).WriteString(w io.Writer, s string) (n int, err error)\n      ReplacerWriteString() { this.(Method).hasQualifiedName(\"strings\", \"Replacer\", \"WriteString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Compare(a string, b string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Contains(s string, substr string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ContainsAny(s string, chars string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ContainsRune(s string, r rune) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Count(s string, substr string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func EqualFold(s string, t string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Fields(s string) []string": {
+      "GeneratedClass": "\n    private class Fields extends TaintTracking::FunctionModel {\n      // signature: func Fields(s string) []string\n      Fields() { hasQualifiedName(\"strings\", \"Fields\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func FieldsFunc(s string, f func(rune) bool) []string": {
+      "GeneratedClass": "\n    private class FieldsFunc extends TaintTracking::FunctionModel {\n      // signature: func FieldsFunc(s string, f func(rune) bool) []string\n      FieldsFunc() { hasQualifiedName(\"strings\", \"FieldsFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func HasPrefix(s string, prefix string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func HasSuffix(s string, suffix string) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Index(s string, substr string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IndexAny(s string, chars string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IndexByte(s string, c byte) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IndexFunc(s string, f func(rune) bool) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func IndexRune(s string, r rune) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Join(elems []string, sep string) string": {
+      "GeneratedClass": "\n    private class Join extends TaintTracking::FunctionModel {\n      // signature: func Join(elems []string, sep string) string\n      Join() { hasQualifiedName(\"strings\", \"Join\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func LastIndex(s string, substr string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LastIndexAny(s string, chars string) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LastIndexByte(s string, c byte) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LastIndexFunc(s string, f func(rune) bool) int": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Map(mapping func(rune) rune, s string) string": {
+      "GeneratedClass": "\n    private class Map extends TaintTracking::FunctionModel {\n      // signature: func Map(mapping func(rune) rune, s string) string\n      Map() { hasQualifiedName(\"strings\", \"Map\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewReader(s string) *Reader": {
+      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(s string) *Reader\n      NewReader() { hasQualifiedName(\"strings\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewReplacer(oldnew ...string) *Replacer": {
+      "GeneratedClass": "\n    private class NewReplacer extends TaintTracking::FunctionModel {\n      // signature: func NewReplacer(oldnew ...string) *Replacer\n      NewReplacer() { hasQualifiedName(\"strings\", \"NewReplacer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Repeat(s string, count int) string": {
+      "GeneratedClass": "\n    private class Repeat extends TaintTracking::FunctionModel {\n      // signature: func Repeat(s string, count int) string\n      Repeat() { hasQualifiedName(\"strings\", \"Repeat\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Replace(s string, old string, new string, n int) string": {
+      "GeneratedClass": "\n    private class Replace extends TaintTracking::FunctionModel {\n      // signature: func Replace(s string, old string, new string, n int) string\n      Replace() { hasQualifiedName(\"strings\", \"Replace\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([0, 2])) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter([0, 2])) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ReplaceAll(s string, old string, new string) string": {
+      "GeneratedClass": "\n    private class ReplaceAll extends TaintTracking::FunctionModel {\n      // signature: func ReplaceAll(s string, old string, new string) string\n      ReplaceAll() { hasQualifiedName(\"strings\", \"ReplaceAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([0, 2])) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter([0, 2])) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Split(s string, sep string) []string": {
+      "GeneratedClass": "\n    private class Split extends TaintTracking::FunctionModel {\n      // signature: func Split(s string, sep string) []string\n      Split() { hasQualifiedName(\"strings\", \"Split\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func SplitAfter(s string, sep string) []string": {
+      "GeneratedClass": "\n    private class SplitAfter extends TaintTracking::FunctionModel {\n      // signature: func SplitAfter(s string, sep string) []string\n      SplitAfter() { hasQualifiedName(\"strings\", \"SplitAfter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func SplitAfterN(s string, sep string, n int) []string": {
+      "GeneratedClass": "\n    private class SplitAfterN extends TaintTracking::FunctionModel {\n      // signature: func SplitAfterN(s string, sep string, n int) []string\n      SplitAfterN() { hasQualifiedName(\"strings\", \"SplitAfterN\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func SplitN(s string, sep string, n int) []string": {
+      "GeneratedClass": "\n    private class SplitN extends TaintTracking::FunctionModel {\n      // signature: func SplitN(s string, sep string, n int) []string\n      SplitN() { hasQualifiedName(\"strings\", \"SplitN\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Title(s string) string": {
+      "GeneratedClass": "\n    private class Title extends TaintTracking::FunctionModel {\n      // signature: func Title(s string) string\n      Title() { hasQualifiedName(\"strings\", \"Title\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToLower(s string) string": {
+      "GeneratedClass": "\n    private class ToLower extends TaintTracking::FunctionModel {\n      // signature: func ToLower(s string) string\n      ToLower() { hasQualifiedName(\"strings\", \"ToLower\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToLowerSpecial(c unicode.SpecialCase, s string) string": {
+      "GeneratedClass": "\n    private class ToLowerSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToLowerSpecial(c unicode.SpecialCase, s string) string\n      ToLowerSpecial() { hasQualifiedName(\"strings\", \"ToLowerSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToTitle(s string) string": {
+      "GeneratedClass": "\n    private class ToTitle extends TaintTracking::FunctionModel {\n      // signature: func ToTitle(s string) string\n      ToTitle() { hasQualifiedName(\"strings\", \"ToTitle\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToTitleSpecial(c unicode.SpecialCase, s string) string": {
+      "GeneratedClass": "\n    private class ToTitleSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToTitleSpecial(c unicode.SpecialCase, s string) string\n      ToTitleSpecial() { hasQualifiedName(\"strings\", \"ToTitleSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToUpper(s string) string": {
+      "GeneratedClass": "\n    private class ToUpper extends TaintTracking::FunctionModel {\n      // signature: func ToUpper(s string) string\n      ToUpper() { hasQualifiedName(\"strings\", \"ToUpper\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToUpperSpecial(c unicode.SpecialCase, s string) string": {
+      "GeneratedClass": "\n    private class ToUpperSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToUpperSpecial(c unicode.SpecialCase, s string) string\n      ToUpperSpecial() { hasQualifiedName(\"strings\", \"ToUpperSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func ToValidUTF8(s string, replacement string) string": {
+      "GeneratedClass": "\n    private class ToValidUTF8 extends TaintTracking::FunctionModel {\n      // signature: func ToValidUTF8(s string, replacement string) string\n      ToValidUTF8() { hasQualifiedName(\"strings\", \"ToValidUTF8\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Trim(s string, cutset string) string": {
+      "GeneratedClass": "\n    private class Trim extends TaintTracking::FunctionModel {\n      // signature: func Trim(s string, cutset string) string\n      Trim() { hasQualifiedName(\"strings\", \"Trim\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimFunc(s string, f func(rune) bool) string": {
+      "GeneratedClass": "\n    private class TrimFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimFunc(s string, f func(rune) bool) string\n      TrimFunc() { hasQualifiedName(\"strings\", \"TrimFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimLeft(s string, cutset string) string": {
+      "GeneratedClass": "\n    private class TrimLeft extends TaintTracking::FunctionModel {\n      // signature: func TrimLeft(s string, cutset string) string\n      TrimLeft() { hasQualifiedName(\"strings\", \"TrimLeft\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimLeftFunc(s string, f func(rune) bool) string": {
+      "GeneratedClass": "\n    private class TrimLeftFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimLeftFunc(s string, f func(rune) bool) string\n      TrimLeftFunc() { hasQualifiedName(\"strings\", \"TrimLeftFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimPrefix(s string, prefix string) string": {
+      "GeneratedClass": "\n    private class TrimPrefix extends TaintTracking::FunctionModel {\n      // signature: func TrimPrefix(s string, prefix string) string\n      TrimPrefix() { hasQualifiedName(\"strings\", \"TrimPrefix\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimRight(s string, cutset string) string": {
+      "GeneratedClass": "\n    private class TrimRight extends TaintTracking::FunctionModel {\n      // signature: func TrimRight(s string, cutset string) string\n      TrimRight() { hasQualifiedName(\"strings\", \"TrimRight\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimRightFunc(s string, f func(rune) bool) string": {
+      "GeneratedClass": "\n    private class TrimRightFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimRightFunc(s string, f func(rune) bool) string\n      TrimRightFunc() { hasQualifiedName(\"strings\", \"TrimRightFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimSpace(s string) string": {
+      "GeneratedClass": "\n    private class TrimSpace extends TaintTracking::FunctionModel {\n      // signature: func TrimSpace(s string) string\n      TrimSpace() { hasQualifiedName(\"strings\", \"TrimSpace\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func TrimSuffix(s string, suffix string) string": {
+      "GeneratedClass": "\n    private class TrimSuffix extends TaintTracking::FunctionModel {\n      // signature: func TrimSuffix(s string, suffix string) string\n      TrimSuffix() { hasQualifiedName(\"strings\", \"TrimSuffix\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   }
+}

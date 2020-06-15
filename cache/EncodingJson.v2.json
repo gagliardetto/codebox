@@ -1,0 +1,648 @@
+{
+   "func (*Decoder).Buffered() io.Reader": {
+      "GeneratedClass": "\n    private class DecoderBuffered extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Buffered() io.Reader\n      DecoderBuffered() { this.(Method).hasQualifiedName(\"encoding/json\", \"Decoder\", \"Buffered\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).Decode(v interface{}) error": {
+      "GeneratedClass": "\n    private class DecoderDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Decode(v interface{}) error\n      DecoderDecode() { this.(Method).hasQualifiedName(\"encoding/json\", \"Decoder\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).DisallowUnknownFields()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Decoder).InputOffset() int64": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Decoder).More() bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Decoder).Token() (Token, error)": {
+      "GeneratedClass": "\n    private class DecoderToken extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Decoder).Token() (Token, error)\n      DecoderToken() { this.(Method).hasQualifiedName(\"encoding/json\", \"Decoder\", \"Token\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Decoder).UseNumber()": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Encoder).Encode(v interface{}) error": {
+      "GeneratedClass": "\n    private class EncoderEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).Encode(v interface{}) error\n      EncoderEncode() { this.(Method).hasQualifiedName(\"encoding/json\", \"Encoder\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*Encoder).SetEscapeHTML(on bool)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Encoder).SetIndent(prefix string, indent string)": {
+      "GeneratedClass": "\n    private class EncoderSetIndent extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoder).SetIndent(prefix string, indent string)\n      EncoderSetIndent() { this.(Method).hasQualifiedName(\"encoding/json\", \"Encoder\", \"SetIndent\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               true
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*InvalidUTF8Error).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*InvalidUnmarshalError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*MarshalerError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*MarshalerError).Unwrap() error": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*RawMessage).UnmarshalJSON(data []byte) error": {
+      "GeneratedClass": "\n    private class RawMessageUnmarshalJSON extends TaintTracking::FunctionModel, Method {\n      // signature: func (*RawMessage).UnmarshalJSON(data []byte) error\n      RawMessageUnmarshalJSON() { this.(Method).hasQualifiedName(\"encoding/json\", \"RawMessage\", \"UnmarshalJSON\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*SyntaxError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*UnmarshalFieldError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*UnmarshalTypeError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*UnsupportedTypeError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*UnsupportedValueError).Error() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Delim).String() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Marshaler).MarshalJSON() ([]byte, error)": {
+      "GeneratedClass": "\n    private class MarshalerMarshalJSON extends TaintTracking::FunctionModel, Method {\n      // signature: func (Marshaler).MarshalJSON() ([]byte, error)\n      MarshalerMarshalJSON() {\n        this.implements(\"encoding/json\", \"Marshaler\", \"MarshalJSON\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Number).Float64() (float64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Number).Int64() (int64, error)": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (Number).String() string": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (RawMessage).MarshalJSON() ([]byte, error)": {
+      "GeneratedClass": "\n    private class RawMessageMarshalJSON extends TaintTracking::FunctionModel, Method {\n      // signature: func (RawMessage).MarshalJSON() ([]byte, error)\n      RawMessageMarshalJSON() { this.(Method).hasQualifiedName(\"encoding/json\", \"RawMessage\", \"MarshalJSON\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (Unmarshaler).UnmarshalJSON([]byte) error": {
+      "GeneratedClass": "\n    private class UnmarshalerUnmarshalJSON extends TaintTracking::FunctionModel, Method {\n      // signature: func (Unmarshaler).UnmarshalJSON([]byte) error\n      UnmarshalerUnmarshalJSON() {\n        this.implements(\"encoding/json\", \"Unmarshaler\", \"UnmarshalJSON\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Compact(dst *bytes.Buffer, src []byte) error": {
+      "GeneratedClass": "\n    private class Compact extends TaintTracking::FunctionModel {\n      // signature: func Compact(dst *bytes.Buffer, src []byte) error\n      Compact() { hasQualifiedName(\"encoding/json\", \"Compact\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func HTMLEscape(dst *bytes.Buffer, src []byte)": {
+      "GeneratedClass": "\n    private class HTMLEscape extends TaintTracking::FunctionModel {\n      // signature: func HTMLEscape(dst *bytes.Buffer, src []byte)\n      HTMLEscape() { hasQualifiedName(\"encoding/json\", \"HTMLEscape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Indent(dst *bytes.Buffer, src []byte, prefix string, indent string) error": {
+      "GeneratedClass": "\n    private class Indent extends TaintTracking::FunctionModel {\n      // signature: func Indent(dst *bytes.Buffer, src []byte, prefix string, indent string) error\n      Indent() { hasQualifiedName(\"encoding/json\", \"Indent\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([1, 2, 3])) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter([1, 2, 3])) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               true,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Marshal(v interface{}) ([]byte, error)": {
+      "GeneratedClass": "\n    private class Marshal extends TaintTracking::FunctionModel {\n      // signature: func Marshal(v interface{}) ([]byte, error)\n      Marshal() { hasQualifiedName(\"encoding/json\", \"Marshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func MarshalIndent(v interface{}, prefix string, indent string) ([]byte, error)": {
+      "GeneratedClass": "\n    private class MarshalIndent extends TaintTracking::FunctionModel {\n      // signature: func MarshalIndent(v interface{}, prefix string, indent string) ([]byte, error)\n      MarshalIndent() { hasQualifiedName(\"encoding/json\", \"MarshalIndent\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               true,
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewDecoder(r io.Reader) *Decoder": {
+      "GeneratedClass": "\n    private class NewDecoder extends TaintTracking::FunctionModel {\n      // signature: func NewDecoder(r io.Reader) *Decoder\n      NewDecoder() { hasQualifiedName(\"encoding/json\", \"NewDecoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false
+            ],
+            "Outp": [
+               false,
+               true
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func NewEncoder(w io.Writer) *Encoder": {
+      "GeneratedClass": "\n    private class NewEncoder extends TaintTracking::FunctionModel {\n      // signature: func NewEncoder(w io.Writer) *Encoder\n      NewEncoder() { hasQualifiedName(\"encoding/json\", \"NewEncoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true
+            ],
+            "Outp": [
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Unmarshal(data []byte, v interface{}) error": {
+      "GeneratedClass": "\n    private class Unmarshal extends TaintTracking::FunctionModel {\n      // signature: func Unmarshal(data []byte, v interface{}) error\n      Unmarshal() { hasQualifiedName(\"encoding/json\", \"Unmarshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1)))\n      }\n    }",
+      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
+      "Blocks": [
+         {
+            "Inp": [
+               true,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               true,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func Valid(data []byte) bool": {
+      "GeneratedClass": "",
+      "GeneratedConditions": "",
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}
