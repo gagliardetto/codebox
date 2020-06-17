@@ -7,12 +7,12 @@ NOTE: removed all with `internal`, and `vendor` in the path.
 Each item in the list is a package on its own:
 
 # [generated][tested and integrated] `package`
-- [x][x] `archive/tar`
-- [x][x] `archive/zip`
-- [x][x] `bufio`
+- [x][] `archive/tar`
+- [x][] `archive/zip`
+- [x][] `bufio`
 			- NewReadWriter
 - [][] `builtin`
-- [x][x] `bytes`
+- [x][] `bytes`
 			- Join
 			- Replace
 			- ReplaceAll
@@ -36,68 +36,68 @@ Each item in the list is a package on its own:
 - [][] `cmd/test2json`
 - [][] `cmd/trace`
 - [][] `cmd/vet`
-- [x][x] `compress/bzip2`
-- [x][x] `compress/flate`
-- [x][x] `compress/gzip`
-- [x][x] `compress/lzw`
-- [x][x] `compress/zlib`
-- [x][x] `container/heap`
-- [x][x] `container/list`
+- [x][] `compress/bzip2`
+- [x][] `compress/flate`
+- [x][] `compress/gzip`
+- [x][] `compress/lzw`
+- [x][] `compress/zlib`
+- [x][] `container/heap`
+- [x][] `container/list`
 			- List.InsertAfter
 			- List.InsertBefore
 			- List.PushBack
 			- List.PushFront
-- [x][x] `container/ring`
-- [x][x] `context`
-- [x][x] `crypto`
+- [x][] `container/ring`
+- [x][] `context`
+- [x][] `crypto`
 - [][] `crypto/aes`
-- [x][x] `crypto/cipher`
+- [x][] `crypto/cipher`
 			- AEAD.Open
 			- AEAD.Seal
 - [][] `crypto/des`
 - [][] `crypto/dsa`
-- [x][x] `crypto/ecdsa`
-- [x][x] `crypto/ed25519`
+- [x][] `crypto/ecdsa`
+- [x][] `crypto/ed25519`
 - [][] `crypto/elliptic`
 - [][] `crypto/hmac`
 - [][] `crypto/md5`
 - [][] `crypto/rand`
 - [][] `crypto/rc4`
-- [x][x] `crypto/rsa`
+- [x][] `crypto/rsa`
 - [][] `crypto/sha1`
 - [][] `crypto/sha256`
 - [][] `crypto/sha512`
 - [][] `crypto/subtle`
-- [x][x] `crypto/tls`
+- [x][] `crypto/tls`
 			- Client
 			- NewListener
 			- Server
-- [x][x] `crypto/x509`
+- [x][] `crypto/x509`
 - [][] `crypto/x509/pkix`
-- [x][x] `database/sql`
-- [x][x] `database/sql/driver`
+- [x][] `database/sql`
+- [x][] `database/sql/driver`
 - [][] `debug/dwarf`
 - [][] `debug/elf`
 - [][] `debug/gosym`
 - [][] `debug/macho`
 - [][] `debug/pe`
 - [][] `debug/plan9obj`
-- [x][x] `encoding`
-- [x][x] `encoding/ascii85`
-- [x][x] `encoding/asn1`
-- [x][x] `encoding/base32`
-- [x][x] `encoding/base64`
-- [x][x] `encoding/binary`
-- [x][x] `encoding/csv`
-- [x][x] `encoding/gob`
-- [x][x] `encoding/hex`
-- [x][x] `encoding/json`
-- [x][x] `encoding/pem`
-- [x][x] `encoding/xml`
-- [x][x] `errors`
-- [x][x] `expvar`
+- [x][] `encoding`
+- [x][] `encoding/ascii85`
+- [x][] `encoding/asn1`
+- [x][] `encoding/base32`
+- [x][] `encoding/base64`
+- [x][] `encoding/binary`
+- [x][] `encoding/csv`
+- [x][] `encoding/gob`
+- [x][] `encoding/hex`
+- [x][] `encoding/json`
+- [x][] `encoding/pem`
+- [x][] `encoding/xml`
+- [x][] `errors`
+- [x][] `expvar`
 - [][] `flag`
-- [x][x] `fmt`
+- [x][] `fmt`
 			- Errorf
 			- Fprintf
 			- Sprintf
@@ -118,8 +118,8 @@ Each item in the list is a package on its own:
 - [][] `hash/crc64`
 - [][] `hash/fnv`
 - [][] `hash/maphash`
-- [x][x] `html`
-- [x][x] `html/template`
+- [x][] `html`
+- [x][] `html/template`
 - [][] `image`
 - [][] `image/color`
 - [][] `image/color/palette`
@@ -128,10 +128,10 @@ Each item in the list is a package on its own:
 - [][] `image/jpeg`
 - [][] `image/png`
 - [][] `index/suffixarray`
-- [x][x] `io`
+- [x][] `io`
 			- TeeReader
-- [x][x] `io/ioutil`
-- [x][x] `log`
+- [x][] `io/ioutil`
+- [x][] `log`
 			- Logger.Fatalf
 			- Logger.Panicf
 			- Logger.Printf
@@ -141,14 +141,14 @@ Each item in the list is a package on its own:
 - [][] `math/bits`
 - [][] `math/cmplx`
 - [][] `math/rand`
-- [x][x] `mime`
+- [x][] `mime`
 			- FormatMediaType
 			- ParseMediaType
-- [x][x] `mime/multipart`
+- [x][] `mime/multipart`
 			- WriteField
-- [x][x] `mime/quotedprintable`
-- [x][x] `net`
-- [x][x] `net/http`
+- [x][] `mime/quotedprintable`
+- [x][] `net`
+- [x][] `net/http`
 			- Header.Add
 			- Header.Set
 - [][] `net/http/cgi`
@@ -156,40 +156,40 @@ Each item in the list is a package on its own:
 - [][] `net/http/fcgi`
 - [][] `net/http/httptest`
 - [][] `net/http/httptrace`
-- [x][x] `net/http/httputil`
+- [x][] `net/http/httputil`
 			- NewClientConn
 			- NewProxyClientConn
 			- NewServerConn
 - [][] `net/http/pprof`
-- [x][x] `net/mail`
+- [x][] `net/mail`
 - [][] `net/rpc`
 - [][] `net/rpc/jsonrpc`
 - [][] `net/smtp`
-- [x][x] `net/textproto`
+- [x][] `net/textproto`
 			- Writer.PrintfLine
-- [x][x] `net/url`
+- [x][] `net/url`
 			- UserPassword
 			- ResolveReference
 			- URL.Parse
 			- Values.Add
 			- Values.Set
-- [x][x] `os`
+- [x][] `os`
 - [][] `os/exec`
 - [][] `os/signal`
 - [][] `os/user`
-- [x][x] `path`
+- [x][] `path`
 			- Split
-- [x][x] `path/filepath`
+- [x][] `path/filepath`
 			- Rel
 			- Split
 - [][] `plugin`
-- [x][x] `reflect`
+- [x][] `reflect`
 			- Append
 			- AppendSlice
 			- Value.SetMapIndex
 			NOTES:
 				- Only tracked Value related stuff.
-- [x][x] `regexp`
+- [x][] `regexp`
 			- Regexp.ReplaceAll
 			- Regexp.ReplaceAllLiteral
 			- Regexp.ReplaceAllLiteralString
@@ -201,8 +201,8 @@ Each item in the list is a package on its own:
 - [][] `runtime/pprof`
 - [][] `runtime/race`
 - [][] `runtime/trace`
-- [x][x] `sort`
-- [x][x] `strconv`
+- [x][] `sort`
+- [x][] `strconv`
 			- AppendQuote
 			- AppendQuoteRune
 			- AppendQuoteRuneToASCII
@@ -210,35 +210,35 @@ Each item in the list is a package on its own:
 			- AppendQuoteToASCII
 			- AppendQuoteToGraphic
 			- UnquoteChar
-- [x][x] `strings`
+- [x][] `strings`
 			- Join
 			- Replace
 			- ReplaceAll
 			- ToValidUTF8
-- [x][x] `sync`
+- [x][] `sync`
 			- Map.LoadOrStore
 			- Map.Store
-- [x][x] `sync/atomic`
+- [x][] `sync/atomic`
 			- AddUintptr
 			- SwapPointer
 			- SwapUintptr
-- [x][x] `syscall`
+- [x][] `syscall`
 - [][] `syscall/js`
 - [][] `testing`
 - [][] `testing/iotest`
 - [][] `testing/quick`
-- [x][x] `text/scanner`
+- [x][] `text/scanner`
 			- Scanner.Init
-- [x][x] `text/tabwriter`
+- [x][] `text/tabwriter`
 			- Writer.Init
-- [x][x] `text/template`
+- [x][] `text/template`
 - [][] `text/template/parse`
 - [][] `time`
-- [x][x] `unicode`
-- [x][x] `unicode/utf16`
+- [x][] `unicode`
+- [x][] `unicode/utf16`
 			- DecodeRune
 			- EncodeRune
-- [x][x] `unicode/utf8`
+- [x][] `unicode/utf8`
 - [][] `unsafe`
 
 ---
