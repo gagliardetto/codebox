@@ -97,7 +97,7 @@ func (s *Scanner) Scan() ([]*Package, error) {
 func scanPackage(path string) (*packages.Package, error) {
 	// NEW way of parsing a go package:
 	//path = "/usr/local/go/src/net"
-	fmt.Println(path)
+	fmt.Println("Scanning", path)
 
 	config := &packages.Config{
 		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |

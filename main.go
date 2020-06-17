@@ -142,6 +142,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 //OK- Zero value of variadic string parameters is not nil: Options(opts ...string)
 //OK- TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
 //OK- unsafe.Pointer in type assertion
+// - Add warning to each golang file: WARNING: This file was automatically generated. DO NOT EDIT.
 func main() {
 	var pkg string
 	var runServer bool
@@ -447,54 +448,37 @@ func main() {
 				panic(err)
 			}
 
-			findLatestFunc := func(signature string) *FEFunc {
-				for _, latest := range feModule.Funcs {
-					if latest.Signature == signature {
-						return latest
+			findCached := func(signature string) *CodeQlFinalVals {
+				for cacheSignature, cached := range cachedMap {
+					if cacheSignature == signature {
+						return cached
 					}
 				}
 				return nil
 			}
-			findLatestTypeMethod := func(signature string) *FETypeMethod {
-				for _, latest := range feModule.TypeMethods {
-					if latest.Func.Signature == signature {
-						return latest
-					}
-				}
-				return nil
-			}
-			findLatestInterfaceMethod := func(signature string) *FEInterfaceMethod {
-				for _, latest := range feModule.InterfaceMethods {
-					if latest.Func.Signature == signature {
-						return latest
-					}
-				}
-				return nil
-			}
-
-			// NOTE: we are searching all-to-some, so there will be a lot of "not found" messages here:
-			for signature, cached := range cachedMap {
-				latest := findLatestFunc(signature)
-				if latest == nil {
-					Warnf("latest FEFunc not found for signature %q", signature)
+			// Load from cache:
+			for _, latest := range feModule.Funcs {
+				cached := findCached(latest.Signature)
+				if cached == nil {
+					Warnf("cached not found for signature %q", latest.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL = cached
 				}
 			}
-			for signature, cached := range cachedMap {
-				latest := findLatestTypeMethod(signature)
-				if latest == nil {
-					Warnf("latest FETypeMethod not found for signature %q", signature)
+			for _, latest := range feModule.TypeMethods {
+				cached := findCached(latest.Func.Signature)
+				if cached == nil {
+					Warnf("cached not found for signature %q", latest.Func.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL = cached
 				}
 			}
-			for signature, cached := range cachedMap {
-				latest := findLatestInterfaceMethod(signature)
-				if latest == nil {
-					Warnf("latest FEInterfaceMethod not found for signature %q", signature)
+			for _, latest := range feModule.InterfaceMethods {
+				cached := findCached(latest.Func.Signature)
+				if cached == nil {
+					Warnf("cached not found for signature %q", latest.Func.Signature)
 				} else {
 					// Copy CodeQL object:
 					latest.CodeQL = cached
@@ -646,7 +630,7 @@ func main() {
 							testBlock.Comment("Run the taint scenario:")
 							testBlock.Id("out").Op(":=").Id(testFuncName).Call(Id("source"))
 
-							testBlock.Comment("Sink the tainted `out`:")
+							testBlock.Comment("If the taint step(s) succeeded, then `out` is tainted and will be sink-able here:")
 							testBlock.Id("sink").Call(Id("out"))
 						})
 					}
@@ -1107,6 +1091,8 @@ func NewTestFile(includeBoilerplace bool) *File {
 	file := NewFile("main")
 	// Set a prefix to avoid collision between variable names and packages:
 	file.PackagePrefix = "cql"
+	// Add comment to file:
+	file.HeaderComment("WARNING: This file was automatically generated. DO NOT EDIT.")
 
 	if includeBoilerplace {
 		{
@@ -1764,7 +1750,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 }
 
 func NewNameWithPrefix(prefix string) string {
-	return Sf("%s%v", prefix, RandomIntRange(111, 999))
+	return Sf("%s%v", prefix, DeterministicRandomIntRange(111, 999))
 }
 func MustVarName(name string) string {
 	return MustVarNameWithDefaultPrefix(name, "variable")

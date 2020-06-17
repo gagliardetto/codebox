@@ -1,6 +1,6 @@
 {
    "func (Writer).Write(p []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class WriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (Writer).Write(p []byte) (n int, err error)\n      WriterWrite() {\n        this.implements(\"io\", \"Writer\", \"Write\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
+      "GeneratedClass": "",
       "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
@@ -18,7 +18,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func NopCloser(r io.Reader) io.ReadCloser": {
       "GeneratedClass": "\n    private class NopCloser extends TaintTracking::FunctionModel {\n      // signature: func NopCloser(r io.Reader) io.ReadCloser\n      NopCloser() { hasQualifiedName(\"io/ioutil\", \"NopCloser\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
