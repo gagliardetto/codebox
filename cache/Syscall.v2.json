@@ -2994,7 +2994,7 @@
       "IsEnabled": false
    },
    "func Pread(fd int, p []byte, offset int64) (n int, err error)": {
-      "GeneratedClass": "\n    private class Pread extends TaintTracking::FunctionModel {\n      // signature: func Pread(fd int, p []byte, offset int64) (n int, err error)\n      Pread() { hasQualifiedName(\"syscall\", \"Pread\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1)))\n      }\n    }",
+      "GeneratedClass": "",
       "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
       "Blocks": [
          {
@@ -3014,7 +3014,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func PtraceAttach(pid int) (err error)": {
       "GeneratedClass": "",
@@ -4342,7 +4342,7 @@
       "IsEnabled": false
    },
    "func SlicePtrFromStrings(ss []string) ([]*byte, error)": {
-      "GeneratedClass": "\n    private class SlicePtrFromStrings extends TaintTracking::FunctionModel {\n      // signature: func SlicePtrFromStrings(ss []string) ([]*byte, error)\n      SlicePtrFromStrings() { hasQualifiedName(\"syscall\", \"SlicePtrFromStrings\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
+      "GeneratedClass": "",
       "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
@@ -4358,7 +4358,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Socket(domain int, typ int, proto int) (fd int, err error)": {
       "GeneratedClass": "",
@@ -4533,7 +4533,7 @@
       "IsEnabled": true
    },
    "func StringSlicePtr(ss []string) []*byte": {
-      "GeneratedClass": "\n    private class StringSlicePtr extends TaintTracking::FunctionModel {\n      // signature: func StringSlicePtr(ss []string) []*byte\n      StringSlicePtr() { hasQualifiedName(\"syscall\", \"StringSlicePtr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedClass": "",
       "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
@@ -4547,7 +4547,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Symlink(oldpath string, newpath string) (err error)": {
       "GeneratedClass": "",
@@ -4851,7 +4851,7 @@
       "IsEnabled": false
    },
    "func UnixCredentials(ucred *Ucred) []byte": {
-      "GeneratedClass": "\n    private class UnixCredentials extends TaintTracking::FunctionModel {\n      // signature: func UnixCredentials(ucred *Ucred) []byte\n      UnixCredentials() { hasQualifiedName(\"syscall\", \"UnixCredentials\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
+      "GeneratedClass": "",
       "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
@@ -4865,7 +4865,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func UnixRights(fds ...int) []byte": {
       "GeneratedClass": "",
