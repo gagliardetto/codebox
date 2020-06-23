@@ -1,4 +1,4 @@
-## standard library (from list available at https://godoc.org/-/go; see also https://golang.org/pkg/)
+## Standard library (from list available at https://godoc.org/-/go; see also https://golang.org/pkg/)
 
 Go version: go version go1.14.1 linux/amd64
 
@@ -243,7 +243,7 @@ Each item in the list is a package on its own:
 
 ---
 
-### packages vendored inside standard library that are not included in the `golang.org/x` list
+### Packages vendored inside standard library that are not included in the `golang.org/x` list
 
 - [ ] github.com/google/pprof/*
 	- [ ] `github.com/google/pprof`
