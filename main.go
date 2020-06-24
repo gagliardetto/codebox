@@ -3446,8 +3446,8 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 		return err
 	}
 	{
-		tempBuf := new(bytes.Buffer)
-		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_Func)
+		funcsTempBuf := new(bytes.Buffer)
+		fnTpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_Func)
 		if err != nil {
 			return err
 		}
@@ -3462,7 +3462,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 				continue
 			}
 			if found > 0 {
-				tempBuf.WriteString(PadNewLines("\nor"))
+				funcsTempBuf.WriteString(PadNewLines("\nor"))
 			}
 			found++
 
@@ -3472,7 +3472,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 			}
 			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
 
-			err = tpl.Execute(tempBuf, fe)
+			err = fnTpl.Execute(funcsTempBuf, fe)
 			if err != nil {
 				return fmt.Errorf("error while executing template for func %q: %s", fe.ID, err)
 			}
@@ -3480,9 +3480,9 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("FuncTaintTracking"),
+				ClassName:  FormatCodeQlName("FunctionTaintTracking"),
 				Extends:    CodeQLExtendsFunctionModel,
-				Conditions: tempBuf.String(),
+				Conditions: funcsTempBuf.String(),
 			}
 			buf.WriteString("\n")
 			err = classTpl.Execute(buf, vals)
@@ -3492,13 +3492,13 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 		}
 	}
 	{
-		tempBuf := new(bytes.Buffer)
-		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_TypeMethod)
+		found := 0
+
+		typeMethodsTempBuf := new(bytes.Buffer)
+		typMethTpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_TypeMethod)
 		if err != nil {
 			return err
 		}
-
-		found := 0
 		for _, fe := range feModule.TypeMethods {
 			if !fe.CodeQL.IsEnabled {
 				continue
@@ -3508,7 +3508,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 				continue
 			}
 			if found > 0 {
-				tempBuf.WriteString(PadNewLines("\nor"))
+				typeMethodsTempBuf.WriteString(PadNewLines("\nor"))
 			}
 			found++
 
@@ -3518,33 +3518,17 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 			}
 			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
 
-			err = tpl.Execute(tempBuf, fe)
+			err = typMethTpl.Execute(typeMethodsTempBuf, fe)
 			if err != nil {
 				return fmt.Errorf("error while executing template for type-method %q: %s", fe.ID, err)
 			}
 		}
-		if found > 0 {
-			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("MethodTaintTracking"),
-				Extends:    CodeQLExtendsFunctionModelMethod,
-				Conditions: tempBuf.String(),
-			}
-			buf.WriteString("\n")
-			err = classTpl.Execute(buf, vals)
-			if err != nil {
-				return fmt.Errorf("error while executing compressed template for type-methods: %s", err)
-			}
-		}
-	}
 
-	{
-		tempBuf := new(bytes.Buffer)
-		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_InterfaceMethod)
+		interfaceMethodsTempBuf := new(bytes.Buffer)
+		intMethTpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_InterfaceMethod)
 		if err != nil {
 			return err
 		}
-
-		found := 0
 		for _, fe := range feModule.InterfaceMethods {
 			if !fe.CodeQL.IsEnabled {
 				continue
@@ -3554,7 +3538,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 				continue
 			}
 			if found > 0 {
-				tempBuf.WriteString(PadNewLines("\nor"))
+				interfaceMethodsTempBuf.WriteString(PadNewLines("\nor"))
 			}
 			found++
 
@@ -3564,21 +3548,22 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 			}
 			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
 
-			err = tpl.Execute(tempBuf, fe)
+			err = intMethTpl.Execute(interfaceMethodsTempBuf, fe)
 			if err != nil {
 				return fmt.Errorf("error while executing template for interface-method %q: %s", fe.ID, err)
 			}
 		}
+
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("InterfaceTaintTracking"),
+				ClassName:  FormatCodeQlName("MethodAndInterfaceTaintTracking"),
 				Extends:    CodeQLExtendsFunctionModelMethod,
-				Conditions: tempBuf.String(),
+				Conditions: "\n// Methods:\n" + typeMethodsTempBuf.String() + "\n// Interfaces:\n" + interfaceMethodsTempBuf.String(),
 			}
 			buf.WriteString("\n")
 			err = classTpl.Execute(buf, vals)
 			if err != nil {
-				return fmt.Errorf("error while executing compressed template for interface-methods: %s", err)
+				return fmt.Errorf("error while executing compressed template for type-methods: %s", err)
 			}
 		}
 	}
