@@ -3493,6 +3493,8 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 	}
 	{
 		found := 0
+		foundTypeMethods := 0
+		foundInterfaceMethods := 0
 
 		typeMethodsTempBuf := new(bytes.Buffer)
 		typMethTpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_TypeMethod)
@@ -3511,6 +3513,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 				typeMethodsTempBuf.WriteString(PadNewLines("\nor"))
 			}
 			found++
+			foundTypeMethods++
 
 			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(fe, fe.CodeQL.Blocks)
 			if err != nil {
@@ -3541,6 +3544,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 				interfaceMethodsTempBuf.WriteString(PadNewLines("\nor"))
 			}
 			found++
+			foundInterfaceMethods++
 
 			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(FEIToFET(fe), fe.CodeQL.Blocks)
 			if err != nil {
@@ -3554,11 +3558,19 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 			}
 		}
 
+		finalConditions := ""
+		if foundTypeMethods > 0 {
+			finalConditions += "\n// Methods:\n" + typeMethodsTempBuf.String()
+		}
+		if foundInterfaceMethods > 0 {
+			finalConditions += "\n// Interfaces:\n" + interfaceMethodsTempBuf.String()
+		}
+
 		if found > 0 {
 			vals := &CompressedTemplateValue{
 				ClassName:  FormatCodeQlName("MethodAndInterfaceTaintTracking"),
 				Extends:    CodeQLExtendsFunctionModelMethod,
-				Conditions: "\n// Methods:\n" + typeMethodsTempBuf.String() + "\n// Interfaces:\n" + interfaceMethodsTempBuf.String(),
+				Conditions: finalConditions,
 			}
 			buf.WriteString("\n")
 			err = classTpl.Execute(buf, vals)
