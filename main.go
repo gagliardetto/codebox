@@ -152,6 +152,7 @@ func main() {
 
 	var toStdout bool
 	var includeBoilerplace bool
+	var compressCodeQl bool
 
 	flag.StringVar(&pkg, "pkg", "", "Package you want to scan (absolute path)")
 	flag.StringVar(&cacheDir, "cache-dir", "./cache", "Folder that contains cache of scanned packages and set pointers")
@@ -159,6 +160,7 @@ func main() {
 	flag.BoolVar(&runServer, "http", false, "Run http server")
 	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
 	flag.BoolVar(&includeBoilerplace, "stub", false, "Include in go test files the utility functions (main, sink, link, etc.)")
+	flag.BoolVar(&compressCodeQl, "compress", true, "Compress codeql classes")
 	flag.Parse()
 
 	// One package at a time:
@@ -688,17 +690,24 @@ import go` + "\n\n"
 				FormatCodeQlName(feModule.PkgPath+"-TaintTracking"),
 			)
 			buf.WriteString(fileHeader + moduleHeader)
-			err := GenerateCodeQLTT_Functions(&buf, feModule.Funcs)
-			if err != nil {
-				panic(err)
-			}
-			err = GenerateCodeQLTT_TypeMethods(&buf, feModule.TypeMethods)
-			if err != nil {
-				panic(err)
-			}
-			err = GenerateCodeQLTT_InterfaceMethods(&buf, feModule.InterfaceMethods)
-			if err != nil {
-				panic(err)
+			if compressCodeQl {
+				err := CompressedGenerateCodeQLTT_All(&buf, feModule)
+				if err != nil {
+					panic(err)
+				}
+			} else {
+				err := GenerateCodeQLTT_Functions(&buf, feModule.Funcs)
+				if err != nil {
+					panic(err)
+				}
+				err = GenerateCodeQLTT_TypeMethods(&buf, feModule.TypeMethods)
+				if err != nil {
+					panic(err)
+				}
+				err = GenerateCodeQLTT_InterfaceMethods(&buf, feModule.InterfaceMethods)
+				if err != nil {
+					panic(err)
+				}
 			}
 
 			buf.WriteString("\n}")
@@ -1071,13 +1080,14 @@ func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMeth
 }
 
 func PadNewLines(s string) string {
+	paddingSize := 6
 	var res string
 	scanner := bufio.NewScanner(strings.NewReader(s))
 	tot := strings.Count(s, "\n")
 	for i := 0; scanner.Scan(); i++ {
 		var padding = ""
 		if i > 0 {
-			padding = RepeatString(8, " ")
+			padding = RepeatString(paddingSize, " ")
 		}
 		res += Sf("%s%s", padding, scanner.Text())
 		isLast := i == tot
@@ -3403,4 +3413,175 @@ func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 	}
 
 	return children
+}
+
+const (
+	CodeQLExtendsFunctionModel       = "TaintTracking::FunctionModel"
+	CodeQLExtendsFunctionModelMethod = "TaintTracking::FunctionModel, Method"
+)
+
+const (
+	CodeQL_TPL_Single_Func = `
+	// signature: {{.Signature}}
+	hasQualifiedName("{{ .PkgPath }}", "{{ .Name }}") and {{ .CodeQL.GeneratedConditions }}`
+
+	CodeQL_TPL_Single_TypeMethod = `
+	// signature: {{.Func.Signature}}
+	this.(Method).hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
+
+	CodeQL_TPL_Single_InterfaceMethod = `
+	// signature: {{.Func.Signature}}
+	this.implements("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
+)
+
+type CompressedTemplateValue struct {
+	ClassName  string
+	Extends    string
+	Conditions string
+}
+
+func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error {
+	classTpl, err := NewTextTemplateFromFile("./templates/v2-compressed-taint-tracking.txt")
+	if err != nil {
+		return err
+	}
+	{
+		tempBuf := new(bytes.Buffer)
+		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_Func)
+		if err != nil {
+			return err
+		}
+
+		found := 0
+		for _, fe := range feModule.Funcs {
+			if !fe.CodeQL.IsEnabled {
+				continue
+			}
+			if err := fe.CodeQL.Validate(); err != nil {
+				Errorf("invalid pointers for %q: %s", fe.Signature, err)
+				continue
+			}
+			if found > 0 {
+				tempBuf.WriteString(PadNewLines("\nor"))
+			}
+			found++
+
+			generatedConditions, err := generateCodeQLFlowConditions_FEFunc(fe, fe.CodeQL.Blocks)
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Signature, err)
+			}
+			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+			err = tpl.Execute(tempBuf, fe)
+			if err != nil {
+				return fmt.Errorf("error while executing template for func %q: %s", fe.ID, err)
+			}
+		}
+
+		if found > 0 {
+			vals := &CompressedTemplateValue{
+				ClassName:  FormatCodeQlName("FuncTaintTracking"),
+				Extends:    CodeQLExtendsFunctionModel,
+				Conditions: tempBuf.String(),
+			}
+			buf.WriteString("\n")
+			err = classTpl.Execute(buf, vals)
+			if err != nil {
+				return fmt.Errorf("error while executing compressed template for funcs: %s", err)
+			}
+		}
+	}
+	{
+		tempBuf := new(bytes.Buffer)
+		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_TypeMethod)
+		if err != nil {
+			return err
+		}
+
+		found := 0
+		for _, fe := range feModule.TypeMethods {
+			if !fe.CodeQL.IsEnabled {
+				continue
+			}
+			if err := fe.CodeQL.Validate(); err != nil {
+				Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+				continue
+			}
+			if found > 0 {
+				tempBuf.WriteString(PadNewLines("\nor"))
+			}
+			found++
+
+			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(fe, fe.CodeQL.Blocks)
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+			}
+			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+			err = tpl.Execute(tempBuf, fe)
+			if err != nil {
+				return fmt.Errorf("error while executing template for type-method %q: %s", fe.ID, err)
+			}
+		}
+		if found > 0 {
+			vals := &CompressedTemplateValue{
+				ClassName:  FormatCodeQlName("MethodTaintTracking"),
+				Extends:    CodeQLExtendsFunctionModelMethod,
+				Conditions: tempBuf.String(),
+			}
+			buf.WriteString("\n")
+			err = classTpl.Execute(buf, vals)
+			if err != nil {
+				return fmt.Errorf("error while executing compressed template for type-methods: %s", err)
+			}
+		}
+	}
+
+	{
+		tempBuf := new(bytes.Buffer)
+		tpl, err := NewTextTemplateFromString("name", CodeQL_TPL_Single_InterfaceMethod)
+		if err != nil {
+			return err
+		}
+
+		found := 0
+		for _, fe := range feModule.InterfaceMethods {
+			if !fe.CodeQL.IsEnabled {
+				continue
+			}
+			if err := fe.CodeQL.Validate(); err != nil {
+				Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
+				continue
+			}
+			if found > 0 {
+				tempBuf.WriteString(PadNewLines("\nor"))
+			}
+			found++
+
+			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(FEIToFET(fe), fe.CodeQL.Blocks)
+			if err != nil {
+				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
+			}
+			fe.CodeQL.GeneratedConditions = PadNewLines(generatedConditions)
+
+			err = tpl.Execute(tempBuf, fe)
+			if err != nil {
+				return fmt.Errorf("error while executing template for interface-method %q: %s", fe.ID, err)
+			}
+		}
+		if found > 0 {
+			vals := &CompressedTemplateValue{
+				ClassName:  FormatCodeQlName("InterfaceTaintTracking"),
+				Extends:    CodeQLExtendsFunctionModelMethod,
+				Conditions: tempBuf.String(),
+			}
+			buf.WriteString("\n")
+			err = classTpl.Execute(buf, vals)
+			if err != nil {
+				return fmt.Errorf("error while executing compressed template for interface-methods: %s", err)
+			}
+		}
+	}
+
+	return nil
 }

@@ -1,0 +1,12 @@
+  private class {{ .ClassName }} extends {{ .Extends }} {
+    FunctionInput inp;
+    FunctionOutput outp;
+
+    {{ .ClassName }}() {
+      {{ .Conditions }}
+    }
+
+    override predicate hasTaintFlow(FunctionInput input, FunctionOutput output) {
+      input = inp and output = outp
+    }
+  }
