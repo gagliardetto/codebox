@@ -582,6 +582,7 @@
                 .then(response => response.json())
                 .then(json => {
                     this.source = json;
+                    document.title = "Package \""+json.PkgPath+"\"";
                 })
         },
         updated() {
