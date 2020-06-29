@@ -28,7 +28,8 @@ codeql test run \
 
 ```bash
 # move all files from child directories to parent directory:
- find . -mindepth 2 -type f -name "*.go" -print -exec mv {} . \;
+# find . -mindepth 2 -type f -name "*.qll" -print -exec mv {} . \;
+ find . -mindepth 2 -type f -print -exec mv {} . \;
 
 #for f in *.qll; do printf '%s\n' "${f%.qll}TaintTracking.qll"; done
 
