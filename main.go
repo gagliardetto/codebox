@@ -529,12 +529,24 @@ func main() {
 			cacheMap := make(CacheType)
 			{
 				for _, v := range feModule.Funcs {
+					{ // Don't save generated stuff:
+						v.CodeQL.GeneratedClass = ""
+						v.CodeQL.GeneratedConditions = ""
+					}
 					cacheMap[v.Signature] = v.CodeQL
 				}
 				for _, v := range feModule.TypeMethods {
+					{ // Don't save generated stuff:
+						v.CodeQL.GeneratedClass = ""
+						v.CodeQL.GeneratedConditions = ""
+					}
 					cacheMap[v.Func.Signature] = v.CodeQL
 				}
 				for _, v := range feModule.InterfaceMethods {
+					{ // Don't save generated stuff:
+						v.CodeQL.GeneratedClass = ""
+						v.CodeQL.GeneratedConditions = ""
+					}
 					cacheMap[v.Func.Signature] = v.CodeQL
 				}
 			}
