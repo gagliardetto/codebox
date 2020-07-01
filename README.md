@@ -1,3 +1,7 @@
+#### Graphical tool to taint-track Go functions/methods/interfaces and generate CodeQL along with Go scenario test cases.
+
+![tool_screenshot](https://user-images.githubusercontent.com/15271561/85956661-f92a9200-b98f-11ea-9ddd-d36047b262f8.png)
+
 # How it works
 
 ```bash
