@@ -142,7 +142,7 @@ func (index *Index) MustSetUnique(signature string, v interface{}) {
 //OK- Zero value of variadic string parameters is not nil: Options(opts ...string)
 //OK- TaintStepTest_NetTextprotoNewWriter: ./NetTextproto.go:50:40: cannot use w (type bufio.Writer) as type *bufio.Writer in argument to textproto.NewWriter
 //OK- unsafe.Pointer in type assertion
-// - Add warning to each golang file: WARNING: This file was automatically generated. DO NOT EDIT.
+//OK- Add warning to each golang file: WARNING: This file was automatically generated. DO NOT EDIT.
 func main() {
 	var pkg string
 	var runServer bool
@@ -155,11 +155,11 @@ func main() {
 	var compressCodeQl bool
 
 	flag.StringVar(&pkg, "pkg", "", "Package you want to scan (absolute path)")
-	flag.StringVar(&cacheDir, "cache-dir", "./cache", "Folder that contains cache of scanned packages and set pointers")
+	flag.StringVar(&cacheDir, "cache-dir", "./cache", "Folder that contains cache of taint-tracking pointers")
 	flag.StringVar(&generatedDir, "out-dir", "./generated", "Folder that contains the generated assets (each run has its own timestamped folder)")
 	flag.BoolVar(&runServer, "http", false, "Run http server")
 	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
-	flag.BoolVar(&includeBoilerplace, "stub", false, "Include in go test files the utility functions (main, sink, link, etc.)")
+	flag.BoolVar(&includeBoilerplace, "stub", false, "Include utility functions (main, sink, link, etc.) in the go test files")
 	flag.BoolVar(&compressCodeQl, "compress", true, "Compress codeql classes")
 	flag.Parse()
 
@@ -240,7 +240,6 @@ func main() {
 	})
 
 	{ // Deduplicate:
-
 		feModule.Funcs = DeduplicateSlice(feModule.Funcs, func(i int) string {
 			return feModule.Funcs[i].Signature
 		}).([]*FEFunc)
@@ -529,25 +528,19 @@ func main() {
 			cacheMap := make(CacheType)
 			{
 				for _, v := range feModule.Funcs {
-					{ // Don't save generated stuff:
-						v.CodeQL.GeneratedClass = ""
-						v.CodeQL.GeneratedConditions = ""
-					}
 					cacheMap[v.Signature] = v.CodeQL
 				}
 				for _, v := range feModule.TypeMethods {
-					{ // Don't save generated stuff:
-						v.CodeQL.GeneratedClass = ""
-						v.CodeQL.GeneratedConditions = ""
-					}
 					cacheMap[v.Func.Signature] = v.CodeQL
 				}
 				for _, v := range feModule.InterfaceMethods {
-					{ // Don't save generated stuff:
-						v.CodeQL.GeneratedClass = ""
-						v.CodeQL.GeneratedConditions = ""
-					}
 					cacheMap[v.Func.Signature] = v.CodeQL
+				}
+
+				// Remove generated stuff:
+				for _, v := range cacheMap {
+					v.GeneratedClass = ""
+					v.GeneratedConditions = ""
 				}
 			}
 			Infof("Saving cache to %q", MustAbs(cacheFilepath))
