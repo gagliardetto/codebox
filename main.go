@@ -19,7 +19,7 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/codebox/scanner"
-	. "github.com/gagliardetto/utils"
+	. "github.com/gagliardetto/utilz"
 	"github.com/gin-gonic/gin"
 )
 
@@ -2510,9 +2510,9 @@ func validateBlocksAreActive(blocks ...*FlowBlock) error {
 
 type CodeQlFinalVals struct {
 	// Generated generated contains the generated class:
-	GeneratedClass string
+	GeneratedClass string `json:"GeneratedClass,omitempty"`
 	// GeneratedConditions contains the generated conditions of the flow:
-	GeneratedConditions string
+	GeneratedConditions string `json:"GeneratedConditions,omitempty"`
 	Blocks              []*FlowBlock
 	IsEnabled           bool
 	//Pointers            *CodeQLPointers // Pointers is where the current pointers will be stored
