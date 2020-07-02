@@ -208,7 +208,7 @@
         <h4>Package "{{source.PkgName}}" from <b>{{source.PkgPath}}</b></h4>
         <!-- functions -->
         <div v-for="func in source.Funcs" class="row">
-            <div class="col-md-6" v-bind:class="{ isNotUsed: !func.CodeQL.IsEnabled }">
+            <div class="col-md-7" v-bind:class="{ isNotUsed: !func.CodeQL.IsEnabled }">
                 <div class="codebox-source border-success">
                     <div class="type-indication text-success">FUNCTION</div>
                     <!-- Rectangular switch -->
@@ -273,7 +273,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
                     <div class="type-indication text-success">CODEQL PREVIEW</div>
                     <code :id="cc('code',func.ID)">
@@ -284,7 +284,7 @@
         </div>
         <!-- methods on types -->
         <div v-for="method in source.TypeMethods" class="row">
-            <div class="col-md-6" v-bind:class="{ isNotUsed: !method.CodeQL.IsEnabled }">
+            <div class="col-md-7" v-bind:class="{ isNotUsed: !method.CodeQL.IsEnabled }">
                 <div class="codebox-source border-primary">
                     <div class="type-indication text-primary">METHOD</div>
                     <!-- Rectangular switch -->
@@ -367,7 +367,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }">
                     <div class="type-indication text-primary">CODEQL PREVIEW</div>
                     <code :id="cc('code',method.ID)">
@@ -378,7 +378,7 @@
         </div>
         <!-- methods on interfaces -->
         <div v-for="itMeth in source.InterfaceMethods" class="row">
-            <div class="col-md-6" v-bind:class="{ isNotUsed: !itMeth.CodeQL.IsEnabled }">
+            <div class="col-md-7" v-bind:class="{ isNotUsed: !itMeth.CodeQL.IsEnabled }">
                 <div class="codebox-source border-warning">
                     <div class="type-indication text-warning">INTERFACE</div>
                     <!-- Rectangular switch -->
@@ -461,7 +461,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }">
                     <div class="type-indication text-warning">CODEQL PREVIEW</div>
                     <code :id="cc('code',itMeth.ID)">
