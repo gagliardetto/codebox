@@ -275,6 +275,7 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
+                    <div class="type-indication text-success">CODEQL PREVIEW</div>
                     <code :id="cc('code',func.ID)">
                         {{ func.CodeQL.GeneratedClass }}
                     </code>
@@ -368,6 +369,7 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }">
+                    <div class="type-indication text-primary">CODEQL PREVIEW</div>
                     <code :id="cc('code',method.ID)">
                         {{ method.CodeQL.GeneratedClass }}
                     </code>
@@ -461,6 +463,7 @@
             </div>
             <div class="col-md-6">
                 <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }">
+                    <div class="type-indication text-warning">CODEQL PREVIEW</div>
                     <code :id="cc('code',itMeth.ID)">
                         {{ itMeth.CodeQL.GeneratedClass }}
                     </code>
