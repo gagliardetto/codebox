@@ -5,13 +5,17 @@ Summary: Codebox is a graphical tool to taint-track Go functions/methods/interfa
 # How it works
 
 ```bash
-# - Enter the codebox folder:
-cd ~/go/src/github.com/gagliardetto/codebox
+# - go get
+go get github.com/gagliardetto/codebox
 
-# - Compile the binary:
+# - Enter the codebox folder:
+cd $GOPATH/src/github.com/gagliardetto/codebox
+
+# - Compile and install the binary:
 make
 
 # - Spin up the graphical tool http server for e.g. the "io" package.
+# NOTE: you still need to be inside $GOPATH/src/github.com/gagliardetto/codebox
 # NOTE: the --pkg flag must be the absolute path to the package.
 # NOTE: there might be some issues with some packages or modules.
 # NOTE: the --out-dir flag is the folder where all the generated files will go.
