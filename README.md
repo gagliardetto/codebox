@@ -1,6 +1,6 @@
 **Summary**: Codebox is a graphical tool to taint-track Go functions/methods/interfaces and generate CodeQL taint-tracking classes along with Go scenario test cases for those classes.
 
-![tool_screenshot](https://user-images.githubusercontent.com/15271561/85956661-f92a9200-b98f-11ea-9ddd-d36047b262f8.png)
+![codebox_screenshot](https://user-images.githubusercontent.com/15271561/86345187-e2bc5900-bc63-11ea-95e5-5f5e63e7040f.png)
 
 # How it works
 
