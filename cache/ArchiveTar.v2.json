@@ -1,7 +1,5 @@
 {
    "func (*Header).FileInfo() os.FileInfo": {
-      "GeneratedClass": "\n    private class HeaderFileInfo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Header).FileInfo() os.FileInfo\n      HeaderFileInfo() { this.(Method).hasQualifiedName(\"archive/tar\", \"Header\", \"FileInfo\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Next() (*Header, error)": {
-      "GeneratedClass": "\n    private class ReaderNext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Next() (*Header, error)\n      ReaderNext() { this.(Method).hasQualifiedName(\"archive/tar\", \"Reader\", \"Next\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Read(b []byte) (int, error)": {
-      "GeneratedClass": "\n    private class ReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Read(b []byte) (int, error)\n      ReaderRead() { this.(Method).hasQualifiedName(\"archive/tar\", \"Reader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Flush() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -91,8 +81,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Write(b []byte) (int, error)": {
-      "GeneratedClass": "\n    private class WriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Write(b []byte) (int, error)\n      WriterWrite() { this.(Method).hasQualifiedName(\"archive/tar\", \"Writer\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -112,8 +100,6 @@
       "IsEnabled": true
    },
    "func (*Writer).WriteHeader(hdr *Header) error": {
-      "GeneratedClass": "\n    private class WriterWriteHeader extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).WriteHeader(hdr *Header) error\n      WriterWriteHeader() { this.(Method).hasQualifiedName(\"archive/tar\", \"Writer\", \"WriteHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -131,8 +117,6 @@
       "IsEnabled": true
    },
    "func (Format).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -148,8 +132,6 @@
       "IsEnabled": false
    },
    "func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)": {
-      "GeneratedClass": "\n    private class FileInfoHeader extends TaintTracking::FunctionModel {\n      // signature: func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)\n      FileInfoHeader() { hasQualifiedName(\"archive/tar\", \"FileInfoHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -169,8 +151,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.Reader) *Reader": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader) *Reader\n      NewReader() { hasQualifiedName(\"archive/tar\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -186,8 +166,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"archive/tar\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

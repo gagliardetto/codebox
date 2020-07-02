@@ -1,7 +1,5 @@
 {
    "func (*FileHeader).Open() (File, error)": {
-      "GeneratedClass": "\n    private class FileHeaderOpen extends TaintTracking::FunctionModel, Method {\n      // signature: func (*FileHeader).Open() (File, error)\n      FileHeaderOpen() { this.(Method).hasQualifiedName(\"mime/multipart\", \"FileHeader\", \"Open\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": true
    },
    "func (*Form).RemoveAll() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": false
    },
    "func (*Part).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": false
    },
    "func (*Part).FileName() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -70,8 +62,6 @@
       "IsEnabled": false
    },
    "func (*Part).FormName() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -87,8 +77,6 @@
       "IsEnabled": false
    },
    "func (*Part).Read(d []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class PartRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Part).Read(d []byte) (n int, err error)\n      PartRead() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Part\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -108,8 +96,6 @@
       "IsEnabled": true
    },
    "func (*Reader).NextPart() (*Part, error)": {
-      "GeneratedClass": "\n    private class ReaderNextPart extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).NextPart() (*Part, error)\n      ReaderNextPart() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Reader\", \"NextPart\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -127,8 +113,6 @@
       "IsEnabled": true
    },
    "func (*Reader).NextRawPart() (*Part, error)": {
-      "GeneratedClass": "\n    private class ReaderNextRawPart extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).NextRawPart() (*Part, error)\n      ReaderNextRawPart() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Reader\", \"NextRawPart\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -146,8 +130,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadForm(maxMemory int64) (*Form, error)": {
-      "GeneratedClass": "\n    private class ReaderReadForm extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadForm(maxMemory int64) (*Form, error)\n      ReaderReadForm() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Reader\", \"ReadForm\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -167,8 +149,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Boundary() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -184,8 +164,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -201,8 +179,6 @@
       "IsEnabled": false
    },
    "func (*Writer).CreateFormField(fieldname string) (io.Writer, error)": {
-      "GeneratedClass": "\n    private class WriterCreateFormField extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).CreateFormField(fieldname string) (io.Writer, error)\n      WriterCreateFormField() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Writer\", \"CreateFormField\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -222,8 +198,6 @@
       "IsEnabled": true
    },
    "func (*Writer).CreateFormFile(fieldname string, filename string) (io.Writer, error)": {
-      "GeneratedClass": "\n    private class WriterCreateFormFile extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).CreateFormFile(fieldname string, filename string) (io.Writer, error)\n      WriterCreateFormFile() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Writer\", \"CreateFormFile\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -245,8 +219,6 @@
       "IsEnabled": true
    },
    "func (*Writer).CreatePart(header net/textproto.MIMEHeader) (io.Writer, error)": {
-      "GeneratedClass": "\n    private class WriterCreatePart extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).CreatePart(header net/textproto.MIMEHeader) (io.Writer, error)\n      WriterCreatePart() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Writer\", \"CreatePart\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -266,8 +238,6 @@
       "IsEnabled": true
    },
    "func (*Writer).FormDataContentType() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -283,8 +253,6 @@
       "IsEnabled": false
    },
    "func (*Writer).SetBoundary(boundary string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -302,8 +270,6 @@
       "IsEnabled": false
    },
    "func (*Writer).WriteField(fieldname string, value string) error": {
-      "GeneratedClass": "\n    private class WriterWriteField extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).WriteField(fieldname string, value string) error\n      WriterWriteField() { this.(Method).hasQualifiedName(\"mime/multipart\", \"Writer\", \"WriteField\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -323,8 +289,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.Reader, boundary string) *Reader": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader, boundary string) *Reader\n      NewReader() { hasQualifiedName(\"mime/multipart\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -342,8 +306,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"mime/multipart\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

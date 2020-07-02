@@ -1,7 +1,5 @@
 {
    "func (BinaryMarshaler).MarshalBinary() (data []byte, err error)": {
-      "GeneratedClass": "\n    private class BinaryMarshalerMarshalBinary extends TaintTracking::FunctionModel, Method {\n      // signature: func (BinaryMarshaler).MarshalBinary() (data []byte, err error)\n      BinaryMarshalerMarshalBinary() {\n        this.implements(\"encoding\", \"BinaryMarshaler\", \"MarshalBinary\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": true
    },
    "func (BinaryUnmarshaler).UnmarshalBinary(data []byte) error": {
-      "GeneratedClass": "\n    private class BinaryUnmarshalerUnmarshalBinary extends TaintTracking::FunctionModel, Method {\n      // signature: func (BinaryUnmarshaler).UnmarshalBinary(data []byte) error\n      BinaryUnmarshalerUnmarshalBinary() {\n        this.implements(\"encoding\", \"BinaryUnmarshaler\", \"UnmarshalBinary\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func (TextMarshaler).MarshalText() (text []byte, err error)": {
-      "GeneratedClass": "\n    private class TextMarshalerMarshalText extends TaintTracking::FunctionModel, Method {\n      // signature: func (TextMarshaler).MarshalText() (text []byte, err error)\n      TextMarshalerMarshalText() {\n        this.implements(\"encoding\", \"TextMarshaler\", \"MarshalText\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": true
    },
    "func (TextUnmarshaler).UnmarshalText(text []byte) error": {
-      "GeneratedClass": "\n    private class TextUnmarshalerUnmarshalText extends TaintTracking::FunctionModel, Method {\n      // signature: func (TextUnmarshaler).UnmarshalText(text []byte) error\n      TextUnmarshalerUnmarshalText() {\n        this.implements(\"encoding\", \"TextUnmarshaler\", \"UnmarshalText\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [

@@ -1,7 +1,5 @@
 {
    "func (*Buffer).Bytes() []byte": {
-      "GeneratedClass": "\n    private class BufferBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).Bytes() []byte\n      BufferBytes() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"Bytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).Cap() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).Grow(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).Next(n int) []byte": {
-      "GeneratedClass": "\n    private class BufferNext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).Next(n int) []byte\n      BufferNext() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"Next\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -87,8 +77,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).Read(p []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class BufferRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).Read(p []byte) (n int, err error)\n      BufferRead() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -108,8 +96,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).ReadByte() (byte, error)": {
-      "GeneratedClass": "\n    private class BufferReadByte extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).ReadByte() (byte, error)\n      BufferReadByte() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"ReadByte\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -127,8 +113,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).ReadBytes(delim byte) (line []byte, err error)": {
-      "GeneratedClass": "\n    private class BufferReadBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).ReadBytes(delim byte) (line []byte, err error)\n      BufferReadBytes() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"ReadBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -148,8 +132,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).ReadFrom(r io.Reader) (n int64, err error)": {
-      "GeneratedClass": "\n    private class BufferReadFrom extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).ReadFrom(r io.Reader) (n int64, err error)\n      BufferReadFrom() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"ReadFrom\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -169,8 +151,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).ReadRune() (r rune, size int, err error)": {
-      "GeneratedClass": "\n    private class BufferReadRune extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).ReadRune() (r rune, size int, err error)\n      BufferReadRune() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"ReadRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -190,8 +170,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).ReadString(delim byte) (line string, err error)": {
-      "GeneratedClass": "\n    private class BufferReadString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).ReadString(delim byte) (line string, err error)\n      BufferReadString() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"ReadString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -211,8 +189,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).Reset()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -226,8 +202,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).String() string": {
-      "GeneratedClass": "\n    private class BufferString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).String() string\n      BufferString() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -243,8 +217,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).Truncate(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -260,8 +232,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).UnreadByte() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -277,8 +247,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).UnreadRune() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -294,8 +262,6 @@
       "IsEnabled": false
    },
    "func (*Buffer).Write(p []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class BufferWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).Write(p []byte) (n int, err error)\n      BufferWrite() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -315,8 +281,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).WriteByte(c byte) error": {
-      "GeneratedClass": "\n    private class BufferWriteByte extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).WriteByte(c byte) error\n      BufferWriteByte() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"WriteByte\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -334,8 +298,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).WriteRune(r rune) (n int, err error)": {
-      "GeneratedClass": "\n    private class BufferWriteRune extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).WriteRune(r rune) (n int, err error)\n      BufferWriteRune() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"WriteRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -355,8 +317,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).WriteString(s string) (n int, err error)": {
-      "GeneratedClass": "\n    private class BufferWriteString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).WriteString(s string) (n int, err error)\n      BufferWriteString() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"WriteString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -376,8 +336,6 @@
       "IsEnabled": true
    },
    "func (*Buffer).WriteTo(w io.Writer) (n int64, err error)": {
-      "GeneratedClass": "\n    private class BufferWriteTo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Buffer).WriteTo(w io.Writer) (n int64, err error)\n      BufferWriteTo() { this.(Method).hasQualifiedName(\"bytes\", \"Buffer\", \"WriteTo\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -397,8 +355,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -414,8 +370,6 @@
       "IsEnabled": false
    },
    "func (*Reader).Read(b []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class ReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Read(b []byte) (n int, err error)\n      ReaderRead() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -435,8 +389,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadAt(b []byte, off int64) (n int, err error)": {
-      "GeneratedClass": "\n    private class ReaderReadAt extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadAt(b []byte, off int64) (n int, err error)\n      ReaderReadAt() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"ReadAt\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -458,8 +410,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadByte() (byte, error)": {
-      "GeneratedClass": "\n    private class ReaderReadByte extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadByte() (byte, error)\n      ReaderReadByte() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"ReadByte\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -477,8 +427,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadRune() (ch rune, size int, err error)": {
-      "GeneratedClass": "\n    private class ReaderReadRune extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadRune() (ch rune, size int, err error)\n      ReaderReadRune() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"ReadRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -498,8 +446,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Reset(b []byte)": {
-      "GeneratedClass": "\n    private class ReaderReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Reset(b []byte)\n      ReaderReset() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"Reset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -515,8 +461,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Seek(offset int64, whence int) (int64, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -538,8 +482,6 @@
       "IsEnabled": false
    },
    "func (*Reader).Size() int64": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -555,8 +497,6 @@
       "IsEnabled": false
    },
    "func (*Reader).UnreadByte() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -572,8 +512,6 @@
       "IsEnabled": false
    },
    "func (*Reader).UnreadRune() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -589,8 +527,6 @@
       "IsEnabled": false
    },
    "func (*Reader).WriteTo(w io.Writer) (n int64, err error)": {
-      "GeneratedClass": "\n    private class ReaderWriteTo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).WriteTo(w io.Writer) (n int64, err error)\n      ReaderWriteTo() { this.(Method).hasQualifiedName(\"bytes\", \"Reader\", \"WriteTo\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -610,8 +546,6 @@
       "IsEnabled": true
    },
    "func Compare(a []byte, b []byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -629,8 +563,6 @@
       "IsEnabled": false
    },
    "func Contains(b []byte, subslice []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -648,8 +580,6 @@
       "IsEnabled": false
    },
    "func ContainsAny(b []byte, chars string) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -667,8 +597,6 @@
       "IsEnabled": false
    },
    "func ContainsRune(b []byte, r rune) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -686,8 +614,6 @@
       "IsEnabled": false
    },
    "func Count(s []byte, sep []byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -705,8 +631,6 @@
       "IsEnabled": false
    },
    "func Equal(a []byte, b []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -724,8 +648,6 @@
       "IsEnabled": false
    },
    "func EqualFold(s []byte, t []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -743,8 +665,6 @@
       "IsEnabled": false
    },
    "func Fields(s []byte) [][]byte": {
-      "GeneratedClass": "\n    private class Fields extends TaintTracking::FunctionModel {\n      // signature: func Fields(s []byte) [][]byte\n      Fields() { hasQualifiedName(\"bytes\", \"Fields\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -760,8 +680,6 @@
       "IsEnabled": true
    },
    "func FieldsFunc(s []byte, f func(rune) bool) [][]byte": {
-      "GeneratedClass": "\n    private class FieldsFunc extends TaintTracking::FunctionModel {\n      // signature: func FieldsFunc(s []byte, f func(rune) bool) [][]byte\n      FieldsFunc() { hasQualifiedName(\"bytes\", \"FieldsFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -779,8 +697,6 @@
       "IsEnabled": true
    },
    "func HasPrefix(s []byte, prefix []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -798,8 +714,6 @@
       "IsEnabled": false
    },
    "func HasSuffix(s []byte, suffix []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -817,8 +731,6 @@
       "IsEnabled": false
    },
    "func Index(s []byte, sep []byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -836,8 +748,6 @@
       "IsEnabled": false
    },
    "func IndexAny(s []byte, chars string) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -855,8 +765,6 @@
       "IsEnabled": false
    },
    "func IndexByte(b []byte, c byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -874,8 +782,6 @@
       "IsEnabled": false
    },
    "func IndexFunc(s []byte, f func(r rune) bool) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -893,8 +799,6 @@
       "IsEnabled": false
    },
    "func IndexRune(s []byte, r rune) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -912,8 +816,6 @@
       "IsEnabled": false
    },
    "func Join(s [][]byte, sep []byte) []byte": {
-      "GeneratedClass": "\n    private class Join extends TaintTracking::FunctionModel {\n      // signature: func Join(s [][]byte, sep []byte) []byte\n      Join() { hasQualifiedName(\"bytes\", \"Join\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -931,8 +833,6 @@
       "IsEnabled": true
    },
    "func LastIndex(s []byte, sep []byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -950,8 +850,6 @@
       "IsEnabled": false
    },
    "func LastIndexAny(s []byte, chars string) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -969,8 +867,6 @@
       "IsEnabled": false
    },
    "func LastIndexByte(s []byte, c byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -988,8 +884,6 @@
       "IsEnabled": false
    },
    "func LastIndexFunc(s []byte, f func(r rune) bool) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1007,8 +901,6 @@
       "IsEnabled": false
    },
    "func Map(mapping func(r rune) rune, s []byte) []byte": {
-      "GeneratedClass": "\n    private class Map extends TaintTracking::FunctionModel {\n      // signature: func Map(mapping func(r rune) rune, s []byte) []byte\n      Map() { hasQualifiedName(\"bytes\", \"Map\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1026,8 +918,6 @@
       "IsEnabled": true
    },
    "func NewBuffer(buf []byte) *Buffer": {
-      "GeneratedClass": "\n    private class NewBuffer extends TaintTracking::FunctionModel {\n      // signature: func NewBuffer(buf []byte) *Buffer\n      NewBuffer() { hasQualifiedName(\"bytes\", \"NewBuffer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1043,8 +933,6 @@
       "IsEnabled": true
    },
    "func NewBufferString(s string) *Buffer": {
-      "GeneratedClass": "\n    private class NewBufferString extends TaintTracking::FunctionModel {\n      // signature: func NewBufferString(s string) *Buffer\n      NewBufferString() { hasQualifiedName(\"bytes\", \"NewBufferString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1060,8 +948,6 @@
       "IsEnabled": true
    },
    "func NewReader(b []byte) *Reader": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(b []byte) *Reader\n      NewReader() { hasQualifiedName(\"bytes\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1077,8 +963,6 @@
       "IsEnabled": true
    },
    "func Repeat(b []byte, count int) []byte": {
-      "GeneratedClass": "\n    private class Repeat extends TaintTracking::FunctionModel {\n      // signature: func Repeat(b []byte, count int) []byte\n      Repeat() { hasQualifiedName(\"bytes\", \"Repeat\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1096,8 +980,6 @@
       "IsEnabled": true
    },
    "func Replace(s []byte, old []byte, new []byte, n int) []byte": {
-      "GeneratedClass": "\n    private class Replace extends TaintTracking::FunctionModel {\n      // signature: func Replace(s []byte, old []byte, new []byte, n int) []byte\n      Replace() { hasQualifiedName(\"bytes\", \"Replace\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([0, 2])) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter([0, 2])) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1119,8 +1001,6 @@
       "IsEnabled": true
    },
    "func ReplaceAll(s []byte, old []byte, new []byte) []byte": {
-      "GeneratedClass": "\n    private class ReplaceAll extends TaintTracking::FunctionModel {\n      // signature: func ReplaceAll(s []byte, old []byte, new []byte) []byte\n      ReplaceAll() { hasQualifiedName(\"bytes\", \"ReplaceAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([0, 2])) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter([0, 2])) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1140,8 +1020,6 @@
       "IsEnabled": true
    },
    "func Runes(s []byte) []rune": {
-      "GeneratedClass": "\n    private class Runes extends TaintTracking::FunctionModel {\n      // signature: func Runes(s []byte) []rune\n      Runes() { hasQualifiedName(\"bytes\", \"Runes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1157,8 +1035,6 @@
       "IsEnabled": true
    },
    "func Split(s []byte, sep []byte) [][]byte": {
-      "GeneratedClass": "\n    private class Split extends TaintTracking::FunctionModel {\n      // signature: func Split(s []byte, sep []byte) [][]byte\n      Split() { hasQualifiedName(\"bytes\", \"Split\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1176,8 +1052,6 @@
       "IsEnabled": true
    },
    "func SplitAfter(s []byte, sep []byte) [][]byte": {
-      "GeneratedClass": "\n    private class SplitAfter extends TaintTracking::FunctionModel {\n      // signature: func SplitAfter(s []byte, sep []byte) [][]byte\n      SplitAfter() { hasQualifiedName(\"bytes\", \"SplitAfter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1195,8 +1069,6 @@
       "IsEnabled": true
    },
    "func SplitAfterN(s []byte, sep []byte, n int) [][]byte": {
-      "GeneratedClass": "\n    private class SplitAfterN extends TaintTracking::FunctionModel {\n      // signature: func SplitAfterN(s []byte, sep []byte, n int) [][]byte\n      SplitAfterN() { hasQualifiedName(\"bytes\", \"SplitAfterN\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1216,8 +1088,6 @@
       "IsEnabled": true
    },
    "func SplitN(s []byte, sep []byte, n int) [][]byte": {
-      "GeneratedClass": "\n    private class SplitN extends TaintTracking::FunctionModel {\n      // signature: func SplitN(s []byte, sep []byte, n int) [][]byte\n      SplitN() { hasQualifiedName(\"bytes\", \"SplitN\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1237,8 +1107,6 @@
       "IsEnabled": true
    },
    "func Title(s []byte) []byte": {
-      "GeneratedClass": "\n    private class Title extends TaintTracking::FunctionModel {\n      // signature: func Title(s []byte) []byte\n      Title() { hasQualifiedName(\"bytes\", \"Title\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1254,8 +1122,6 @@
       "IsEnabled": true
    },
    "func ToLower(s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToLower extends TaintTracking::FunctionModel {\n      // signature: func ToLower(s []byte) []byte\n      ToLower() { hasQualifiedName(\"bytes\", \"ToLower\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1271,8 +1137,6 @@
       "IsEnabled": true
    },
    "func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToLowerSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte\n      ToLowerSpecial() { hasQualifiedName(\"bytes\", \"ToLowerSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1290,8 +1154,6 @@
       "IsEnabled": true
    },
    "func ToTitle(s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToTitle extends TaintTracking::FunctionModel {\n      // signature: func ToTitle(s []byte) []byte\n      ToTitle() { hasQualifiedName(\"bytes\", \"ToTitle\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1307,8 +1169,6 @@
       "IsEnabled": true
    },
    "func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToTitleSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte\n      ToTitleSpecial() { hasQualifiedName(\"bytes\", \"ToTitleSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1326,8 +1186,6 @@
       "IsEnabled": true
    },
    "func ToUpper(s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToUpper extends TaintTracking::FunctionModel {\n      // signature: func ToUpper(s []byte) []byte\n      ToUpper() { hasQualifiedName(\"bytes\", \"ToUpper\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1343,8 +1201,6 @@
       "IsEnabled": true
    },
    "func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte": {
-      "GeneratedClass": "\n    private class ToUpperSpecial extends TaintTracking::FunctionModel {\n      // signature: func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte\n      ToUpperSpecial() { hasQualifiedName(\"bytes\", \"ToUpperSpecial\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1362,8 +1218,6 @@
       "IsEnabled": true
    },
    "func ToValidUTF8(s []byte, replacement []byte) []byte": {
-      "GeneratedClass": "\n    private class ToValidUTF8 extends TaintTracking::FunctionModel {\n      // signature: func ToValidUTF8(s []byte, replacement []byte) []byte\n      ToValidUTF8() { hasQualifiedName(\"bytes\", \"ToValidUTF8\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1381,8 +1235,6 @@
       "IsEnabled": true
    },
    "func Trim(s []byte, cutset string) []byte": {
-      "GeneratedClass": "\n    private class Trim extends TaintTracking::FunctionModel {\n      // signature: func Trim(s []byte, cutset string) []byte\n      Trim() { hasQualifiedName(\"bytes\", \"Trim\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1400,8 +1252,6 @@
       "IsEnabled": true
    },
    "func TrimFunc(s []byte, f func(r rune) bool) []byte": {
-      "GeneratedClass": "\n    private class TrimFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimFunc(s []byte, f func(r rune) bool) []byte\n      TrimFunc() { hasQualifiedName(\"bytes\", \"TrimFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1419,8 +1269,6 @@
       "IsEnabled": true
    },
    "func TrimLeft(s []byte, cutset string) []byte": {
-      "GeneratedClass": "\n    private class TrimLeft extends TaintTracking::FunctionModel {\n      // signature: func TrimLeft(s []byte, cutset string) []byte\n      TrimLeft() { hasQualifiedName(\"bytes\", \"TrimLeft\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1438,8 +1286,6 @@
       "IsEnabled": true
    },
    "func TrimLeftFunc(s []byte, f func(r rune) bool) []byte": {
-      "GeneratedClass": "\n    private class TrimLeftFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimLeftFunc(s []byte, f func(r rune) bool) []byte\n      TrimLeftFunc() { hasQualifiedName(\"bytes\", \"TrimLeftFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1457,8 +1303,6 @@
       "IsEnabled": true
    },
    "func TrimPrefix(s []byte, prefix []byte) []byte": {
-      "GeneratedClass": "\n    private class TrimPrefix extends TaintTracking::FunctionModel {\n      // signature: func TrimPrefix(s []byte, prefix []byte) []byte\n      TrimPrefix() { hasQualifiedName(\"bytes\", \"TrimPrefix\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1476,8 +1320,6 @@
       "IsEnabled": true
    },
    "func TrimRight(s []byte, cutset string) []byte": {
-      "GeneratedClass": "\n    private class TrimRight extends TaintTracking::FunctionModel {\n      // signature: func TrimRight(s []byte, cutset string) []byte\n      TrimRight() { hasQualifiedName(\"bytes\", \"TrimRight\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1495,8 +1337,6 @@
       "IsEnabled": true
    },
    "func TrimRightFunc(s []byte, f func(r rune) bool) []byte": {
-      "GeneratedClass": "\n    private class TrimRightFunc extends TaintTracking::FunctionModel {\n      // signature: func TrimRightFunc(s []byte, f func(r rune) bool) []byte\n      TrimRightFunc() { hasQualifiedName(\"bytes\", \"TrimRightFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1514,8 +1354,6 @@
       "IsEnabled": true
    },
    "func TrimSpace(s []byte) []byte": {
-      "GeneratedClass": "\n    private class TrimSpace extends TaintTracking::FunctionModel {\n      // signature: func TrimSpace(s []byte) []byte\n      TrimSpace() { hasQualifiedName(\"bytes\", \"TrimSpace\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1531,8 +1369,6 @@
       "IsEnabled": true
    },
    "func TrimSuffix(s []byte, suffix []byte) []byte": {
-      "GeneratedClass": "\n    private class TrimSuffix extends TaintTracking::FunctionModel {\n      // signature: func TrimSuffix(s []byte, suffix []byte) []byte\n      TrimSuffix() { hasQualifiedName(\"bytes\", \"TrimSuffix\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

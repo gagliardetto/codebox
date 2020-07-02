@@ -1,7 +1,5 @@
 {
    "func (*Reader).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Reader).Multistream(ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Reader).Read(p []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class ReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Read(p []byte) (n int, err error)\n      ReaderRead() { this.(Method).hasQualifiedName(\"compress/gzip\", \"Reader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -55,8 +49,6 @@
       "IsEnabled": true
    },
    "func (*Reader).Reset(r io.Reader) error": {
-      "GeneratedClass": "\n    private class ReaderReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Reset(r io.Reader) error\n      ReaderReset() { this.(Method).hasQualifiedName(\"compress/gzip\", \"Reader\", \"Reset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -91,8 +81,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Flush() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -108,8 +96,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Reset(w io.Writer)": {
-      "GeneratedClass": "\n    private class WriterReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Reset(w io.Writer)\n      WriterReset() { this.(Method).hasQualifiedName(\"compress/gzip\", \"Writer\", \"Reset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -125,8 +111,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Write(p []byte) (int, error)": {
-      "GeneratedClass": "\n    private class WriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Write(p []byte) (int, error)\n      WriterWrite() { this.(Method).hasQualifiedName(\"compress/gzip\", \"Writer\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -146,8 +130,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.Reader) (*Reader, error)": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader) (*Reader, error)\n      NewReader() { hasQualifiedName(\"compress/gzip\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -165,8 +147,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"compress/gzip\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -182,8 +162,6 @@
       "IsEnabled": true
    },
    "func NewWriterLevel(w io.Writer, level int) (*Writer, error)": {
-      "GeneratedClass": "\n    private class NewWriterLevel extends TaintTracking::FunctionModel {\n      // signature: func NewWriterLevel(w io.Writer, level int) (*Writer, error)\n      NewWriterLevel() { hasQualifiedName(\"compress/gzip\", \"NewWriterLevel\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

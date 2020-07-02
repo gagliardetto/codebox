@@ -1,7 +1,5 @@
 {
    "func (Context).Deadline() (deadline time.Time, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": false
    },
    "func (Context).Done() \u003c-chan struct{}": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": false
    },
    "func (Context).Err() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": false
    },
    "func (Context).Value(key interface{}) interface{}": {
-      "GeneratedClass": "\n    private class ContextValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (Context).Value(key interface{}) interface{}\n      ContextValue() {\n        this.implements(\"context\", \"Context\", \"Value\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func Background() Context": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -87,8 +77,6 @@
       "IsEnabled": false
    },
    "func TODO() Context": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -102,8 +90,6 @@
       "IsEnabled": false
    },
    "func WithCancel(parent Context) (ctx Context, cancel CancelFunc)": {
-      "GeneratedClass": "\n    private class WithCancel extends TaintTracking::FunctionModel {\n      // signature: func WithCancel(parent Context) (ctx Context, cancel CancelFunc)\n      WithCancel() { hasQualifiedName(\"context\", \"WithCancel\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -121,8 +107,6 @@
       "IsEnabled": true
    },
    "func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)": {
-      "GeneratedClass": "\n    private class WithDeadline extends TaintTracking::FunctionModel {\n      // signature: func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)\n      WithDeadline() { hasQualifiedName(\"context\", \"WithDeadline\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -142,8 +126,6 @@
       "IsEnabled": true
    },
    "func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)": {
-      "GeneratedClass": "\n    private class WithTimeout extends TaintTracking::FunctionModel {\n      // signature: func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)\n      WithTimeout() { hasQualifiedName(\"context\", \"WithTimeout\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -163,8 +145,6 @@
       "IsEnabled": true
    },
    "func WithValue(parent Context, key interface{}, val interface{}) Context": {
-      "GeneratedClass": "\n    private class WithValue extends TaintTracking::FunctionModel {\n      // signature: func WithValue(parent Context, key interface{}, val interface{}) Context\n      WithValue() { hasQualifiedName(\"context\", \"WithValue\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

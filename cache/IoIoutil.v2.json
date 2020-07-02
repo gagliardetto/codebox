@@ -1,7 +1,5 @@
 {
    "func (Writer).Write(p []byte) (n int, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -21,8 +19,6 @@
       "IsEnabled": false
    },
    "func NopCloser(r io.Reader) io.ReadCloser": {
-      "GeneratedClass": "\n    private class NopCloser extends TaintTracking::FunctionModel {\n      // signature: func NopCloser(r io.Reader) io.ReadCloser\n      NopCloser() { hasQualifiedName(\"io/ioutil\", \"NopCloser\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func ReadAll(r io.Reader) ([]byte, error)": {
-      "GeneratedClass": "\n    private class ReadAll extends TaintTracking::FunctionModel {\n      // signature: func ReadAll(r io.Reader) ([]byte, error)\n      ReadAll() { hasQualifiedName(\"io/ioutil\", \"ReadAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": true
    },
    "func ReadDir(dirname string) ([]os.FileInfo, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -76,8 +68,6 @@
       "IsEnabled": false
    },
    "func ReadFile(filename string) ([]byte, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -95,8 +85,6 @@
       "IsEnabled": false
    },
    "func TempDir(dir string, pattern string) (name string, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -116,8 +104,6 @@
       "IsEnabled": false
    },
    "func TempFile(dir string, pattern string) (f *os.File, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -137,8 +123,6 @@
       "IsEnabled": false
    },
    "func WriteFile(filename string, data []byte, perm os.FileMode) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

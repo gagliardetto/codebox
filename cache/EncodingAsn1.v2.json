@@ -1,7 +1,5 @@
 {
    "func (BitString).At(i int) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": false
    },
    "func (BitString).RightAlign() []byte": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": false
    },
    "func (ObjectIdentifier).Equal(other ObjectIdentifier) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -55,8 +49,6 @@
       "IsEnabled": false
    },
    "func (ObjectIdentifier).String() string": {
-      "GeneratedClass": "\n    private class ObjectIdentifierString extends TaintTracking::FunctionModel, Method {\n      // signature: func (ObjectIdentifier).String() string\n      ObjectIdentifierString() { this.(Method).hasQualifiedName(\"encoding/asn1\", \"ObjectIdentifier\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func (StructuralError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -89,8 +79,6 @@
       "IsEnabled": false
    },
    "func (SyntaxError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -106,8 +94,6 @@
       "IsEnabled": false
    },
    "func Marshal(val interface{}) ([]byte, error)": {
-      "GeneratedClass": "\n    private class Marshal extends TaintTracking::FunctionModel {\n      // signature: func Marshal(val interface{}) ([]byte, error)\n      Marshal() { hasQualifiedName(\"encoding/asn1\", \"Marshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -125,8 +111,6 @@
       "IsEnabled": true
    },
    "func MarshalWithParams(val interface{}, params string) ([]byte, error)": {
-      "GeneratedClass": "\n    private class MarshalWithParams extends TaintTracking::FunctionModel {\n      // signature: func MarshalWithParams(val interface{}, params string) ([]byte, error)\n      MarshalWithParams() { hasQualifiedName(\"encoding/asn1\", \"MarshalWithParams\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -146,8 +130,6 @@
       "IsEnabled": true
    },
    "func Unmarshal(b []byte, val interface{}) (rest []byte, err error)": {
-      "GeneratedClass": "\n    private class Unmarshal extends TaintTracking::FunctionModel {\n      // signature: func Unmarshal(b []byte, val interface{}) (rest []byte, err error)\n      Unmarshal() { hasQualifiedName(\"encoding/asn1\", \"Unmarshal\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1) or outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1) or outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -167,8 +149,6 @@
       "IsEnabled": true
    },
    "func UnmarshalWithParams(b []byte, val interface{}, params string) (rest []byte, err error)": {
-      "GeneratedClass": "\n    private class UnmarshalWithParams extends TaintTracking::FunctionModel {\n      // signature: func UnmarshalWithParams(b []byte, val interface{}, params string) (rest []byte, err error)\n      UnmarshalWithParams() { hasQualifiedName(\"encoding/asn1\", \"UnmarshalWithParams\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([0, 2])) and (outp.isParameter(1) or outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter([0, 2])) and (outp.isParameter(1) or outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [

@@ -1,7 +1,5 @@
 {
    "func (*Conn).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Cmd(format string, args ...interface{}) (id uint, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -40,8 +36,6 @@
       "IsEnabled": false
    },
    "func (*Error).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": false
    },
    "func (*Pipeline).EndRequest(id uint)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": false
    },
    "func (*Pipeline).EndResponse(id uint)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -91,8 +81,6 @@
       "IsEnabled": false
    },
    "func (*Pipeline).Next() uint": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -108,8 +96,6 @@
       "IsEnabled": false
    },
    "func (*Pipeline).StartRequest(id uint)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -125,8 +111,6 @@
       "IsEnabled": false
    },
    "func (*Pipeline).StartResponse(id uint)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -142,8 +126,6 @@
       "IsEnabled": false
    },
    "func (*Reader).DotReader() io.Reader": {
-      "GeneratedClass": "\n    private class ReaderDotReader extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).DotReader() io.Reader\n      ReaderDotReader() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"DotReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -159,8 +141,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadCodeLine(expectCode int) (code int, message string, err error)": {
-      "GeneratedClass": "\n    private class ReaderReadCodeLine extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadCodeLine(expectCode int) (code int, message string, err error)\n      ReaderReadCodeLine() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadCodeLine\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(1)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(1)))",
       "Blocks": [
          {
             "Inp": [
@@ -182,8 +162,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadContinuedLine() (string, error)": {
-      "GeneratedClass": "\n    private class ReaderReadContinuedLine extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadContinuedLine() (string, error)\n      ReaderReadContinuedLine() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadContinuedLine\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -201,8 +179,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadContinuedLineBytes() ([]byte, error)": {
-      "GeneratedClass": "\n    private class ReaderReadContinuedLineBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadContinuedLineBytes() ([]byte, error)\n      ReaderReadContinuedLineBytes() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadContinuedLineBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -220,8 +196,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadDotBytes() ([]byte, error)": {
-      "GeneratedClass": "\n    private class ReaderReadDotBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadDotBytes() ([]byte, error)\n      ReaderReadDotBytes() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadDotBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -239,8 +213,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadDotLines() ([]string, error)": {
-      "GeneratedClass": "\n    private class ReaderReadDotLines extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadDotLines() ([]string, error)\n      ReaderReadDotLines() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadDotLines\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -258,8 +230,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadLine() (string, error)": {
-      "GeneratedClass": "\n    private class ReaderReadLine extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadLine() (string, error)\n      ReaderReadLine() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadLine\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -277,8 +247,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadLineBytes() ([]byte, error)": {
-      "GeneratedClass": "\n    private class ReaderReadLineBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadLineBytes() ([]byte, error)\n      ReaderReadLineBytes() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadLineBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -296,8 +264,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadMIMEHeader() (MIMEHeader, error)": {
-      "GeneratedClass": "\n    private class ReaderReadMIMEHeader extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadMIMEHeader() (MIMEHeader, error)\n      ReaderReadMIMEHeader() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadMIMEHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -315,8 +281,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadResponse(expectCode int) (code int, message string, err error)": {
-      "GeneratedClass": "\n    private class ReaderReadResponse extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadResponse(expectCode int) (code int, message string, err error)\n      ReaderReadResponse() { this.(Method).hasQualifiedName(\"net/textproto\", \"Reader\", \"ReadResponse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(1)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(1)))",
       "Blocks": [
          {
             "Inp": [
@@ -338,8 +302,6 @@
       "IsEnabled": true
    },
    "func (*Writer).DotWriter() io.WriteCloser": {
-      "GeneratedClass": "\n    private class WriterDotWriter extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).DotWriter() io.WriteCloser\n      WriterDotWriter() { this.(Method).hasQualifiedName(\"net/textproto\", \"Writer\", \"DotWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -355,8 +317,6 @@
       "IsEnabled": true
    },
    "func (*Writer).PrintfLine(format string, args ...interface{}) error": {
-      "GeneratedClass": "\n    private class WriterPrintfLine extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).PrintfLine(format string, args ...interface{}) error\n      WriterPrintfLine() { this.(Method).hasQualifiedName(\"net/textproto\", \"Writer\", \"PrintfLine\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -376,8 +336,6 @@
       "IsEnabled": true
    },
    "func (MIMEHeader).Add(key string, value string)": {
-      "GeneratedClass": "\n    private class MIMEHeaderAdd extends TaintTracking::FunctionModel, Method {\n      // signature: func (MIMEHeader).Add(key string, value string)\n      MIMEHeaderAdd() { this.(Method).hasQualifiedName(\"net/textproto\", \"MIMEHeader\", \"Add\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -395,8 +353,6 @@
       "IsEnabled": true
    },
    "func (MIMEHeader).Del(key string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -412,8 +368,6 @@
       "IsEnabled": false
    },
    "func (MIMEHeader).Get(key string) string": {
-      "GeneratedClass": "\n    private class MIMEHeaderGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (MIMEHeader).Get(key string) string\n      MIMEHeaderGet() { this.(Method).hasQualifiedName(\"net/textproto\", \"MIMEHeader\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -431,8 +385,6 @@
       "IsEnabled": true
    },
    "func (MIMEHeader).Set(key string, value string)": {
-      "GeneratedClass": "\n    private class MIMEHeaderSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (MIMEHeader).Set(key string, value string)\n      MIMEHeaderSet() { this.(Method).hasQualifiedName(\"net/textproto\", \"MIMEHeader\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -450,8 +402,6 @@
       "IsEnabled": true
    },
    "func (MIMEHeader).Values(key string) []string": {
-      "GeneratedClass": "\n    private class MIMEHeaderValues extends TaintTracking::FunctionModel, Method {\n      // signature: func (MIMEHeader).Values(key string) []string\n      MIMEHeaderValues() { this.(Method).hasQualifiedName(\"net/textproto\", \"MIMEHeader\", \"Values\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -469,8 +419,6 @@
       "IsEnabled": true
    },
    "func (ProtocolError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -486,8 +434,6 @@
       "IsEnabled": false
    },
    "func CanonicalMIMEHeaderKey(s string) string": {
-      "GeneratedClass": "\n    private class CanonicalMIMEHeaderKey extends TaintTracking::FunctionModel {\n      // signature: func CanonicalMIMEHeaderKey(s string) string\n      CanonicalMIMEHeaderKey() { hasQualifiedName(\"net/textproto\", \"CanonicalMIMEHeaderKey\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -503,8 +449,6 @@
       "IsEnabled": true
    },
    "func Dial(network string, addr string) (*Conn, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -524,8 +468,6 @@
       "IsEnabled": false
    },
    "func NewConn(conn io.ReadWriteCloser) *Conn": {
-      "GeneratedClass": "\n    private class NewConn extends TaintTracking::FunctionModel {\n      // signature: func NewConn(conn io.ReadWriteCloser) *Conn\n      NewConn() { hasQualifiedName(\"net/textproto\", \"NewConn\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -551,8 +493,6 @@
       "IsEnabled": true
    },
    "func NewReader(r *bufio.Reader) *Reader": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r *bufio.Reader) *Reader\n      NewReader() { hasQualifiedName(\"net/textproto\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -568,8 +508,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w *bufio.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w *bufio.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"net/textproto\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -585,8 +523,6 @@
       "IsEnabled": true
    },
    "func TrimBytes(b []byte) []byte": {
-      "GeneratedClass": "\n    private class TrimBytes extends TaintTracking::FunctionModel {\n      // signature: func TrimBytes(b []byte) []byte\n      TrimBytes() { hasQualifiedName(\"net/textproto\", \"TrimBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -602,8 +538,6 @@
       "IsEnabled": true
    },
    "func TrimString(s string) string": {
-      "GeneratedClass": "\n    private class TrimString extends TaintTracking::FunctionModel {\n      // signature: func TrimString(s string) string\n      TrimString() { hasQualifiedName(\"net/textproto\", \"TrimString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

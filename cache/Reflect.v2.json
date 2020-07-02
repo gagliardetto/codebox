@@ -1,7 +1,5 @@
 {
    "func (*MapIter).Key() Value": {
-      "GeneratedClass": "\n    private class MapIterKey extends TaintTracking::FunctionModel, Method {\n      // signature: func (*MapIter).Key() Value\n      MapIterKey() { this.(Method).hasQualifiedName(\"reflect\", \"MapIter\", \"Key\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func (*MapIter).Next() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*MapIter).Value() Value": {
-      "GeneratedClass": "\n    private class MapIterValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (*MapIter).Value() Value\n      MapIterValue() { this.(Method).hasQualifiedName(\"reflect\", \"MapIter\", \"Value\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": true
    },
    "func (*ValueError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": false
    },
    "func (ChanDir).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -85,8 +75,6 @@
       "IsEnabled": false
    },
    "func (Kind).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -102,8 +90,6 @@
       "IsEnabled": false
    },
    "func (StructTag).Get(key string) string": {
-      "GeneratedClass": "\n    private class StructTagGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (StructTag).Get(key string) string\n      StructTagGet() { this.(Method).hasQualifiedName(\"reflect\", \"StructTag\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -121,8 +107,6 @@
       "IsEnabled": true
    },
    "func (StructTag).Lookup(key string) (value string, ok bool)": {
-      "GeneratedClass": "\n    private class StructTagLookup extends TaintTracking::FunctionModel, Method {\n      // signature: func (StructTag).Lookup(key string) (value string, ok bool)\n      StructTagLookup() { this.(Method).hasQualifiedName(\"reflect\", \"StructTag\", \"Lookup\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -142,8 +126,6 @@
       "IsEnabled": true
    },
    "func (Type).Align() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -159,8 +141,6 @@
       "IsEnabled": false
    },
    "func (Type).AssignableTo(u Type) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -178,8 +158,6 @@
       "IsEnabled": false
    },
    "func (Type).Bits() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -195,8 +173,6 @@
       "IsEnabled": false
    },
    "func (Type).ChanDir() ChanDir": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -212,8 +188,6 @@
       "IsEnabled": false
    },
    "func (Type).Comparable() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -229,8 +203,6 @@
       "IsEnabled": false
    },
    "func (Type).ConvertibleTo(u Type) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -248,8 +220,6 @@
       "IsEnabled": false
    },
    "func (Type).Elem() Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -265,8 +235,6 @@
       "IsEnabled": false
    },
    "func (Type).Field(i int) StructField": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -284,8 +252,6 @@
       "IsEnabled": false
    },
    "func (Type).FieldAlign() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -301,8 +267,6 @@
       "IsEnabled": false
    },
    "func (Type).FieldByIndex(index []int) StructField": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -320,8 +284,6 @@
       "IsEnabled": false
    },
    "func (Type).FieldByName(name string) (StructField, bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -341,8 +303,6 @@
       "IsEnabled": false
    },
    "func (Type).FieldByNameFunc(match func(string) bool) (StructField, bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -362,8 +322,6 @@
       "IsEnabled": false
    },
    "func (Type).Implements(u Type) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -381,8 +339,6 @@
       "IsEnabled": false
    },
    "func (Type).In(i int) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -400,8 +356,6 @@
       "IsEnabled": false
    },
    "func (Type).IsVariadic() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -417,8 +371,6 @@
       "IsEnabled": false
    },
    "func (Type).Key() Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -434,8 +386,6 @@
       "IsEnabled": false
    },
    "func (Type).Kind() Kind": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -451,8 +401,6 @@
       "IsEnabled": false
    },
    "func (Type).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -468,8 +416,6 @@
       "IsEnabled": false
    },
    "func (Type).Method(int) Method": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -487,8 +433,6 @@
       "IsEnabled": false
    },
    "func (Type).MethodByName(string) (Method, bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -508,8 +452,6 @@
       "IsEnabled": false
    },
    "func (Type).Name() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -525,8 +467,6 @@
       "IsEnabled": false
    },
    "func (Type).NumField() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -542,8 +482,6 @@
       "IsEnabled": false
    },
    "func (Type).NumIn() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -559,8 +497,6 @@
       "IsEnabled": false
    },
    "func (Type).NumMethod() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -576,8 +512,6 @@
       "IsEnabled": false
    },
    "func (Type).NumOut() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -593,8 +527,6 @@
       "IsEnabled": false
    },
    "func (Type).Out(i int) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -612,8 +544,6 @@
       "IsEnabled": false
    },
    "func (Type).PkgPath() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -629,8 +559,6 @@
       "IsEnabled": false
    },
    "func (Type).Size() uintptr": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -646,8 +574,6 @@
       "IsEnabled": false
    },
    "func (Type).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -663,8 +589,6 @@
       "IsEnabled": false
    },
    "func (Value).Addr() Value": {
-      "GeneratedClass": "\n    private class ValueAddr extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Addr() Value\n      ValueAddr() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Addr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -680,8 +604,6 @@
       "IsEnabled": true
    },
    "func (Value).Bool() bool": {
-      "GeneratedClass": "\n    private class ValueBool extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Bool() bool\n      ValueBool() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Bool\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -697,8 +619,6 @@
       "IsEnabled": true
    },
    "func (Value).Bytes() []byte": {
-      "GeneratedClass": "\n    private class ValueBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Bytes() []byte\n      ValueBytes() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Bytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -714,8 +634,6 @@
       "IsEnabled": true
    },
    "func (Value).Call(in []Value) []Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -733,8 +651,6 @@
       "IsEnabled": false
    },
    "func (Value).CallSlice(in []Value) []Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -752,8 +668,6 @@
       "IsEnabled": false
    },
    "func (Value).CanAddr() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -769,8 +683,6 @@
       "IsEnabled": false
    },
    "func (Value).CanInterface() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -786,8 +698,6 @@
       "IsEnabled": false
    },
    "func (Value).CanSet() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -803,8 +713,6 @@
       "IsEnabled": false
    },
    "func (Value).Cap() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -820,8 +728,6 @@
       "IsEnabled": false
    },
    "func (Value).Close()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -835,8 +741,6 @@
       "IsEnabled": false
    },
    "func (Value).Complex() complex128": {
-      "GeneratedClass": "\n    private class ValueComplex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Complex() complex128\n      ValueComplex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Complex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -852,8 +756,6 @@
       "IsEnabled": true
    },
    "func (Value).Convert(t Type) Value": {
-      "GeneratedClass": "\n    private class ValueConvert extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Convert(t Type) Value\n      ValueConvert() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Convert\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -871,8 +773,6 @@
       "IsEnabled": true
    },
    "func (Value).Elem() Value": {
-      "GeneratedClass": "\n    private class ValueElem extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Elem() Value\n      ValueElem() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Elem\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -888,8 +788,6 @@
       "IsEnabled": true
    },
    "func (Value).Field(i int) Value": {
-      "GeneratedClass": "\n    private class ValueField extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Field(i int) Value\n      ValueField() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Field\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -907,8 +805,6 @@
       "IsEnabled": true
    },
    "func (Value).FieldByIndex(index []int) Value": {
-      "GeneratedClass": "\n    private class ValueFieldByIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).FieldByIndex(index []int) Value\n      ValueFieldByIndex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"FieldByIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -926,8 +822,6 @@
       "IsEnabled": true
    },
    "func (Value).FieldByName(name string) Value": {
-      "GeneratedClass": "\n    private class ValueFieldByName extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).FieldByName(name string) Value\n      ValueFieldByName() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"FieldByName\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -945,8 +839,6 @@
       "IsEnabled": true
    },
    "func (Value).FieldByNameFunc(match func(string) bool) Value": {
-      "GeneratedClass": "\n    private class ValueFieldByNameFunc extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).FieldByNameFunc(match func(string) bool) Value\n      ValueFieldByNameFunc() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"FieldByNameFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -964,8 +856,6 @@
       "IsEnabled": true
    },
    "func (Value).Float() float64": {
-      "GeneratedClass": "\n    private class ValueFloat extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Float() float64\n      ValueFloat() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Float\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -981,8 +871,6 @@
       "IsEnabled": true
    },
    "func (Value).Index(i int) Value": {
-      "GeneratedClass": "\n    private class ValueIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Index(i int) Value\n      ValueIndex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Index\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1000,8 +888,6 @@
       "IsEnabled": true
    },
    "func (Value).Int() int64": {
-      "GeneratedClass": "\n    private class ValueInt extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Int() int64\n      ValueInt() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Int\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1017,8 +903,6 @@
       "IsEnabled": true
    },
    "func (Value).Interface() (i interface{})": {
-      "GeneratedClass": "\n    private class ValueInterface extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Interface() (i interface{})\n      ValueInterface() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Interface\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1034,8 +918,6 @@
       "IsEnabled": true
    },
    "func (Value).InterfaceData() [2]uintptr": {
-      "GeneratedClass": "\n    private class ValueInterfaceData extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).InterfaceData() [2]uintptr\n      ValueInterfaceData() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"InterfaceData\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1051,8 +933,6 @@
       "IsEnabled": true
    },
    "func (Value).IsNil() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1068,8 +948,6 @@
       "IsEnabled": false
    },
    "func (Value).IsValid() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1085,8 +963,6 @@
       "IsEnabled": false
    },
    "func (Value).IsZero() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1102,8 +978,6 @@
       "IsEnabled": false
    },
    "func (Value).Kind() Kind": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1119,8 +993,6 @@
       "IsEnabled": false
    },
    "func (Value).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1136,8 +1008,6 @@
       "IsEnabled": false
    },
    "func (Value).MapIndex(key Value) Value": {
-      "GeneratedClass": "\n    private class ValueMapIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).MapIndex(key Value) Value\n      ValueMapIndex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"MapIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1155,8 +1025,6 @@
       "IsEnabled": true
    },
    "func (Value).MapKeys() []Value": {
-      "GeneratedClass": "\n    private class ValueMapKeys extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).MapKeys() []Value\n      ValueMapKeys() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"MapKeys\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1172,8 +1040,6 @@
       "IsEnabled": true
    },
    "func (Value).MapRange() *MapIter": {
-      "GeneratedClass": "\n    private class ValueMapRange extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).MapRange() *MapIter\n      ValueMapRange() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"MapRange\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1189,8 +1055,6 @@
       "IsEnabled": true
    },
    "func (Value).Method(i int) Value": {
-      "GeneratedClass": "\n    private class ValueMethod extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Method(i int) Value\n      ValueMethod() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Method\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1208,8 +1072,6 @@
       "IsEnabled": true
    },
    "func (Value).MethodByName(name string) Value": {
-      "GeneratedClass": "\n    private class ValueMethodByName extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).MethodByName(name string) Value\n      ValueMethodByName() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"MethodByName\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1227,8 +1089,6 @@
       "IsEnabled": true
    },
    "func (Value).NumField() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1244,8 +1104,6 @@
       "IsEnabled": false
    },
    "func (Value).NumMethod() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1261,8 +1119,6 @@
       "IsEnabled": false
    },
    "func (Value).OverflowComplex(x complex128) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1280,8 +1136,6 @@
       "IsEnabled": false
    },
    "func (Value).OverflowFloat(x float64) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1299,8 +1153,6 @@
       "IsEnabled": false
    },
    "func (Value).OverflowInt(x int64) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1318,8 +1170,6 @@
       "IsEnabled": false
    },
    "func (Value).OverflowUint(x uint64) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1337,8 +1187,6 @@
       "IsEnabled": false
    },
    "func (Value).Pointer() uintptr": {
-      "GeneratedClass": "\n    private class ValuePointer extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Pointer() uintptr\n      ValuePointer() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Pointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1354,8 +1202,6 @@
       "IsEnabled": true
    },
    "func (Value).Recv() (x Value, ok bool)": {
-      "GeneratedClass": "\n    private class ValueRecv extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Recv() (x Value, ok bool)\n      ValueRecv() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Recv\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1373,8 +1219,6 @@
       "IsEnabled": true
    },
    "func (Value).Send(x Value)": {
-      "GeneratedClass": "\n    private class ValueSend extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Send(x Value)\n      ValueSend() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Send\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1390,8 +1234,6 @@
       "IsEnabled": true
    },
    "func (Value).Set(x Value)": {
-      "GeneratedClass": "\n    private class ValueSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Set(x Value)\n      ValueSet() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1407,8 +1249,6 @@
       "IsEnabled": true
    },
    "func (Value).SetBool(x bool)": {
-      "GeneratedClass": "\n    private class ValueSetBool extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetBool(x bool)\n      ValueSetBool() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetBool\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1424,8 +1264,6 @@
       "IsEnabled": true
    },
    "func (Value).SetBytes(x []byte)": {
-      "GeneratedClass": "\n    private class ValueSetBytes extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetBytes(x []byte)\n      ValueSetBytes() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetBytes\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1441,8 +1279,6 @@
       "IsEnabled": true
    },
    "func (Value).SetCap(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1458,8 +1294,6 @@
       "IsEnabled": false
    },
    "func (Value).SetComplex(x complex128)": {
-      "GeneratedClass": "\n    private class ValueSetComplex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetComplex(x complex128)\n      ValueSetComplex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetComplex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1475,8 +1309,6 @@
       "IsEnabled": true
    },
    "func (Value).SetFloat(x float64)": {
-      "GeneratedClass": "\n    private class ValueSetFloat extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetFloat(x float64)\n      ValueSetFloat() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetFloat\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1492,8 +1324,6 @@
       "IsEnabled": true
    },
    "func (Value).SetInt(x int64)": {
-      "GeneratedClass": "\n    private class ValueSetInt extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetInt(x int64)\n      ValueSetInt() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetInt\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1509,8 +1339,6 @@
       "IsEnabled": true
    },
    "func (Value).SetLen(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1526,8 +1354,6 @@
       "IsEnabled": false
    },
    "func (Value).SetMapIndex(key Value, elem Value)": {
-      "GeneratedClass": "\n    private class ValueSetMapIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetMapIndex(key Value, elem Value)\n      ValueSetMapIndex() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetMapIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1545,8 +1371,6 @@
       "IsEnabled": true
    },
    "func (Value).SetPointer(x unsafe.Pointer)": {
-      "GeneratedClass": "\n    private class ValueSetPointer extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetPointer(x unsafe.Pointer)\n      ValueSetPointer() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetPointer\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1562,8 +1386,6 @@
       "IsEnabled": true
    },
    "func (Value).SetString(x string)": {
-      "GeneratedClass": "\n    private class ValueSetString extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetString(x string)\n      ValueSetString() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1579,8 +1401,6 @@
       "IsEnabled": true
    },
    "func (Value).SetUint(x uint64)": {
-      "GeneratedClass": "\n    private class ValueSetUint extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).SetUint(x uint64)\n      ValueSetUint() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"SetUint\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1596,8 +1416,6 @@
       "IsEnabled": true
    },
    "func (Value).Slice(i int, j int) Value": {
-      "GeneratedClass": "\n    private class ValueSlice extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Slice(i int, j int) Value\n      ValueSlice() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Slice\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1617,8 +1435,6 @@
       "IsEnabled": true
    },
    "func (Value).Slice3(i int, j int, k int) Value": {
-      "GeneratedClass": "\n    private class ValueSlice3 extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Slice3(i int, j int, k int) Value\n      ValueSlice3() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Slice3\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1640,8 +1456,6 @@
       "IsEnabled": true
    },
    "func (Value).String() string": {
-      "GeneratedClass": "\n    private class ValueString extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).String() string\n      ValueString() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1657,8 +1471,6 @@
       "IsEnabled": true
    },
    "func (Value).TryRecv() (x Value, ok bool)": {
-      "GeneratedClass": "\n    private class ValueTryRecv extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).TryRecv() (x Value, ok bool)\n      ValueTryRecv() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"TryRecv\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1676,8 +1488,6 @@
       "IsEnabled": true
    },
    "func (Value).TrySend(x Value) bool": {
-      "GeneratedClass": "\n    private class ValueTrySend extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).TrySend(x Value) bool\n      ValueTrySend() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"TrySend\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1695,8 +1505,6 @@
       "IsEnabled": true
    },
    "func (Value).Type() Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1712,8 +1520,6 @@
       "IsEnabled": false
    },
    "func (Value).Uint() uint64": {
-      "GeneratedClass": "\n    private class ValueUint extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).Uint() uint64\n      ValueUint() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"Uint\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1729,8 +1535,6 @@
       "IsEnabled": true
    },
    "func (Value).UnsafeAddr() uintptr": {
-      "GeneratedClass": "\n    private class ValueUnsafeAddr extends TaintTracking::FunctionModel, Method {\n      // signature: func (Value).UnsafeAddr() uintptr\n      ValueUnsafeAddr() { this.(Method).hasQualifiedName(\"reflect\", \"Value\", \"UnsafeAddr\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1746,8 +1550,6 @@
       "IsEnabled": true
    },
    "func Append(s Value, x ...Value) Value": {
-      "GeneratedClass": "\n    private class Append extends TaintTracking::FunctionModel {\n      // signature: func Append(s Value, x ...Value) Value\n      Append() { hasQualifiedName(\"reflect\", \"Append\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1765,8 +1567,6 @@
       "IsEnabled": true
    },
    "func AppendSlice(s Value, t Value) Value": {
-      "GeneratedClass": "\n    private class AppendSlice extends TaintTracking::FunctionModel {\n      // signature: func AppendSlice(s Value, t Value) Value\n      AppendSlice() { hasQualifiedName(\"reflect\", \"AppendSlice\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1784,8 +1584,6 @@
       "IsEnabled": true
    },
    "func ArrayOf(count int, elem Type) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1803,8 +1601,6 @@
       "IsEnabled": false
    },
    "func ChanOf(dir ChanDir, t Type) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1822,8 +1618,6 @@
       "IsEnabled": false
    },
    "func Copy(dst Value, src Value) int": {
-      "GeneratedClass": "\n    private class Copy extends TaintTracking::FunctionModel {\n      // signature: func Copy(dst Value, src Value) int\n      Copy() { hasQualifiedName(\"reflect\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1841,8 +1635,6 @@
       "IsEnabled": true
    },
    "func DeepEqual(x interface{}, y interface{}) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1860,8 +1652,6 @@
       "IsEnabled": false
    },
    "func FuncOf(in []Type, out []Type, variadic bool) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1881,8 +1671,6 @@
       "IsEnabled": false
    },
    "func Indirect(v Value) Value": {
-      "GeneratedClass": "\n    private class Indirect extends TaintTracking::FunctionModel {\n      // signature: func Indirect(v Value) Value\n      Indirect() { hasQualifiedName(\"reflect\", \"Indirect\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1898,8 +1686,6 @@
       "IsEnabled": true
    },
    "func MakeChan(typ Type, buffer int) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1917,8 +1703,6 @@
       "IsEnabled": false
    },
    "func MakeFunc(typ Type, fn func(args []Value) (results []Value)) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1936,8 +1720,6 @@
       "IsEnabled": false
    },
    "func MakeMap(typ Type) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1953,8 +1735,6 @@
       "IsEnabled": false
    },
    "func MakeMapWithSize(typ Type, n int) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1972,8 +1752,6 @@
       "IsEnabled": false
    },
    "func MakeSlice(typ Type, len int, cap int) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1993,8 +1771,6 @@
       "IsEnabled": false
    },
    "func MapOf(key Type, elem Type) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2012,8 +1788,6 @@
       "IsEnabled": false
    },
    "func New(typ Type) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2029,8 +1803,6 @@
       "IsEnabled": false
    },
    "func NewAt(typ Type, p unsafe.Pointer) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2048,8 +1820,6 @@
       "IsEnabled": false
    },
    "func PtrTo(t Type) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2065,8 +1835,6 @@
       "IsEnabled": false
    },
    "func Select(cases []SelectCase) (chosen int, recv Value, recvOK bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2086,8 +1854,6 @@
       "IsEnabled": false
    },
    "func SliceOf(t Type) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2103,8 +1869,6 @@
       "IsEnabled": false
    },
    "func StructOf(fields []StructField) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2120,8 +1884,6 @@
       "IsEnabled": false
    },
    "func Swapper(slice interface{}) func(i int, j int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2137,8 +1899,6 @@
       "IsEnabled": false
    },
    "func TypeOf(i interface{}) Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2154,8 +1914,6 @@
       "IsEnabled": false
    },
    "func ValueOf(i interface{}) Value": {
-      "GeneratedClass": "\n    private class ValueOf extends TaintTracking::FunctionModel {\n      // signature: func ValueOf(i interface{}) Value\n      ValueOf() { hasQualifiedName(\"reflect\", \"ValueOf\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -2171,8 +1929,6 @@
       "IsEnabled": true
    },
    "func Zero(typ Type) Value": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

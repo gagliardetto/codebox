@@ -1,7 +1,5 @@
 {
    "func (*ColumnType).DatabaseTypeName() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*ColumnType).DecimalSize() (precision int64, scale int64, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": false
    },
    "func (*ColumnType).Length() (length int64, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": false
    },
    "func (*ColumnType).Name() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": false
    },
    "func (*ColumnType).Nullable() (nullable bool, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -93,8 +83,6 @@
       "IsEnabled": false
    },
    "func (*ColumnType).ScanType() reflect.Type": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -110,8 +98,6 @@
       "IsEnabled": false
    },
    "func (*Conn).BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -133,8 +119,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -150,8 +134,6 @@
       "IsEnabled": false
    },
    "func (*Conn).ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -175,8 +157,6 @@
       "IsEnabled": false
    },
    "func (*Conn).PingContext(ctx context.Context) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -194,8 +174,6 @@
       "IsEnabled": false
    },
    "func (*Conn).PrepareContext(ctx context.Context, query string) (*Stmt, error)": {
-      "GeneratedClass": "\n    private class ConnPrepareContext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Conn).PrepareContext(ctx context.Context, query string) (*Stmt, error)\n      ConnPrepareContext() { this.(Method).hasQualifiedName(\"database/sql\", \"Conn\", \"PrepareContext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -217,8 +195,6 @@
       "IsEnabled": true
    },
    "func (*Conn).QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -242,8 +218,6 @@
       "IsEnabled": false
    },
    "func (*Conn).QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -265,8 +239,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Raw(f func(driverConn interface{}) error) (err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -284,8 +256,6 @@
       "IsEnabled": false
    },
    "func (*DB).Begin() (*Tx, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -303,8 +273,6 @@
       "IsEnabled": false
    },
    "func (*DB).BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -326,8 +294,6 @@
       "IsEnabled": false
    },
    "func (*DB).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -343,8 +309,6 @@
       "IsEnabled": false
    },
    "func (*DB).Conn(ctx context.Context) (*Conn, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -364,8 +328,6 @@
       "IsEnabled": false
    },
    "func (*DB).Driver() database/sql/driver.Driver": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -381,8 +343,6 @@
       "IsEnabled": false
    },
    "func (*DB).Exec(query string, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -404,8 +364,6 @@
       "IsEnabled": false
    },
    "func (*DB).ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -429,8 +387,6 @@
       "IsEnabled": false
    },
    "func (*DB).Ping() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -446,8 +402,6 @@
       "IsEnabled": false
    },
    "func (*DB).PingContext(ctx context.Context) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -465,8 +419,6 @@
       "IsEnabled": false
    },
    "func (*DB).Prepare(query string) (*Stmt, error)": {
-      "GeneratedClass": "\n    private class DBPrepare extends TaintTracking::FunctionModel, Method {\n      // signature: func (*DB).Prepare(query string) (*Stmt, error)\n      DBPrepare() { this.(Method).hasQualifiedName(\"database/sql\", \"DB\", \"Prepare\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -486,8 +438,6 @@
       "IsEnabled": true
    },
    "func (*DB).PrepareContext(ctx context.Context, query string) (*Stmt, error)": {
-      "GeneratedClass": "\n    private class DBPrepareContext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*DB).PrepareContext(ctx context.Context, query string) (*Stmt, error)\n      DBPrepareContext() { this.(Method).hasQualifiedName(\"database/sql\", \"DB\", \"PrepareContext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -509,8 +459,6 @@
       "IsEnabled": true
    },
    "func (*DB).Query(query string, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -532,8 +480,6 @@
       "IsEnabled": false
    },
    "func (*DB).QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -557,8 +503,6 @@
       "IsEnabled": false
    },
    "func (*DB).QueryRow(query string, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -578,8 +522,6 @@
       "IsEnabled": false
    },
    "func (*DB).QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -601,8 +543,6 @@
       "IsEnabled": false
    },
    "func (*DB).SetConnMaxLifetime(d time.Duration)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -618,8 +558,6 @@
       "IsEnabled": false
    },
    "func (*DB).SetMaxIdleConns(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -635,8 +573,6 @@
       "IsEnabled": false
    },
    "func (*DB).SetMaxOpenConns(n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -652,8 +588,6 @@
       "IsEnabled": false
    },
    "func (*DB).Stats() DBStats": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -669,8 +603,6 @@
       "IsEnabled": false
    },
    "func (*NullBool).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -688,8 +620,6 @@
       "IsEnabled": false
    },
    "func (*NullFloat64).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -707,8 +637,6 @@
       "IsEnabled": false
    },
    "func (*NullInt32).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -726,8 +654,6 @@
       "IsEnabled": false
    },
    "func (*NullInt64).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -745,8 +671,6 @@
       "IsEnabled": false
    },
    "func (*NullString).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -764,8 +688,6 @@
       "IsEnabled": false
    },
    "func (*NullTime).Scan(value interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -783,8 +705,6 @@
       "IsEnabled": false
    },
    "func (*Row).Scan(dest ...interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -802,8 +722,6 @@
       "IsEnabled": false
    },
    "func (*Rows).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -819,8 +737,6 @@
       "IsEnabled": false
    },
    "func (*Rows).ColumnTypes() ([]*ColumnType, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -838,8 +754,6 @@
       "IsEnabled": false
    },
    "func (*Rows).Columns() ([]string, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -857,8 +771,6 @@
       "IsEnabled": false
    },
    "func (*Rows).Err() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -874,8 +786,6 @@
       "IsEnabled": false
    },
    "func (*Rows).Next() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -891,8 +801,6 @@
       "IsEnabled": false
    },
    "func (*Rows).NextResultSet() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -908,8 +816,6 @@
       "IsEnabled": false
    },
    "func (*Rows).Scan(dest ...interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -927,8 +833,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -944,8 +848,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).Exec(args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -965,8 +867,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).ExecContext(ctx context.Context, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -988,8 +888,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).Query(args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1009,8 +907,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).QueryContext(ctx context.Context, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1032,8 +928,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).QueryRow(args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1051,8 +945,6 @@
       "IsEnabled": false
    },
    "func (*Stmt).QueryRowContext(ctx context.Context, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1072,8 +964,6 @@
       "IsEnabled": false
    },
    "func (*Tx).Commit() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1089,8 +979,6 @@
       "IsEnabled": false
    },
    "func (*Tx).Exec(query string, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1112,8 +1000,6 @@
       "IsEnabled": false
    },
    "func (*Tx).ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1137,8 +1023,6 @@
       "IsEnabled": false
    },
    "func (*Tx).Prepare(query string) (*Stmt, error)": {
-      "GeneratedClass": "\n    private class TxPrepare extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Tx).Prepare(query string) (*Stmt, error)\n      TxPrepare() { this.(Method).hasQualifiedName(\"database/sql\", \"Tx\", \"Prepare\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1158,8 +1042,6 @@
       "IsEnabled": true
    },
    "func (*Tx).PrepareContext(ctx context.Context, query string) (*Stmt, error)": {
-      "GeneratedClass": "\n    private class TxPrepareContext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Tx).PrepareContext(ctx context.Context, query string) (*Stmt, error)\n      TxPrepareContext() { this.(Method).hasQualifiedName(\"database/sql\", \"Tx\", \"PrepareContext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1181,8 +1063,6 @@
       "IsEnabled": true
    },
    "func (*Tx).Query(query string, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1204,8 +1084,6 @@
       "IsEnabled": false
    },
    "func (*Tx).QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1229,8 +1107,6 @@
       "IsEnabled": false
    },
    "func (*Tx).QueryRow(query string, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1250,8 +1126,6 @@
       "IsEnabled": false
    },
    "func (*Tx).QueryRowContext(ctx context.Context, query string, args ...interface{}) *Row": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1273,8 +1147,6 @@
       "IsEnabled": false
    },
    "func (*Tx).Rollback() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1290,8 +1162,6 @@
       "IsEnabled": false
    },
    "func (*Tx).Stmt(stmt *Stmt) *Stmt": {
-      "GeneratedClass": "\n    private class TxStmt extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Tx).Stmt(stmt *Stmt) *Stmt\n      TxStmt() { this.(Method).hasQualifiedName(\"database/sql\", \"Tx\", \"Stmt\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1309,8 +1179,6 @@
       "IsEnabled": true
    },
    "func (*Tx).StmtContext(ctx context.Context, stmt *Stmt) *Stmt": {
-      "GeneratedClass": "\n    private class TxStmtContext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Tx).StmtContext(ctx context.Context, stmt *Stmt) *Stmt\n      TxStmtContext() { this.(Method).hasQualifiedName(\"database/sql\", \"Tx\", \"StmtContext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1330,8 +1198,6 @@
       "IsEnabled": true
    },
    "func (IsolationLevel).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1347,8 +1213,6 @@
       "IsEnabled": false
    },
    "func (NullBool).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1366,8 +1230,6 @@
       "IsEnabled": false
    },
    "func (NullFloat64).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1385,8 +1247,6 @@
       "IsEnabled": false
    },
    "func (NullInt32).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1404,8 +1264,6 @@
       "IsEnabled": false
    },
    "func (NullInt64).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1423,8 +1281,6 @@
       "IsEnabled": false
    },
    "func (NullString).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1442,8 +1298,6 @@
       "IsEnabled": false
    },
    "func (NullTime).Value() (database/sql/driver.Value, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1461,8 +1315,6 @@
       "IsEnabled": false
    },
    "func (Result).LastInsertId() (int64, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1480,8 +1332,6 @@
       "IsEnabled": false
    },
    "func (Result).RowsAffected() (int64, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1499,8 +1349,6 @@
       "IsEnabled": false
    },
    "func (Scanner).Scan(src interface{}) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1518,8 +1366,6 @@
       "IsEnabled": false
    },
    "func Drivers() []string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1533,8 +1379,6 @@
       "IsEnabled": false
    },
    "func Named(name string, value interface{}) NamedArg": {
-      "GeneratedClass": "\n    private class Named extends TaintTracking::FunctionModel {\n      // signature: func Named(name string, value interface{}) NamedArg\n      Named() { hasQualifiedName(\"database/sql\", \"Named\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1552,8 +1396,6 @@
       "IsEnabled": true
    },
    "func Open(driverName string, dataSourceName string) (*DB, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1573,8 +1415,6 @@
       "IsEnabled": false
    },
    "func OpenDB(c database/sql/driver.Connector) *DB": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1590,8 +1430,6 @@
       "IsEnabled": false
    },
    "func Register(name string, driver database/sql/driver.Driver)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

@@ -1,7 +1,5 @@
 {
    "func (*File).DataOffset() (offset int64, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": false
    },
    "func (*File).Open() (io.ReadCloser, error)": {
-      "GeneratedClass": "\n    private class FileOpen extends TaintTracking::FunctionModel, Method {\n      // signature: func (*File).Open() (io.ReadCloser, error)\n      FileOpen() { this.(Method).hasQualifiedName(\"archive/zip\", \"File\", \"Open\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func (*FileHeader).FileInfo() os.FileInfo": {
-      "GeneratedClass": "\n    private class FileHeaderFileInfo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*FileHeader).FileInfo() os.FileInfo\n      FileHeaderFileInfo() { this.(Method).hasQualifiedName(\"archive/zip\", \"FileHeader\", \"FileInfo\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -55,8 +49,6 @@
       "IsEnabled": true
    },
    "func (*FileHeader).ModTime() time.Time": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": false
    },
    "func (*FileHeader).Mode() (mode os.FileMode)": {
-      "GeneratedClass": "\n    private class FileHeaderMode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*FileHeader).Mode() (mode os.FileMode)\n      FileHeaderMode() { this.(Method).hasQualifiedName(\"archive/zip\", \"FileHeader\", \"Mode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -89,8 +79,6 @@
       "IsEnabled": true
    },
    "func (*FileHeader).SetModTime(t time.Time)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -106,8 +94,6 @@
       "IsEnabled": false
    },
    "func (*FileHeader).SetMode(mode os.FileMode)": {
-      "GeneratedClass": "\n    private class FileHeaderSetMode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*FileHeader).SetMode(mode os.FileMode)\n      FileHeaderSetMode() { this.(Method).hasQualifiedName(\"archive/zip\", \"FileHeader\", \"SetMode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -123,8 +109,6 @@
       "IsEnabled": true
    },
    "func (*ReadCloser).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -140,8 +124,6 @@
       "IsEnabled": false
    },
    "func (*Reader).RegisterDecompressor(method uint16, dcomp Decompressor)": {
-      "GeneratedClass": "\n    private class ReaderRegisterDecompressor extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).RegisterDecompressor(method uint16, dcomp Decompressor)\n      ReaderRegisterDecompressor() { this.(Method).hasQualifiedName(\"archive/zip\", \"Reader\", \"RegisterDecompressor\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -159,8 +141,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -176,8 +156,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Create(name string) (io.Writer, error)": {
-      "GeneratedClass": "\n    private class WriterCreate extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Create(name string) (io.Writer, error)\n      WriterCreate() { this.(Method).hasQualifiedName(\"archive/zip\", \"Writer\", \"Create\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -197,8 +175,6 @@
       "IsEnabled": true
    },
    "func (*Writer).CreateHeader(fh *FileHeader) (io.Writer, error)": {
-      "GeneratedClass": "\n    private class WriterCreateHeader extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).CreateHeader(fh *FileHeader) (io.Writer, error)\n      WriterCreateHeader() { this.(Method).hasQualifiedName(\"archive/zip\", \"Writer\", \"CreateHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0) or inp.isResult(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0) or inp.isResult(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -218,8 +194,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Flush() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -235,8 +209,6 @@
       "IsEnabled": false
    },
    "func (*Writer).RegisterCompressor(method uint16, comp Compressor)": {
-      "GeneratedClass": "\n    private class WriterRegisterCompressor extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).RegisterCompressor(method uint16, comp Compressor)\n      WriterRegisterCompressor() { this.(Method).hasQualifiedName(\"archive/zip\", \"Writer\", \"RegisterCompressor\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -254,8 +226,6 @@
       "IsEnabled": true
    },
    "func (*Writer).SetComment(comment string) error": {
-      "GeneratedClass": "\n    private class WriterSetComment extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).SetComment(comment string) error\n      WriterSetComment() { this.(Method).hasQualifiedName(\"archive/zip\", \"Writer\", \"SetComment\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -273,8 +243,6 @@
       "IsEnabled": true
    },
    "func (*Writer).SetOffset(n int64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -290,8 +258,6 @@
       "IsEnabled": false
    },
    "func FileInfoHeader(fi os.FileInfo) (*FileHeader, error)": {
-      "GeneratedClass": "\n    private class FileInfoHeader extends TaintTracking::FunctionModel {\n      // signature: func FileInfoHeader(fi os.FileInfo) (*FileHeader, error)\n      FileInfoHeader() { hasQualifiedName(\"archive/zip\", \"FileInfoHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -309,8 +275,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.ReaderAt, size int64) (*Reader, error)": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.ReaderAt, size int64) (*Reader, error)\n      NewReader() { hasQualifiedName(\"archive/zip\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -330,8 +294,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"archive/zip\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -347,8 +309,6 @@
       "IsEnabled": true
    },
    "func OpenReader(name string) (*ReadCloser, error)": {
-      "GeneratedClass": "\n    private class OpenReader extends TaintTracking::FunctionModel {\n      // signature: func OpenReader(name string) (*ReadCloser, error)\n      OpenReader() { hasQualifiedName(\"archive/zip\", \"OpenReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -366,8 +326,6 @@
       "IsEnabled": true
    },
    "func RegisterCompressor(method uint16, comp Compressor)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -383,8 +341,6 @@
       "IsEnabled": false
    },
    "func RegisterDecompressor(method uint16, dcomp Decompressor)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

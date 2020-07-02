@@ -1,7 +1,5 @@
 {
    "func NewReader(r io.Reader, order Order, litWidth int) io.ReadCloser": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader, order Order, litWidth int) io.ReadCloser\n      NewReader() { hasQualifiedName(\"compress/lzw\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -21,8 +19,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer, order Order, litWidth int) io.WriteCloser": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer, order Order, litWidth int) io.WriteCloser\n      NewWriter() { hasQualifiedName(\"compress/lzw\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

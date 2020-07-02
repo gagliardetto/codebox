@@ -1,7 +1,5 @@
 {
    "func (*ClientConn).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*ClientConn).Do(req *net/http.Request) (*net/http.Response, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": false
    },
    "func (*ClientConn).Hijack() (c net.Conn, r *bufio.Reader)": {
-      "GeneratedClass": "\n    private class ClientConnHijack extends TaintTracking::FunctionModel, Method {\n      // signature: func (*ClientConn).Hijack() (c net.Conn, r *bufio.Reader)\n      ClientConnHijack() { this.(Method).hasQualifiedName(\"net/http/httputil\", \"ClientConn\", \"Hijack\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(_)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(_)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": true
    },
    "func (*ClientConn).Pending() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": false
    },
    "func (*ClientConn).Read(req *net/http.Request) (resp *net/http.Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -95,8 +85,6 @@
       "IsEnabled": false
    },
    "func (*ClientConn).Write(req *net/http.Request) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -114,8 +102,6 @@
       "IsEnabled": false
    },
    "func (*ReverseProxy).ServeHTTP(rw net/http.ResponseWriter, req *net/http.Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -133,8 +119,6 @@
       "IsEnabled": false
    },
    "func (*ServerConn).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -150,8 +134,6 @@
       "IsEnabled": false
    },
    "func (*ServerConn).Hijack() (net.Conn, *bufio.Reader)": {
-      "GeneratedClass": "\n    private class ServerConnHijack extends TaintTracking::FunctionModel, Method {\n      // signature: func (*ServerConn).Hijack() (net.Conn, *bufio.Reader)\n      ServerConnHijack() { this.(Method).hasQualifiedName(\"net/http/httputil\", \"ServerConn\", \"Hijack\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(_)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(_)))",
       "Blocks": [
          {
             "Inp": [
@@ -169,8 +151,6 @@
       "IsEnabled": true
    },
    "func (*ServerConn).Pending() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -186,8 +166,6 @@
       "IsEnabled": false
    },
    "func (*ServerConn).Read() (*net/http.Request, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -205,8 +183,6 @@
       "IsEnabled": false
    },
    "func (*ServerConn).Write(req *net/http.Request, resp *net/http.Response) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -226,8 +202,6 @@
       "IsEnabled": false
    },
    "func (BufferPool).Get() []byte": {
-      "GeneratedClass": "\n    private class BufferPoolGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (BufferPool).Get() []byte\n      BufferPoolGet() {\n        this.implements(\"net/http/httputil\", \"BufferPool\", \"Get\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -243,8 +217,6 @@
       "IsEnabled": true
    },
    "func (BufferPool).Put([]byte)": {
-      "GeneratedClass": "\n    private class BufferPoolPut extends TaintTracking::FunctionModel, Method {\n      // signature: func (BufferPool).Put([]byte)\n      BufferPoolPut() {\n        this.implements(\"net/http/httputil\", \"BufferPool\", \"Put\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -260,8 +232,6 @@
       "IsEnabled": true
    },
    "func DumpRequest(req *net/http.Request, body bool) ([]byte, error)": {
-      "GeneratedClass": "\n    private class DumpRequest extends TaintTracking::FunctionModel {\n      // signature: func DumpRequest(req *net/http.Request, body bool) ([]byte, error)\n      DumpRequest() { hasQualifiedName(\"net/http/httputil\", \"DumpRequest\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -281,8 +251,6 @@
       "IsEnabled": true
    },
    "func DumpRequestOut(req *net/http.Request, body bool) ([]byte, error)": {
-      "GeneratedClass": "\n    private class DumpRequestOut extends TaintTracking::FunctionModel {\n      // signature: func DumpRequestOut(req *net/http.Request, body bool) ([]byte, error)\n      DumpRequestOut() { hasQualifiedName(\"net/http/httputil\", \"DumpRequestOut\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -302,8 +270,6 @@
       "IsEnabled": true
    },
    "func DumpResponse(resp *net/http.Response, body bool) ([]byte, error)": {
-      "GeneratedClass": "\n    private class DumpResponse extends TaintTracking::FunctionModel {\n      // signature: func DumpResponse(resp *net/http.Response, body bool) ([]byte, error)\n      DumpResponse() { hasQualifiedName(\"net/http/httputil\", \"DumpResponse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -323,8 +289,6 @@
       "IsEnabled": true
    },
    "func NewChunkedReader(r io.Reader) io.Reader": {
-      "GeneratedClass": "\n    private class NewChunkedReader extends TaintTracking::FunctionModel {\n      // signature: func NewChunkedReader(r io.Reader) io.Reader\n      NewChunkedReader() { hasQualifiedName(\"net/http/httputil\", \"NewChunkedReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -340,8 +304,6 @@
       "IsEnabled": true
    },
    "func NewChunkedWriter(w io.Writer) io.WriteCloser": {
-      "GeneratedClass": "\n    private class NewChunkedWriter extends TaintTracking::FunctionModel {\n      // signature: func NewChunkedWriter(w io.Writer) io.WriteCloser\n      NewChunkedWriter() { hasQualifiedName(\"net/http/httputil\", \"NewChunkedWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -357,8 +319,6 @@
       "IsEnabled": true
    },
    "func NewClientConn(c net.Conn, r *bufio.Reader) *ClientConn": {
-      "GeneratedClass": "\n    private class NewClientConn extends TaintTracking::FunctionModel {\n      // signature: func NewClientConn(c net.Conn, r *bufio.Reader) *ClientConn\n      NewClientConn() { hasQualifiedName(\"net/http/httputil\", \"NewClientConn\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -388,8 +348,6 @@
       "IsEnabled": true
    },
    "func NewProxyClientConn(c net.Conn, r *bufio.Reader) *ClientConn": {
-      "GeneratedClass": "\n    private class NewProxyClientConn extends TaintTracking::FunctionModel {\n      // signature: func NewProxyClientConn(c net.Conn, r *bufio.Reader) *ClientConn\n      NewProxyClientConn() { hasQualifiedName(\"net/http/httputil\", \"NewProxyClientConn\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -419,8 +377,6 @@
       "IsEnabled": true
    },
    "func NewServerConn(c net.Conn, r *bufio.Reader) *ServerConn": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -438,8 +394,6 @@
       "IsEnabled": false
    },
    "func NewSingleHostReverseProxy(target *net/url.URL) *ReverseProxy": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

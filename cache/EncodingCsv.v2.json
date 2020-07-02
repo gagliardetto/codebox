@@ -1,7 +1,5 @@
 {
    "func (*ParseError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*ParseError).Unwrap() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Reader).Read() (record []string, err error)": {
-      "GeneratedClass": "\n    private class ReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).Read() (record []string, err error)\n      ReaderRead() { this.(Method).hasQualifiedName(\"encoding/csv\", \"Reader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": true
    },
    "func (*Reader).ReadAll() (records [][]string, err error)": {
-      "GeneratedClass": "\n    private class ReaderReadAll extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Reader).ReadAll() (records [][]string, err error)\n      ReaderReadAll() { this.(Method).hasQualifiedName(\"encoding/csv\", \"Reader\", \"ReadAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Error() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -89,8 +79,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Flush()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -104,8 +92,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Write(record []string) error": {
-      "GeneratedClass": "\n    private class WriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Write(record []string) error\n      WriterWrite() { this.(Method).hasQualifiedName(\"encoding/csv\", \"Writer\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -123,8 +109,6 @@
       "IsEnabled": true
    },
    "func (*Writer).WriteAll(records [][]string) error": {
-      "GeneratedClass": "\n    private class WriterWriteAll extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).WriteAll(records [][]string) error\n      WriterWriteAll() { this.(Method).hasQualifiedName(\"encoding/csv\", \"Writer\", \"WriteAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -142,8 +126,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.Reader) *Reader": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader) *Reader\n      NewReader() { hasQualifiedName(\"encoding/csv\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -159,8 +141,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"encoding/csv\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

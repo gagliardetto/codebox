@@ -1,7 +1,5 @@
 {
    "func (*Writer).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Flush() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Writer).Reset(w io.Writer)": {
-      "GeneratedClass": "\n    private class WriterReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Reset(w io.Writer)\n      WriterReset() { this.(Method).hasQualifiedName(\"compress/zlib\", \"Writer\", \"Reset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": true
    },
    "func (*Writer).Write(p []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class WriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Writer).Write(p []byte) (n int, err error)\n      WriterWrite() { this.(Method).hasQualifiedName(\"compress/zlib\", \"Writer\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func (Resetter).Reset(r io.Reader, dict []byte) error": {
-      "GeneratedClass": "\n    private class ResetterReset extends TaintTracking::FunctionModel, Method {\n      // signature: func (Resetter).Reset(r io.Reader, dict []byte) error\n      ResetterReset() {\n        this.implements(\"compress/zlib\", \"Resetter\", \"Reset\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -93,8 +83,6 @@
       "IsEnabled": true
    },
    "func NewReader(r io.Reader) (io.ReadCloser, error)": {
-      "GeneratedClass": "\n    private class NewReader extends TaintTracking::FunctionModel {\n      // signature: func NewReader(r io.Reader) (io.ReadCloser, error)\n      NewReader() { hasQualifiedName(\"compress/zlib\", \"NewReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -112,8 +100,6 @@
       "IsEnabled": true
    },
    "func NewReaderDict(r io.Reader, dict []byte) (io.ReadCloser, error)": {
-      "GeneratedClass": "\n    private class NewReaderDict extends TaintTracking::FunctionModel {\n      // signature: func NewReaderDict(r io.Reader, dict []byte) (io.ReadCloser, error)\n      NewReaderDict() { hasQualifiedName(\"compress/zlib\", \"NewReaderDict\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -133,8 +119,6 @@
       "IsEnabled": true
    },
    "func NewWriter(w io.Writer) *Writer": {
-      "GeneratedClass": "\n    private class NewWriter extends TaintTracking::FunctionModel {\n      // signature: func NewWriter(w io.Writer) *Writer\n      NewWriter() { hasQualifiedName(\"compress/zlib\", \"NewWriter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -150,8 +134,6 @@
       "IsEnabled": true
    },
    "func NewWriterLevel(w io.Writer, level int) (*Writer, error)": {
-      "GeneratedClass": "\n    private class NewWriterLevel extends TaintTracking::FunctionModel {\n      // signature: func NewWriterLevel(w io.Writer, level int) (*Writer, error)\n      NewWriterLevel() { hasQualifiedName(\"compress/zlib\", \"NewWriterLevel\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -171,8 +153,6 @@
       "IsEnabled": true
    },
    "func NewWriterLevelDict(w io.Writer, level int, dict []byte) (*Writer, error)": {
-      "GeneratedClass": "\n    private class NewWriterLevelDict extends TaintTracking::FunctionModel {\n      // signature: func NewWriterLevelDict(w io.Writer, level int, dict []byte) (*Writer, error)\n      NewWriterLevelDict() { hasQualifiedName(\"compress/zlib\", \"NewWriterLevelDict\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult(0)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult(0)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

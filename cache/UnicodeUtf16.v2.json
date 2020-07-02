@@ -1,7 +1,5 @@
 {
    "func Decode(s []uint16) []rune": {
-      "GeneratedClass": "\n    private class Decode extends TaintTracking::FunctionModel {\n      // signature: func Decode(s []uint16) []rune\n      Decode() { hasQualifiedName(\"unicode/utf16\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func DecodeRune(r1 rune, r2 rune) rune": {
-      "GeneratedClass": "\n    private class DecodeRune extends TaintTracking::FunctionModel {\n      // signature: func DecodeRune(r1 rune, r2 rune) rune\n      DecodeRune() { hasQualifiedName(\"unicode/utf16\", \"DecodeRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": true
    },
    "func Encode(s []rune) []uint16": {
-      "GeneratedClass": "\n    private class Encode extends TaintTracking::FunctionModel {\n      // signature: func Encode(s []rune) []uint16\n      Encode() { hasQualifiedName(\"unicode/utf16\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": true
    },
    "func EncodeRune(r rune) (r1 rune, r2 rune)": {
-      "GeneratedClass": "\n    private class EncodeRune extends TaintTracking::FunctionModel {\n      // signature: func EncodeRune(r rune) (r1 rune, r2 rune)\n      EncodeRune() { hasQualifiedName(\"unicode/utf16\", \"EncodeRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(_)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(_)))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func IsSurrogate(r rune) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

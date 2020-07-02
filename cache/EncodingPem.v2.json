@@ -1,7 +1,5 @@
 {
    "func Decode(data []byte) (p *Block, rest []byte)": {
-      "GeneratedClass": "\n    private class Decode extends TaintTracking::FunctionModel {\n      // signature: func Decode(data []byte) (p *Block, rest []byte)\n      Decode() { hasQualifiedName(\"encoding/pem\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(_)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(_)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": true
    },
    "func Encode(out io.Writer, b *Block) error": {
-      "GeneratedClass": "\n    private class Encode extends TaintTracking::FunctionModel {\n      // signature: func Encode(out io.Writer, b *Block) error\n      Encode() { hasQualifiedName(\"encoding/pem\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func EncodeToMemory(b *Block) []byte": {
-      "GeneratedClass": "\n    private class EncodeToMemory extends TaintTracking::FunctionModel {\n      // signature: func EncodeToMemory(b *Block) []byte\n      EncodeToMemory() { hasQualifiedName(\"encoding/pem\", \"EncodeToMemory\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

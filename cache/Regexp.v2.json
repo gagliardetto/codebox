@@ -1,7 +1,5 @@
 {
    "func (*Regexp).Copy() *Regexp": {
-      "GeneratedClass": "\n    private class RegexpCopy extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).Copy() *Regexp\n      RegexpCopy() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"Copy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).Expand(dst []byte, template []byte, src []byte, match []int) []byte": {
-      "GeneratedClass": "\n    private class RegexpExpand extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).Expand(dst []byte, template []byte, src []byte, match []int) []byte\n      RegexpExpand() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"Expand\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([1, 2])) and (outp.isParameter(0) or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter([1, 2])) and (outp.isParameter(0) or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -42,8 +38,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ExpandString(dst []byte, template string, src string, match []int) []byte": {
-      "GeneratedClass": "\n    private class RegexpExpandString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ExpandString(dst []byte, template string, src string, match []int) []byte\n      RegexpExpandString() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ExpandString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter([1, 2])) and (outp.isParameter(0) or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter([1, 2])) and (outp.isParameter(0) or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -67,8 +61,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).Find(b []byte) []byte": {
-      "GeneratedClass": "\n    private class RegexpFind extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).Find(b []byte) []byte\n      RegexpFind() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"Find\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -86,8 +78,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAll(b []byte, n int) [][]byte": {
-      "GeneratedClass": "\n    private class RegexpFindAll extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAll(b []byte, n int) [][]byte\n      RegexpFindAll() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -107,8 +97,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllIndex(b []byte, n int) [][]int": {
-      "GeneratedClass": "\n    private class RegexpFindAllIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllIndex(b []byte, n int) [][]int\n      RegexpFindAllIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -128,8 +116,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllString(s string, n int) []string": {
-      "GeneratedClass": "\n    private class RegexpFindAllString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllString(s string, n int) []string\n      RegexpFindAllString() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -149,8 +135,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllStringIndex(s string, n int) [][]int": {
-      "GeneratedClass": "\n    private class RegexpFindAllStringIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllStringIndex(s string, n int) [][]int\n      RegexpFindAllStringIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllStringIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -170,8 +154,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllStringSubmatch(s string, n int) [][]string": {
-      "GeneratedClass": "\n    private class RegexpFindAllStringSubmatch extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllStringSubmatch(s string, n int) [][]string\n      RegexpFindAllStringSubmatch() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllStringSubmatch\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -191,8 +173,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllStringSubmatchIndex(s string, n int) [][]int": {
-      "GeneratedClass": "\n    private class RegexpFindAllStringSubmatchIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllStringSubmatchIndex(s string, n int) [][]int\n      RegexpFindAllStringSubmatchIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllStringSubmatchIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -212,8 +192,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllSubmatch(b []byte, n int) [][][]byte": {
-      "GeneratedClass": "\n    private class RegexpFindAllSubmatch extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllSubmatch(b []byte, n int) [][][]byte\n      RegexpFindAllSubmatch() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllSubmatch\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -233,8 +211,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindAllSubmatchIndex(b []byte, n int) [][]int": {
-      "GeneratedClass": "\n    private class RegexpFindAllSubmatchIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindAllSubmatchIndex(b []byte, n int) [][]int\n      RegexpFindAllSubmatchIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindAllSubmatchIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -254,8 +230,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindIndex(b []byte) (loc []int)": {
-      "GeneratedClass": "\n    private class RegexpFindIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindIndex(b []byte) (loc []int)\n      RegexpFindIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -273,8 +247,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindReaderIndex(r io.RuneReader) (loc []int)": {
-      "GeneratedClass": "\n    private class RegexpFindReaderIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindReaderIndex(r io.RuneReader) (loc []int)\n      RegexpFindReaderIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindReaderIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -292,8 +264,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindReaderSubmatchIndex(r io.RuneReader) []int": {
-      "GeneratedClass": "\n    private class RegexpFindReaderSubmatchIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindReaderSubmatchIndex(r io.RuneReader) []int\n      RegexpFindReaderSubmatchIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindReaderSubmatchIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -311,8 +281,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindString(s string) string": {
-      "GeneratedClass": "\n    private class RegexpFindString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindString(s string) string\n      RegexpFindString() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -330,8 +298,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindStringIndex(s string) (loc []int)": {
-      "GeneratedClass": "\n    private class RegexpFindStringIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindStringIndex(s string) (loc []int)\n      RegexpFindStringIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindStringIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -349,8 +315,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindStringSubmatch(s string) []string": {
-      "GeneratedClass": "\n    private class RegexpFindStringSubmatch extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindStringSubmatch(s string) []string\n      RegexpFindStringSubmatch() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindStringSubmatch\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -368,8 +332,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindStringSubmatchIndex(s string) []int": {
-      "GeneratedClass": "\n    private class RegexpFindStringSubmatchIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindStringSubmatchIndex(s string) []int\n      RegexpFindStringSubmatchIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindStringSubmatchIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -387,8 +349,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindSubmatch(b []byte) [][]byte": {
-      "GeneratedClass": "\n    private class RegexpFindSubmatch extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindSubmatch(b []byte) [][]byte\n      RegexpFindSubmatch() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindSubmatch\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -406,8 +366,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).FindSubmatchIndex(b []byte) []int": {
-      "GeneratedClass": "\n    private class RegexpFindSubmatchIndex extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).FindSubmatchIndex(b []byte) []int\n      RegexpFindSubmatchIndex() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"FindSubmatchIndex\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -425,8 +383,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).LiteralPrefix() (prefix string, complete bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -444,8 +400,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).Longest()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -459,8 +413,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).Match(b []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -478,8 +430,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).MatchReader(r io.RuneReader) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -497,8 +447,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).MatchString(s string) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -516,8 +464,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).NumSubexp() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -533,8 +479,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).ReplaceAll(src []byte, repl []byte) []byte": {
-      "GeneratedClass": "\n    private class RegexpReplaceAll extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAll(src []byte, repl []byte) []byte\n      RegexpReplaceAll() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAll\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -554,8 +498,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ReplaceAllFunc(src []byte, repl func([]byte) []byte) []byte": {
-      "GeneratedClass": "\n    private class RegexpReplaceAllFunc extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAllFunc(src []byte, repl func([]byte) []byte) []byte\n      RegexpReplaceAllFunc() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAllFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -575,8 +517,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ReplaceAllLiteral(src []byte, repl []byte) []byte": {
-      "GeneratedClass": "\n    private class RegexpReplaceAllLiteral extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAllLiteral(src []byte, repl []byte) []byte\n      RegexpReplaceAllLiteral() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAllLiteral\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -596,8 +536,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ReplaceAllLiteralString(src string, repl string) string": {
-      "GeneratedClass": "\n    private class RegexpReplaceAllLiteralString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAllLiteralString(src string, repl string) string\n      RegexpReplaceAllLiteralString() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAllLiteralString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -617,8 +555,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ReplaceAllString(src string, repl string) string": {
-      "GeneratedClass": "\n    private class RegexpReplaceAllString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAllString(src string, repl string) string\n      RegexpReplaceAllString() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAllString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -638,8 +574,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).ReplaceAllStringFunc(src string, repl func(string) string) string": {
-      "GeneratedClass": "\n    private class RegexpReplaceAllStringFunc extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).ReplaceAllStringFunc(src string, repl func(string) string) string\n      RegexpReplaceAllStringFunc() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"ReplaceAllStringFunc\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -659,8 +593,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).Split(s string, n int) []string": {
-      "GeneratedClass": "\n    private class RegexpSplit extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Regexp).Split(s string, n int) []string\n      RegexpSplit() { this.(Method).hasQualifiedName(\"regexp\", \"Regexp\", \"Split\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -680,8 +612,6 @@
       "IsEnabled": true
    },
    "func (*Regexp).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -697,8 +627,6 @@
       "IsEnabled": false
    },
    "func (*Regexp).SubexpNames() []string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -714,8 +642,6 @@
       "IsEnabled": false
    },
    "func Compile(expr string) (*Regexp, error)": {
-      "GeneratedClass": "\n    private class Compile extends TaintTracking::FunctionModel {\n      // signature: func Compile(expr string) (*Regexp, error)\n      Compile() { hasQualifiedName(\"regexp\", \"Compile\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -733,8 +659,6 @@
       "IsEnabled": true
    },
    "func CompilePOSIX(expr string) (*Regexp, error)": {
-      "GeneratedClass": "\n    private class CompilePOSIX extends TaintTracking::FunctionModel {\n      // signature: func CompilePOSIX(expr string) (*Regexp, error)\n      CompilePOSIX() { hasQualifiedName(\"regexp\", \"CompilePOSIX\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -752,8 +676,6 @@
       "IsEnabled": true
    },
    "func Match(pattern string, b []byte) (matched bool, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -773,8 +695,6 @@
       "IsEnabled": false
    },
    "func MatchReader(pattern string, r io.RuneReader) (matched bool, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -794,8 +714,6 @@
       "IsEnabled": false
    },
    "func MatchString(pattern string, s string) (matched bool, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -815,8 +733,6 @@
       "IsEnabled": false
    },
    "func MustCompile(str string) *Regexp": {
-      "GeneratedClass": "\n    private class MustCompile extends TaintTracking::FunctionModel {\n      // signature: func MustCompile(str string) *Regexp\n      MustCompile() { hasQualifiedName(\"regexp\", \"MustCompile\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -832,8 +748,6 @@
       "IsEnabled": true
    },
    "func MustCompilePOSIX(str string) *Regexp": {
-      "GeneratedClass": "\n    private class MustCompilePOSIX extends TaintTracking::FunctionModel {\n      // signature: func MustCompilePOSIX(str string) *Regexp\n      MustCompilePOSIX() { hasQualifiedName(\"regexp\", \"MustCompilePOSIX\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -849,8 +763,6 @@
       "IsEnabled": true
    },
    "func QuoteMeta(s string) string": {
-      "GeneratedClass": "\n    private class QuoteMeta extends TaintTracking::FunctionModel {\n      // signature: func QuoteMeta(s string) string\n      QuoteMeta() { hasQualifiedName(\"regexp\", \"QuoteMeta\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

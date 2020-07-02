@@ -1,7 +1,5 @@
 {
    "func (*Address).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*AddressParser).Parse(address string) (*Address, error)": {
-      "GeneratedClass": "\n    private class AddressParserParse extends TaintTracking::FunctionModel, Method {\n      // signature: func (*AddressParser).Parse(address string) (*Address, error)\n      AddressParserParse() { this.(Method).hasQualifiedName(\"net/mail\", \"AddressParser\", \"Parse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func (*AddressParser).ParseList(list string) ([]*Address, error)": {
-      "GeneratedClass": "\n    private class AddressParserParseList extends TaintTracking::FunctionModel, Method {\n      // signature: func (*AddressParser).ParseList(list string) ([]*Address, error)\n      AddressParserParseList() { this.(Method).hasQualifiedName(\"net/mail\", \"AddressParser\", \"ParseList\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -59,8 +53,6 @@
       "IsEnabled": true
    },
    "func (Header).AddressList(key string) ([]*Address, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -80,8 +72,6 @@
       "IsEnabled": false
    },
    "func (Header).Date() (time.Time, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -99,8 +89,6 @@
       "IsEnabled": false
    },
    "func (Header).Get(key string) string": {
-      "GeneratedClass": "\n    private class HeaderGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Get(key string) string\n      HeaderGet() { this.(Method).hasQualifiedName(\"net/mail\", \"Header\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -118,8 +106,6 @@
       "IsEnabled": true
    },
    "func ParseAddress(address string) (*Address, error)": {
-      "GeneratedClass": "\n    private class ParseAddress extends TaintTracking::FunctionModel {\n      // signature: func ParseAddress(address string) (*Address, error)\n      ParseAddress() { hasQualifiedName(\"net/mail\", \"ParseAddress\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -137,8 +123,6 @@
       "IsEnabled": true
    },
    "func ParseAddressList(list string) ([]*Address, error)": {
-      "GeneratedClass": "\n    private class ParseAddressList extends TaintTracking::FunctionModel {\n      // signature: func ParseAddressList(list string) ([]*Address, error)\n      ParseAddressList() { hasQualifiedName(\"net/mail\", \"ParseAddressList\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -156,8 +140,6 @@
       "IsEnabled": true
    },
    "func ParseDate(date string) (time.Time, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -175,8 +157,6 @@
       "IsEnabled": false
    },
    "func ReadMessage(r io.Reader) (msg *Message, err error)": {
-      "GeneratedClass": "\n    private class ReadMessage extends TaintTracking::FunctionModel {\n      // signature: func ReadMessage(r io.Reader) (msg *Message, err error)\n      ReadMessage() { hasQualifiedName(\"net/mail\", \"ReadMessage\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [

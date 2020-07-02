@@ -1,7 +1,5 @@
 {
    "func EscapeString(s string) string": {
-      "GeneratedClass": "\n    private class EscapeString extends TaintTracking::FunctionModel {\n      // signature: func EscapeString(s string) string\n      EscapeString() { hasQualifiedName(\"html\", \"EscapeString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func UnescapeString(s string) string": {
-      "GeneratedClass": "\n    private class UnescapeString extends TaintTracking::FunctionModel {\n      // signature: func UnescapeString(s string) string\n      UnescapeString() { hasQualifiedName(\"html\", \"UnescapeString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

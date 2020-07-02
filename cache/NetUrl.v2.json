@@ -1,7 +1,5 @@
 {
    "func (*Error).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Error).Temporary() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Error).Timeout() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": false
    },
    "func (*Error).Unwrap() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": false
    },
    "func (*URL).EscapedPath() string": {
-      "GeneratedClass": "\n    private class URLEscapedPath extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).EscapedPath() string\n      URLEscapedPath() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"EscapedPath\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -85,8 +75,6 @@
       "IsEnabled": true
    },
    "func (*URL).Hostname() string": {
-      "GeneratedClass": "\n    private class URLHostname extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).Hostname() string\n      URLHostname() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"Hostname\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -102,8 +90,6 @@
       "IsEnabled": true
    },
    "func (*URL).IsAbs() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -119,8 +105,6 @@
       "IsEnabled": false
    },
    "func (*URL).MarshalBinary() (text []byte, err error)": {
-      "GeneratedClass": "\n    private class URLMarshalBinary extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).MarshalBinary() (text []byte, err error)\n      URLMarshalBinary() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"MarshalBinary\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -138,8 +122,6 @@
       "IsEnabled": true
    },
    "func (*URL).Parse(ref string) (*URL, error)": {
-      "GeneratedClass": "\n    private class URLParse extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).Parse(ref string) (*URL, error)\n      URLParse() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"Parse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver() or inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver() or inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -159,8 +141,6 @@
       "IsEnabled": true
    },
    "func (*URL).Port() string": {
-      "GeneratedClass": "\n    private class URLPort extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).Port() string\n      URLPort() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"Port\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -176,8 +156,6 @@
       "IsEnabled": true
    },
    "func (*URL).Query() Values": {
-      "GeneratedClass": "\n    private class URLQuery extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).Query() Values\n      URLQuery() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"Query\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -193,8 +171,6 @@
       "IsEnabled": true
    },
    "func (*URL).RequestURI() string": {
-      "GeneratedClass": "\n    private class URLRequestURI extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).RequestURI() string\n      URLRequestURI() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"RequestURI\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -210,8 +186,6 @@
       "IsEnabled": true
    },
    "func (*URL).ResolveReference(ref *URL) *URL": {
-      "GeneratedClass": "\n    private class URLResolveReference extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).ResolveReference(ref *URL) *URL\n      URLResolveReference() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"ResolveReference\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver() or inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver() or inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -229,8 +203,6 @@
       "IsEnabled": true
    },
    "func (*URL).String() string": {
-      "GeneratedClass": "\n    private class URLString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).String() string\n      URLString() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -246,8 +218,6 @@
       "IsEnabled": true
    },
    "func (*URL).UnmarshalBinary(text []byte) error": {
-      "GeneratedClass": "\n    private class URLUnmarshalBinary extends TaintTracking::FunctionModel, Method {\n      // signature: func (*URL).UnmarshalBinary(text []byte) error\n      URLUnmarshalBinary() { this.(Method).hasQualifiedName(\"net/url\", \"URL\", \"UnmarshalBinary\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -265,8 +235,6 @@
       "IsEnabled": true
    },
    "func (*Userinfo).Password() (string, bool)": {
-      "GeneratedClass": "\n    private class UserinfoPassword extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Userinfo).Password() (string, bool)\n      UserinfoPassword() { this.(Method).hasQualifiedName(\"net/url\", \"Userinfo\", \"Password\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -284,8 +252,6 @@
       "IsEnabled": true
    },
    "func (*Userinfo).String() string": {
-      "GeneratedClass": "\n    private class UserinfoString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Userinfo).String() string\n      UserinfoString() { this.(Method).hasQualifiedName(\"net/url\", \"Userinfo\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -301,8 +267,6 @@
       "IsEnabled": true
    },
    "func (*Userinfo).Username() string": {
-      "GeneratedClass": "\n    private class UserinfoUsername extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Userinfo).Username() string\n      UserinfoUsername() { this.(Method).hasQualifiedName(\"net/url\", \"Userinfo\", \"Username\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -318,8 +282,6 @@
       "IsEnabled": true
    },
    "func (EscapeError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -335,8 +297,6 @@
       "IsEnabled": false
    },
    "func (InvalidHostError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -352,8 +312,6 @@
       "IsEnabled": false
    },
    "func (Values).Add(key string, value string)": {
-      "GeneratedClass": "\n    private class ValuesAdd extends TaintTracking::FunctionModel, Method {\n      // signature: func (Values).Add(key string, value string)\n      ValuesAdd() { this.(Method).hasQualifiedName(\"net/url\", \"Values\", \"Add\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -371,8 +329,6 @@
       "IsEnabled": true
    },
    "func (Values).Del(key string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -388,8 +344,6 @@
       "IsEnabled": false
    },
    "func (Values).Encode() string": {
-      "GeneratedClass": "\n    private class ValuesEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (Values).Encode() string\n      ValuesEncode() { this.(Method).hasQualifiedName(\"net/url\", \"Values\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -405,8 +359,6 @@
       "IsEnabled": true
    },
    "func (Values).Get(key string) string": {
-      "GeneratedClass": "\n    private class ValuesGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Values).Get(key string) string\n      ValuesGet() { this.(Method).hasQualifiedName(\"net/url\", \"Values\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -424,8 +376,6 @@
       "IsEnabled": true
    },
    "func (Values).Set(key string, value string)": {
-      "GeneratedClass": "\n    private class ValuesSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Values).Set(key string, value string)\n      ValuesSet() { this.(Method).hasQualifiedName(\"net/url\", \"Values\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -443,8 +393,6 @@
       "IsEnabled": true
    },
    "func Parse(rawurl string) (*URL, error)": {
-      "GeneratedClass": "\n    private class Parse extends TaintTracking::FunctionModel {\n      // signature: func Parse(rawurl string) (*URL, error)\n      Parse() { hasQualifiedName(\"net/url\", \"Parse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -462,8 +410,6 @@
       "IsEnabled": true
    },
    "func ParseQuery(query string) (Values, error)": {
-      "GeneratedClass": "\n    private class ParseQuery extends TaintTracking::FunctionModel {\n      // signature: func ParseQuery(query string) (Values, error)\n      ParseQuery() { hasQualifiedName(\"net/url\", \"ParseQuery\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -481,8 +427,6 @@
       "IsEnabled": true
    },
    "func ParseRequestURI(rawurl string) (*URL, error)": {
-      "GeneratedClass": "\n    private class ParseRequestURI extends TaintTracking::FunctionModel {\n      // signature: func ParseRequestURI(rawurl string) (*URL, error)\n      ParseRequestURI() { hasQualifiedName(\"net/url\", \"ParseRequestURI\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -500,8 +444,6 @@
       "IsEnabled": true
    },
    "func PathEscape(s string) string": {
-      "GeneratedClass": "\n    private class PathEscape extends TaintTracking::FunctionModel {\n      // signature: func PathEscape(s string) string\n      PathEscape() { hasQualifiedName(\"net/url\", \"PathEscape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -517,8 +459,6 @@
       "IsEnabled": true
    },
    "func PathUnescape(s string) (string, error)": {
-      "GeneratedClass": "\n    private class PathUnescape extends TaintTracking::FunctionModel {\n      // signature: func PathUnescape(s string) (string, error)\n      PathUnescape() { hasQualifiedName(\"net/url\", \"PathUnescape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -536,8 +476,6 @@
       "IsEnabled": true
    },
    "func QueryEscape(s string) string": {
-      "GeneratedClass": "\n    private class QueryEscape extends TaintTracking::FunctionModel {\n      // signature: func QueryEscape(s string) string\n      QueryEscape() { hasQualifiedName(\"net/url\", \"QueryEscape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -553,8 +491,6 @@
       "IsEnabled": true
    },
    "func QueryUnescape(s string) (string, error)": {
-      "GeneratedClass": "\n    private class QueryUnescape extends TaintTracking::FunctionModel {\n      // signature: func QueryUnescape(s string) (string, error)\n      QueryUnescape() { hasQualifiedName(\"net/url\", \"QueryUnescape\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -572,8 +508,6 @@
       "IsEnabled": true
    },
    "func User(username string) *Userinfo": {
-      "GeneratedClass": "\n    private class User extends TaintTracking::FunctionModel {\n      // signature: func User(username string) *Userinfo\n      User() { hasQualifiedName(\"net/url\", \"User\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -589,8 +523,6 @@
       "IsEnabled": true
    },
    "func UserPassword(username string, password string) *Userinfo": {
-      "GeneratedClass": "\n    private class UserPassword extends TaintTracking::FunctionModel {\n      // signature: func UserPassword(username string, password string) *Userinfo\n      UserPassword() { hasQualifiedName(\"net/url\", \"UserPassword\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

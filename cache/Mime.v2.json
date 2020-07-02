@@ -1,7 +1,5 @@
 {
    "func (*WordDecoder).Decode(word string) (string, error)": {
-      "GeneratedClass": "\n    private class WordDecoderDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*WordDecoder).Decode(word string) (string, error)\n      WordDecoderDecode() { this.(Method).hasQualifiedName(\"mime\", \"WordDecoder\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -21,8 +19,6 @@
       "IsEnabled": true
    },
    "func (*WordDecoder).DecodeHeader(header string) (string, error)": {
-      "GeneratedClass": "\n    private class WordDecoderDecodeHeader extends TaintTracking::FunctionModel, Method {\n      // signature: func (*WordDecoder).DecodeHeader(header string) (string, error)\n      WordDecoderDecodeHeader() { this.(Method).hasQualifiedName(\"mime\", \"WordDecoder\", \"DecodeHeader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -42,8 +38,6 @@
       "IsEnabled": true
    },
    "func (WordEncoder).Encode(charset string, s string) string": {
-      "GeneratedClass": "\n    private class WordEncoderEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (WordEncoder).Encode(charset string, s string) string\n      WordEncoderEncode() { this.(Method).hasQualifiedName(\"mime\", \"WordEncoder\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -63,8 +57,6 @@
       "IsEnabled": true
    },
    "func AddExtensionType(ext string, typ string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -82,8 +74,6 @@
       "IsEnabled": false
    },
    "func ExtensionsByType(typ string) ([]string, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -101,8 +91,6 @@
       "IsEnabled": false
    },
    "func FormatMediaType(t string, param map[string]string) string": {
-      "GeneratedClass": "\n    private class FormatMediaType extends TaintTracking::FunctionModel {\n      // signature: func FormatMediaType(t string, param map[string]string) string\n      FormatMediaType() { hasQualifiedName(\"mime\", \"FormatMediaType\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -120,8 +108,6 @@
       "IsEnabled": true
    },
    "func ParseMediaType(v string) (mediatype string, params map[string]string, err error)": {
-      "GeneratedClass": "\n    private class ParseMediaType extends TaintTracking::FunctionModel {\n      // signature: func ParseMediaType(v string) (mediatype string, params map[string]string, err error)\n      ParseMediaType() { hasQualifiedName(\"mime\", \"ParseMediaType\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult([0, 1])))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult([0, 1])))",
       "Blocks": [
          {
             "Inp": [
@@ -141,8 +127,6 @@
       "IsEnabled": true
    },
    "func TypeByExtension(ext string) string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

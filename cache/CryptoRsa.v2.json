@@ -1,7 +1,5 @@
 {
    "func (*PSSOptions).HashFunc() crypto.Hash": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*PrivateKey).Decrypt(rand io.Reader, ciphertext []byte, opts crypto.DecrypterOpts) (plaintext []byte, err error)": {
-      "GeneratedClass": "\n    private class PrivateKeyDecrypt extends TaintTracking::FunctionModel, Method {\n      // signature: func (*PrivateKey).Decrypt(rand io.Reader, ciphertext []byte, opts crypto.DecrypterOpts) (plaintext []byte, err error)\n      PrivateKeyDecrypt() { this.(Method).hasQualifiedName(\"crypto/rsa\", \"PrivateKey\", \"Decrypt\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -42,8 +38,6 @@
       "IsEnabled": true
    },
    "func (*PrivateKey).Precompute()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": false
    },
    "func (*PrivateKey).Public() crypto.PublicKey": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": false
    },
    "func (*PrivateKey).Sign(rand io.Reader, digest []byte, opts crypto.SignerOpts) ([]byte, error)": {
-      "GeneratedClass": "\n    private class PrivateKeySign extends TaintTracking::FunctionModel, Method {\n      // signature: func (*PrivateKey).Sign(rand io.Reader, digest []byte, opts crypto.SignerOpts) ([]byte, error)\n      PrivateKeySign() { this.(Method).hasQualifiedName(\"crypto/rsa\", \"PrivateKey\", \"Sign\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -99,8 +89,6 @@
       "IsEnabled": true
    },
    "func (*PrivateKey).Validate() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -116,8 +104,6 @@
       "IsEnabled": false
    },
    "func (*PublicKey).Size() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -133,8 +119,6 @@
       "IsEnabled": false
    },
    "func DecryptOAEP(hash hash.Hash, random io.Reader, priv *PrivateKey, ciphertext []byte, label []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class DecryptOAEP extends TaintTracking::FunctionModel {\n      // signature: func DecryptOAEP(hash hash.Hash, random io.Reader, priv *PrivateKey, ciphertext []byte, label []byte) ([]byte, error)\n      DecryptOAEP() { hasQualifiedName(\"crypto/rsa\", \"DecryptOAEP\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(3)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(3)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -160,8 +144,6 @@
       "IsEnabled": true
    },
    "func DecryptPKCS1v15(rand io.Reader, priv *PrivateKey, ciphertext []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class DecryptPKCS1V15 extends TaintTracking::FunctionModel {\n      // signature: func DecryptPKCS1v15(rand io.Reader, priv *PrivateKey, ciphertext []byte) ([]byte, error)\n      DecryptPKCS1V15() { hasQualifiedName(\"crypto/rsa\", \"DecryptPKCS1v15\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -183,8 +165,6 @@
       "IsEnabled": true
    },
    "func DecryptPKCS1v15SessionKey(rand io.Reader, priv *PrivateKey, ciphertext []byte, key []byte) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(3)))",
       "Blocks": [
          {
             "Inp": [
@@ -206,8 +186,6 @@
       "IsEnabled": false
    },
    "func EncryptOAEP(hash hash.Hash, random io.Reader, pub *PublicKey, msg []byte, label []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class EncryptOAEP extends TaintTracking::FunctionModel {\n      // signature: func EncryptOAEP(hash hash.Hash, random io.Reader, pub *PublicKey, msg []byte, label []byte) ([]byte, error)\n      EncryptOAEP() { hasQualifiedName(\"crypto/rsa\", \"EncryptOAEP\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(3)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(3)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -233,8 +211,6 @@
       "IsEnabled": true
    },
    "func EncryptPKCS1v15(rand io.Reader, pub *PublicKey, msg []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class EncryptPKCS1V15 extends TaintTracking::FunctionModel {\n      // signature: func EncryptPKCS1v15(rand io.Reader, pub *PublicKey, msg []byte) ([]byte, error)\n      EncryptPKCS1V15() { hasQualifiedName(\"crypto/rsa\", \"EncryptPKCS1v15\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -256,8 +232,6 @@
       "IsEnabled": true
    },
    "func GenerateKey(random io.Reader, bits int) (*PrivateKey, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -277,8 +251,6 @@
       "IsEnabled": false
    },
    "func GenerateMultiPrimeKey(random io.Reader, nprimes int, bits int) (*PrivateKey, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -300,8 +272,6 @@
       "IsEnabled": false
    },
    "func SignPKCS1v15(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class SignPKCS1V15 extends TaintTracking::FunctionModel {\n      // signature: func SignPKCS1v15(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte) ([]byte, error)\n      SignPKCS1V15() { hasQualifiedName(\"crypto/rsa\", \"SignPKCS1v15\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(3)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(3)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -325,8 +295,6 @@
       "IsEnabled": true
    },
    "func SignPSS(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte, opts *PSSOptions) ([]byte, error)": {
-      "GeneratedClass": "\n    private class SignPSS extends TaintTracking::FunctionModel {\n      // signature: func SignPSS(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte, opts *PSSOptions) ([]byte, error)\n      SignPSS() { hasQualifiedName(\"crypto/rsa\", \"SignPSS\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(3)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(3)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -352,8 +320,6 @@
       "IsEnabled": true
    },
    "func VerifyPKCS1v15(pub *PublicKey, hash crypto.Hash, hashed []byte, sig []byte) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -375,8 +341,6 @@
       "IsEnabled": false
    },
    "func VerifyPSS(pub *PublicKey, hash crypto.Hash, hashed []byte, sig []byte, opts *PSSOptions) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

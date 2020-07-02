@@ -1,7 +1,5 @@
 {
    "func DecodeLastRune(p []byte) (r rune, size int)": {
-      "GeneratedClass": "\n    private class DecodeLastRune extends TaintTracking::FunctionModel {\n      // signature: func DecodeLastRune(p []byte) (r rune, size int)\n      DecodeLastRune() { hasQualifiedName(\"unicode/utf8\", \"DecodeLastRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": true
    },
    "func DecodeLastRuneInString(s string) (r rune, size int)": {
-      "GeneratedClass": "\n    private class DecodeLastRuneInString extends TaintTracking::FunctionModel {\n      // signature: func DecodeLastRuneInString(s string) (r rune, size int)\n      DecodeLastRuneInString() { hasQualifiedName(\"unicode/utf8\", \"DecodeLastRuneInString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": true
    },
    "func DecodeRune(p []byte) (r rune, size int)": {
-      "GeneratedClass": "\n    private class DecodeRune extends TaintTracking::FunctionModel {\n      // signature: func DecodeRune(p []byte) (r rune, size int)\n      DecodeRune() { hasQualifiedName(\"unicode/utf8\", \"DecodeRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": true
    },
    "func DecodeRuneInString(s string) (r rune, size int)": {
-      "GeneratedClass": "\n    private class DecodeRuneInString extends TaintTracking::FunctionModel {\n      // signature: func DecodeRuneInString(s string) (r rune, size int)\n      DecodeRuneInString() { hasQualifiedName(\"unicode/utf8\", \"DecodeRuneInString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -76,8 +68,6 @@
       "IsEnabled": true
    },
    "func EncodeRune(p []byte, r rune) int": {
-      "GeneratedClass": "\n    private class EncodeRune extends TaintTracking::FunctionModel {\n      // signature: func EncodeRune(p []byte, r rune) int\n      EncodeRune() { hasQualifiedName(\"unicode/utf8\", \"EncodeRune\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -95,8 +85,6 @@
       "IsEnabled": true
    },
    "func FullRune(p []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -112,8 +100,6 @@
       "IsEnabled": false
    },
    "func FullRuneInString(s string) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -129,8 +115,6 @@
       "IsEnabled": false
    },
    "func RuneCount(p []byte) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -146,8 +130,6 @@
       "IsEnabled": false
    },
    "func RuneCountInString(s string) (n int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -163,8 +145,6 @@
       "IsEnabled": false
    },
    "func RuneLen(r rune) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -180,8 +160,6 @@
       "IsEnabled": false
    },
    "func RuneStart(b byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -197,8 +175,6 @@
       "IsEnabled": false
    },
    "func Valid(p []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -214,8 +190,6 @@
       "IsEnabled": false
    },
    "func ValidRune(r rune) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -231,8 +205,6 @@
       "IsEnabled": false
    },
    "func ValidString(s string) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

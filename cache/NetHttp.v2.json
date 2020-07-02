@@ -1,7 +1,5 @@
 {
    "func (*Client).CloseIdleConnections()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -15,8 +13,6 @@
       "IsEnabled": false
    },
    "func (*Client).Do(req *Request) (*Response, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -36,8 +32,6 @@
       "IsEnabled": false
    },
    "func (*Client).Get(url string) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": false
    },
    "func (*Client).Head(url string) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -78,8 +70,6 @@
       "IsEnabled": false
    },
    "func (*Client).Post(url string, contentType string, body io.Reader) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -103,8 +93,6 @@
       "IsEnabled": false
    },
    "func (*Client).PostForm(url string, data net/url.Values) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -126,8 +114,6 @@
       "IsEnabled": false
    },
    "func (*Cookie).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -143,8 +129,6 @@
       "IsEnabled": false
    },
    "func (*ProtocolError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -160,8 +144,6 @@
       "IsEnabled": false
    },
    "func (*Request).AddCookie(c *Cookie)": {
-      "GeneratedClass": "\n    private class RequestAddCookie extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Request).AddCookie(c *Cookie)\n      RequestAddCookie() { this.(Method).hasQualifiedName(\"net/http\", \"Request\", \"AddCookie\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -177,8 +159,6 @@
       "IsEnabled": true
    },
    "func (*Request).BasicAuth() (username string, password string, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -198,8 +178,6 @@
       "IsEnabled": false
    },
    "func (*Request).Clone(ctx context.Context) *Request": {
-      "GeneratedClass": "\n    private class RequestClone extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Request).Clone(ctx context.Context) *Request\n      RequestClone() { this.(Method).hasQualifiedName(\"net/http\", \"Request\", \"Clone\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -217,8 +195,6 @@
       "IsEnabled": true
    },
    "func (*Request).Context() context.Context": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -234,8 +210,6 @@
       "IsEnabled": false
    },
    "func (*Request).Cookie(name string) (*Cookie, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -255,8 +229,6 @@
       "IsEnabled": false
    },
    "func (*Request).Cookies() []*Cookie": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -272,8 +244,6 @@
       "IsEnabled": false
    },
    "func (*Request).FormFile(key string) (mime/multipart.File, *mime/multipart.FileHeader, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -295,8 +265,6 @@
       "IsEnabled": false
    },
    "func (*Request).FormValue(key string) string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -314,8 +282,6 @@
       "IsEnabled": false
    },
    "func (*Request).MultipartReader() (*mime/multipart.Reader, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -333,8 +299,6 @@
       "IsEnabled": false
    },
    "func (*Request).ParseForm() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -350,8 +314,6 @@
       "IsEnabled": false
    },
    "func (*Request).ParseMultipartForm(maxMemory int64) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -369,8 +331,6 @@
       "IsEnabled": false
    },
    "func (*Request).PostFormValue(key string) string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -388,8 +348,6 @@
       "IsEnabled": false
    },
    "func (*Request).ProtoAtLeast(major int, minor int) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -409,8 +367,6 @@
       "IsEnabled": false
    },
    "func (*Request).Referer() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -426,8 +382,6 @@
       "IsEnabled": false
    },
    "func (*Request).SetBasicAuth(username string, password string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -445,8 +399,6 @@
       "IsEnabled": false
    },
    "func (*Request).UserAgent() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -462,8 +414,6 @@
       "IsEnabled": false
    },
    "func (*Request).WithContext(ctx context.Context) *Request": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -481,8 +431,6 @@
       "IsEnabled": false
    },
    "func (*Request).Write(w io.Writer) error": {
-      "GeneratedClass": "\n    private class RequestWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Request).Write(w io.Writer) error\n      RequestWrite() { this.(Method).hasQualifiedName(\"net/http\", \"Request\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -500,8 +448,6 @@
       "IsEnabled": true
    },
    "func (*Request).WriteProxy(w io.Writer) error": {
-      "GeneratedClass": "\n    private class RequestWriteProxy extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Request).WriteProxy(w io.Writer) error\n      RequestWriteProxy() { this.(Method).hasQualifiedName(\"net/http\", \"Request\", \"WriteProxy\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -519,8 +465,6 @@
       "IsEnabled": true
    },
    "func (*Response).Cookies() []*Cookie": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -536,8 +480,6 @@
       "IsEnabled": false
    },
    "func (*Response).Location() (*net/url.URL, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -555,8 +497,6 @@
       "IsEnabled": false
    },
    "func (*Response).ProtoAtLeast(major int, minor int) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -576,8 +516,6 @@
       "IsEnabled": false
    },
    "func (*Response).Write(w io.Writer) error": {
-      "GeneratedClass": "\n    private class ResponseWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Response).Write(w io.Writer) error\n      ResponseWrite() { this.(Method).hasQualifiedName(\"net/http\", \"Response\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -595,8 +533,6 @@
       "IsEnabled": true
    },
    "func (*ServeMux).Handle(pattern string, handler Handler)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -614,8 +550,6 @@
       "IsEnabled": false
    },
    "func (*ServeMux).HandleFunc(pattern string, handler func(ResponseWriter, *Request))": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -633,8 +567,6 @@
       "IsEnabled": false
    },
    "func (*ServeMux).Handler(r *Request) (h Handler, pattern string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -654,8 +586,6 @@
       "IsEnabled": false
    },
    "func (*ServeMux).ServeHTTP(w ResponseWriter, r *Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -673,8 +603,6 @@
       "IsEnabled": false
    },
    "func (*Server).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -690,8 +618,6 @@
       "IsEnabled": false
    },
    "func (*Server).ListenAndServe() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -707,8 +633,6 @@
       "IsEnabled": false
    },
    "func (*Server).ListenAndServeTLS(certFile string, keyFile string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -728,8 +652,6 @@
       "IsEnabled": false
    },
    "func (*Server).RegisterOnShutdown(f func())": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -745,8 +667,6 @@
       "IsEnabled": false
    },
    "func (*Server).Serve(l net.Listener) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -764,8 +684,6 @@
       "IsEnabled": false
    },
    "func (*Server).ServeTLS(l net.Listener, certFile string, keyFile string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -787,8 +705,6 @@
       "IsEnabled": false
    },
    "func (*Server).SetKeepAlivesEnabled(v bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -804,8 +720,6 @@
       "IsEnabled": false
    },
    "func (*Server).Shutdown(ctx context.Context) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -823,8 +737,6 @@
       "IsEnabled": false
    },
    "func (*Transport).CancelRequest(req *Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -840,8 +752,6 @@
       "IsEnabled": false
    },
    "func (*Transport).Clone() *Transport": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -857,8 +767,6 @@
       "IsEnabled": false
    },
    "func (*Transport).CloseIdleConnections()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -872,8 +780,6 @@
       "IsEnabled": false
    },
    "func (*Transport).RegisterProtocol(scheme string, rt RoundTripper)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -891,8 +797,6 @@
       "IsEnabled": false
    },
    "func (*Transport).RoundTrip(req *Request) (*Response, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -912,8 +816,6 @@
       "IsEnabled": false
    },
    "func (CloseNotifier).CloseNotify() \u003c-chan bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -929,8 +831,6 @@
       "IsEnabled": false
    },
    "func (ConnState).String() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -946,8 +846,6 @@
       "IsEnabled": false
    },
    "func (CookieJar).Cookies(u *net/url.URL) []*Cookie": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -965,8 +863,6 @@
       "IsEnabled": false
    },
    "func (CookieJar).SetCookies(u *net/url.URL, cookies []*Cookie)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -984,8 +880,6 @@
       "IsEnabled": false
    },
    "func (Dir).Open(name string) (File, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1005,8 +899,6 @@
       "IsEnabled": false
    },
    "func (File).Readdir(count int) ([]os.FileInfo, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1026,8 +918,6 @@
       "IsEnabled": false
    },
    "func (File).Stat() (os.FileInfo, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1045,8 +935,6 @@
       "IsEnabled": false
    },
    "func (FileSystem).Open(name string) (File, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1066,8 +954,6 @@
       "IsEnabled": false
    },
    "func (Flusher).Flush()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1081,8 +967,6 @@
       "IsEnabled": false
    },
    "func (Handler).ServeHTTP(ResponseWriter, *Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1100,8 +984,6 @@
       "IsEnabled": false
    },
    "func (HandlerFunc).ServeHTTP(w ResponseWriter, r *Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1119,8 +1001,6 @@
       "IsEnabled": false
    },
    "func (Header).Add(key string, value string)": {
-      "GeneratedClass": "\n    private class HeaderAdd extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Add(key string, value string)\n      HeaderAdd() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Add\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1138,8 +1018,6 @@
       "IsEnabled": true
    },
    "func (Header).Clone() Header": {
-      "GeneratedClass": "\n    private class HeaderClone extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Clone() Header\n      HeaderClone() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Clone\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1155,8 +1033,6 @@
       "IsEnabled": true
    },
    "func (Header).Del(key string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1172,8 +1048,6 @@
       "IsEnabled": false
    },
    "func (Header).Get(key string) string": {
-      "GeneratedClass": "\n    private class HeaderGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Get(key string) string\n      HeaderGet() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1191,8 +1065,6 @@
       "IsEnabled": true
    },
    "func (Header).Set(key string, value string)": {
-      "GeneratedClass": "\n    private class HeaderSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Set(key string, value string)\n      HeaderSet() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1210,8 +1082,6 @@
       "IsEnabled": true
    },
    "func (Header).Values(key string) []string": {
-      "GeneratedClass": "\n    private class HeaderValues extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Values(key string) []string\n      HeaderValues() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Values\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1229,8 +1099,6 @@
       "IsEnabled": true
    },
    "func (Header).Write(w io.Writer) error": {
-      "GeneratedClass": "\n    private class HeaderWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).Write(w io.Writer) error\n      HeaderWrite() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1248,8 +1116,6 @@
       "IsEnabled": true
    },
    "func (Header).WriteSubset(w io.Writer, exclude map[string]bool) error": {
-      "GeneratedClass": "\n    private class HeaderWriteSubset extends TaintTracking::FunctionModel, Method {\n      // signature: func (Header).WriteSubset(w io.Writer, exclude map[string]bool) error\n      HeaderWriteSubset() { this.(Method).hasQualifiedName(\"net/http\", \"Header\", \"WriteSubset\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1269,8 +1135,6 @@
       "IsEnabled": true
    },
    "func (Hijacker).Hijack() (net.Conn, *bufio.ReadWriter, error)": {
-      "GeneratedClass": "\n    private class HijackerHijack extends TaintTracking::FunctionModel, Method {\n      // signature: func (Hijacker).Hijack() (net.Conn, *bufio.ReadWriter, error)\n      HijackerHijack() {\n        this.implements(\"net/http\", \"Hijacker\", \"Hijack\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult([0, 1])))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult([0, 1])))",
       "Blocks": [
          {
             "Inp": [
@@ -1290,8 +1154,6 @@
       "IsEnabled": true
    },
    "func (Pusher).Push(target string, opts *PushOptions) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1311,8 +1173,6 @@
       "IsEnabled": false
    },
    "func (ResponseWriter).Header() Header": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1328,8 +1188,6 @@
       "IsEnabled": false
    },
    "func (ResponseWriter).Write([]byte) (int, error)": {
-      "GeneratedClass": "\n    private class ResponseWriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (ResponseWriter).Write([]byte) (int, error)\n      ResponseWriterWrite() {\n        this.implements(\"net/http\", \"ResponseWriter\", \"Write\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -1349,8 +1207,6 @@
       "IsEnabled": true
    },
    "func (ResponseWriter).WriteHeader(statusCode int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1366,8 +1222,6 @@
       "IsEnabled": false
    },
    "func (RoundTripper).RoundTrip(*Request) (*Response, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1387,8 +1241,6 @@
       "IsEnabled": false
    },
    "func CanonicalHeaderKey(s string) string": {
-      "GeneratedClass": "\n    private class CanonicalHeaderKey extends TaintTracking::FunctionModel {\n      // signature: func CanonicalHeaderKey(s string) string\n      CanonicalHeaderKey() { hasQualifiedName(\"net/http\", \"CanonicalHeaderKey\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1404,8 +1256,6 @@
       "IsEnabled": true
    },
    "func DetectContentType(data []byte) string": {
-      "GeneratedClass": "\n    private class DetectContentType extends TaintTracking::FunctionModel {\n      // signature: func DetectContentType(data []byte) string\n      DetectContentType() { hasQualifiedName(\"net/http\", \"DetectContentType\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1421,8 +1271,6 @@
       "IsEnabled": true
    },
    "func Error(w ResponseWriter, error string, code int)": {
-      "GeneratedClass": "\n    private class Error extends TaintTracking::FunctionModel {\n      // signature: func Error(w ResponseWriter, error string, code int)\n      Error() { hasQualifiedName(\"net/http\", \"Error\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1440,8 +1288,6 @@
       "IsEnabled": true
    },
    "func FileServer(root FileSystem) Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1457,8 +1303,6 @@
       "IsEnabled": false
    },
    "func Get(url string) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1476,8 +1320,6 @@
       "IsEnabled": false
    },
    "func Handle(pattern string, handler Handler)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1493,8 +1335,6 @@
       "IsEnabled": false
    },
    "func HandleFunc(pattern string, handler func(ResponseWriter, *Request))": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1510,8 +1350,6 @@
       "IsEnabled": false
    },
    "func Head(url string) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1529,8 +1367,6 @@
       "IsEnabled": false
    },
    "func ListenAndServe(addr string, handler Handler) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1548,8 +1384,6 @@
       "IsEnabled": false
    },
    "func ListenAndServeTLS(addr string, certFile string, keyFile string, handler Handler) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1571,8 +1405,6 @@
       "IsEnabled": false
    },
    "func MaxBytesReader(w ResponseWriter, r io.ReadCloser, n int64) io.ReadCloser": {
-      "GeneratedClass": "\n    private class MaxBytesReader extends TaintTracking::FunctionModel {\n      // signature: func MaxBytesReader(w ResponseWriter, r io.ReadCloser, n int64) io.ReadCloser\n      MaxBytesReader() { hasQualifiedName(\"net/http\", \"MaxBytesReader\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -1592,8 +1424,6 @@
       "IsEnabled": true
    },
    "func NewFileTransport(fs FileSystem) RoundTripper": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1609,8 +1439,6 @@
       "IsEnabled": false
    },
    "func NewRequest(method string, url string, body io.Reader) (*Request, error)": {
-      "GeneratedClass": "\n    private class NewRequest extends TaintTracking::FunctionModel {\n      // signature: func NewRequest(method string, url string, body io.Reader) (*Request, error)\n      NewRequest() { hasQualifiedName(\"net/http\", \"NewRequest\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1632,8 +1460,6 @@
       "IsEnabled": true
    },
    "func NewRequestWithContext(ctx context.Context, method string, url string, body io.Reader) (*Request, error)": {
-      "GeneratedClass": "\n    private class NewRequestWithContext extends TaintTracking::FunctionModel {\n      // signature: func NewRequestWithContext(ctx context.Context, method string, url string, body io.Reader) (*Request, error)\n      NewRequestWithContext() { hasQualifiedName(\"net/http\", \"NewRequestWithContext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1657,8 +1483,6 @@
       "IsEnabled": true
    },
    "func NewServeMux() *ServeMux": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1672,8 +1496,6 @@
       "IsEnabled": false
    },
    "func NotFound(w ResponseWriter, r *Request)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1689,8 +1511,6 @@
       "IsEnabled": false
    },
    "func NotFoundHandler() Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1704,8 +1524,6 @@
       "IsEnabled": false
    },
    "func ParseHTTPVersion(vers string) (major int, minor int, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1725,8 +1543,6 @@
       "IsEnabled": false
    },
    "func ParseTime(text string) (t time.Time, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1744,8 +1560,6 @@
       "IsEnabled": false
    },
    "func Post(url string, contentType string, body io.Reader) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1767,8 +1581,6 @@
       "IsEnabled": false
    },
    "func PostForm(url string, data net/url.Values) (resp *Response, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1788,8 +1600,6 @@
       "IsEnabled": false
    },
    "func ProxyFromEnvironment(req *Request) (*net/url.URL, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1807,8 +1617,6 @@
       "IsEnabled": false
    },
    "func ProxyURL(fixedURL *net/url.URL) func(*Request) (*net/url.URL, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1824,8 +1632,6 @@
       "IsEnabled": false
    },
    "func ReadRequest(b *bufio.Reader) (*Request, error)": {
-      "GeneratedClass": "\n    private class ReadRequest extends TaintTracking::FunctionModel {\n      // signature: func ReadRequest(b *bufio.Reader) (*Request, error)\n      ReadRequest() { hasQualifiedName(\"net/http\", \"ReadRequest\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1843,8 +1649,6 @@
       "IsEnabled": true
    },
    "func ReadResponse(r *bufio.Reader, req *Request) (*Response, error)": {
-      "GeneratedClass": "\n    private class ReadResponse extends TaintTracking::FunctionModel {\n      // signature: func ReadResponse(r *bufio.Reader, req *Request) (*Response, error)\n      ReadResponse() { hasQualifiedName(\"net/http\", \"ReadResponse\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -1864,8 +1668,6 @@
       "IsEnabled": true
    },
    "func Redirect(w ResponseWriter, r *Request, url string, code int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1885,8 +1687,6 @@
       "IsEnabled": false
    },
    "func RedirectHandler(url string, code int) Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1904,8 +1704,6 @@
       "IsEnabled": false
    },
    "func Serve(l net.Listener, handler Handler) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1923,8 +1721,6 @@
       "IsEnabled": false
    },
    "func ServeContent(w ResponseWriter, req *Request, name string, modtime time.Time, content io.ReadSeeker)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1946,8 +1742,6 @@
       "IsEnabled": false
    },
    "func ServeFile(w ResponseWriter, r *Request, name string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1965,8 +1759,6 @@
       "IsEnabled": false
    },
    "func ServeTLS(l net.Listener, handler Handler, certFile string, keyFile string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -1988,8 +1780,6 @@
       "IsEnabled": false
    },
    "func SetCookie(w ResponseWriter, cookie *Cookie)": {
-      "GeneratedClass": "\n    private class SetCookie extends TaintTracking::FunctionModel {\n      // signature: func SetCookie(w ResponseWriter, cookie *Cookie)\n      SetCookie() { hasQualifiedName(\"net/http\", \"SetCookie\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -2005,8 +1795,6 @@
       "IsEnabled": true
    },
    "func StatusText(code int) string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2022,8 +1810,6 @@
       "IsEnabled": false
    },
    "func StripPrefix(prefix string, h Handler) Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -2041,8 +1827,6 @@
       "IsEnabled": false
    },
    "func TimeoutHandler(h Handler, dt time.Duration, msg string) Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

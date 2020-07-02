@@ -1,7 +1,5 @@
 {
    "func (AEAD).NonceSize() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (AEAD).Open(dst []byte, nonce []byte, ciphertext []byte, additionalData []byte) ([]byte, error)": {
-      "GeneratedClass": "\n    private class AEADOpen extends TaintTracking::FunctionModel, Method {\n      // signature: func (AEAD).Open(dst []byte, nonce []byte, ciphertext []byte, additionalData []byte) ([]byte, error)\n      AEADOpen() {\n        this.implements(\"crypto/cipher\", \"AEAD\", \"Open\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isParameter(0) or outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(0) or outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -44,8 +40,6 @@
       "IsEnabled": true
    },
    "func (AEAD).Overhead() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -61,8 +55,6 @@
       "IsEnabled": false
    },
    "func (AEAD).Seal(dst []byte, nonce []byte, plaintext []byte, additionalData []byte) []byte": {
-      "GeneratedClass": "\n    private class AEADSeal extends TaintTracking::FunctionModel, Method {\n      // signature: func (AEAD).Seal(dst []byte, nonce []byte, plaintext []byte, additionalData []byte) []byte\n      AEADSeal() {\n        this.implements(\"crypto/cipher\", \"AEAD\", \"Seal\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isParameter(0) or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(0) or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -86,8 +78,6 @@
       "IsEnabled": true
    },
    "func (Block).BlockSize() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -103,8 +93,6 @@
       "IsEnabled": false
    },
    "func (Block).Decrypt(dst []byte, src []byte)": {
-      "GeneratedClass": "\n    private class BlockDecrypt extends TaintTracking::FunctionModel, Method {\n      // signature: func (Block).Decrypt(dst []byte, src []byte)\n      BlockDecrypt() {\n        this.implements(\"crypto/cipher\", \"Block\", \"Decrypt\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -122,8 +110,6 @@
       "IsEnabled": true
    },
    "func (Block).Encrypt(dst []byte, src []byte)": {
-      "GeneratedClass": "\n    private class BlockEncrypt extends TaintTracking::FunctionModel, Method {\n      // signature: func (Block).Encrypt(dst []byte, src []byte)\n      BlockEncrypt() {\n        this.implements(\"crypto/cipher\", \"Block\", \"Encrypt\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -141,8 +127,6 @@
       "IsEnabled": true
    },
    "func (BlockMode).BlockSize() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -158,8 +142,6 @@
       "IsEnabled": false
    },
    "func (BlockMode).CryptBlocks(dst []byte, src []byte)": {
-      "GeneratedClass": "\n    private class BlockModeCryptBlocks extends TaintTracking::FunctionModel, Method {\n      // signature: func (BlockMode).CryptBlocks(dst []byte, src []byte)\n      BlockModeCryptBlocks() {\n        this.implements(\"crypto/cipher\", \"BlockMode\", \"CryptBlocks\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -177,8 +159,6 @@
       "IsEnabled": true
    },
    "func (Stream).XORKeyStream(dst []byte, src []byte)": {
-      "GeneratedClass": "\n    private class StreamXORKeyStream extends TaintTracking::FunctionModel, Method {\n      // signature: func (Stream).XORKeyStream(dst []byte, src []byte)\n      StreamXORKeyStream() {\n        this.implements(\"crypto/cipher\", \"Stream\", \"XORKeyStream\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -196,8 +176,6 @@
       "IsEnabled": true
    },
    "func (StreamReader).Read(dst []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class StreamReaderRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (StreamReader).Read(dst []byte) (n int, err error)\n      StreamReaderRead() { this.(Method).hasQualifiedName(\"crypto/cipher\", \"StreamReader\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -217,8 +195,6 @@
       "IsEnabled": true
    },
    "func (StreamWriter).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -234,8 +210,6 @@
       "IsEnabled": false
    },
    "func (StreamWriter).Write(src []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class StreamWriterWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (StreamWriter).Write(src []byte) (n int, err error)\n      StreamWriterWrite() { this.(Method).hasQualifiedName(\"crypto/cipher\", \"StreamWriter\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -255,8 +229,6 @@
       "IsEnabled": true
    },
    "func NewCBCDecrypter(b Block, iv []byte) BlockMode": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -274,8 +246,6 @@
       "IsEnabled": false
    },
    "func NewCBCEncrypter(b Block, iv []byte) BlockMode": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -293,8 +263,6 @@
       "IsEnabled": false
    },
    "func NewCFBDecrypter(block Block, iv []byte) Stream": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -312,8 +280,6 @@
       "IsEnabled": false
    },
    "func NewCFBEncrypter(block Block, iv []byte) Stream": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -331,8 +297,6 @@
       "IsEnabled": false
    },
    "func NewCTR(block Block, iv []byte) Stream": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -350,8 +314,6 @@
       "IsEnabled": false
    },
    "func NewGCM(cipher Block) (AEAD, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -369,8 +331,6 @@
       "IsEnabled": false
    },
    "func NewGCMWithNonceSize(cipher Block, size int) (AEAD, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -390,8 +350,6 @@
       "IsEnabled": false
    },
    "func NewGCMWithTagSize(cipher Block, tagSize int) (AEAD, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -411,8 +369,6 @@
       "IsEnabled": false
    },
    "func NewOFB(b Block, iv []byte) Stream": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

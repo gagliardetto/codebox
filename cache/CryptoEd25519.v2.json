@@ -1,7 +1,5 @@
 {
    "func (PrivateKey).Public() crypto.PublicKey": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (PrivateKey).Seed() []byte": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (PrivateKey).Sign(rand io.Reader, message []byte, opts crypto.SignerOpts) (signature []byte, err error)": {
-      "GeneratedClass": "\n    private class PrivateKeySign extends TaintTracking::FunctionModel, Method {\n      // signature: func (PrivateKey).Sign(rand io.Reader, message []byte, opts crypto.SignerOpts) (signature []byte, err error)\n      PrivateKeySign() { this.(Method).hasQualifiedName(\"crypto/ed25519\", \"PrivateKey\", \"Sign\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -59,8 +53,6 @@
       "IsEnabled": true
    },
    "func GenerateKey(rand io.Reader) (PublicKey, PrivateKey, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -80,8 +72,6 @@
       "IsEnabled": false
    },
    "func NewKeyFromSeed(seed []byte) PrivateKey": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -97,8 +87,6 @@
       "IsEnabled": false
    },
    "func Sign(privateKey PrivateKey, message []byte) []byte": {
-      "GeneratedClass": "\n    private class Sign extends TaintTracking::FunctionModel {\n      // signature: func Sign(privateKey PrivateKey, message []byte) []byte\n      Sign() { hasQualifiedName(\"crypto/ed25519\", \"Sign\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -116,8 +104,6 @@
       "IsEnabled": true
    },
    "func Verify(publicKey PublicKey, message []byte, sig []byte) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

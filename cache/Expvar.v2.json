@@ -1,7 +1,5 @@
 {
    "func (*Float).Add(delta float64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Float).Set(value float64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Float).String() string": {
-      "GeneratedClass": "\n    private class FloatString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Float).String() string\n      FloatString() { this.(Method).hasQualifiedName(\"expvar\", \"Float\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": true
    },
    "func (*Float).Value() float64": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": false
    },
    "func (*Int).Add(delta int64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -85,8 +75,6 @@
       "IsEnabled": false
    },
    "func (*Int).Set(value int64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -102,8 +90,6 @@
       "IsEnabled": false
    },
    "func (*Int).String() string": {
-      "GeneratedClass": "\n    private class IntString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Int).String() string\n      IntString() { this.(Method).hasQualifiedName(\"expvar\", \"Int\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -119,8 +105,6 @@
       "IsEnabled": true
    },
    "func (*Int).Value() int64": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -136,8 +120,6 @@
       "IsEnabled": false
    },
    "func (*Map).Add(key string, delta int64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -155,8 +137,6 @@
       "IsEnabled": false
    },
    "func (*Map).AddFloat(key string, delta float64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -174,8 +154,6 @@
       "IsEnabled": false
    },
    "func (*Map).Delete(key string)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -191,8 +169,6 @@
       "IsEnabled": false
    },
    "func (*Map).Do(f func(KeyValue))": {
-      "GeneratedClass": "\n    private class MapDo extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Map).Do(f func(KeyValue))\n      MapDo() { this.(Method).hasQualifiedName(\"expvar\", \"Map\", \"Do\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -208,8 +184,6 @@
       "IsEnabled": true
    },
    "func (*Map).Get(key string) Var": {
-      "GeneratedClass": "\n    private class MapGet extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Map).Get(key string) Var\n      MapGet() { this.(Method).hasQualifiedName(\"expvar\", \"Map\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -227,8 +201,6 @@
       "IsEnabled": true
    },
    "func (*Map).Init() *Map": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -244,8 +216,6 @@
       "IsEnabled": false
    },
    "func (*Map).Set(key string, av Var)": {
-      "GeneratedClass": "\n    private class MapSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Map).Set(key string, av Var)\n      MapSet() { this.(Method).hasQualifiedName(\"expvar\", \"Map\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -263,8 +233,6 @@
       "IsEnabled": true
    },
    "func (*Map).String() string": {
-      "GeneratedClass": "\n    private class MapString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Map).String() string\n      MapString() { this.(Method).hasQualifiedName(\"expvar\", \"Map\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -280,8 +248,6 @@
       "IsEnabled": true
    },
    "func (*String).Set(value string)": {
-      "GeneratedClass": "\n    private class StringSet extends TaintTracking::FunctionModel, Method {\n      // signature: func (*String).Set(value string)\n      StringSet() { this.(Method).hasQualifiedName(\"expvar\", \"String\", \"Set\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -297,8 +263,6 @@
       "IsEnabled": true
    },
    "func (*String).String() string": {
-      "GeneratedClass": "\n    private class StringString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*String).String() string\n      StringString() { this.(Method).hasQualifiedName(\"expvar\", \"String\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -314,8 +278,6 @@
       "IsEnabled": true
    },
    "func (*String).Value() string": {
-      "GeneratedClass": "\n    private class StringValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (*String).Value() string\n      StringValue() { this.(Method).hasQualifiedName(\"expvar\", \"String\", \"Value\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -331,8 +293,6 @@
       "IsEnabled": true
    },
    "func (Func).String() string": {
-      "GeneratedClass": "\n    private class FuncString extends TaintTracking::FunctionModel, Method {\n      // signature: func (Func).String() string\n      FuncString() { this.(Method).hasQualifiedName(\"expvar\", \"Func\", \"String\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -348,8 +308,6 @@
       "IsEnabled": true
    },
    "func (Func).Value() interface{}": {
-      "GeneratedClass": "\n    private class FuncValue extends TaintTracking::FunctionModel, Method {\n      // signature: func (Func).Value() interface{}\n      FuncValue() { this.(Method).hasQualifiedName(\"expvar\", \"Func\", \"Value\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -365,8 +323,6 @@
       "IsEnabled": true
    },
    "func (Var).String() string": {
-      "GeneratedClass": "\n    private class VarString extends TaintTracking::FunctionModel, Method {\n      // signature: func (Var).String() string\n      VarString() {\n        this.implements(\"expvar\", \"Var\", \"String\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -382,8 +338,6 @@
       "IsEnabled": true
    },
    "func Do(f func(KeyValue))": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -397,8 +351,6 @@
       "IsEnabled": false
    },
    "func Get(name string) Var": {
-      "GeneratedClass": "\n    private class Get extends TaintTracking::FunctionModel {\n      // signature: func Get(name string) Var\n      Get() { hasQualifiedName(\"expvar\", \"Get\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -414,8 +366,6 @@
       "IsEnabled": true
    },
    "func Handler() net/http.Handler": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -429,8 +379,6 @@
       "IsEnabled": false
    },
    "func NewFloat(name string) *Float": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -446,8 +394,6 @@
       "IsEnabled": false
    },
    "func NewInt(name string) *Int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -463,8 +409,6 @@
       "IsEnabled": false
    },
    "func NewMap(name string) *Map": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -480,8 +424,6 @@
       "IsEnabled": false
    },
    "func NewString(name string) *String": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -497,8 +439,6 @@
       "IsEnabled": false
    },
    "func Publish(name string, v Var)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

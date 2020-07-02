@@ -1,7 +1,5 @@
 {
    "func (*Encoding).Decode(dst []byte, src []byte) (n int, err error)": {
-      "GeneratedClass": "\n    private class EncodingDecode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoding).Decode(dst []byte, src []byte) (n int, err error)\n      EncodingDecode() { this.(Method).hasQualifiedName(\"encoding/base64\", \"Encoding\", \"Decode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -23,8 +21,6 @@
       "IsEnabled": true
    },
    "func (*Encoding).DecodeString(s string) ([]byte, error)": {
-      "GeneratedClass": "\n    private class EncodingDecodeString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoding).DecodeString(s string) ([]byte, error)\n      EncodingDecodeString() { this.(Method).hasQualifiedName(\"encoding/base64\", \"Encoding\", \"DecodeString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -44,8 +40,6 @@
       "IsEnabled": true
    },
    "func (*Encoding).DecodedLen(n int) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -63,8 +57,6 @@
       "IsEnabled": false
    },
    "func (*Encoding).Encode(dst []byte, src []byte)": {
-      "GeneratedClass": "\n    private class EncodingEncode extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoding).Encode(dst []byte, src []byte)\n      EncodingEncode() { this.(Method).hasQualifiedName(\"encoding/base64\", \"Encoding\", \"Encode\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -82,8 +74,6 @@
       "IsEnabled": true
    },
    "func (*Encoding).EncodeToString(src []byte) string": {
-      "GeneratedClass": "\n    private class EncodingEncodeToString extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Encoding).EncodeToString(src []byte) string\n      EncodingEncodeToString() { this.(Method).hasQualifiedName(\"encoding/base64\", \"Encoding\", \"EncodeToString\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -101,8 +91,6 @@
       "IsEnabled": true
    },
    "func (*Encoding).EncodedLen(n int) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -120,8 +108,6 @@
       "IsEnabled": false
    },
    "func (CorruptInputError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -137,8 +123,6 @@
       "IsEnabled": false
    },
    "func (Encoding).Strict() *Encoding": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -154,8 +138,6 @@
       "IsEnabled": false
    },
    "func (Encoding).WithPadding(padding rune) *Encoding": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -173,8 +155,6 @@
       "IsEnabled": false
    },
    "func NewDecoder(enc *Encoding, r io.Reader) io.Reader": {
-      "GeneratedClass": "\n    private class NewDecoder extends TaintTracking::FunctionModel {\n      // signature: func NewDecoder(enc *Encoding, r io.Reader) io.Reader\n      NewDecoder() { hasQualifiedName(\"encoding/base64\", \"NewDecoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -192,8 +172,6 @@
       "IsEnabled": true
    },
    "func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser": {
-      "GeneratedClass": "\n    private class NewEncoder extends TaintTracking::FunctionModel {\n      // signature: func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser\n      NewEncoder() { hasQualifiedName(\"encoding/base64\", \"NewEncoder\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isResult()) and (outp.isParameter(1)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isResult()) and (outp.isParameter(1)))",
       "Blocks": [
          {
             "Inp": [
@@ -211,8 +189,6 @@
       "IsEnabled": true
    },
    "func NewEncoding(encoder string) *Encoding": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

@@ -1,7 +1,5 @@
 {
    "func (*Element).Next() *Element": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Element).Prev() *Element": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*List).Back() *Element": {
-      "GeneratedClass": "\n    private class ListBack extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).Back() *Element\n      ListBack() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"Back\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": true
    },
    "func (*List).Front() *Element": {
-      "GeneratedClass": "\n    private class ListFront extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).Front() *Element\n      ListFront() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"Front\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": true
    },
    "func (*List).Init() *List": {
-      "GeneratedClass": "\n    private class ListInit extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).Init() *List\n      ListInit() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"Init\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -85,8 +75,6 @@
       "IsEnabled": true
    },
    "func (*List).InsertAfter(v interface{}, mark *Element) *Element": {
-      "GeneratedClass": "\n    private class ListInsertAfter extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).InsertAfter(v interface{}, mark *Element) *Element\n      ListInsertAfter() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"InsertAfter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -106,8 +94,6 @@
       "IsEnabled": true
    },
    "func (*List).InsertBefore(v interface{}, mark *Element) *Element": {
-      "GeneratedClass": "\n    private class ListInsertBefore extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).InsertBefore(v interface{}, mark *Element) *Element\n      ListInsertBefore() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"InsertBefore\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -127,8 +113,6 @@
       "IsEnabled": true
    },
    "func (*List).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -144,8 +128,6 @@
       "IsEnabled": false
    },
    "func (*List).MoveAfter(e *Element, mark *Element)": {
-      "GeneratedClass": "\n    private class ListMoveAfter extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).MoveAfter(e *Element, mark *Element)\n      ListMoveAfter() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"MoveAfter\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -163,8 +145,6 @@
       "IsEnabled": true
    },
    "func (*List).MoveBefore(e *Element, mark *Element)": {
-      "GeneratedClass": "\n    private class ListMoveBefore extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).MoveBefore(e *Element, mark *Element)\n      ListMoveBefore() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"MoveBefore\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -182,8 +162,6 @@
       "IsEnabled": true
    },
    "func (*List).MoveToBack(e *Element)": {
-      "GeneratedClass": "\n    private class ListMoveToBack extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).MoveToBack(e *Element)\n      ListMoveToBack() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"MoveToBack\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -199,8 +177,6 @@
       "IsEnabled": true
    },
    "func (*List).MoveToFront(e *Element)": {
-      "GeneratedClass": "\n    private class ListMoveToFront extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).MoveToFront(e *Element)\n      ListMoveToFront() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"MoveToFront\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -216,8 +192,6 @@
       "IsEnabled": true
    },
    "func (*List).PushBack(v interface{}) *Element": {
-      "GeneratedClass": "\n    private class ListPushBack extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).PushBack(v interface{}) *Element\n      ListPushBack() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"PushBack\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -235,8 +209,6 @@
       "IsEnabled": true
    },
    "func (*List).PushBackList(other *List)": {
-      "GeneratedClass": "\n    private class ListPushBackList extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).PushBackList(other *List)\n      ListPushBackList() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"PushBackList\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -252,8 +224,6 @@
       "IsEnabled": true
    },
    "func (*List).PushFront(v interface{}) *Element": {
-      "GeneratedClass": "\n    private class ListPushFront extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).PushFront(v interface{}) *Element\n      ListPushFront() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"PushFront\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver() or outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -271,8 +241,6 @@
       "IsEnabled": true
    },
    "func (*List).PushFrontList(other *List)": {
-      "GeneratedClass": "\n    private class ListPushFrontList extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).PushFrontList(other *List)\n      ListPushFrontList() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"PushFrontList\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -288,8 +256,6 @@
       "IsEnabled": true
    },
    "func (*List).Remove(e *Element) interface{}": {
-      "GeneratedClass": "\n    private class ListRemove extends TaintTracking::FunctionModel, Method {\n      // signature: func (*List).Remove(e *Element) interface{}\n      ListRemove() { this.(Method).hasQualifiedName(\"container/list\", \"List\", \"Remove\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -307,8 +273,6 @@
       "IsEnabled": true
    },
    "func New() *List": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

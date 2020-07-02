@@ -1,7 +1,5 @@
 {
    "func (ByteOrder).PutUint16([]byte, uint16)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": false
    },
    "func (ByteOrder).PutUint32([]byte, uint32)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": false
    },
    "func (ByteOrder).PutUint64([]byte, uint64)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -57,8 +51,6 @@
       "IsEnabled": false
    },
    "func (ByteOrder).String() string": {
-      "GeneratedClass": "\n    private class ByteOrderString extends TaintTracking::FunctionModel, Method {\n      // signature: func (ByteOrder).String() string\n      ByteOrderString() {\n        this.implements(\"encoding/binary\", \"ByteOrder\", \"String\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -74,8 +66,6 @@
       "IsEnabled": true
    },
    "func (ByteOrder).Uint16([]byte) uint16": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -93,8 +83,6 @@
       "IsEnabled": false
    },
    "func (ByteOrder).Uint32([]byte) uint32": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -112,8 +100,6 @@
       "IsEnabled": false
    },
    "func (ByteOrder).Uint64([]byte) uint64": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -131,8 +117,6 @@
       "IsEnabled": false
    },
    "func PutUvarint(buf []byte, x uint64) int": {
-      "GeneratedClass": "\n    private class PutUvarint extends TaintTracking::FunctionModel {\n      // signature: func PutUvarint(buf []byte, x uint64) int\n      PutUvarint() { hasQualifiedName(\"encoding/binary\", \"PutUvarint\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -150,8 +134,6 @@
       "IsEnabled": true
    },
    "func PutVarint(buf []byte, x int64) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -169,8 +151,6 @@
       "IsEnabled": false
    },
    "func Read(r io.Reader, order ByteOrder, data interface{}) error": {
-      "GeneratedClass": "\n    private class Read extends TaintTracking::FunctionModel {\n      // signature: func Read(r io.Reader, order ByteOrder, data interface{}) error\n      Read() { hasQualifiedName(\"encoding/binary\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(2)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(2)))",
       "Blocks": [
          {
             "Inp": [
@@ -190,8 +170,6 @@
       "IsEnabled": true
    },
    "func ReadUvarint(r io.ByteReader) (uint64, error)": {
-      "GeneratedClass": "\n    private class ReadUvarint extends TaintTracking::FunctionModel {\n      // signature: func ReadUvarint(r io.ByteReader) (uint64, error)\n      ReadUvarint() { hasQualifiedName(\"encoding/binary\", \"ReadUvarint\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -209,8 +187,6 @@
       "IsEnabled": true
    },
    "func ReadVarint(r io.ByteReader) (int64, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -228,8 +204,6 @@
       "IsEnabled": false
    },
    "func Size(v interface{}) int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -245,8 +219,6 @@
       "IsEnabled": false
    },
    "func Uvarint(buf []byte) (uint64, int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -264,8 +236,6 @@
       "IsEnabled": false
    },
    "func Varint(buf []byte) (int64, int)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -283,8 +253,6 @@
       "IsEnabled": false
    },
    "func Write(w io.Writer, order ByteOrder, data interface{}) error": {
-      "GeneratedClass": "\n    private class Write extends TaintTracking::FunctionModel {\n      // signature: func Write(w io.Writer, order ByteOrder, data interface{}) error\n      Write() { hasQualifiedName(\"encoding/binary\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(2)) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [

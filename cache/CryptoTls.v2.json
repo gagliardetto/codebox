@@ -1,7 +1,5 @@
 {
    "func (*CertificateRequestInfo).SupportsCertificate(c *Certificate) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": false
    },
    "func (*ClientHelloInfo).SupportsCertificate(c *Certificate) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": false
    },
    "func (*Config).BuildNameToCertificate()": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": false
    },
    "func (*Config).Clone() *Config": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -70,8 +62,6 @@
       "IsEnabled": false
    },
    "func (*Config).SetSessionTicketKeys(keys [][32]byte)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -87,8 +77,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Close() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -104,8 +92,6 @@
       "IsEnabled": false
    },
    "func (*Conn).CloseWrite() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -121,8 +107,6 @@
       "IsEnabled": false
    },
    "func (*Conn).ConnectionState() ConnectionState": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -138,8 +122,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Handshake() error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -155,8 +137,6 @@
       "IsEnabled": false
    },
    "func (*Conn).LocalAddr() net.Addr": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -172,8 +152,6 @@
       "IsEnabled": false
    },
    "func (*Conn).OCSPResponse() []byte": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -189,8 +167,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Read(b []byte) (int, error)": {
-      "GeneratedClass": "\n    private class ConnRead extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Conn).Read(b []byte) (int, error)\n      ConnRead() { this.(Method).hasQualifiedName(\"crypto/tls\", \"Conn\", \"Read\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -210,8 +186,6 @@
       "IsEnabled": true
    },
    "func (*Conn).RemoteAddr() net.Addr": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -227,8 +201,6 @@
       "IsEnabled": false
    },
    "func (*Conn).SetDeadline(t time.Time) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -246,8 +218,6 @@
       "IsEnabled": false
    },
    "func (*Conn).SetReadDeadline(t time.Time) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -265,8 +235,6 @@
       "IsEnabled": false
    },
    "func (*Conn).SetWriteDeadline(t time.Time) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -284,8 +252,6 @@
       "IsEnabled": false
    },
    "func (*Conn).VerifyHostname(host string) error": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -303,8 +269,6 @@
       "IsEnabled": false
    },
    "func (*Conn).Write(b []byte) (int, error)": {
-      "GeneratedClass": "\n    private class ConnWrite extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Conn).Write(b []byte) (int, error)\n      ConnWrite() { this.(Method).hasQualifiedName(\"crypto/tls\", \"Conn\", \"Write\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isReceiver()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isReceiver()))",
       "Blocks": [
          {
             "Inp": [
@@ -324,8 +288,6 @@
       "IsEnabled": true
    },
    "func (*ConnectionState).ExportKeyingMaterial(label string, context []byte, length int) ([]byte, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -349,8 +311,6 @@
       "IsEnabled": false
    },
    "func (ClientSessionCache).Get(sessionKey string) (session *ClientSessionState, ok bool)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -370,8 +330,6 @@
       "IsEnabled": false
    },
    "func (ClientSessionCache).Put(sessionKey string, cs *ClientSessionState)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -389,8 +347,6 @@
       "IsEnabled": false
    },
    "func (RecordHeaderError).Error() string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -406,8 +362,6 @@
       "IsEnabled": false
    },
    "func CipherSuiteName(id uint16) string": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -423,8 +377,6 @@
       "IsEnabled": false
    },
    "func CipherSuites() []*CipherSuite": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -438,8 +390,6 @@
       "IsEnabled": false
    },
    "func Client(conn net.Conn, config *Config) *Conn": {
-      "GeneratedClass": "\n    private class Client extends TaintTracking::FunctionModel {\n      // signature: func Client(conn net.Conn, config *Config) *Conn\n      Client() { hasQualifiedName(\"crypto/tls\", \"Client\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -469,8 +419,6 @@
       "IsEnabled": true
    },
    "func Dial(network string, addr string, config *Config) (*Conn, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -492,8 +440,6 @@
       "IsEnabled": false
    },
    "func DialWithDialer(dialer *net.Dialer, network string, addr string, config *Config) (*Conn, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isParameter(2)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -517,8 +463,6 @@
       "IsEnabled": false
    },
    "func InsecureCipherSuites() []*CipherSuite": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -532,8 +476,6 @@
       "IsEnabled": false
    },
    "func Listen(network string, laddr string, config *Config) (net.Listener, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -555,8 +497,6 @@
       "IsEnabled": false
    },
    "func LoadX509KeyPair(certFile string, keyFile string) (Certificate, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -576,8 +516,6 @@
       "IsEnabled": false
    },
    "func NewLRUClientSessionCache(capacity int) ClientSessionCache": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -593,8 +531,6 @@
       "IsEnabled": false
    },
    "func NewListener(inner net.Listener, config *Config) net.Listener": {
-      "GeneratedClass": "\n    private class NewListener extends TaintTracking::FunctionModel {\n      // signature: func NewListener(inner net.Listener, config *Config) net.Listener\n      NewListener() { hasQualifiedName(\"crypto/tls\", \"NewListener\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -612,8 +548,6 @@
       "IsEnabled": true
    },
    "func Server(conn net.Conn, config *Config) *Conn": {
-      "GeneratedClass": "\n    private class Server extends TaintTracking::FunctionModel {\n      // signature: func Server(conn net.Conn, config *Config) *Conn\n      Server() { hasQualifiedName(\"crypto/tls\", \"Server\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))\n        or\n        ((inp.isResult()) and (outp.isParameter(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -643,8 +577,6 @@
       "IsEnabled": true
    },
    "func X509KeyPair(certPEMBlock []byte, keyPEMBlock []byte) (Certificate, error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

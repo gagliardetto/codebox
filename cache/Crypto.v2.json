@@ -1,7 +1,5 @@
 {
    "func (Decrypter).Decrypt(rand io.Reader, msg []byte, opts DecrypterOpts) (plaintext []byte, err error)": {
-      "GeneratedClass": "\n    private class DecrypterDecrypt extends TaintTracking::FunctionModel, Method {\n      // signature: func (Decrypter).Decrypt(rand io.Reader, msg []byte, opts DecrypterOpts) (plaintext []byte, err error)\n      DecrypterDecrypt() {\n        this.implements(\"crypto\", \"Decrypter\", \"Decrypt\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -25,8 +23,6 @@
       "IsEnabled": true
    },
    "func (Decrypter).Public() PublicKey": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -42,8 +38,6 @@
       "IsEnabled": false
    },
    "func (Hash).Available() bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -59,8 +53,6 @@
       "IsEnabled": false
    },
    "func (Hash).HashFunc() Hash": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -76,8 +68,6 @@
       "IsEnabled": false
    },
    "func (Hash).New() hash.Hash": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -93,8 +83,6 @@
       "IsEnabled": false
    },
    "func (Hash).Size() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -110,8 +98,6 @@
       "IsEnabled": false
    },
    "func (Signer).Public() PublicKey": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -127,8 +113,6 @@
       "IsEnabled": false
    },
    "func (Signer).Sign(rand io.Reader, digest []byte, opts SignerOpts) (signature []byte, err error)": {
-      "GeneratedClass": "\n    private class SignerSign extends TaintTracking::FunctionModel, Method {\n      // signature: func (Signer).Sign(rand io.Reader, digest []byte, opts SignerOpts) (signature []byte, err error)\n      SignerSign() {\n        this.implements(\"crypto\", \"Signer\", \"Sign\")\n      }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(1)) and (outp.isResult(0)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(1)) and (outp.isResult(0)))",
       "Blocks": [
          {
             "Inp": [
@@ -152,8 +136,6 @@
       "IsEnabled": true
    },
    "func (SignerOpts).HashFunc() Hash": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -169,8 +151,6 @@
       "IsEnabled": false
    },
    "func RegisterHash(h Hash, f func() hash.Hash)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

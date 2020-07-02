@@ -1,7 +1,5 @@
 {
    "func As(err error, target interface{}) bool": {
-      "GeneratedClass": "\n    private class As extends TaintTracking::FunctionModel {\n      // signature: func As(err error, target interface{}) bool\n      As() { hasQualifiedName(\"errors\", \"As\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isParameter(1)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isParameter(1)))",
       "Blocks": [
          {
             "Inp": [
@@ -19,8 +17,6 @@
       "IsEnabled": true
    },
    "func Is(err error, target error) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -38,8 +34,6 @@
       "IsEnabled": false
    },
    "func New(text string) error": {
-      "GeneratedClass": "\n    private class New extends TaintTracking::FunctionModel {\n      // signature: func New(text string) error\n      New() { hasQualifiedName(\"errors\", \"New\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -55,8 +49,6 @@
       "IsEnabled": true
    },
    "func Unwrap(err error) error": {
-      "GeneratedClass": "\n    private class Unwrap extends TaintTracking::FunctionModel {\n      // signature: func Unwrap(err error) error\n      Unwrap() { hasQualifiedName(\"errors\", \"Unwrap\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [

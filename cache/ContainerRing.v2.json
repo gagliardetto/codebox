@@ -1,7 +1,5 @@
 {
    "func (*Ring).Do(f func(interface{}))": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": false
    },
    "func (*Ring).Len() int": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": false
    },
    "func (*Ring).Link(s *Ring) *Ring": {
-      "GeneratedClass": "\n    private class RingLink extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Ring).Link(s *Ring) *Ring\n      RingLink() { this.(Method).hasQualifiedName(\"container/ring\", \"Ring\", \"Link\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -53,8 +47,6 @@
       "IsEnabled": true
    },
    "func (*Ring).Move(n int) *Ring": {
-      "GeneratedClass": "\n    private class RingMove extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Ring).Move(n int) *Ring\n      RingMove() { this.(Method).hasQualifiedName(\"container/ring\", \"Ring\", \"Move\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -72,8 +64,6 @@
       "IsEnabled": true
    },
    "func (*Ring).Next() *Ring": {
-      "GeneratedClass": "\n    private class RingNext extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Ring).Next() *Ring\n      RingNext() { this.(Method).hasQualifiedName(\"container/ring\", \"Ring\", \"Next\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -89,8 +79,6 @@
       "IsEnabled": true
    },
    "func (*Ring).Prev() *Ring": {
-      "GeneratedClass": "\n    private class RingPrev extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Ring).Prev() *Ring\n      RingPrev() { this.(Method).hasQualifiedName(\"container/ring\", \"Ring\", \"Prev\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -106,8 +94,6 @@
       "IsEnabled": true
    },
    "func (*Ring).Unlink(n int) *Ring": {
-      "GeneratedClass": "\n    private class RingUnlink extends TaintTracking::FunctionModel, Method {\n      // signature: func (*Ring).Unlink(n int) *Ring\n      RingUnlink() { this.(Method).hasQualifiedName(\"container/ring\", \"Ring\", \"Unlink\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isReceiver()) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isReceiver()) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -125,8 +111,6 @@
       "IsEnabled": true
    },
    "func New(n int) *Ring": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [

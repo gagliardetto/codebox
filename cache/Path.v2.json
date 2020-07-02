@@ -1,7 +1,5 @@
 {
    "func Base(path string) string": {
-      "GeneratedClass": "\n    private class Base extends TaintTracking::FunctionModel {\n      // signature: func Base(path string) string\n      Base() { hasQualifiedName(\"path\", \"Base\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -17,8 +15,6 @@
       "IsEnabled": true
    },
    "func Clean(path string) string": {
-      "GeneratedClass": "\n    private class Clean extends TaintTracking::FunctionModel {\n      // signature: func Clean(path string) string\n      Clean() { hasQualifiedName(\"path\", \"Clean\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -34,8 +30,6 @@
       "IsEnabled": true
    },
    "func Dir(path string) string": {
-      "GeneratedClass": "\n    private class Dir extends TaintTracking::FunctionModel {\n      // signature: func Dir(path string) string\n      Dir() { hasQualifiedName(\"path\", \"Dir\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -51,8 +45,6 @@
       "IsEnabled": true
    },
    "func Ext(path string) string": {
-      "GeneratedClass": "\n    private class Ext extends TaintTracking::FunctionModel {\n      // signature: func Ext(path string) string\n      Ext() { hasQualifiedName(\"path\", \"Ext\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -68,8 +60,6 @@
       "IsEnabled": true
    },
    "func IsAbs(path string) bool": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -85,8 +75,6 @@
       "IsEnabled": false
    },
    "func Join(elem ...string) string": {
-      "GeneratedClass": "\n    private class Join extends TaintTracking::FunctionModel {\n      // signature: func Join(elem ...string) string\n      Join() { hasQualifiedName(\"path\", \"Join\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(_)) and (outp.isResult()))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(_)) and (outp.isResult()))",
       "Blocks": [
          {
             "Inp": [
@@ -102,8 +90,6 @@
       "IsEnabled": true
    },
    "func Match(pattern string, name string) (matched bool, err error)": {
-      "GeneratedClass": "",
-      "GeneratedConditions": "",
       "Blocks": [
          {
             "Inp": [
@@ -123,8 +109,6 @@
       "IsEnabled": false
    },
    "func Split(path string) (dir string, file string)": {
-      "GeneratedClass": "\n    private class Split extends TaintTracking::FunctionModel {\n      // signature: func Split(path string) (dir string, file string)\n      Split() { hasQualifiedName(\"path\", \"Split\") }\n\n      override predicate hasTaintFlow(FunctionInput inp, FunctionOutput outp) {\n        ((inp.isParameter(0)) and (outp.isResult(_)))\n      }\n    }",
-      "GeneratedConditions": "((inp.isParameter(0)) and (outp.isResult(_)))",
       "Blocks": [
          {
             "Inp": [
