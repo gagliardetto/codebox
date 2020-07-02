@@ -27,6 +27,7 @@ chrome http://127.0.0.1:8080/
 # - Now that you see the UI in the browser, complete the taint-tracking logic
 # and when you're done, close the server program you started in the terminal
 # with a CTRL-C.
+# You will find the generated codeql and golang files inside ./generated/compressed
 
 # NOTE: if you only want to regenerate the code without starting the server,
 # then you need to remove the --http flag:
