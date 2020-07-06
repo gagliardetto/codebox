@@ -94,18 +94,18 @@ func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
 	return fe
 }
 
-type Index struct {
+type Storage struct {
 	mu     *sync.RWMutex
 	values map[string]*IndexItem
 }
 
-func NewIndex() *Index {
-	return &Index{
+func NewIndex() *Storage {
+	return &Storage{
 		mu:     &sync.RWMutex{},
 		values: make(map[string]*IndexItem),
 	}
 }
-func (index *Index) GetBySignature(signature string) *IndexItem {
+func (index *Storage) GetBySignature(signature string) *IndexItem {
 	index.mu.RLock()
 	defer index.mu.RUnlock()
 
@@ -116,13 +116,13 @@ func (index *Index) GetBySignature(signature string) *IndexItem {
 	return val
 }
 
-func (index *Index) Set(signature string, v interface{}) {
+func (index *Storage) Set(signature string, v interface{}) {
 	index.mu.Lock()
 	defer index.mu.Unlock()
 
 	index.values[signature] = NewIndexItem(v)
 }
-func (index *Index) MustSetUnique(signature string, v interface{}) {
+func (index *Storage) MustSetUnique(signature string, v interface{}) {
 
 	existing := index.GetBySignature(signature)
 	if existing != nil {
