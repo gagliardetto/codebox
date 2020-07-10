@@ -241,13 +241,13 @@
                                         <tr :id="cc(func.ID,'block',blockIndex)">
                                             <td><b>func {{ func.Name }}</b>{{func.Parameters == null ? "( )" : "(" }}</td>
                                             <td v-for="(funParameter, index) in func.Parameters" :id="cc(func.ID,'block',blockIndex,'bl',index)" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index, func), 'selected-outp': isCheckedOutp(blockIndex, index, func) }">
-                                                <span :title="funParameter.KindString">
+                                                <span :title="funParameter.KindString" data-toggle="tooltip">
                                                     {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                     {{index < func.Parameters.length - 1 ? ", " : "" }}{{index==func.Parameters.length - 1 ?")":""}}
                                                 </span>
                                             </td>
                                             <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'block',blockIndex,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+len(func.Parameters), func), 'selected-outp': isCheckedOutp(blockIndex, index+len(func.Parameters), func) }">
-                                                <span :title="funResult.KindString">
+                                                <span :title="funResult.KindString" data-toggle="tooltip">
                                                     {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                                     {{index < func.Results.length - 1 ? ", " : "" }}{{index==func.Results.length - 1 ? ")" : "" }}
                                                 </span>
@@ -326,19 +326,19 @@
                                         <tr :id="cc(method.ID,'block',blockIndex)">
                                             <td></td>
                                             <td class="method-type" :id="cc(method.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, method), 'selected-outp': isCheckedOutp(blockIndex, 0, method) }">
-                                                <span :title="method.Receiver.KindString">
+                                                <span :title="method.Receiver.KindString" data-toggle="tooltip">
                                                     ({{method.IsOnPtr?"*":""}}{{method.Receiver.TypeName}})
                                                 </span>
                                             </td>
                                             <td>func <b>{{ method.Func.Name }}</b>{{method.Func.Parameters == null ? "( )" : "(" }}</td>
                                             <td v-for="(funParameter, index) in method.Func.Parameters" :id="cc(method.ID,'block',blockIndex,'bl',index+1)" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, method), 'selected-outp': isCheckedOutp(blockIndex, index+1, method) }">
-                                                <span :title="funParameter.KindString">
+                                                <span :title="funParameter.KindString" data-toggle="tooltip">
                                                     {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                     {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index==method.Func.Parameters.length - 1 ?")":""}}
                                                 </span>
                                             </td>
                                             <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'block',blockIndex,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(method.Func.Parameters), method), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(method.Func.Parameters), method) }">
-                                                <span :title="funResult.KindString">
+                                                <span :title="funResult.KindString" data-toggle="tooltip">
                                                     {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                                     {{index < method.Func.Results.length - 1 ? ", " : "" }}</td>
                                                 </span>
@@ -429,19 +429,19 @@
                                         <tr :id="cc(itMeth.ID,'block',blockIndex)">
                                             <td></td>
                                             <td class="intmet-type" :id="cc(itMeth.ID,'block',blockIndex,'bl',0)" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, 0, itMeth), 'selected-outp': isCheckedOutp(blockIndex, 0, itMeth) }">
-                                                <span :title="itMeth.Receiver.KindString">
+                                                <span :title="itMeth.Receiver.KindString" data-toggle="tooltip">
                                                     (<b>{{itMeth.Receiver.TypeName}}</b>)
                                                 </span>
                                             </td>
                                             <td>func <b>{{ itMeth.Func.Name }}</b>{{itMeth.Func.Parameters == null ? "( )" : "(" }}</td>
                                             <td v-for="(funParameter, index) in itMeth.Func.Parameters" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1)" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1, itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1, itMeth) }">
-                                                <span :title="funParameter.KindString">
+                                                <span :title="funParameter.KindString" data-toggle="tooltip">
                                                     {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                     {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index==itMeth.Func.Parameters.length - 1 ?")":""}}
                                                 </span>
                                             </td>
                                             <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth) }">
-                                                <span :title="funResult.KindString">
+                                                <span :title="funResult.KindString" data-toggle="tooltip">
                                                     {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
                                                     {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}
                                                 </span>
@@ -638,6 +638,13 @@
                     self.drawAllArrows(blockIndex, element)
                 });
             });
+            (function ($) {
+              $(document).ready(function () {
+                $(function () {
+                  $('[data-toggle="tooltip"]').tooltip()
+                })
+              });
+            })(jQuery);
         },
         methods: {
             drawAllArrows: function(blockIndex, fn) {
