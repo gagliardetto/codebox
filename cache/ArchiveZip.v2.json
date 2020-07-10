@@ -46,7 +46,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*FileHeader).ModTime() time.Time": {
       "Blocks": [
@@ -76,7 +76,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*FileHeader).SetModTime(t time.Time)": {
       "Blocks": [
@@ -106,7 +106,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*ReadCloser).Close() error": {
       "Blocks": [
@@ -138,7 +138,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Writer).Close() error": {
       "Blocks": [
@@ -179,7 +179,7 @@
          {
             "Inp": [
                false,
-               true,
+               false,
                true,
                false
             ],
@@ -223,7 +223,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Writer).SetComment(comment string) error": {
       "Blocks": [
@@ -240,7 +240,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Writer).SetOffset(n int64)": {
       "Blocks": [
