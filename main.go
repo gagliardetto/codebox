@@ -3,11 +3,14 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"go/token"
 	"go/types"
+	"hash/maphash"
+	"math/rand"
 	"os"
 	"path"
 	"path/filepath"
@@ -661,7 +664,7 @@ func main() {
 
 		{
 			// Save golang assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath+"-TaintTracking") + ".go"
+			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file go test file:
@@ -684,7 +687,7 @@ func main() {
 			var buf bytes.Buffer
 
 			fileHeader := `/**
- * Provides classes modeling security-relevant aspects of the standard libraries.
+ * Provides classes modeling security-relevant aspects of the ` + "`" + feModule.PkgPath + "`" + ` package.
  */
 
 import go` + "\n\n"
@@ -692,7 +695,7 @@ import go` + "\n\n"
 			moduleHeader := Sf(
 				"/** Provides models of commonly used functions in the `%s` package. */\nmodule %s {",
 				feModule.PkgPath,
-				FormatCodeQlName(feModule.PkgPath+"-TaintTracking"),
+				FormatCodeQlName(feModule.PkgPath),
 			)
 			buf.WriteString(fileHeader + moduleHeader)
 			if compressCodeQl {
@@ -722,7 +725,7 @@ import go` + "\n\n"
 			}
 
 			// Save codeql assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath) + "TaintTracking" + ".qll"
+			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file qll file:
@@ -949,6 +952,56 @@ import go` + "\n\n"
 
 		r.Run() // listen and serve on 0.0.0.0:8080
 	}
+}
+
+var hasherPool *sync.Pool
+
+func init() {
+	hasherPool = &sync.Pool{
+		New: func() interface{} {
+			return &maphash.Hash{}
+		},
+	}
+}
+func HashString(s string) uint64 {
+	h := hasherPool.Get().(*maphash.Hash)
+
+	defer hasherPool.Put(h)
+	h.Reset()
+	_, err := h.WriteString(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return h.Sum64()
+}
+func HashBytes(b []byte) uint64 {
+	h := hasherPool.Get().(*maphash.Hash)
+
+	defer hasherPool.Put(h)
+	h.Reset()
+	_, err := h.Write(b)
+	if err != nil {
+		panic(err)
+	}
+
+	return h.Sum64()
+}
+
+func HashAnyWithJSON(v interface{}) (uint64, error) {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return 0, err
+	}
+	return HashBytes(b), nil
+}
+
+func MustHashAnyWithJSON(v interface{}) uint64 {
+	h, err := HashAnyWithJSON(v)
+	if err != nil {
+		panic(err)
+	}
+	return h
 }
 
 type GeneratedClassResponse struct {
@@ -3419,6 +3472,10 @@ type StatementAndName struct {
 
 // for each block, generate a golang test function for each inp and outp combination.
 func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
+	// Seed the random number generator with the hash of the
+	// FEFunc, so that the numbers in the variable names
+	// will stay the same as long as the FEFunc is the same.
+	rand.Seed(int64(MustHashAnyWithJSON(fe)))
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
@@ -3466,6 +3523,10 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 
 // for each block, generate a golang test function for each inp and outp combination.
 func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
+	// Seed the random number generator with the hash of the
+	// FETypeMethod, so that the numbers in the variable names
+	// will stay the same as long as the FETypeMethod is the same.
+	rand.Seed(int64(MustHashAnyWithJSON(fe)))
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
@@ -3576,7 +3637,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("FunctionTaintTracking"),
+				ClassName:  FormatCodeQlName("FunctionModels"),
 				Extends:    CodeQLExtendsFunctionModel,
 				Conditions: funcsTempBuf.String(),
 			}
@@ -3664,7 +3725,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("MethodAndInterfaceTaintTracking"),
+				ClassName:  FormatCodeQlName("MethodModels"),
 				Extends:    CodeQLExtendsFunctionModelMethod,
 				Conditions: finalConditions,
 			}
