@@ -2205,7 +2205,94 @@ func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 			}
 		}
 	}
+}
 
+func FormatKindString(typ types.Type) string {
+	buf := new(bytes.Buffer)
+	switch t := typ.(type) {
+	case *types.Basic:
+		{
+			buf.WriteString(Sf(
+				"a basic %s",
+				t.String(),
+			))
+		}
+	case *types.Array:
+		{
+			buf.WriteString(Sf(
+				"an array %s: [%v]%s",
+				t.String(),
+				t.Len(),
+				FormatKindString(t.Elem()),
+			))
+		}
+	case *types.Slice:
+		{
+			buf.WriteString(Sf(
+				"a slice %s: []%s",
+				t.String(),
+				FormatKindString(t.Elem()),
+			))
+		}
+	case *types.Struct:
+		{
+			buf.WriteString(Sf(
+				"a struct",
+			))
+		}
+	case *types.Pointer:
+		{
+			buf.WriteString(Sf(
+				"a pointer to %s",
+				FormatKindString(t.Elem()),
+			))
+		}
+	case *types.Tuple:
+		{
+			buf.WriteString(Sf(
+				"a tuple `%s`",
+				t.String(),
+			))
+		}
+	case *types.Signature:
+		{
+			buf.WriteString(Sf(
+				"a signature `%s`",
+				t.String(),
+			))
+		}
+	case *types.Interface:
+		{
+			buf.WriteString(Sf(
+				"an interface",
+			))
+		}
+	case *types.Map:
+		{
+			buf.WriteString(Sf(
+				"a map[%s]%s",
+				FormatKindString(t.Key()),
+				FormatKindString(t.Elem()),
+			))
+		}
+	case *types.Chan:
+		{
+			buf.WriteString(Sf(
+				"a chan `%s`",
+				t.String(),
+			))
+		}
+	case *types.Named:
+		{
+			buf.WriteString(Sf(
+				"a named %s, which is %s",
+				t.String(),
+				FormatKindString(t.Underlying()),
+			))
+		}
+	}
+
+	return buf.String()
 }
 
 // declare `name := sourceCQL.(Type)`
@@ -2670,6 +2757,7 @@ type FEType struct {
 	IsNullable    bool
 	IsStruct      bool
 	TypeString    string
+	KindString    string
 	original      scanner.Type
 }
 
@@ -2690,6 +2778,7 @@ func getFEType(tp scanner.Type) *FEType {
 	} else {
 		fe.TypeString = tp.GetType().String()
 	}
+	fe.KindString = FormatKindString(tp.GetType())
 
 	finalType := tp.GetTypesVar().Type()
 	{
@@ -2743,6 +2832,8 @@ func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMetho
 			Index:   -1,
 		},
 	}
+	fe.Receiver.TypeString = mt.Recv().String()
+	fe.Receiver.KindString = FormatKindString(mt.Recv())
 
 	{
 		var named *types.Named
