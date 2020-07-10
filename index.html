@@ -216,7 +216,7 @@
                 <div class="codebox-source border-success">
                     <div class="type-indication text-success">FUNCTION</div>
                     <!-- Rectangular switch -->
-                    <label class="switch">
+                    <label class="switch" title="Click to enable/disable">
                         <input type="checkbox" v-model="func.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, func.Signature)">
                         <span class="slider bg-success"></span>
                     </label>
@@ -301,7 +301,7 @@
                 <div class="codebox-source border-primary">
                     <div class="type-indication text-primary">METHOD</div>
                     <!-- Rectangular switch -->
-                    <label class="switch">
+                    <label class="switch" title="Click to enable/disable">
                         <input type="checkbox" v-model="method.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, method.Func.Signature)">
                         <span class="slider bg-primary"></span>
                     </label>
@@ -404,7 +404,7 @@
                 <div class="codebox-source border-warning">
                     <div class="type-indication text-warning">INTERFACE</div>
                     <!-- Rectangular switch -->
-                    <label class="switch">
+                    <label class="switch" title="Click to enable/disable">
                         <input type="checkbox" v-model="itMeth.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, itMeth.Func.Signature)">
                         <span class="slider bg-warning"></span>
                     </label>
