@@ -33,7 +33,11 @@ class FlowConf extends TaintTracking::Configuration {
   override predicate isSink(DataFlow::Node sink) { isSink(sink, _) }
 }
 
-predicate esistsFlowFromSourceToSink(DataFlow::CallNode sourceCall) {
+/**
+ * True if the result of the provided sourceCall flows to the corresponding sink,
+ * both marked by the same numeric first argument.
+ */
+predicate flowsToSink(DataFlow::CallNode sourceCall) {
   exists(
     FlowConf cfg, DataFlow::PathNode source, DataFlow::PathNode sink, DataFlow::CallNode sinkCall
   |
@@ -48,5 +52,5 @@ predicate esistsFlowFromSourceToSink(DataFlow::CallNode sourceCall) {
 
 /* Show only flow sources that DON'T flow to their dedicated sink. */
 from DataFlow::CallNode sourceCall
-where isSource(_, sourceCall) and not esistsFlowFromSourceToSink(sourceCall)
+where isSource(_, sourceCall) and not flowsToSink(sourceCall)
 select sourceCall, "No flow to its sink"
