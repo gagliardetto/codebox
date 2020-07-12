@@ -632,16 +632,16 @@ func main() {
 				Id("RunAllTaints_" + FormatCodeQlName(feModule.PkgPath)).
 				Params().
 				BlockFunc(func(group *Group) {
-					for _, testFuncName := range testFuncNames {
+					for testID, testFuncName := range testFuncNames {
 						group.BlockFunc(func(testBlock *Group) {
 							testBlock.Comment("Create a new source:")
-							testBlock.Id("source").Op(":=").Id("newSource").Call()
+							testBlock.Id("source").Op(":=").Id("newSource").Call(Lit(testID))
 
 							testBlock.Comment("Run the taint scenario:")
 							testBlock.Id("out").Op(":=").Id(testFuncName).Call(Id("source"))
 
 							testBlock.Comment("If the taint step(s) succeeded, then `out` is tainted and will be sink-able here:")
-							testBlock.Id("sink").Call(Id("out"))
+							testBlock.Id("sink").Call(Lit(testID), Id("out"))
 						})
 					}
 				})
@@ -1171,7 +1171,7 @@ func NewTestFile(includeBoilerplace bool) *File {
 			// sink function:
 			code := Func().
 				Id("sink").
-				Params(Id("v").Interface()).
+				Params(Id("id").Int(), Id("v").Interface()).
 				Block()
 			file.Add(code.Line())
 		}
@@ -1187,7 +1187,7 @@ func NewTestFile(includeBoilerplace bool) *File {
 			// newSource functions returns a new tainted thing:
 			code := Func().
 				Id("newSource").
-				Params().
+				Params(Id("id").Int()).
 				Interface().
 				Block(Return(Nil()))
 			file.Add(code.Line())
