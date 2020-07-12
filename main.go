@@ -10,7 +10,6 @@ import (
 	"go/token"
 	"go/types"
 	"hash/maphash"
-	"math/rand"
 	"os"
 	"path"
 	"path/filepath"
@@ -628,13 +627,13 @@ func main() {
 				BlockFunc(func(group *Group) {
 					for testID, testFuncName := range testFuncNames {
 						group.BlockFunc(func(testBlock *Group) {
-							testBlock.Comment("Create a new source:")
+							Comments(testBlock, "Create a new source:")
 							testBlock.Id("source").Op(":=").Id("newSource").Call(Lit(testID))
 
-							testBlock.Comment("Run the taint scenario:")
+							Comments(testBlock, "Run the taint scenario:")
 							testBlock.Id("out").Op(":=").Id(testFuncName).Call(Id("source"))
 
-							testBlock.Comment("If the taint step(s) succeeded, then `out` is tainted and will be sink-able here:")
+							Comments(testBlock, "If the taint step(s) succeeded, then `out` is tainted and will be sink-able here:")
 							testBlock.Id("sink").Call(Lit(testID), Id("out"))
 						})
 					}
@@ -1305,7 +1304,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
@@ -1365,7 +1364,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
@@ -1425,7 +1424,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1484,7 +1483,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1546,7 +1545,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1614,7 +1613,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1682,7 +1681,7 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1777,7 +1776,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1867,7 +1866,7 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1928,7 +1927,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -1990,7 +1989,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -2063,7 +2062,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 
 	code := BlockFunc(
 		func(groupCase *Group) {
-			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName)).Line()
+			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
 			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
@@ -3495,7 +3494,7 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FEFunc, so that the numbers in the variable names
 	// will stay the same as long as the FEFunc is the same.
-	rand.Seed(int64(MustHashAnyWithJSON(fe)))
+	//rand.Seed(int64(MustHashAnyWithJSON(fe.CodeQL.Blocks)))
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
@@ -3546,7 +3545,7 @@ func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FETypeMethod, so that the numbers in the variable names
 	// will stay the same as long as the FETypeMethod is the same.
-	rand.Seed(int64(MustHashAnyWithJSON(fe)))
+	//rand.Seed(int64(MustHashAnyWithJSON(fe.CodeQL.Blocks)))
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
