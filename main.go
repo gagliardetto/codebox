@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"go/token"
 	"go/types"
-	"hash/maphash"
 	"os"
 	"path"
 	"path/filepath"
@@ -945,40 +944,6 @@ import go` + "\n\n"
 
 		r.Run() // listen and serve on 0.0.0.0:8080
 	}
-}
-
-var hasherPool *sync.Pool
-
-func init() {
-	hasherPool = &sync.Pool{
-		New: func() interface{} {
-			return &maphash.Hash{}
-		},
-	}
-}
-func HashString(s string) uint64 {
-	h := hasherPool.Get().(*maphash.Hash)
-
-	defer hasherPool.Put(h)
-	h.Reset()
-	_, err := h.WriteString(s)
-	if err != nil {
-		panic(err)
-	}
-
-	return h.Sum64()
-}
-func HashBytes(b []byte) uint64 {
-	h := hasherPool.Get().(*maphash.Hash)
-
-	defer hasherPool.Put(h)
-	h.Reset()
-	_, err := h.Write(b)
-	if err != nil {
-		panic(err)
-	}
-
-	return h.Sum64()
 }
 
 func HashAnyWithJSON(v interface{}) (uint64, error) {
