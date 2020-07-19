@@ -30,111 +30,9 @@ var (
 	mu = &sync.RWMutex{}
 )
 
-type IndexItem struct {
-	original interface{}
-}
-
-//
-func NewIndexItem(v interface{}) *IndexItem {
-	item := &IndexItem{}
-	item.Set(v)
-	return item
-}
-
-//
-func (item *IndexItem) Set(v interface{}) {
-	item.original = v
-}
-
-//
-func (item *IndexItem) IsNil() bool {
-	return item.original == nil
-}
-
-//
-func (item *IndexItem) GetFEFunc() *FEFunc {
-	fe, ok := item.original.(*FEFunc)
-	if !ok {
-		return nil
-	}
-	return fe
-}
-
-//
-func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
-	fe, ok := item.original.(*FETypeMethod)
-	if !ok {
-		return nil
-	}
-	return fe
-}
-
-func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
-	feTyp, ok := item.original.(*FETypeMethod)
-	if !ok {
-		feIt, ok := item.original.(*FEInterfaceMethod)
-		if !ok {
-			return nil
-		}
-		return FEIToFET(feIt)
-	}
-	return feTyp
-}
-
-func FEIToFET(feIt *FEInterfaceMethod) *FETypeMethod {
-	converted := FETypeMethod(*feIt)
-	return &converted
-}
-
-//
-func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
-	fe, ok := item.original.(*FEInterfaceMethod)
-	if !ok {
-		return nil
-	}
-	return fe
-}
-
-type Storage struct {
-	mu     *sync.RWMutex
-	values map[string]*IndexItem
-}
-
-func NewIndex() *Storage {
-	return &Storage{
-		mu:     &sync.RWMutex{},
-		values: make(map[string]*IndexItem),
-	}
-}
-func (index *Storage) GetBySignature(signature string) *IndexItem {
-	index.mu.RLock()
-	defer index.mu.RUnlock()
-
-	val, ok := index.values[signature]
-	if !ok {
-		return nil
-	}
-	return val
-}
-
-func (index *Storage) Set(signature string, v interface{}) {
-	index.mu.Lock()
-	defer index.mu.Unlock()
-
-	index.values[signature] = NewIndexItem(v)
-}
-func (index *Storage) MustSetUnique(signature string, v interface{}) {
-
-	existing := index.GetBySignature(signature)
-	if existing != nil {
-		Errorf(Sf("%q already in the index", signature))
-	} else {
-		index.Set(signature, v)
-	}
-}
-
 var (
-	IncludeCommentsInGo bool
+	IncludeCommentsInGeneratedGo bool
+	InlineGeneratedGo            bool
 )
 
 func main() {
@@ -155,7 +53,8 @@ func main() {
 	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
 	flag.BoolVar(&includeBoilerplace, "stub", false, "Include utility functions (main, sink, link, etc.) in the go test files")
 	flag.BoolVar(&compressCodeQl, "compress", true, "Compress codeql classes")
-	flag.BoolVar(&IncludeCommentsInGo, "comments", false, "Include comments inside go test code")
+	flag.BoolVar(&IncludeCommentsInGeneratedGo, "comments", false, "Include comments inside go test code")
+	flag.BoolVar(&InlineGeneratedGo, "inline", false, "Inline tests in generated go code")
 	flag.Parse()
 
 	// One package at a time:
@@ -946,6 +845,109 @@ import go` + "\n\n"
 	}
 }
 
+type IndexItem struct {
+	original interface{}
+}
+
+//
+func NewIndexItem(v interface{}) *IndexItem {
+	item := &IndexItem{}
+	item.Set(v)
+	return item
+}
+
+//
+func (item *IndexItem) Set(v interface{}) {
+	item.original = v
+}
+
+//
+func (item *IndexItem) IsNil() bool {
+	return item.original == nil
+}
+
+//
+func (item *IndexItem) GetFEFunc() *FEFunc {
+	fe, ok := item.original.(*FEFunc)
+	if !ok {
+		return nil
+	}
+	return fe
+}
+
+//
+func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
+	fe, ok := item.original.(*FETypeMethod)
+	if !ok {
+		return nil
+	}
+	return fe
+}
+
+func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
+	feTyp, ok := item.original.(*FETypeMethod)
+	if !ok {
+		feIt, ok := item.original.(*FEInterfaceMethod)
+		if !ok {
+			return nil
+		}
+		return FEIToFET(feIt)
+	}
+	return feTyp
+}
+
+func FEIToFET(feIt *FEInterfaceMethod) *FETypeMethod {
+	converted := FETypeMethod(*feIt)
+	return &converted
+}
+
+//
+func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
+	fe, ok := item.original.(*FEInterfaceMethod)
+	if !ok {
+		return nil
+	}
+	return fe
+}
+
+type Storage struct {
+	mu     *sync.RWMutex
+	values map[string]*IndexItem
+}
+
+func NewIndex() *Storage {
+	return &Storage{
+		mu:     &sync.RWMutex{},
+		values: make(map[string]*IndexItem),
+	}
+}
+func (index *Storage) GetBySignature(signature string) *IndexItem {
+	index.mu.RLock()
+	defer index.mu.RUnlock()
+
+	val, ok := index.values[signature]
+	if !ok {
+		return nil
+	}
+	return val
+}
+
+func (index *Storage) Set(signature string, v interface{}) {
+	index.mu.Lock()
+	defer index.mu.Unlock()
+
+	index.values[signature] = NewIndexItem(v)
+}
+func (index *Storage) MustSetUnique(signature string, v interface{}) {
+
+	existing := index.GetBySignature(signature)
+	if existing != nil {
+		Errorf(Sf("%q already in the index", signature))
+	} else {
+		index.Set(signature, v)
+	}
+}
+
 func HashAnyWithJSON(v interface{}) (uint64, error) {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -1242,7 +1244,7 @@ func getPlaceholderFromMethod(fe *FETypeMethod, ident *CodeQlIdentity) string {
 
 // Comments adds comments to a Group (if enabled), and returns the group.
 func Comments(group *Group, comments ...string) *Group {
-	if IncludeCommentsInGo {
+	if IncludeCommentsInGeneratedGo {
 		for _, comment := range comments {
 			group.Line().Comment(comment)
 		}
