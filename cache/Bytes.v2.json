@@ -110,7 +110,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Buffer).ReadBytes(delim byte) (line []byte, err error)": {
       "Blocks": [
@@ -167,7 +167,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Buffer).ReadString(delim byte) (line string, err error)": {
       "Blocks": [
@@ -295,7 +295,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Buffer).WriteRune(r rune) (n int, err error)": {
       "Blocks": [
@@ -314,7 +314,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Buffer).WriteString(s string) (n int, err error)": {
       "Blocks": [
@@ -424,7 +424,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).ReadRune() (ch rune, size int, err error)": {
       "Blocks": [
@@ -443,7 +443,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).Reset(b []byte)": {
       "Blocks": [

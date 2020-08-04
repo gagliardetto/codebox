@@ -86,7 +86,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).ReadBytes(delim byte) ([]byte, error)": {
       "Blocks": [
@@ -143,7 +143,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).ReadSlice(delim byte) (line []byte, err error)": {
       "Blocks": [
@@ -482,7 +482,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Writer).WriteRune(r rune) (size int, err error)": {
       "Blocks": [
@@ -501,7 +501,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Writer).WriteString(s string) (int, error)": {
       "Blocks": [
