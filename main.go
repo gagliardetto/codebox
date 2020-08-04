@@ -149,7 +149,7 @@ func main() {
 
 	cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".v2.json")
 	cacheExists := MustFileExists(cacheFilepath)
-	{
+	{ // Load pointer blocks from cache:
 		// try to use DEPRECATED cache:
 		deprecatedCacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
 		deprecatedCacheExists := MustFileExists(deprecatedCacheFilepath)
@@ -382,13 +382,12 @@ func main() {
 		}
 	}
 
-	//Q(feModule)
 	lenFuncs := len(feModule.Funcs)
 	lenTypeMethods := len(feModule.TypeMethods)
 	lenInterfaceMethods := len(feModule.InterfaceMethods)
 	lenTotal := lenFuncs + lenTypeMethods + lenInterfaceMethods
 	Sfln(
-		IndigoBG("package %q has %v funcs, %v methods on types, and %v methods on interfaces (total=%v)"),
+		IndigoBG("Package %q has %v funcs, %v methods on types, and %v methods on interfaces (total=%v)"),
 		pk.Name,
 		lenFuncs,
 		lenTypeMethods,
@@ -410,6 +409,7 @@ func main() {
 		}
 	}
 
+	// Callback executed when this program is closed:
 	onExitCallback := func() {
 		mu.Lock()
 		defer mu.Unlock()
@@ -444,8 +444,8 @@ func main() {
 			}
 		}
 
-		// Generate golang tests:
-		file := NewTestFile(includeBoilerplace)
+		// Generate golang tests code:
+		goTestFile := NewTestFile(includeBoilerplace)
 		testFuncNames := make([]string, 0)
 		{
 			for _, fe := range feModule.Funcs {
@@ -456,13 +456,13 @@ func main() {
 					Errorf("invalid pointers for %q: %s", fe.Signature, err)
 					continue
 				}
-				allCode := generateAll_Func(
-					file,
+				allCode := generateGoTestBlock_Func(
+					goTestFile,
 					fe,
 				)
 				for _, codeEnvelope := range allCode {
 					if codeEnvelope.Statement != nil {
-						file.Add(codeEnvelope.Statement.Line())
+						goTestFile.Add(codeEnvelope.Statement.Line())
 						testFuncNames = append(testFuncNames, codeEnvelope.TestFuncName)
 					} else {
 						Warnf("NOTHING GENERATED")
@@ -479,13 +479,13 @@ func main() {
 					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 					continue
 				}
-				allCode := generateAll_Method(
-					file,
+				allCode := generateGoTestBlock_Method(
+					goTestFile,
 					fe,
 				)
 				for _, codeEnvelope := range allCode {
 					if codeEnvelope.Statement != nil {
-						file.Add(codeEnvelope.Statement.Line())
+						goTestFile.Add(codeEnvelope.Statement.Line())
 						testFuncNames = append(testFuncNames, codeEnvelope.TestFuncName)
 					} else {
 						Warnf("NOTHING GENERATED")
@@ -503,13 +503,13 @@ func main() {
 					continue
 				}
 				converted := FEIToFET(fe)
-				allCode := generateAll_Method(
-					file,
+				allCode := generateGoTestBlock_Method(
+					goTestFile,
 					converted,
 				)
 				for _, codeEnvelope := range allCode {
 					if codeEnvelope.Statement != nil {
-						file.Add(codeEnvelope.Statement.Line())
+						goTestFile.Add(codeEnvelope.Statement.Line())
 						testFuncNames = append(testFuncNames, codeEnvelope.TestFuncName)
 					} else {
 						Warnf("NOTHING GENERATED")
@@ -536,10 +536,10 @@ func main() {
 						})
 					}
 				})
-			file.Add(code.Line())
+			goTestFile.Add(code.Line())
 		}
 		if toStdout {
-			fmt.Printf("%#v", file)
+			fmt.Printf("%#v", goTestFile)
 		}
 
 		ts := time.Now()
@@ -567,7 +567,7 @@ func main() {
 
 			// write generated Golang code to file:
 			Infof("Saving golang assets to %q", MustAbs(assetFilepath))
-			err = file.Render(goFile)
+			err = goTestFile.Render(goFile)
 			if err != nil {
 				panic(err)
 			}
@@ -1163,7 +1163,7 @@ func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return filepath.Base(pkgPath) != pkgName
 }
 
-func generate_Func(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generateGoChildBlock_Func(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
 	Parameter := ElementParameter
 	Result := ElementResult
 
@@ -1183,7 +1183,7 @@ func generate_Func(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identity
 	return nil
 }
 
-func generate_Method(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generateChildBlock_Method(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
 	Receiver := ElementReceiver
 	Parameter := ElementParameter
 	Result := ElementResult
@@ -3040,7 +3040,7 @@ func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, blocks []*FlowBlock) (strin
 	return generateCodeQLFlowCondition_V2(
 		fn,
 		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
-			return getIdentities_FEFunc(fn, block)
+			return getIdentitiesByBlock_FEFunc(fn, block)
 		},
 		blocks,
 	)
@@ -3049,7 +3049,7 @@ func generateCodeQLFlowConditions_FEMethod(fn *FETypeMethod, blocks []*FlowBlock
 	return generateCodeQLFlowCondition_V2(
 		fn.Func,
 		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
-			return getIdentities_FEMethod(fn, block)
+			return getIdentitiesByBlock_FEMethod(fn, block)
 		},
 		blocks,
 	)
@@ -3067,59 +3067,7 @@ func gatherIdentitiesPerType(ids []*CodeQlIdentity) (recv *CodeQlIdentity, param
 	}
 	return
 }
-func generateCodeQLFlowCondition(idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
-	finalBuf := new(bytes.Buffer)
-	for blockIndex, block := range blocks {
-		inp, outp, err := idGetter(block)
-		if err != nil {
-			return "", err
-		}
-		if len(inp) == 0 {
-			return "", fmt.Errorf("error: no inp specified for block %v", blockIndex)
-		}
-		if len(outp) == 0 {
-			return "", fmt.Errorf("error: no outp specified for block %v", blockIndex)
-		}
 
-		buf := new(bytes.Buffer)
-		{ //inp:
-			buf.WriteString("(")
-			for i, in := range inp {
-				// TODO: add logic to do things like inp.isParameter([0,1,3])
-				if i == 0 {
-					buf.WriteString("inp." + in.Placeholder)
-				} else {
-					buf.WriteString(" or ")
-					buf.WriteString("inp." + in.Placeholder)
-				}
-			}
-			buf.WriteString(")")
-		}
-
-		buf.WriteString(" and ")
-		{ // outp:
-			buf.WriteString("(")
-			for i, out := range outp {
-				if i == 0 {
-					buf.WriteString("outp." + out.Placeholder)
-				} else {
-					buf.WriteString(" or ")
-					buf.WriteString("outp." + out.Placeholder)
-				}
-			}
-			buf.WriteString(")")
-		}
-
-		// write to finalBuf
-		if blockIndex > 0 {
-			finalBuf.WriteString("\nor\n")
-		}
-		finalBuf.WriteString("(")
-		buf.WriteTo(finalBuf)
-		finalBuf.WriteString(")")
-	}
-	return finalBuf.String(), nil
-}
 func generateCodeQLFlowCondition_V2(fn *FEFunc, idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
 	finalBuf := new(bytes.Buffer)
 	for blockIndex, block := range blocks {
@@ -3286,7 +3234,8 @@ func generateCodeQLFlowCondition_V2(fn *FEFunc, idGetter IdentityGetter, blocks 
 		buf.WriteTo(finalBuf)
 		finalBuf.WriteString(")")
 	}
-	return finalBuf.String(), nil
+
+	return "(" + finalBuf.String() + ")", nil
 }
 
 func validateBlockLen_FEFunc(fn *FEFunc, blocks ...*FlowBlock) error {
@@ -3307,7 +3256,9 @@ func validateBlockLen_FEFunc(fn *FEFunc, blocks ...*FlowBlock) error {
 	return nil
 }
 
-func getIdentities_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+// getIdentitiesByBlock_FEFunc gathers and returns the inp and outp identities
+// from the provided FEFunc based on the values of the FlowBlock `block`.
+func getIdentitiesByBlock_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 
 	lenParameters := len(fn.Parameters)
 
@@ -3368,7 +3319,7 @@ func validateBlockLen_FEMethod(fn *FETypeMethod, blocks ...*FlowBlock) error {
 
 	return nil
 }
-func getIdentities_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+func getIdentitiesByBlock_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
 
 	lenParameters := len(fe.Func.Parameters)
 
@@ -3422,34 +3373,6 @@ func getIdentities_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQlIdenti
 
 	return identitiesInp, identitiesOutp, nil
 }
-func mustGetFirstIdentity_Inp_FEFunc(fn *FEFunc) *CodeQlIdentity {
-	inp, _, err := getIdentities_FEFunc(fn, fn.CodeQL.Blocks[0])
-	if err != nil {
-		panic(err)
-	}
-	return inp[0]
-}
-func mustGetFirstIdentity_Outp_FEFunc(fn *FEFunc) *CodeQlIdentity {
-	_, outp, err := getIdentities_FEFunc(fn, fn.CodeQL.Blocks[0])
-	if err != nil {
-		panic(err)
-	}
-	return outp[0]
-}
-func mustGetFirstIdentity_Inp_FEMethod(fn *FETypeMethod) *CodeQlIdentity {
-	inp, _, err := getIdentities_FEMethod(fn, fn.CodeQL.Blocks[0])
-	if err != nil {
-		panic(err)
-	}
-	return inp[0]
-}
-func mustGetFirstIdentity_Outp_FEMethod(fn *FETypeMethod) *CodeQlIdentity {
-	_, outp, err := getIdentities_FEMethod(fn, fn.CodeQL.Blocks[0])
-	if err != nil {
-		panic(err)
-	}
-	return outp[0]
-}
 
 type StatementAndName struct {
 	Statement    *Statement
@@ -3457,7 +3380,7 @@ type StatementAndName struct {
 }
 
 // for each block, generate a golang test function for each inp and outp combination.
-func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
+func generateGoTestBlock_Func(file *File, fe *FEFunc) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FEFunc, so that the numbers in the variable names
 	// will stay the same as long as the FEFunc is the same.
@@ -3465,7 +3388,7 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
-		inps, outps, err := getIdentities_FEFunc(fe, block)
+		inps, outps, err := getIdentitiesByBlock_FEFunc(fe, block)
 		if err != nil {
 			panic(err)
 		}
@@ -3473,7 +3396,7 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 		for inpIndex, inp := range inps {
 			for outpIndex, outp := range outps {
 
-				childBlock := generate_Func(
+				childBlock := generateGoChildBlock_Func(
 					file,
 					fe,
 					inp,
@@ -3508,7 +3431,7 @@ func generateAll_Func(file *File, fe *FEFunc) []*StatementAndName {
 }
 
 // for each block, generate a golang test function for each inp and outp combination.
-func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
+func generateGoTestBlock_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FETypeMethod, so that the numbers in the variable names
 	// will stay the same as long as the FETypeMethod is the same.
@@ -3516,7 +3439,7 @@ func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 
 	children := make([]*StatementAndName, 0)
 	for blockIndex, block := range fe.CodeQL.Blocks {
-		inps, outps, err := getIdentities_FEMethod(fe, block)
+		inps, outps, err := getIdentitiesByBlock_FEMethod(fe, block)
 		if err != nil {
 			panic(err)
 		}
@@ -3524,7 +3447,7 @@ func generateAll_Method(file *File, fe *FETypeMethod) []*StatementAndName {
 		for inpIndex, inp := range inps {
 			for outpIndex, outp := range outps {
 
-				childBlock := generate_Method(
+				childBlock := generateChildBlock_Method(
 					file,
 					fe,
 					inp,
@@ -3570,7 +3493,7 @@ const (
 
 	CodeQL_TPL_Single_TypeMethod = `
 	// signature: {{.Func.Signature}}
-	this.(Method).hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
+	this.hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
 
 	CodeQL_TPL_Single_InterfaceMethod = `
 	// signature: {{.Func.Signature}}
@@ -3703,10 +3626,10 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		finalConditions := ""
 		if foundTypeMethods > 0 {
-			finalConditions += "\n// Methods:\n" + typeMethodsTempBuf.String()
+			finalConditions += typeMethodsTempBuf.String()
 		}
 		if foundInterfaceMethods > 0 {
-			finalConditions += "\n// Interfaces:\n" + interfaceMethodsTempBuf.String()
+			finalConditions += interfaceMethodsTempBuf.String()
 		}
 
 		if found > 0 {
