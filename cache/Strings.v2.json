@@ -125,7 +125,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Builder).WriteString(s string) (int, error)": {
       "Blocks": [

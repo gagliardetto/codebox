@@ -101,6 +101,18 @@
                false,
                true
             ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               true
+            ]
          }
       ],
       "IsEnabled": true
@@ -118,9 +130,21 @@
                false,
                true
             ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func AppendQuoteRuneToASCII(dst []byte, r rune) []byte": {
       "Blocks": [
@@ -137,7 +161,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func AppendQuoteRuneToGraphic(dst []byte, r rune) []byte": {
       "Blocks": [
@@ -154,7 +178,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func AppendQuoteToASCII(dst []byte, s string) []byte": {
       "Blocks": [
@@ -166,6 +190,18 @@
             ],
             "Outp": [
                false,
+               false,
+               true
+            ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
                false,
                true
             ]
@@ -183,6 +219,18 @@
             ],
             "Outp": [
                false,
+               false,
+               true
+            ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
                false,
                true
             ]
@@ -557,7 +605,7 @@
                false,
                true,
                false,
-               false,
+               true,
                false
             ]
          }

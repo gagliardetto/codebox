@@ -112,18 +112,18 @@
       "Blocks": [
          {
             "Inp": [
-               false,
+               true,
                false,
                false
             ],
             "Outp": [
                false,
-               false,
+               true,
                false
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func HasPrefix(p string, prefix string) bool": {
       "Blocks": [
@@ -261,16 +261,16 @@
       "Blocks": [
          {
             "Inp": [
-               false,
+               true,
                false
             ],
             "Outp": [
                false,
-               false
+               true
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func Walk(root string, walkFn WalkFunc) error": {
       "Blocks": [
