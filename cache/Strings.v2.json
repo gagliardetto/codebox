@@ -106,7 +106,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Builder).WriteRune(r rune) (int, error)": {
       "Blocks": [
@@ -216,7 +216,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).ReadRune() (ch rune, size int, err error)": {
       "Blocks": [
@@ -235,7 +235,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Reader).Reset(s string)": {
       "Blocks": [

@@ -101,18 +101,6 @@
                false,
                true
             ]
-         },
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               true,
-               false,
-               true
-            ]
          }
       ],
       "IsEnabled": true
@@ -193,18 +181,6 @@
                false,
                true
             ]
-         },
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               true,
-               false,
-               true
-            ]
          }
       ],
       "IsEnabled": true
@@ -219,18 +195,6 @@
             ],
             "Outp": [
                false,
-               false,
-               true
-            ]
-         },
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               true,
                false,
                true
             ]
@@ -510,7 +474,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func QuoteRuneToASCII(r rune) string": {
       "Blocks": [
@@ -525,7 +489,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func QuoteRuneToGraphic(r rune) string": {
       "Blocks": [
@@ -540,7 +504,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func QuoteToASCII(s string) string": {
       "Blocks": [
@@ -603,7 +567,7 @@
             "Outp": [
                false,
                false,
-               true,
+               false,
                false,
                true,
                false
