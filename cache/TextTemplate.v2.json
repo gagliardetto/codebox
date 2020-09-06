@@ -75,7 +75,7 @@
       "Blocks": [
          {
             "Inp": [
-               true,
+               false,
                false,
                true,
                false
@@ -94,7 +94,7 @@
       "Blocks": [
          {
             "Inp": [
-               true,
+               false,
                false,
                false,
                true,
@@ -433,7 +433,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ParseFiles(filenames ...string) (*Template, error)": {
       "Blocks": [
@@ -450,7 +450,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ParseGlob(pattern string) (*Template, error)": {
       "Blocks": [
@@ -467,7 +467,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func URLQueryEscaper(args ...interface{}) string": {
       "Blocks": [

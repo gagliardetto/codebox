@@ -14,7 +14,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (SpecialCase).ToTitle(r rune) rune": {
       "Blocks": [
@@ -31,7 +31,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (SpecialCase).ToUpper(r rune) rune": {
       "Blocks": [
@@ -48,7 +48,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func In(r rune, ranges ...*RangeTable) bool": {
       "Blocks": [
@@ -309,7 +309,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func To(_case int, r rune) rune": {
       "Blocks": [
@@ -326,7 +326,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ToLower(r rune) rune": {
       "Blocks": [
@@ -341,7 +341,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ToTitle(r rune) rune": {
       "Blocks": [
@@ -356,7 +356,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ToUpper(r rune) rune": {
       "Blocks": [
@@ -371,6 +371,6 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    }
 }

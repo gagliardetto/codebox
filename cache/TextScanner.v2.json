@@ -44,7 +44,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Scanner).Peek() rune": {
       "Blocks": [
@@ -59,7 +59,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Scanner).Pos() (pos Position)": {
       "Blocks": [
@@ -89,7 +89,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Scanner).TokenText() string": {
       "Blocks": [
@@ -134,6 +134,6 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    }
 }

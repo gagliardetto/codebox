@@ -14,7 +14,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func DecodeLastRuneInString(s string) (r rune, size int)": {
       "Blocks": [
@@ -31,7 +31,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func DecodeRune(p []byte) (r rune, size int)": {
       "Blocks": [
@@ -48,7 +48,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func DecodeRuneInString(s string) (r rune, size int)": {
       "Blocks": [
@@ -65,7 +65,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func EncodeRune(p []byte, r rune) int": {
       "Blocks": [

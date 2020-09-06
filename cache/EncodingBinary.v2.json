@@ -63,7 +63,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (ByteOrder).Uint16([]byte) uint16": {
       "Blocks": [
@@ -131,7 +131,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func PutVarint(buf []byte, x int64) int": {
       "Blocks": [
@@ -184,7 +184,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ReadVarint(r io.ByteReader) (int64, error)": {
       "Blocks": [

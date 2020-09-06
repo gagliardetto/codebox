@@ -50,7 +50,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).DefinedTemplates() string": {
       "Blocks": [
@@ -65,7 +65,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Delims(left string, right string) *Template": {
       "Blocks": [
@@ -84,13 +84,13 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Execute(wr io.Writer, data interface{}) error": {
       "Blocks": [
          {
             "Inp": [
-               true,
+               false,
                false,
                true,
                false
@@ -109,7 +109,7 @@
       "Blocks": [
          {
             "Inp": [
-               true,
+               false,
                false,
                false,
                true,
@@ -158,7 +158,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Name() string": {
       "Blocks": [
@@ -190,7 +190,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Option(opt ...string) *Template": {
       "Blocks": [
@@ -207,7 +207,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Parse(text string) (*Template, error)": {
       "Blocks": [
@@ -226,7 +226,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).ParseFiles(filenames ...string) (*Template, error)": {
       "Blocks": [
@@ -245,7 +245,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).ParseGlob(pattern string) (*Template, error)": {
       "Blocks": [
@@ -264,7 +264,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Template).Templates() []*Template": {
       "Blocks": [
@@ -279,7 +279,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func HTMLEscape(w io.Writer, b []byte)": {
       "Blocks": [
@@ -403,7 +403,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func New(name string) *Template": {
       "Blocks": [
@@ -435,7 +435,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ParseGlob(pattern string) (*Template, error)": {
       "Blocks": [
@@ -452,7 +452,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func URLQueryEscaper(args ...interface{}) string": {
       "Blocks": [
