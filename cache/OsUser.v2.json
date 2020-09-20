@@ -1,45 +1,5 @@
 {
-   "func (*Encoding).Decode(dst []byte, src []byte) (n int, err error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               true,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (*Encoding).DecodeString(s string) ([]byte, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (*Encoding).DecodedLen(n int) int": {
+   "func (*User).GroupIds() ([]string, error)": {
       "Blocks": [
          {
             "Inp": [
@@ -56,58 +16,7 @@
       ],
       "IsEnabled": false
    },
-   "func (*Encoding).Encode(dst []byte, src []byte)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true
-            ],
-            "Outp": [
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Encoding).EncodeToString(src []byte) string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Encoding).EncodedLen(n int) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (CorruptInputError).Error() string": {
+   "func (UnknownGroupError).Error() string": {
       "Blocks": [
          {
             "Inp": [
@@ -122,7 +31,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Encoding).Strict() *Encoding": {
+   "func (UnknownGroupIdError).Error() string": {
       "Blocks": [
          {
             "Inp": [
@@ -137,7 +46,52 @@
       ],
       "IsEnabled": false
    },
-   "func (Encoding).WithPadding(padding rune) *Encoding": {
+   "func (UnknownUserError).Error() string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (UnknownUserIdError).Error() string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Current() (*User, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Lookup(username string) (*User, error)": {
       "Blocks": [
          {
             "Inp": [
@@ -154,48 +108,50 @@
       ],
       "IsEnabled": false
    },
-   "func NewDecoder(enc *Encoding, r io.Reader) io.Reader": {
+   "func LookupGroup(name string) (*Group, error)": {
       "Blocks": [
          {
             "Inp": [
                false,
-               true,
+               false,
                false
             ],
             "Outp": [
                false,
                false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true
-            ],
-            "Outp": [
-               false,
-               true,
                false
             ]
          }
       ],
       "IsEnabled": false
    },
-   "func NewEncoding(encoder string) *Encoding": {
+   "func LookupGroupId(gid string) (*Group, error)": {
       "Blocks": [
          {
             "Inp": [
                false,
+               false,
                false
             ],
             "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func LookupId(uid string) (*User, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
                false,
                false
             ]

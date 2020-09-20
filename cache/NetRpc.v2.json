@@ -1,73 +1,5 @@
 {
-   "func (ColumnConverter).ColumnConverter(idx int) ValueConverter": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Conn).Begin() (Tx, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Conn).Close() error": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Conn).Prepare(query string) (Stmt, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (ConnBeginTx).BeginTx(ctx context.Context, opts TxOptions) (Tx, error)": {
+   "func (*Client).Call(serviceMethod string, args interface{}, reply interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -88,47 +20,7 @@
       ],
       "IsEnabled": false
    },
-   "func (ConnPrepareContext).PrepareContext(ctx context.Context, query string) (Stmt, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (Connector).Connect(context.Context) (Conn, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Connector).Driver() Driver": {
+   "func (*Client).Close() error": {
       "Blocks": [
          {
             "Inp": [
@@ -143,66 +35,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Driver).Open(name string) (Conn, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (DriverContext).OpenConnector(name string) (Connector, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Execer).Exec(query string, args []Value) (Result, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (ExecerContext).ExecContext(ctx context.Context, query string, args []NamedValue) (Result, error)": {
+   "func (*Client).Go(serviceMethod string, args interface{}, reply interface{}, done chan *Call) *Call": {
       "Blocks": [
          {
             "Inp": [
@@ -225,7 +58,22 @@
       ],
       "IsEnabled": false
    },
-   "func (NamedValueChecker).CheckNamedValue(*NamedValue) error": {
+   "func (*Server).Accept(lis net.Listener)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Server).HandleHTTP(rpcPath string, debugPath string)": {
       "Blocks": [
          {
             "Inp": [
@@ -242,45 +90,7 @@
       ],
       "IsEnabled": false
    },
-   "func (NotNull).ConvertValue(v interface{}) (Value, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (Null).ConvertValue(v interface{}) (Value, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (Pinger).Ping(ctx context.Context) error": {
+   "func (*Server).Register(rcvr interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -297,183 +107,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Queryer).Query(query string, args []Value) (Rows, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (QueryerContext).QueryContext(ctx context.Context, query string, args []NamedValue) (Rows, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Result).LastInsertId() (int64, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Result).RowsAffected() (int64, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Rows).Close() error": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Rows).Columns() []string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Rows).Next(dest []Value) error": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (RowsAffected).LastInsertId() (int64, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (RowsAffected).RowsAffected() (int64, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (RowsColumnTypeDatabaseTypeName).ColumnTypeDatabaseTypeName(index int) string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (RowsColumnTypeLength).ColumnTypeLength(index int) (length int64, ok bool)": {
+   "func (*Server).RegisterName(name string, rcvr interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -492,7 +126,120 @@
       ],
       "IsEnabled": false
    },
-   "func (RowsColumnTypeNullable).ColumnTypeNullable(index int) (nullable bool, ok bool)": {
+   "func (*Server).ServeCodec(codec ServerCodec)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Server).ServeConn(conn io.ReadWriteCloser)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Server).ServeHTTP(w net/http.ResponseWriter, req *net/http.Request)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Server).ServeRequest(codec ServerCodec) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ClientCodec).Close() error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ClientCodec).ReadResponseBody(interface{}) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ClientCodec).ReadResponseHeader(*Response) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (ClientCodec).WriteRequest(*Request, interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -511,20 +258,14 @@
       ],
       "IsEnabled": false
    },
-   "func (RowsColumnTypePrecisionScale).ColumnTypePrecisionScale(index int) (precision int64, scale int64, ok bool)": {
+   "func (ServerCodec).Close() error": {
       "Blocks": [
          {
             "Inp": [
                false,
-               false,
-               false,
-               false,
                false
             ],
             "Outp": [
-               false,
-               false,
-               false,
                false,
                false
             ]
@@ -532,7 +273,7 @@
       ],
       "IsEnabled": false
    },
-   "func (RowsColumnTypeScanType).ColumnTypeScanType(index int) reflect.Type": {
+   "func (ServerCodec).ReadRequestBody(interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -549,37 +290,7 @@
       ],
       "IsEnabled": false
    },
-   "func (RowsNextResultSet).HasNextResultSet() bool": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (RowsNextResultSet).NextResultSet() error": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (SessionResetter).ResetSession(ctx context.Context) error": {
+   "func (ServerCodec).ReadRequestHeader(*Request) error": {
       "Blocks": [
          {
             "Inp": [
@@ -596,22 +307,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Stmt).Close() error": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Stmt).Exec(args []Value) (Result, error)": {
+   "func (ServerCodec).WriteResponse(*Response, interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -630,7 +326,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Stmt).NumInput() int": {
+   "func (ServerError).Error() string": {
       "Blocks": [
          {
             "Inp": [
@@ -645,7 +341,20 @@
       ],
       "IsEnabled": false
    },
-   "func (Stmt).Query(args []Value) (Rows, error)": {
+   "func Accept(lis net.Listener)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Dial(network string, address string) (*Client, error)": {
       "Blocks": [
          {
             "Inp": [
@@ -664,7 +373,26 @@
       ],
       "IsEnabled": false
    },
-   "func (StmtExecContext).ExecContext(ctx context.Context, args []NamedValue) (Result, error)": {
+   "func DialHTTP(network string, address string) (*Client, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func DialHTTPPath(network string, address string, path string) (*Client, error)": {
       "Blocks": [
          {
             "Inp": [
@@ -685,28 +413,16 @@
       ],
       "IsEnabled": false
    },
-   "func (StmtQueryContext).QueryContext(ctx context.Context, args []NamedValue) (Rows, error)": {
+   "func HandleHTTP()": {
       "Blocks": [
          {
-            "Inp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
+            "Inp": [],
+            "Outp": []
          }
       ],
       "IsEnabled": false
    },
-   "func (Tx).Commit() error": {
+   "func NewClient(conn io.ReadWriteCloser) *Client": {
       "Blocks": [
          {
             "Inp": [
@@ -721,7 +437,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Tx).Rollback() error": {
+   "func NewClientWithCodec(codec ClientCodec) *Client": {
       "Blocks": [
          {
             "Inp": [
@@ -736,7 +452,20 @@
       ],
       "IsEnabled": false
    },
-   "func (Validator).IsValid() bool": {
+   "func NewServer() *Server": {
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Register(rcvr interface{}) error": {
       "Blocks": [
          {
             "Inp": [
@@ -751,50 +480,16 @@
       ],
       "IsEnabled": false
    },
-   "func (ValueConverter).ConvertValue(v interface{}) (Value, error)": {
+   "func RegisterName(name string, rcvr interface{}) error": {
       "Blocks": [
          {
             "Inp": [
                false,
-               true,
                false,
                false
             ],
             "Outp": [
                false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (Valuer).Value() (Value, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func IsScanValue(v interface{}) bool": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
                false,
                false
             ]
@@ -802,7 +497,33 @@
       ],
       "IsEnabled": false
    },
-   "func IsValue(v interface{}) bool": {
+   "func ServeCodec(codec ServerCodec)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ServeConn(conn io.ReadWriteCloser)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ServeRequest(codec ServerCodec) error": {
       "Blocks": [
          {
             "Inp": [

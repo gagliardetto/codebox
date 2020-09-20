@@ -72,6 +72,25 @@
       ],
       "IsEnabled": true
    },
+   "func (*Map).LoadAndDelete(key interface{}) (value interface{}, loaded bool)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
    "func (*Map).LoadOrStore(key interface{}, value interface{}) (actual interface{}, loaded bool)": {
       "Blocks": [
          {
@@ -93,7 +112,7 @@
          {
             "Inp": [
                false,
-               false,
+               true,
                true,
                false,
                false
@@ -122,7 +141,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Map).Store(key interface{}, value interface{})": {
       "Blocks": [

@@ -755,16 +755,16 @@
       "Blocks": [
          {
             "Inp": [
-               false,
+               true,
                false
             ],
             "Outp": [
                false,
-               false
+               true
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func (*Transport).CloseIdleConnections()": {
       "Blocks": [
@@ -1268,7 +1268,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Error(w ResponseWriter, error string, code int)": {
       "Blocks": [
@@ -1457,7 +1457,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func NewRequestWithContext(ctx context.Context, method string, url string, body io.Reader) (*Request, error)": {
       "Blocks": [
@@ -1480,7 +1480,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func NewServeMux() *ServeMux": {
       "Blocks": [

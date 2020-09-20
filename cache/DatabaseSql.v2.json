@@ -192,7 +192,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Conn).QueryContext(ctx context.Context, query string, args ...interface{}) (*Rows, error)": {
       "Blocks": [
@@ -435,7 +435,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*DB).PrepareContext(ctx context.Context, query string) (*Stmt, error)": {
       "Blocks": [
@@ -456,7 +456,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*DB).Query(query string, args ...interface{}) (*Rows, error)": {
       "Blocks": [
@@ -535,6 +535,21 @@
                false,
                false,
                false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*DB).SetConnMaxIdleTime(d time.Duration)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
                false,
                false
             ]
@@ -658,11 +673,11 @@
          {
             "Inp": [
                false,
-               false,
+               true,
                false
             ],
             "Outp": [
-               false,
+               true,
                false,
                false
             ]
@@ -675,11 +690,28 @@
          {
             "Inp": [
                false,
-               false,
+               true,
                false
             ],
             "Outp": [
+               true,
                false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": true
+   },
+   "func (*NullTime).Scan(value interface{}) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
                false,
                false
             ]
@@ -687,16 +719,14 @@
       ],
       "IsEnabled": false
    },
-   "func (*NullTime).Scan(value interface{}) error": {
+   "func (*Row).Err() error": {
       "Blocks": [
          {
             "Inp": [
                false,
-               false,
                false
             ],
             "Outp": [
-               false,
                false,
                false
             ]
@@ -708,18 +738,18 @@
       "Blocks": [
          {
             "Inp": [
-               false,
+               true,
                false,
                false
             ],
             "Outp": [
                false,
-               false,
+               true,
                false
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func (*Rows).Close() error": {
       "Blocks": [
@@ -819,18 +849,18 @@
       "Blocks": [
          {
             "Inp": [
-               false,
+               true,
                false,
                false
             ],
             "Outp": [
                false,
-               false,
+               true,
                false
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func (*Stmt).Close() error": {
       "Blocks": [
@@ -1039,7 +1069,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Tx).PrepareContext(ctx context.Context, query string) (*Stmt, error)": {
       "Blocks": [
@@ -1060,7 +1090,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Tx).Query(query string, args ...interface{}) (*Rows, error)": {
       "Blocks": [
@@ -1176,7 +1206,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Tx).StmtContext(ctx context.Context, stmt *Stmt) *Stmt": {
       "Blocks": [
@@ -1195,7 +1225,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IsolationLevel).String() string": {
       "Blocks": [
@@ -1353,17 +1383,17 @@
          {
             "Inp": [
                false,
-               false,
+               true,
                false
             ],
             "Outp": [
-               false,
+               true,
                false,
                false
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func Drivers() []string": {
       "Blocks": [

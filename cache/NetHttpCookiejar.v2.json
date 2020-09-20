@@ -1,5 +1,56 @@
 {
-   "func (CorruptInputError).Error() string": {
+   "func (*Jar).Cookies(u *net/url.URL) (cookies []*net/http.Cookie)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Jar).SetCookies(u *net/url.URL, cookies []*net/http.Cookie)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (PublicSuffixList).PublicSuffix(domain string) string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (PublicSuffixList).String() string": {
       "Blocks": [
          {
             "Inp": [
@@ -14,85 +65,17 @@
       ],
       "IsEnabled": false
    },
-   "func Decode(dst []byte, src []byte, flush bool) (ndst int, nsrc int, err error)": {
+   "func New(o *Options) (*Jar, error)": {
       "Blocks": [
          {
             "Inp": [
-               false,
-               true,
-               false,
                false,
                false,
                false
             ],
             "Outp": [
-               true,
                false,
                false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func Encode(dst []byte, src []byte) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               true,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func MaxEncodedLen(n int) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func NewDecoder(r io.Reader) io.Reader": {
-      "Blocks": [
-         {
-            "Inp": [
-               true,
-               false
-            ],
-            "Outp": [
-               false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func NewEncoder(w io.Writer) io.WriteCloser": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true
-            ],
-            "Outp": [
-               true,
                false
             ]
          }

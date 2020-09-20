@@ -12,7 +12,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).Expand(dst []byte, template []byte, src []byte, match []int) []byte": {
       "Blocks": [
@@ -113,7 +113,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindAllString(s string, n int) []string": {
       "Blocks": [
@@ -151,7 +151,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindAllStringSubmatch(s string, n int) [][]string": {
       "Blocks": [
@@ -189,7 +189,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindAllSubmatch(b []byte, n int) [][][]byte": {
       "Blocks": [
@@ -227,7 +227,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindIndex(b []byte) (loc []int)": {
       "Blocks": [
@@ -244,7 +244,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindReaderIndex(r io.RuneReader) (loc []int)": {
       "Blocks": [
@@ -261,7 +261,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindReaderSubmatchIndex(r io.RuneReader) []int": {
       "Blocks": [
@@ -278,7 +278,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindString(s string) string": {
       "Blocks": [
@@ -312,7 +312,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindStringSubmatch(s string) []string": {
       "Blocks": [
@@ -346,7 +346,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).FindSubmatch(b []byte) [][]byte": {
       "Blocks": [
@@ -380,7 +380,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Regexp).LiteralPrefix() (prefix string, complete bool)": {
       "Blocks": [
@@ -626,6 +626,23 @@
       ],
       "IsEnabled": false
    },
+   "func (*Regexp).SubexpIndex(name string) int": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
    "func (*Regexp).SubexpNames() []string": {
       "Blocks": [
          {
@@ -656,7 +673,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func CompilePOSIX(expr string) (*Regexp, error)": {
       "Blocks": [
@@ -673,7 +690,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Match(pattern string, b []byte) (matched bool, err error)": {
       "Blocks": [
@@ -745,7 +762,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func MustCompilePOSIX(str string) *Regexp": {
       "Blocks": [
@@ -760,7 +777,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func QuoteMeta(s string) string": {
       "Blocks": [

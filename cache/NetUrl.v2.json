@@ -59,6 +59,21 @@
       ],
       "IsEnabled": false
    },
+   "func (*URL).EscapedFragment() string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
    "func (*URL).EscapedPath() string": {
       "Blocks": [
          {
@@ -169,6 +184,21 @@
          }
       ],
       "IsEnabled": true
+   },
+   "func (*URL).Redacted() string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
    },
    "func (*URL).RequestURI() string": {
       "Blocks": [

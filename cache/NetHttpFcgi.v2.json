@@ -1,0 +1,34 @@
+{
+   "func ProcessEnv(r *net/http.Request) map[string]string": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Serve(l net.Listener, handler net/http.Handler) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   }
+}

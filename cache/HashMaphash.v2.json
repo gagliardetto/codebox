@@ -1,45 +1,78 @@
 {
-   "func (*Encoding).Decode(dst []byte, src []byte) (n int, err error)": {
+   "func (*Hash).BlockSize() int": {
       "Blocks": [
          {
             "Inp": [
-               false,
-               false,
-               true,
                false,
                false
             ],
             "Outp": [
                false,
-               true,
-               false,
-               false,
                false
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
-   "func (*Encoding).DecodeString(s string) ([]byte, error)": {
+   "func (*Hash).Reset()": {
       "Blocks": [
          {
             "Inp": [
-               false,
-               true,
+               false
+            ],
+            "Outp": [
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Hash).Seed() Seed": {
+      "Blocks": [
+         {
+            "Inp": [
                false,
                false
             ],
             "Outp": [
                false,
-               false,
-               true,
                false
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
-   "func (*Encoding).DecodedLen(n int) int": {
+   "func (*Hash).SetSeed(seed Seed)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Hash).Size() int": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Hash).Sum(b []byte) []byte": {
       "Blocks": [
          {
             "Inp": [
@@ -56,58 +89,7 @@
       ],
       "IsEnabled": false
    },
-   "func (*Encoding).Encode(dst []byte, src []byte)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true
-            ],
-            "Outp": [
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Encoding).EncodeToString(src []byte) string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Encoding).EncodedLen(n int) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (CorruptInputError).Error() string": {
+   "func (*Hash).Sum64() uint64": {
       "Blocks": [
          {
             "Inp": [
@@ -122,14 +104,18 @@
       ],
       "IsEnabled": false
    },
-   "func (Encoding).Strict() *Encoding": {
+   "func (*Hash).Write(b []byte) (int, error)": {
       "Blocks": [
          {
             "Inp": [
                false,
+               false,
+               false,
                false
             ],
             "Outp": [
+               false,
+               false,
                false,
                false
             ]
@@ -137,7 +123,7 @@
       ],
       "IsEnabled": false
    },
-   "func (Encoding).WithPadding(padding rune) *Encoding": {
+   "func (*Hash).WriteByte(b byte) error": {
       "Blocks": [
          {
             "Inp": [
@@ -154,49 +140,32 @@
       ],
       "IsEnabled": false
    },
-   "func NewDecoder(enc *Encoding, r io.Reader) io.Reader": {
+   "func (*Hash).WriteString(s string) (int, error)": {
       "Blocks": [
          {
             "Inp": [
                false,
-               true,
+               false,
+               false,
                false
             ],
             "Outp": [
                false,
                false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser": {
-      "Blocks": [
-         {
-            "Inp": [
                false,
-               false,
-               true
-            ],
-            "Outp": [
-               false,
-               true,
                false
             ]
          }
       ],
       "IsEnabled": false
    },
-   "func NewEncoding(encoder string) *Encoding": {
+   "func MakeSeed() Seed": {
       "Blocks": [
          {
             "Inp": [
-               false,
                false
             ],
             "Outp": [
-               false,
                false
             ]
          }

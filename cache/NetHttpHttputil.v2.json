@@ -46,6 +46,18 @@
                true,
                true
             ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
+            ]
          }
       ],
       "IsEnabled": true
@@ -145,6 +157,18 @@
                false,
                true,
                true
+            ]
+         },
+         {
+            "Inp": [
+               false,
+               true,
+               false
+            ],
+            "Outp": [
+               true,
+               false,
+               false
             ]
          }
       ],

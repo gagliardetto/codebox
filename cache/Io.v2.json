@@ -211,7 +211,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (ByteScanner).UnreadByte() error": {
       "Blocks": [
@@ -243,7 +243,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (Closer).Close() error": {
       "Blocks": [
@@ -336,7 +336,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (RuneScanner).UnreadRune() error": {
       "Blocks": [

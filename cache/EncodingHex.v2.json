@@ -78,7 +78,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Dumper(w io.Writer) io.WriteCloser": {
       "Blocks": [
@@ -93,7 +93,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Encode(dst []byte, src []byte) int": {
       "Blocks": [
@@ -110,7 +110,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func EncodeToString(src []byte) string": {
       "Blocks": [
@@ -125,7 +125,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func EncodedLen(n int) int": {
       "Blocks": [
@@ -170,6 +170,6 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    }
 }

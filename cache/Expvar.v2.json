@@ -42,7 +42,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Float).Value() float64": {
       "Blocks": [
@@ -102,7 +102,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Int).Value() int64": {
       "Blocks": [
@@ -181,7 +181,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Map).Get(key string) Var": {
       "Blocks": [
@@ -305,7 +305,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (Func).Value() interface{}": {
       "Blocks": [
@@ -363,7 +363,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Handler() net/http.Handler": {
       "Blocks": [

@@ -276,7 +276,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*IPConn).ReadFrom(b []byte) (int, Addr, error)": {
       "Blocks": [
@@ -488,7 +488,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*Interface).Addrs() ([]Addr, error)": {
       "Blocks": [
@@ -708,6 +708,29 @@
       ],
       "IsEnabled": false
    },
+   "func (*Resolver).LookupIP(ctx context.Context, network string, host string) ([]IP, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
    "func (*Resolver).LookupIPAddr(ctx context.Context, host string) ([]IPAddr, error)": {
       "Blocks": [
          {
@@ -870,7 +893,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*TCPConn).CloseRead() error": {
       "Blocks": [
@@ -1380,7 +1403,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*UnixConn).CloseRead() error": {
       "Blocks": [
@@ -1938,7 +1961,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (HardwareAddr).String() string": {
       "Blocks": [
@@ -1953,7 +1976,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IP).DefaultMask() IPMask": {
       "Blocks": [
@@ -2139,7 +2162,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IP).To16() IP": {
       "Blocks": [
@@ -2201,7 +2224,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (InvalidAddrError).Error() string": {
       "Blocks": [
@@ -2660,7 +2683,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func FilePacketConn(f *os.File) (c PacketConn, err error)": {
       "Blocks": [
@@ -2710,7 +2733,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func IPv4Mask(a byte, b byte, c byte, d byte) IPMask": {
       "Blocks": [
@@ -2731,7 +2754,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func InterfaceAddrs() ([]Addr, error)": {
       "Blocks": [

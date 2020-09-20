@@ -67,7 +67,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (ScanState).SkipSpace()": {
       "Blocks": [

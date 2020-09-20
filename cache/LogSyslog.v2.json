@@ -1,45 +1,5 @@
 {
-   "func (*Encoding).Decode(dst []byte, src []byte) (n int, err error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               true,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (*Encoding).DecodeString(s string) ([]byte, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func (*Encoding).DecodedLen(n int) int": {
+   "func (*Writer).Alert(m string) error": {
       "Blocks": [
          {
             "Inp": [
@@ -56,41 +16,22 @@
       ],
       "IsEnabled": false
    },
-   "func (*Encoding).Encode(dst []byte, src []byte)": {
+   "func (*Writer).Close() error": {
       "Blocks": [
          {
             "Inp": [
                false,
-               false,
-               true
+               false
             ],
             "Outp": [
                false,
-               true,
                false
             ]
          }
       ],
       "IsEnabled": false
    },
-   "func (*Encoding).EncodeToString(src []byte) string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               false,
-               false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Encoding).EncodedLen(n int) int": {
+   "func (*Writer).Crit(m string) error": {
       "Blocks": [
          {
             "Inp": [
@@ -107,37 +48,7 @@
       ],
       "IsEnabled": false
    },
-   "func (CorruptInputError).Error() string": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Encoding).Strict() *Encoding": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (Encoding).WithPadding(padding rune) *Encoding": {
+   "func (*Writer).Debug(m string) error": {
       "Blocks": [
          {
             "Inp": [
@@ -154,48 +65,164 @@
       ],
       "IsEnabled": false
    },
-   "func NewDecoder(enc *Encoding, r io.Reader) io.Reader": {
+   "func (*Writer).Emerg(m string) error": {
       "Blocks": [
          {
             "Inp": [
                false,
-               true,
+               false,
                false
             ],
             "Outp": [
                false,
                false,
-               true
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               true
-            ],
-            "Outp": [
-               false,
-               true,
                false
             ]
          }
       ],
       "IsEnabled": false
    },
-   "func NewEncoding(encoder string) *Encoding": {
+   "func (*Writer).Err(m string) error": {
       "Blocks": [
          {
             "Inp": [
                false,
+               false,
                false
             ],
             "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Writer).Info(m string) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Writer).Notice(m string) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Writer).Warning(m string) error": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func (*Writer).Write(b []byte) (int, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func Dial(network string, raddr string, priority Priority, tag string) (*Writer, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func New(priority Priority, tag string) (*Writer, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func NewLogger(p Priority, logFlag int) (*log.Logger, error)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false,
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false,
                false,
                false
             ]

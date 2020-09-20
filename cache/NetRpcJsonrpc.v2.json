@@ -1,12 +1,16 @@
 {
-   "func (CorruptInputError).Error() string": {
+   "func Dial(network string, address string) (*net/rpc.Client, error)": {
       "Blocks": [
          {
             "Inp": [
                false,
+               false,
+               false,
                false
             ],
             "Outp": [
+               false,
+               false,
                false,
                false
             ]
@@ -14,62 +18,7 @@
       ],
       "IsEnabled": false
    },
-   "func Decode(dst []byte, src []byte, flush bool) (ndst int, nsrc int, err error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               true,
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": true
-   },
-   "func Encode(dst []byte, src []byte) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               true,
-               false
-            ],
-            "Outp": [
-               true,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func MaxEncodedLen(n int) int": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false
-            ],
-            "Outp": [
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func NewDecoder(r io.Reader) io.Reader": {
+   "func NewClient(conn io.ReadWriteCloser) *net/rpc.Client": {
       "Blocks": [
          {
             "Inp": [
@@ -82,17 +31,45 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
-   "func NewEncoder(w io.Writer) io.WriteCloser": {
+   "func NewClientCodec(conn io.ReadWriteCloser) net/rpc.ClientCodec": {
       "Blocks": [
          {
             "Inp": [
                false,
-               true
+               false
             ],
             "Outp": [
-               true,
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func NewServerCodec(conn io.ReadWriteCloser) net/rpc.ServerCodec": {
+      "Blocks": [
+         {
+            "Inp": [
+               false,
+               false
+            ],
+            "Outp": [
+               false,
+               false
+            ]
+         }
+      ],
+      "IsEnabled": false
+   },
+   "func ServeConn(conn io.ReadWriteCloser)": {
+      "Blocks": [
+         {
+            "Inp": [
+               false
+            ],
+            "Outp": [
                false
             ]
          }
