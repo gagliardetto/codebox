@@ -246,7 +246,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (*IPAddr).Network() string": {
       "Blocks": [
@@ -698,29 +698,6 @@
                false
             ],
             "Outp": [
-               false,
-               false,
-               false,
-               false,
-               false
-            ]
-         }
-      ],
-      "IsEnabled": false
-   },
-   "func (*Resolver).LookupIP(ctx context.Context, network string, host string) ([]IP, error)": {
-      "Blocks": [
-         {
-            "Inp": [
-               false,
-               false,
-               false,
-               false,
-               false,
-               false
-            ],
-            "Outp": [
-               false,
                false,
                false,
                false,
@@ -3169,7 +3146,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ParseIP(s string) IP": {
       "Blocks": [
@@ -3184,7 +3161,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func ParseMAC(s string) (hw HardwareAddr, err error)": {
       "Blocks": [
@@ -3201,7 +3178,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Pipe() (Conn, Conn)": {
       "Blocks": [
