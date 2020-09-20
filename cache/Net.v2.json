@@ -2107,7 +2107,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IP).Mask(mask IPMask) IP": {
       "Blocks": [
@@ -2154,7 +2154,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IP).To4() IP": {
       "Blocks": [
@@ -2169,7 +2169,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (IPMask).Size() (ones int, bits int)": {
       "Blocks": [
