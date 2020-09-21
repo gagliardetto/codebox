@@ -133,7 +133,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (SignerOpts).HashFunc() Hash": {
       "Blocks": [

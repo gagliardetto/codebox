@@ -35,7 +35,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func GenerateKey(c crypto/elliptic.Curve, rand io.Reader) (*PrivateKey, error)": {
       "Blocks": [

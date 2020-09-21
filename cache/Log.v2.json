@@ -238,12 +238,12 @@
       "Blocks": [
          {
             "Inp": [
-               false,
-               true
-            ],
-            "Outp": [
                true,
                false
+            ],
+            "Outp": [
+               false,
+               true
             ]
          }
       ],

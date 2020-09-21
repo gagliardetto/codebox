@@ -50,7 +50,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func GenerateKey(rand io.Reader) (PublicKey, PrivateKey, error)": {
       "Blocks": [
@@ -101,7 +101,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func Verify(publicKey PublicKey, message []byte, sig []byte) bool": {
       "Blocks": [

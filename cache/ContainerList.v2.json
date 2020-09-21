@@ -12,7 +12,7 @@
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func (*Element).Prev() *Element": {
       "Blocks": [
@@ -27,7 +27,7 @@
             ]
          }
       ],
-      "IsEnabled": false
+      "IsEnabled": true
    },
    "func (*List).Back() *Element": {
       "Blocks": [

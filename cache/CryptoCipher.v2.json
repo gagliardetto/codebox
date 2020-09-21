@@ -75,7 +75,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (Block).BlockSize() int": {
       "Blocks": [
@@ -124,7 +124,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (BlockMode).BlockSize() int": {
       "Blocks": [
@@ -156,7 +156,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (Stream).XORKeyStream(dst []byte, src []byte)": {
       "Blocks": [
@@ -173,7 +173,7 @@
             ]
          }
       ],
-      "IsEnabled": true
+      "IsEnabled": false
    },
    "func (StreamReader).Read(dst []byte) (n int, err error)": {
       "Blocks": [
