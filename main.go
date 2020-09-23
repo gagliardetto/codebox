@@ -3493,11 +3493,11 @@ const (
 
 	CodeQL_TPL_Single_TypeMethod = `
 	// signature: {{.Func.Signature}}
-	this.hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
+	hasQualifiedName("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
 
 	CodeQL_TPL_Single_InterfaceMethod = `
 	// signature: {{.Func.Signature}}
-	this.implements("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
+	implements("{{ .Receiver.PkgPath }}", "{{ .Receiver.TypeName }}", "{{ .Func.Name }}") and {{ .CodeQL.GeneratedConditions }}`
 )
 
 type CompressedTemplateValue struct {
