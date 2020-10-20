@@ -7,12 +7,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"go/token"
 	"go/types"
 	"os"
 	"path"
-	"path/filepath"
-	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -20,11 +17,12 @@ import (
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/codebox/scanner"
+	"github.com/gagliardetto/feparser"
 	. "github.com/gagliardetto/utilz"
 	"github.com/gin-gonic/gin"
 )
 
-type CacheType map[string]*CodeQlFinalVals
+type CacheType map[string]*feparser.CodeQlFinalVals
 
 var (
 	mu = &sync.RWMutex{}
@@ -74,89 +72,24 @@ func main() {
 		// folder for all folders for assets:
 		MustCreateFolderIfNotExists(generatedDir, 0750)
 	}
-
-	feModule := &FEModule{
-		Funcs:            make([]*FEFunc, 0),
-		TypeMethods:      make([]*FETypeMethod, 0),
-		InterfaceMethods: make([]*FEInterfaceMethod, 0),
-	}
-
 	pk := pks[0]
-
 	// compose the feModule:
 	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
-	{
-		feModule.Name = pk.Name
-		feModule.ID = pk.Path
-		feModule.PkgPath = scanner.RemoveGoSrcClonePath(pk.Path)
-		feModule.PkgName = pk.Name
-
-		for _, fn := range pk.Funcs {
-			if fn.Receiver == nil {
-				f := getFEFunc(fn)
-				// TODO: what to do with aliases???
-				f.PkgPath = feModule.PkgPath
-				feModule.Funcs = append(feModule.Funcs, f)
-			}
-		}
-		for _, mt := range pk.Methods {
-			meth := getFETypeMethod(mt, pk.Funcs)
-			if meth != nil {
-				feModule.TypeMethods = append(feModule.TypeMethods, meth)
-			}
-		}
-		for _, it := range pk.Interfaces {
-			feModule.InterfaceMethods = append(feModule.InterfaceMethods, getAllFEInterfaceMethods(it)...)
-		}
+	feModule, err := feparser.Load(pk)
+	if err != nil {
+		panic(err)
 	}
 
-	// Sort funcs by name:
-	sort.Slice(feModule.Funcs, func(i, j int) bool {
-		return feModule.Funcs[i].Name < feModule.Funcs[j].Name
-	})
-	// Sort type methods by receiver:
-	sort.Slice(feModule.TypeMethods, func(i, j int) bool {
-		// If same receiver...
-		if feModule.TypeMethods[i].Receiver.QualifiedName == feModule.TypeMethods[j].Receiver.QualifiedName {
-			// ... sort by func name:
-			return feModule.TypeMethods[i].Func.Name < feModule.TypeMethods[j].Func.Name
-		}
-		return feModule.TypeMethods[i].Receiver.QualifiedName < feModule.TypeMethods[j].Receiver.QualifiedName
-	})
-	// Sort interface methods by receiver:
-	sort.Slice(feModule.InterfaceMethods, func(i, j int) bool {
-		// If same receiver...
-		if feModule.InterfaceMethods[i].Receiver.QualifiedName == feModule.InterfaceMethods[j].Receiver.QualifiedName {
-			// ... sort by func name:
-			return feModule.InterfaceMethods[i].Func.Name < feModule.InterfaceMethods[j].Func.Name
-		}
-		return feModule.InterfaceMethods[i].Receiver.QualifiedName < feModule.InterfaceMethods[j].Receiver.QualifiedName
-	})
-
-	{ // Deduplicate:
-		feModule.Funcs = DeduplicateSlice(feModule.Funcs, func(i int) string {
-			return feModule.Funcs[i].Signature
-		}).([]*FEFunc)
-
-		feModule.TypeMethods = DeduplicateSlice(feModule.TypeMethods, func(i int) string {
-			return feModule.TypeMethods[i].Func.Signature
-		}).([]*FETypeMethod)
-
-		feModule.InterfaceMethods = DeduplicateSlice(feModule.InterfaceMethods, func(i int) string {
-			return feModule.InterfaceMethods[i].Func.Signature
-		}).([]*FEInterfaceMethod)
-	}
-
-	cacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".v2.json")
+	cacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".v2.json")
 	cacheExists := MustFileExists(cacheFilepath)
 	{ // Load pointer blocks from cache:
 		// try to use DEPRECATED cache:
-		deprecatedCacheFilepath := path.Join(cacheDir, FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
+		deprecatedCacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".json")
 		deprecatedCacheExists := MustFileExists(deprecatedCacheFilepath)
 
 		canLoadFromDeprecatedCache := !cacheExists && deprecatedCacheExists
 		if canLoadFromDeprecatedCache {
-			tempDeprecatedFeModule := &DEPRECATEDFEModule{}
+			tempDeprecatedFeModule := &feparser.DEPRECATEDFEModule{}
 			// Load cache:
 			Infof("Loading cached feModule from %q", deprecatedCacheFilepath)
 			err := LoadJSON(tempDeprecatedFeModule, deprecatedCacheFilepath)
@@ -164,7 +97,7 @@ func main() {
 				panic(err)
 			}
 
-			findLatestFunc := func(signature string) *FEFunc {
+			findLatestFunc := func(signature string) *feparser.FEFunc {
 				for _, latest := range feModule.Funcs {
 					if latest.Signature == signature {
 						return latest
@@ -172,7 +105,7 @@ func main() {
 				}
 				return nil
 			}
-			findLatestTypeMethod := func(signature string) *FETypeMethod {
+			findLatestTypeMethod := func(signature string) *feparser.FETypeMethod {
 				for _, latest := range feModule.TypeMethods {
 					if latest.Func.Signature == signature {
 						return latest
@@ -180,7 +113,7 @@ func main() {
 				}
 				return nil
 			}
-			findLatestInterfaceMethod := func(signature string) *FEInterfaceMethod {
+			findLatestInterfaceMethod := func(signature string) *feparser.FEInterfaceMethod {
 				for _, latest := range feModule.InterfaceMethods {
 					if latest.Func.Signature == signature {
 						return latest
@@ -202,10 +135,10 @@ func main() {
 						{
 							// Initialize block:
 							width := len(latest.Parameters) + len(latest.Results)
-							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = make([]*feparser.FlowBlock, 0)
 							latest.CodeQL.Blocks = append(
 								latest.CodeQL.Blocks,
-								&FlowBlock{
+								&feparser.FlowBlock{
 									Inp:  make([]bool, width),
 									Outp: make([]bool, width),
 								},
@@ -215,18 +148,18 @@ func main() {
 							{
 								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Inp[inp.Index] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Parameters)] = true
 								}
 							}
 							{
 								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Outp[outp.Index] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Parameters)] = true
 								}
 							}
@@ -246,10 +179,10 @@ func main() {
 						{
 							// Initialize block:
 							width := 1 + len(latest.Func.Parameters) + len(latest.Func.Results)
-							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = make([]*feparser.FlowBlock, 0)
 							latest.CodeQL.Blocks = append(
 								latest.CodeQL.Blocks,
-								&FlowBlock{
+								&feparser.FlowBlock{
 									Inp:  make([]bool, width),
 									Outp: make([]bool, width),
 								},
@@ -259,22 +192,22 @@ func main() {
 							{
 								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
-								case ElementReceiver:
+								case feparser.ElementReceiver:
 									latest.CodeQL.Blocks[0].Inp[0] = true
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Inp[inp.Index+1] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Func.Parameters)+1] = true
 								}
 							}
 							{
 								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
-								case ElementReceiver:
+								case feparser.ElementReceiver:
 									latest.CodeQL.Blocks[0].Outp[0] = true
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Outp[outp.Index+1] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Func.Parameters)+1] = true
 								}
 							}
@@ -293,10 +226,10 @@ func main() {
 						{
 							// Initialize block:
 							width := 1 + len(latest.Func.Parameters) + len(latest.Func.Results)
-							latest.CodeQL.Blocks = make([]*FlowBlock, 0)
+							latest.CodeQL.Blocks = make([]*feparser.FlowBlock, 0)
 							latest.CodeQL.Blocks = append(
 								latest.CodeQL.Blocks,
-								&FlowBlock{
+								&feparser.FlowBlock{
 									Inp:  make([]bool, width),
 									Outp: make([]bool, width),
 								},
@@ -306,22 +239,22 @@ func main() {
 							{
 								inp := cached.CodeQL.Pointers.Inp
 								switch inp.Element {
-								case ElementReceiver:
+								case feparser.ElementReceiver:
 									latest.CodeQL.Blocks[0].Inp[0] = true
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Inp[inp.Index+1] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Inp[inp.Index+len(latest.Func.Parameters)+1] = true
 								}
 							}
 							{
 								outp := cached.CodeQL.Pointers.Outp
 								switch outp.Element {
-								case ElementReceiver:
+								case feparser.ElementReceiver:
 									latest.CodeQL.Blocks[0].Outp[0] = true
-								case ElementParameter:
+								case feparser.ElementParameter:
 									latest.CodeQL.Blocks[0].Outp[outp.Index+1] = true
-								case ElementResult:
+								case feparser.ElementResult:
 									latest.CodeQL.Blocks[0].Outp[outp.Index+len(latest.Func.Parameters)+1] = true
 								}
 							}
@@ -343,7 +276,7 @@ func main() {
 				panic(err)
 			}
 
-			findCached := func(signature string) *CodeQlFinalVals {
+			findCached := func(signature string) *feparser.CodeQlFinalVals {
 				for cacheSignature, cached := range cachedMap {
 					if cacheSignature == signature {
 						return cached
@@ -418,7 +351,7 @@ func main() {
 
 		{
 			// Save cache:
-			cacheFilepath := path.Join(cacheDir, FormatCodeQlName(feModule.PkgPath)+".v2.json")
+			cacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(feModule.PkgPath)+".v2.json")
 			cacheMap := make(CacheType)
 			{
 				for _, v := range feModule.Funcs {
@@ -502,7 +435,7 @@ func main() {
 					Errorf("invalid pointers for %q: %s", fe.Func.Signature, err)
 					continue
 				}
-				converted := FEIToFET(fe)
+				converted := feparser.FEIToFET(fe)
 				allCode := generateGoTestBlock_Method(
 					goTestFile,
 					converted,
@@ -520,7 +453,7 @@ func main() {
 		{
 
 			code := Func().
-				Id("RunAllTaints_" + FormatCodeQlName(feModule.PkgPath)).
+				Id("RunAllTaints_" + feparser.FormatCodeQlName(feModule.PkgPath)).
 				Params().
 				BlockFunc(func(group *Group) {
 					for testID, testFuncName := range testFuncNames {
@@ -544,18 +477,18 @@ func main() {
 
 		ts := time.Now()
 		// Create subfolder for package for generated assets:
-		packageAssetFolderName := FormatCodeQlName(feModule.PkgPath)
+		packageAssetFolderName := feparser.FormatCodeQlName(feModule.PkgPath)
 		packageAssetFolderPath := path.Join(generatedDir, packageAssetFolderName)
 		MustCreateFolderIfNotExists(packageAssetFolderPath, 0750)
 		// Create folder for assets generated during this run:
-		thisRunAssetFolderName := FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
+		thisRunAssetFolderName := feparser.FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
 		thisRunAssetFolderPath := path.Join(packageAssetFolderPath, thisRunAssetFolderName)
 		// Create a new assets folder inside the main assets folder:
 		MustCreateFolderIfNotExists(thisRunAssetFolderPath, 0750)
 
 		{
 			// Save golang assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".go"
+			assetFileName := feparser.FormatCodeQlName(feModule.PkgPath) + ".go"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file go test file:
@@ -586,7 +519,7 @@ import go` + "\n\n"
 			moduleHeader := Sf(
 				"/** Provides models of commonly used functions in the `%s` package. */\nmodule %s {",
 				feModule.PkgPath,
-				FormatCodeQlName(feModule.PkgPath),
+				feparser.FormatCodeQlName(feModule.PkgPath),
 			)
 			buf.WriteString(fileHeader + moduleHeader)
 			if compressCodeQl {
@@ -616,7 +549,7 @@ import go` + "\n\n"
 			}
 
 			// Save codeql assets:
-			assetFileName := FormatCodeQlName(feModule.PkgPath) + ".qll"
+			assetFileName := feparser.FormatCodeQlName(feModule.PkgPath) + ".qll"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file qll file:
@@ -694,7 +627,7 @@ import go` + "\n\n"
 			}
 
 			switch stored.GetOriginal().(type) {
-			case *FEFunc:
+			case *feparser.FEFunc:
 				{
 					fe := stored.GetFEFunc()
 					if req.Enabled {
@@ -707,7 +640,7 @@ import go` + "\n\n"
 					}
 
 				}
-			case *FETypeMethod, *FEInterfaceMethod:
+			case *feparser.FETypeMethod, *feparser.FEInterfaceMethod:
 				{
 					fe := stored.GetFETypeMethodOrInterfaceMethod()
 					if req.Enabled {
@@ -749,7 +682,7 @@ import go` + "\n\n"
 			}
 
 			switch stored.GetOriginal().(type) {
-			case *FEFunc:
+			case *feparser.FEFunc:
 				{
 					fe := stored.GetFEFunc()
 					{
@@ -767,7 +700,7 @@ import go` + "\n\n"
 
 					{
 						generatedCodeql := new(bytes.Buffer)
-						err := GenerateCodeQLTT_Functions(generatedCodeql, []*FEFunc{fe})
+						err := GenerateCodeQLTT_Functions(generatedCodeql, []*feparser.FEFunc{fe})
 						if err != nil {
 							Errorf("error generating codeql: %s", err)
 							c.Status(400)
@@ -787,7 +720,7 @@ import go` + "\n\n"
 					}
 
 				}
-			case *FETypeMethod, *FEInterfaceMethod:
+			case *feparser.FETypeMethod, *feparser.FEInterfaceMethod:
 				{
 					fe := stored.GetFETypeMethodOrInterfaceMethod()
 					{
@@ -806,7 +739,7 @@ import go` + "\n\n"
 						generatedCodeql := new(bytes.Buffer)
 						st := stored.GetFETypeMethod()
 						if st != nil {
-							err := GenerateCodeQLTT_TypeMethods(generatedCodeql, []*FETypeMethod{st})
+							err := GenerateCodeQLTT_TypeMethods(generatedCodeql, []*feparser.FETypeMethod{st})
 							if err != nil {
 								Errorf("error generating codeql: %s", err)
 								c.Status(400)
@@ -814,7 +747,7 @@ import go` + "\n\n"
 							}
 						} else {
 							st := stored.GetFEInterfaceMethod()
-							err := GenerateCodeQLTT_InterfaceMethods(generatedCodeql, []*FEInterfaceMethod{st})
+							err := GenerateCodeQLTT_InterfaceMethods(generatedCodeql, []*feparser.FEInterfaceMethod{st})
 							if err != nil {
 								Errorf("error generating codeql: %s", err)
 								c.Status(400)
@@ -871,8 +804,8 @@ func (item *IndexItem) IsNil() bool {
 }
 
 //
-func (item *IndexItem) GetFEFunc() *FEFunc {
-	fe, ok := item.GetOriginal().(*FEFunc)
+func (item *IndexItem) GetFEFunc() *feparser.FEFunc {
+	fe, ok := item.GetOriginal().(*feparser.FEFunc)
 	if !ok {
 		return nil
 	}
@@ -880,34 +813,29 @@ func (item *IndexItem) GetFEFunc() *FEFunc {
 }
 
 //
-func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
-	fe, ok := item.GetOriginal().(*FETypeMethod)
+func (item *IndexItem) GetFETypeMethod() *feparser.FETypeMethod {
+	fe, ok := item.GetOriginal().(*feparser.FETypeMethod)
 	if !ok {
 		return nil
 	}
 	return fe
 }
 
-func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
-	feTyp, ok := item.GetOriginal().(*FETypeMethod)
+func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *feparser.FETypeMethod {
+	feTyp, ok := item.GetOriginal().(*feparser.FETypeMethod)
 	if !ok {
-		feIt, ok := item.GetOriginal().(*FEInterfaceMethod)
+		feIt, ok := item.GetOriginal().(*feparser.FEInterfaceMethod)
 		if !ok {
 			return nil
 		}
-		return FEIToFET(feIt)
+		return feparser.FEIToFET(feIt)
 	}
 	return feTyp
 }
 
-func FEIToFET(feIt *FEInterfaceMethod) *FETypeMethod {
-	converted := FETypeMethod(*feIt)
-	return &converted
-}
-
 //
-func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
-	fe, ok := item.GetOriginal().(*FEInterfaceMethod)
+func (item *IndexItem) GetFEInterfaceMethod() *feparser.FEInterfaceMethod {
+	fe, ok := item.GetOriginal().(*feparser.FEInterfaceMethod)
 	if !ok {
 		return nil
 	}
@@ -972,12 +900,12 @@ type GeneratedClassResponse struct {
 	GeneratedClass string
 }
 
-func PopulateGeneratedClassCodeQL(feModule *FEModule) error {
+func PopulateGeneratedClassCodeQL(feModule *feparser.FEModule) error {
 	for i := range feModule.Funcs {
 		fe := feModule.Funcs[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
-			err := GenerateCodeQLTT_Functions(generatedCodeqlClass, []*FEFunc{fe})
+			err := GenerateCodeQLTT_Functions(generatedCodeqlClass, []*feparser.FEFunc{fe})
 			if err != nil {
 				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Signature, err)
 			}
@@ -988,7 +916,7 @@ func PopulateGeneratedClassCodeQL(feModule *FEModule) error {
 		fe := feModule.TypeMethods[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
-			err := GenerateCodeQLTT_TypeMethods(generatedCodeqlClass, []*FETypeMethod{fe})
+			err := GenerateCodeQLTT_TypeMethods(generatedCodeqlClass, []*feparser.FETypeMethod{fe})
 			if err != nil {
 				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
 			}
@@ -999,7 +927,7 @@ func PopulateGeneratedClassCodeQL(feModule *FEModule) error {
 		fe := feModule.InterfaceMethods[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
-			err := GenerateCodeQLTT_InterfaceMethods(generatedCodeqlClass, []*FEInterfaceMethod{fe})
+			err := GenerateCodeQLTT_InterfaceMethods(generatedCodeqlClass, []*feparser.FEInterfaceMethod{fe})
 			if err != nil {
 				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
 			}
@@ -1010,7 +938,7 @@ func PopulateGeneratedClassCodeQL(feModule *FEModule) error {
 	return nil
 }
 
-func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*FEFunc) error {
+func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*feparser.FEFunc) error {
 	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_function.txt")
 	if err != nil {
 		return err
@@ -1040,7 +968,7 @@ func GenerateCodeQLTT_Functions(buf *bytes.Buffer, fes []*FEFunc) error {
 
 	return nil
 }
-func GenerateCodeQLTT_TypeMethods(buf *bytes.Buffer, fes []*FETypeMethod) error {
+func GenerateCodeQLTT_TypeMethods(buf *bytes.Buffer, fes []*feparser.FETypeMethod) error {
 	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_type-method.txt")
 	if err != nil {
 		return err
@@ -1070,7 +998,7 @@ func GenerateCodeQLTT_TypeMethods(buf *bytes.Buffer, fes []*FETypeMethod) error 
 
 	return nil
 }
-func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMethod) error {
+func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*feparser.FEInterfaceMethod) error {
 	tpl, err := NewTextTemplateFromFile("./templates/taint-tracking_interface-method.txt")
 	if err != nil {
 		return err
@@ -1086,7 +1014,7 @@ func GenerateCodeQLTT_InterfaceMethods(buf *bytes.Buffer, fes []*FEInterfaceMeth
 		}
 		buf.WriteString("\n")
 
-		generatedConditions, err := generateCodeQLFlowConditions_FEMethod(FEIToFET(fe), fe.CodeQL.Blocks)
+		generatedConditions, err := generateCodeQLFlowConditions_FEMethod(feparser.FEIToFET(fe), fe.CodeQL.Blocks)
 		if err != nil {
 			return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
 		}
@@ -1160,16 +1088,9 @@ func NewTestFile(includeBoilerplace bool) *File {
 	return file
 }
 
-// ShouldUseAlias tells whether the package name and the base
-// of the backage path are the same; if they are not,
-// then the package should use an alias in the import.
-func ShouldUseAlias(pkgPath string, pkgName string) bool {
-	return filepath.Base(pkgPath) != pkgName
-}
-
-func generateGoChildBlock_Func(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
-	Parameter := ElementParameter
-	Result := ElementResult
+func generateGoChildBlock_Func(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
+	Parameter := feparser.ElementParameter
+	Result := feparser.ElementResult
 
 	switch {
 	case identityInp.Element == Parameter && identityOutp.Element == Parameter:
@@ -1187,10 +1108,10 @@ func generateGoChildBlock_Func(file *File, fe *FEFunc, identityInp *CodeQlIdenti
 	return nil
 }
 
-func generateChildBlock_Method(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
-	Receiver := ElementReceiver
-	Parameter := ElementParameter
-	Result := ElementResult
+func generateChildBlock_Method(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
+	Receiver := feparser.ElementReceiver
+	Parameter := feparser.ElementParameter
+	Result := feparser.ElementResult
 
 	switch {
 	case identityInp.Element == Receiver && identityOutp.Element == Parameter:
@@ -1216,30 +1137,30 @@ func generateChildBlock_Method(file *File, fe *FETypeMethod, identityInp *CodeQl
 	return nil
 }
 
-func getPlaceholder(element Element, index int, fe *FEFunc) string {
+func getPlaceholder(element feparser.Element, index int, fe *feparser.FEFunc) string {
 	switch element {
-	case ElementParameter:
+	case feparser.ElementParameter:
 		return fe.Parameters[index].Identity.Placeholder
-	case ElementResult:
+	case feparser.ElementResult:
 		return fe.Results[index].Identity.Placeholder
 	default:
 		panic(Sf("not valid pointers.Inp.Element: %s", element))
 	}
 }
 
-func getPlaceholderFromFunc(fe *FEFunc, ident *CodeQlIdentity) string {
+func getPlaceholderFromFunc(fe *feparser.FEFunc, ident *feparser.CodeQlIdentity) string {
 	element := ident.Element
 	index := ident.Index
 	return getPlaceholder(element, index, fe)
 }
 
-func getPlaceholderFromMethod(fe *FETypeMethod, ident *CodeQlIdentity) string {
+func getPlaceholderFromMethod(fe *feparser.FETypeMethod, ident *feparser.CodeQlIdentity) string {
 	element := ident.Element
 	index := ident.Index
 	switch element {
-	case ElementReceiver:
+	case feparser.ElementReceiver:
 		return fe.Receiver.Identity.Placeholder
-	case ElementParameter, ElementResult:
+	case feparser.ElementParameter, feparser.ElementResult:
 		return getPlaceholder(element, index, fe.Func)
 	default:
 		panic(Sf("not valid pointers.Inp.Element: %s", element))
@@ -1255,7 +1176,7 @@ func Comments(group *Group, comments ...string) *Group {
 	}
 	return group
 }
-func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ReceMethPara(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
@@ -1278,7 +1199,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.IsVariadic)
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
 			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
@@ -1315,7 +1236,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: receiver
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
@@ -1338,7 +1259,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.IsVariadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1375,7 +1296,7 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ParaMethRece(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: receiver
@@ -1401,7 +1322,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.IsVariadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1435,7 +1356,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ParaMethPara(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: param
@@ -1497,7 +1418,7 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ParaMethResu(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: method (when there is a receiver, then it must be a method medium)
 	// into: result
@@ -1564,7 +1485,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ResuMethRece(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: method
 	// into: receiver
@@ -1590,7 +1511,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.IsVariadic)
 
 			Comments(groupCase,
 				"Call the method that will transfer the taint",
@@ -1633,7 +1554,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 		})
 	return code.Line()
 }
-func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: method
 	// into: parameter
@@ -1726,9 +1647,9 @@ func NewLowerTitleCodeQlName(elems ...string) string {
 	return LowerCaseFirst(NewCodeQlName(elems...))
 }
 func NewCodeQlName(elems ...string) string {
-	return FormatCodeQlName(JoinDash(elems...))
+	return feparser.FormatCodeQlName(JoinDash(elems...))
 }
-func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: method
 	// into: result
@@ -1818,7 +1739,7 @@ func MustVarNameWithDefaultPrefix(name string, prefix string) string {
 
 	return name
 }
-func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ParaFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: func
 	// into: param
@@ -1879,7 +1800,7 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 	return code.Line()
 }
 
-func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ParaFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: func
 	// into: result
@@ -1940,7 +1861,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 		})
 	return code.Line()
 }
-func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ResuFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: func
 	// into: param
@@ -2014,7 +1935,7 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 		})
 	return code.Line()
 }
-func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, identityOutp *CodeQlIdentity) *Statement {
+func generate_ResuFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: func
 	// into: result
@@ -2250,94 +2171,6 @@ func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 	}
 }
 
-func FormatKindString(typ types.Type) string {
-	buf := new(bytes.Buffer)
-	switch t := typ.(type) {
-	case *types.Basic:
-		{
-			buf.WriteString(Sf(
-				"a basic %s",
-				t.String(),
-			))
-		}
-	case *types.Array:
-		{
-			buf.WriteString(Sf(
-				"an array %s: [%v]%s",
-				t.String(),
-				t.Len(),
-				FormatKindString(t.Elem()),
-			))
-		}
-	case *types.Slice:
-		{
-			buf.WriteString(Sf(
-				"a slice %s: []%s",
-				t.String(),
-				FormatKindString(t.Elem()),
-			))
-		}
-	case *types.Struct:
-		{
-			buf.WriteString(Sf(
-				"a struct",
-			))
-		}
-	case *types.Pointer:
-		{
-			buf.WriteString(Sf(
-				"a pointer to %s",
-				FormatKindString(t.Elem()),
-			))
-		}
-	case *types.Tuple:
-		{
-			buf.WriteString(Sf(
-				"a tuple `%s`",
-				t.String(),
-			))
-		}
-	case *types.Signature:
-		{
-			buf.WriteString(Sf(
-				"a signature `%s`",
-				t.String(),
-			))
-		}
-	case *types.Interface:
-		{
-			buf.WriteString(Sf(
-				"an interface",
-			))
-		}
-	case *types.Map:
-		{
-			buf.WriteString(Sf(
-				"a map[%s]%s",
-				FormatKindString(t.Key()),
-				FormatKindString(t.Elem()),
-			))
-		}
-	case *types.Chan:
-		{
-			buf.WriteString(Sf(
-				"a chan `%s`",
-				t.String(),
-			))
-		}
-	case *types.Named:
-		{
-			buf.WriteString(Sf(
-				"a named %s, which is %s",
-				t.String(),
-				FormatKindString(t.Underlying()),
-			))
-		}
-	}
-
-	return buf.String()
-}
-
 // declare `name := sourceCQL.(Type)`
 func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
 	assertContent := newStatement()
@@ -2365,7 +2198,7 @@ func importPackage(file *File, pkgPath string, pkgName string) {
 	if pkgPath == "" || pkgName == "" {
 		return
 	}
-	if ShouldUseAlias(pkgPath, pkgName) {
+	if feparser.ShouldUseAlias(pkgPath, pkgName) {
 		file.ImportAlias(pkgPath, pkgName)
 	} else {
 		file.ImportName(pkgPath, pkgName)
@@ -2535,7 +2368,7 @@ type PayloadDisable struct {
 }
 type PayloadSetPointers struct {
 	Signature string
-	Blocks    []*FlowBlock
+	Blocks    []*feparser.FlowBlock
 }
 
 //
@@ -2543,7 +2376,7 @@ func (req *PayloadSetPointers) Validate() error {
 	if req.Signature == "" {
 		return errors.New("req.Signature is not set")
 	}
-	if err := validateBlocksAreActive(req.Blocks...); err != nil {
+	if err := feparser.ValidateBlocksAreActive(req.Blocks...); err != nil {
 		return fmt.Errorf(
 			"error validating block: %s", err,
 		)
@@ -2552,543 +2385,39 @@ func (req *PayloadSetPointers) Validate() error {
 	return nil
 }
 
-func FormatCodeQlName(name string) string {
-	return ToCamel(strings.ReplaceAll(name, "\"", ""))
-}
-
-const TODO = "TODO"
-
-type CodeQLPointers struct {
-	Inp  *CodeQlIdentity
-	Outp *CodeQlIdentity
-}
-
-func (obj *CodeQLPointers) Validate() error {
-	if obj.Inp == nil {
-		return errors.New("obj.Inp is not set")
-	}
-	if obj.Outp == nil {
-		return errors.New("obj.Outp is not set")
-	}
-
-	if err := obj.Inp.Identity.Validate(); err != nil {
-		return err
-	}
-	if err := obj.Outp.Validate(); err != nil {
-		return err
-	}
-
-	if obj.Inp.Identity.Element == obj.Outp.Identity.Element && (obj.Inp.Identity.Element == ElementReceiver || (obj.Inp.Identity.Index == obj.Outp.Identity.Index)) {
-		return errors.New("obj.Inp and obj.Outp have same values")
-	}
-
-	return nil
-}
-func (obj *Identity) Validate() error {
-	if obj.Element == "" || obj.Element == TODO || !IsValidElementName(obj.Element) {
-		return errors.New("obj.Element is not set")
-	}
-
-	// the Index can be non-valid only for the receiver:
-	if obj.Index < 0 && obj.Element != ElementReceiver {
-		return errors.New("obj.Index is not set")
-	}
-	return nil
-}
-
-var ValidElementNames = []string{
-	string(ElementReceiver),
-	string(ElementParameter),
-	string(ElementResult),
-}
-
-func IsValidElementName(name Element) bool {
-	return IsAnyOf(
-		string(name),
-		ValidElementNames...,
-	)
-}
-
-func NewCodeQlFinalVals() *CodeQlFinalVals {
-	return &CodeQlFinalVals{}
-}
-func (obj *CodeQlFinalVals) Validate() error {
-	if obj.Blocks == nil || len(obj.Blocks) == 0 {
-		return errors.New("obj.Blocks is not set")
-	}
-	if err := validateBlocksAreActive(obj.Blocks...); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func validateBlocksAreActive(blocks ...*FlowBlock) error {
-	if len(blocks) == 0 {
-		return errors.New("no blocks provided")
-	}
-	for blockIndex, block := range blocks {
-		if AllFalse(block.Inp...) {
-			return fmt.Errorf("error: Inp of block %v is all false", blockIndex)
-		}
-		if AllFalse(block.Outp...) {
-			return fmt.Errorf("error: Outp of block %v is all false", blockIndex)
-		}
-	}
-	return nil
-}
-
-type CodeQlFinalVals struct {
-	// Generated generated contains the generated class:
-	GeneratedClass string `json:"GeneratedClass,omitempty"`
-	// GeneratedConditions contains the generated conditions of the flow:
-	GeneratedConditions string `json:"GeneratedConditions,omitempty"`
-	Blocks              []*FlowBlock
-	IsEnabled           bool
-	//Pointers            *CodeQLPointers // Pointers is where the current pointers will be stored
-}
-
-type DEPRECATEDFEModule struct {
-	Funcs            []*DEPRECATEDFEFunc
-	TypeMethods      []*DEPRECATEDFETypeMethod
-	InterfaceMethods []*DEPRECATEDFETypeMethod
-}
-
-type DEPRECATEDFEFunc struct {
-	CodeQL    *DEPRECATEDCodeQlFinalVals
-	Signature string
-}
-type DEPRECATEDFETypeMethod struct {
-	CodeQL *DEPRECATEDCodeQlFinalVals
-	Func   *DEPRECATEDFEFunc
-}
-type DEPRECATEDCodeQlFinalVals struct {
-	IsEnabled bool
-	Pointers  *CodeQLPointers // Pointers is where the current pointers will be stored
-}
-
-type Identity struct {
-	Element    Element
-	Index      int
-	IsVariadic bool
-}
-type CodeQlIdentity struct {
-	Placeholder string
-	Identity
-}
-type FEModule struct {
-	PkgPath          string
-	PkgName          string
-	ID               string
-	Funcs            []*FEFunc
-	TypeMethods      []*FETypeMethod
-	InterfaceMethods []*FEInterfaceMethod
-}
-
-type FEFunc struct {
-	CodeQL    *CodeQlFinalVals
-	ClassName string
-	Signature string
-	ID        string
-	Docs      []string
-	Name      string
-	PkgPath   string
-	PkgName   string
-
-	Parameters []*FEType
-	Results    []*FEType
-	original   *scanner.Func
-}
-
-func (v *FEFunc) GetOriginal() *scanner.Func {
-	return v.original
-}
-
-func DocsWithDefault(docs []string) []string {
-	if docs == nil {
-		docs = make([]string, 0)
-	}
-	return docs
-}
-
-type Element string
-
-const (
-	ElementReceiver  Element = "receiver"
-	ElementParameter Element = "parameter"
-	ElementResult    Element = "result"
-)
-
-func getFEFunc(fn *scanner.Func) *FEFunc {
-	var fe FEFunc
-	fe.original = fn
-	fe.CodeQL = NewCodeQlFinalVals()
-	fe.ClassName = FormatCodeQlName(fn.Name)
-	fe.Name = fn.Name
-	fe.PkgName = fn.PkgName
-	fe.ID = FormatCodeQlName("function-" + fn.Name)
-	fe.Docs = DocsWithDefault(fn.Doc)
-	fe.Signature = RemoveThisPackagePathFromSignature(fn.Signature, fn.PkgPath)
-	fe.PkgPath = fn.PkgPath
-	for i, in := range fn.Input {
-		v := getFEType(in)
-
-		placeholder := Sf("isParameter(%v)", i)
-		if v.IsVariadic {
-			if len(fn.Input) == 1 {
-				placeholder = "isParameter(_)"
-			} else {
-				placeholder = Sf("isParameter(any(int i | i >= %v))", i)
-			}
-		}
-		isNotLast := i != len(fn.Input)-1
-		if v.IsVariadic && isNotLast {
-			panic(Sf("parameter %v is variadic but is NOT the last parameter", v))
-		}
-		v.Identity = CodeQlIdentity{
-			Placeholder: placeholder,
-			Identity: Identity{
-				Element:    ElementParameter,
-				Index:      i,
-				IsVariadic: v.IsVariadic,
-			},
-		}
-		fe.Parameters = append(fe.Parameters, v)
-	}
-	for i, out := range fn.Output {
-		v := getFEType(out)
-
-		placeholder := Sf("isResult(%v)", i)
-		if len(fn.Output) == 1 {
-			placeholder = "isResult()"
-		}
-		v.Identity = CodeQlIdentity{
-			Placeholder: placeholder,
-			Identity: Identity{
-				Element:    ElementResult,
-				Index:      i,
-				IsVariadic: v.IsVariadic,
-			},
-		}
-		fe.Results = append(fe.Results, v)
-	}
-	{
-		width := len(fe.Parameters) + len(fe.Results)
-		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
-		fe.CodeQL.Blocks = append(
-			fe.CodeQL.Blocks,
-			&FlowBlock{
-				Inp:  make([]bool, width),
-				Outp: make([]bool, width),
-			},
-		)
-	}
-	return &fe
-}
-func RemoveThisPackagePathFromSignature(signature string, pkgPath string) string {
-	clean := strings.Replace(signature, pkgPath+".", "", -1)
-	return clean
-}
-
-type FEType struct {
-	Identity      CodeQlIdentity
-	VarName       string
-	TypeName      string
-	PkgName       string
-	PkgPath       string
-	QualifiedName string
-	IsPtr         bool
-	IsBasic       bool
-	IsVariadic    bool
-	IsNullable    bool
-	IsStruct      bool
-	TypeString    string
-	KindString    string
-	original      scanner.Type
-}
-
-func (v *FEType) GetOriginal() scanner.Type {
-	return v.original
-}
-
-func getFEType(tp scanner.Type) *FEType {
-	var fe FEType
-	fe.original = tp
-	varName := tp.GetTypesVar().Name()
-	if varName != "" {
-		fe.VarName = varName
-	}
-	fe.IsVariadic = tp.IsVariadic()
-	fe.IsNullable = tp.IsNullable()
-	fe.IsPtr = tp.IsPtr()
-	fe.IsStruct = tp.IsStruct()
-	fe.IsBasic = tp.IsBasic()
-	if tp.IsVariadic() {
-		fe.TypeString = "..." + tp.GetType().(*types.Slice).Elem().String()
-	} else {
-		fe.TypeString = tp.GetType().String()
-	}
-	fe.KindString = FormatKindString(tp.GetType())
-
-	finalType := tp.GetTypesVar().Type()
-	{
-		slice, ok := tp.GetTypesVar().Type().(*types.Slice)
-		if ok {
-			finalType = slice.Elem()
-		}
-	}
-	{
-		array, ok := tp.GetTypesVar().Type().(*types.Array)
-		if ok {
-			finalType = array.Elem()
-		}
-	}
-	// Check if pointer:
-	{
-		pointer, ok := finalType.(*types.Pointer)
-		if ok {
-			finalType = pointer.Elem()
-		}
-	}
-
-	{
-		named, ok := finalType.(*types.Named)
-		if ok {
-			fe.TypeName = named.Obj().Name()
-			if pkg := named.Obj().Pkg(); pkg != nil {
-				fe.QualifiedName = scanner.StringRemoveGoPath(pkg.Path()) + "." + named.Obj().Name()
-				fe.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
-				fe.PkgName = named.Obj().Pkg().Name()
-			}
-		} else {
-			fe.TypeName = tp.TypeString()
-		}
-	}
-
-	return &fe
-}
-
-func getFETypeMethod(mt *types.Selection, allFuncs []*scanner.Func) *FETypeMethod {
-	var fe FETypeMethod
-
-	fe.CodeQL = NewCodeQlFinalVals()
-	fe.Docs = make([]string, 0)
-
-	fe.Receiver = &FEReceiver{}
-	fe.Receiver.Identity = CodeQlIdentity{
-		Placeholder: "isReceiver()",
-		Identity: Identity{
-			Element: ElementReceiver,
-			Index:   -1,
-		},
-	}
-	fe.Receiver.TypeString = mt.Recv().String()
-	fe.Receiver.KindString = FormatKindString(mt.Recv())
-
-	{
-		var named *types.Named
-		ptr, isPtr := mt.Recv().(*types.Pointer)
-		if isPtr {
-			named = ptr.Elem().(*types.Named)
-		} else {
-			named = mt.Recv().(*types.Named)
-		}
-		fe.Receiver.original = named
-		fe.Receiver.TypeName = named.Obj().Name()
-		fe.Receiver.QualifiedName = scanner.RemoveGoPath(named.Obj().Pkg()) + "." + named.Obj().Name()
-		fe.Receiver.PkgPath = scanner.RemoveGoPath(named.Obj().Pkg())
-		fe.Receiver.PkgName = named.Obj().Pkg().Name()
-		//fe.Receiver.VarName =
-	}
-	// Skip methods on non-exported types:
-	if !token.IsExported(fe.Receiver.TypeName) {
-		return nil
-	}
-
-	fe.Func = &FEFunc{}
-	methodFuncName := mt.Obj().Name()
-
-	{
-		// Check if the method is on a pointer of a value:
-		_, isPtr := mt.Obj().Type().(*types.Signature).Recv().Type().(*types.Pointer)
-		if isPtr {
-			fe.IsOnPtr = true
-		}
-	}
-	{
-		findCorrespondingFunc := func() bool {
-			for _, mtFn := range allFuncs {
-				if mtFn.Receiver != nil {
-
-					sameReceiverType := fe.Receiver.QualifiedName == mtFn.Receiver.TypeString()
-					sameFuncName := methodFuncName == mtFn.Name
-
-					if sameReceiverType && sameFuncName {
-						fe.Docs = DocsWithDefault(mtFn.Doc)
-						fe.Func = getFEFunc(mtFn)
-						fe.Func.CodeQL = nil
-						fe.original = mtFn.GetType()
-						return true
-					}
-				}
-			}
-			return false
-		}
-
-		found := findCorrespondingFunc()
-		if !found {
-			return nil
-		}
-	}
-
-	fe.ID = "type-method-" + fe.Receiver.TypeName + "-" + methodFuncName
-	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
-
-	{
-		width := 1 + len(fe.Func.Parameters) + len(fe.Func.Results)
-		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
-		fe.CodeQL.Blocks = append(
-			fe.CodeQL.Blocks,
-			&FlowBlock{
-				Inp:  make([]bool, width),
-				Outp: make([]bool, width),
-			},
-		)
-	}
-	return &fe
-}
-
-type FETypeMethod struct {
-	CodeQL    *CodeQlFinalVals
-	ClassName string
-	Docs      []string
-	IsOnPtr   bool
-	Receiver  *FEReceiver
-	ID        string
-	Func      *FEFunc
-	original  types.Type
-}
-
-func (v *FETypeMethod) GetOriginal() types.Type {
-	return v.original
-}
-
-type FEInterfaceMethod FETypeMethod
-
-type FEReceiver struct {
-	FEType
-	original types.Type
-}
-
-func (v *FEReceiver) GetOriginal() types.Type {
-	return v.original
-}
-
-func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETypeMethod {
-	var fe FETypeMethod
-	fe.original = it.GetType()
-
-	fe.CodeQL = NewCodeQlFinalVals()
-
-	fe.Receiver = &FEReceiver{}
-	fe.Receiver.Identity = CodeQlIdentity{
-		Placeholder: "isReceiver()",
-		Identity: Identity{
-			Element: ElementReceiver,
-			Index:   -1,
-		},
-	}
-
-	feFunc := getFEFunc(methodFunc)
-	feFunc.CodeQL = nil
-	{
-		fe.Receiver.original = it.GetType()
-		fe.Receiver.TypeName = it.Name
-		fe.Receiver.QualifiedName = scanner.StringRemoveGoPath(feFunc.PkgPath) + "." + feFunc.Name
-		fe.Receiver.PkgPath = scanner.StringRemoveGoPath(feFunc.PkgPath)
-		fe.Receiver.PkgName = feFunc.PkgName
-	}
-
-	fe.Func = &FEFunc{}
-	methodFuncName := feFunc.Name
-
-	{
-		// Check if the method is on a pointer of a value:
-		fe.IsOnPtr = true
-	}
-	{
-		fe.Docs = DocsWithDefault(methodFunc.Doc)
-		fe.Func = feFunc
-	}
-
-	fe.ID = "interface-method-" + fe.Receiver.TypeName + "-" + methodFuncName
-	fe.ClassName = FormatCodeQlName(fe.Receiver.TypeName + "-" + methodFuncName)
-
-	{
-		width := 1 + len(fe.Func.Parameters) + len(fe.Func.Results)
-		fe.CodeQL.Blocks = make([]*FlowBlock, 0)
-		fe.CodeQL.Blocks = append(
-			fe.CodeQL.Blocks,
-			&FlowBlock{
-				Inp:  make([]bool, width),
-				Outp: make([]bool, width),
-			},
-		)
-	}
-	return &fe
-}
-func getAllFEInterfaceMethods(it *scanner.Interface) []*FEInterfaceMethod {
-
-	feInterfaces := make([]*FEInterfaceMethod, 0)
-	for _, mt := range it.Methods {
-
-		feMethod := getFEInterfaceMethod(it, mt)
-		converted := FEInterfaceMethod(*feMethod)
-		feInterfaces = append(feInterfaces, &converted)
-	}
-	return feInterfaces
-}
-
-type FlowBlock struct {
-	Inp  []bool
-	Outp []bool
-}
-
-type IdentityGetter func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error)
-
-func generateCodeQLFlowConditions_FEFunc(fn *FEFunc, blocks []*FlowBlock) (string, error) {
+func generateCodeQLFlowConditions_FEFunc(fn *feparser.FEFunc, blocks []*feparser.FlowBlock) (string, error) {
 	return generateCodeQLFlowCondition_V2(
 		fn,
-		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+		func(block *feparser.FlowBlock) ([]*feparser.CodeQlIdentity, []*feparser.CodeQlIdentity, error) {
 			return getIdentitiesByBlock_FEFunc(fn, block)
 		},
 		blocks,
 	)
 }
-func generateCodeQLFlowConditions_FEMethod(fn *FETypeMethod, blocks []*FlowBlock) (string, error) {
+func generateCodeQLFlowConditions_FEMethod(fn *feparser.FETypeMethod, blocks []*feparser.FlowBlock) (string, error) {
 	return generateCodeQLFlowCondition_V2(
 		fn.Func,
-		func(block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+		func(block *feparser.FlowBlock) ([]*feparser.CodeQlIdentity, []*feparser.CodeQlIdentity, error) {
 			return getIdentitiesByBlock_FEMethod(fn, block)
 		},
 		blocks,
 	)
 }
-func gatherIdentitiesPerType(ids []*CodeQlIdentity) (recv *CodeQlIdentity, params []*CodeQlIdentity, results []*CodeQlIdentity) {
+func gatherIdentitiesPerType(ids []*feparser.CodeQlIdentity) (recv *feparser.CodeQlIdentity, params []*feparser.CodeQlIdentity, results []*feparser.CodeQlIdentity) {
 	for _, id := range ids {
 		switch id.Element {
-		case ElementReceiver:
+		case feparser.ElementReceiver:
 			recv = id
-		case ElementParameter:
+		case feparser.ElementParameter:
 			params = append(params, id)
-		case ElementResult:
+		case feparser.ElementResult:
 			results = append(results, id)
 		}
 	}
 	return
 }
 
-func generateCodeQLFlowCondition_V2(fn *FEFunc, idGetter IdentityGetter, blocks []*FlowBlock) (string, error) {
+func generateCodeQLFlowCondition_V2(fn *feparser.FEFunc, idGetter feparser.IdentityGetter, blocks []*feparser.FlowBlock) (string, error) {
 	finalBuf := new(bytes.Buffer)
 	for blockIndex, block := range blocks {
 		inp, outp, err := idGetter(block)
@@ -3258,7 +2587,7 @@ func generateCodeQLFlowCondition_V2(fn *FEFunc, idGetter IdentityGetter, blocks 
 	return "(" + finalBuf.String() + ")", nil
 }
 
-func validateBlockLen_FEFunc(fn *FEFunc, blocks ...*FlowBlock) error {
+func validateBlockLen_FEFunc(fn *feparser.FEFunc, blocks ...*feparser.FlowBlock) error {
 	for blockIndex, block := range blocks {
 		// check width:
 		lenParameters := len(fn.Parameters)
@@ -3278,14 +2607,14 @@ func validateBlockLen_FEFunc(fn *FEFunc, blocks ...*FlowBlock) error {
 
 // getIdentitiesByBlock_FEFunc gathers and returns the inp and outp identities
 // from the provided FEFunc based on the values of the FlowBlock `block`.
-func getIdentitiesByBlock_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+func getIdentitiesByBlock_FEFunc(fn *feparser.FEFunc, block *feparser.FlowBlock) ([]*feparser.CodeQlIdentity, []*feparser.CodeQlIdentity, error) {
 
 	lenParameters := len(fn.Parameters)
 
 	if err := validateBlockLen_FEFunc(fn, block); err != nil {
 		return nil, nil, err
 	}
-	identitiesInp := make([]*CodeQlIdentity, 0)
+	identitiesInp := make([]*feparser.CodeQlIdentity, 0)
 	for index, v := range block.Inp {
 		if v == false {
 			continue
@@ -3301,7 +2630,7 @@ func getIdentitiesByBlock_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentit
 		}
 	}
 
-	identitiesOutp := make([]*CodeQlIdentity, 0)
+	identitiesOutp := make([]*feparser.CodeQlIdentity, 0)
 	for index, v := range block.Outp {
 		if v == false {
 			continue
@@ -3320,7 +2649,7 @@ func getIdentitiesByBlock_FEFunc(fn *FEFunc, block *FlowBlock) ([]*CodeQlIdentit
 	return identitiesInp, identitiesOutp, nil
 }
 
-func validateBlockLen_FEMethod(fn *FETypeMethod, blocks ...*FlowBlock) error {
+func validateBlockLen_FEMethod(fn *feparser.FETypeMethod, blocks ...*feparser.FlowBlock) error {
 	for blockIndex, block := range blocks {
 		// check width:
 		lenReceiver := 1
@@ -3339,7 +2668,7 @@ func validateBlockLen_FEMethod(fn *FETypeMethod, blocks ...*FlowBlock) error {
 
 	return nil
 }
-func getIdentitiesByBlock_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQlIdentity, []*CodeQlIdentity, error) {
+func getIdentitiesByBlock_FEMethod(fe *feparser.FETypeMethod, block *feparser.FlowBlock) ([]*feparser.CodeQlIdentity, []*feparser.CodeQlIdentity, error) {
 
 	lenParameters := len(fe.Func.Parameters)
 
@@ -3347,7 +2676,7 @@ func getIdentitiesByBlock_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQ
 		return nil, nil, err
 	}
 
-	identitiesInp := make([]*CodeQlIdentity, 0)
+	identitiesInp := make([]*feparser.CodeQlIdentity, 0)
 	for index, v := range block.Inp {
 		if v == false {
 			continue
@@ -3369,7 +2698,7 @@ func getIdentitiesByBlock_FEMethod(fe *FETypeMethod, block *FlowBlock) ([]*CodeQ
 		}
 	}
 
-	identitiesOutp := make([]*CodeQlIdentity, 0)
+	identitiesOutp := make([]*feparser.CodeQlIdentity, 0)
 	for index, v := range block.Outp {
 		if v == false {
 			continue
@@ -3400,7 +2729,7 @@ type StatementAndName struct {
 }
 
 // for each block, generate a golang test function for each inp and outp combination.
-func generateGoTestBlock_Func(file *File, fe *FEFunc) []*StatementAndName {
+func generateGoTestBlock_Func(file *File, fe *feparser.FEFunc) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FEFunc, so that the numbers in the variable names
 	// will stay the same as long as the FEFunc is the same.
@@ -3425,7 +2754,7 @@ func generateGoTestBlock_Func(file *File, fe *FEFunc) []*StatementAndName {
 				{
 					if childBlock != nil {
 
-						testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.PkgPath+"-"+fe.Name) + Sf("_B%vI%vO%v", blockIndex, inpIndex, outpIndex)
+						testFuncID := "TaintStepTest_" + feparser.FormatCodeQlName(fe.PkgPath+"-"+fe.Name) + Sf("_B%vI%vO%v", blockIndex, inpIndex, outpIndex)
 						enclosed := Func().Id(testFuncID).
 							ParamsFunc(
 								func(group *Group) {
@@ -3451,7 +2780,7 @@ func generateGoTestBlock_Func(file *File, fe *FEFunc) []*StatementAndName {
 }
 
 // for each block, generate a golang test function for each inp and outp combination.
-func generateGoTestBlock_Method(file *File, fe *FETypeMethod) []*StatementAndName {
+func generateGoTestBlock_Method(file *File, fe *feparser.FETypeMethod) []*StatementAndName {
 	// Seed the random number generator with the hash of the
 	// FETypeMethod, so that the numbers in the variable names
 	// will stay the same as long as the FETypeMethod is the same.
@@ -3476,7 +2805,7 @@ func generateGoTestBlock_Method(file *File, fe *FETypeMethod) []*StatementAndNam
 				{
 					if childBlock != nil {
 
-						testFuncID := "TaintStepTest_" + FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName) + Sf("_B%vI%vO%v", blockIndex, inpIndex, outpIndex)
+						testFuncID := "TaintStepTest_" + feparser.FormatCodeQlName(fe.Receiver.PkgPath+"-"+fe.ClassName) + Sf("_B%vI%vO%v", blockIndex, inpIndex, outpIndex)
 						enclosed := Func().Id(testFuncID).
 							ParamsFunc(
 								func(group *Group) {
@@ -3526,7 +2855,7 @@ type CompressedTemplateValue struct {
 	Conditions string
 }
 
-func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error {
+func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *feparser.FEModule) error {
 	classTpl, err := NewTextTemplateFromFile("./templates/v2-compressed-taint-tracking.txt")
 	if err != nil {
 		return err
@@ -3566,7 +2895,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("FunctionModels"),
+				ClassName:  feparser.FormatCodeQlName("FunctionModels"),
 				Extends:    CodeQLExtendsFunctionModel,
 				Conditions: funcsTempBuf.String(),
 			}
@@ -3632,7 +2961,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 			found++
 			foundInterfaceMethods++
 
-			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(FEIToFET(fe), fe.CodeQL.Blocks)
+			generatedConditions, err := generateCodeQLFlowConditions_FEMethod(feparser.FEIToFET(fe), fe.CodeQL.Blocks)
 			if err != nil {
 				return fmt.Errorf("error generating codeql conditions for %q: %s", fe.Func.Signature, err)
 			}
@@ -3654,7 +2983,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *FEModule) error
 
 		if found > 0 {
 			vals := &CompressedTemplateValue{
-				ClassName:  FormatCodeQlName("MethodModels"),
+				ClassName:  feparser.FormatCodeQlName("MethodModels"),
 				Extends:    CodeQLExtendsFunctionModelMethod,
 				Conditions: finalConditions,
 			}
