@@ -66,18 +66,18 @@ func main() {
 		panic(err)
 	}
 	pk := pks[0]
+	// compose the feModule:
+	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
+	feModule, err := feparser.Load(pk)
+	if err != nil {
+		panic(err)
+	}
 
 	{ // Create folders:
 		// folder for all cache:
 		MustCreateFolderIfNotExists(cacheDir, 0750)
 		// folder for all folders for assets:
 		MustCreateFolderIfNotExists(generatedDir, 0750)
-	}
-	// compose the feModule:
-	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
-	feModule, err := feparser.Load(pk)
-	if err != nil {
-		panic(err)
 	}
 
 	cacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(scanner.RemoveGoSrcClonePath(pk.Path))+".v2.json")
