@@ -55,7 +55,7 @@ func main() {
 	flag.BoolVar(&InlineGeneratedGo, "inline", false, "Inline tests in generated go code")
 	flag.Parse()
 
-	// One package at a time:
+	// Initialize GOPATH scanner:
 	sc, err := scanner.New(false, pkg)
 	if err != nil {
 		panic(err)

@@ -5,6 +5,8 @@ import (
 	"go/ast"
 	"go/types"
 	"strings"
+
+	"golang.org/x/tools/go/packages"
 )
 
 // Package holds information about a single Go package and
@@ -14,6 +16,7 @@ type Package struct {
 	Resolved   bool
 	Path       string
 	Name       string
+	Module     *packages.Module
 	Structs    []*Struct
 	Enums      []*Enum
 	Funcs      []*Func

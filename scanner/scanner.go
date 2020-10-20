@@ -140,8 +140,13 @@ func (s *Scanner) scanPackageWithScanner(p string, sc ScannerFunc) (*Package, er
 	if err != nil {
 		return nil, err
 	}
+	scannedPackage, err := buildPackage(ctx, pkg.Types)
+	if err != nil {
+		return nil, err
+	}
+	scannedPackage.Module = pkg.Module
 
-	return buildPackage(ctx, pkg.Types)
+	return scannedPackage, nil
 }
 
 func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
