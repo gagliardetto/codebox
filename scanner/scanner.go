@@ -515,6 +515,7 @@ func scanStruct(s *Struct, elem *types.Struct) *Struct {
 			Name: v.Name(),
 			Type: scanType(v.Type()),
 		}
+		f.BaseType = newBaseType()
 		f.SetType(v.Type())
 		f.SetTypesVar(v)
 
