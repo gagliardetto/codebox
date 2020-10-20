@@ -482,6 +482,7 @@ func scanEnumValue(ctx *context, name string, named *types.Named, hasStringMetho
 
 func scanStruct(s *Struct, elem *types.Struct) *Struct {
 	s.BaseType = newBaseType()
+	s.SetIsStruct(true)
 
 	for i := 0; i < elem.NumFields(); i++ {
 		v := elem.Field(i)
@@ -515,9 +516,8 @@ func scanStruct(s *Struct, elem *types.Struct) *Struct {
 			Name: v.Name(),
 			Type: scanType(v.Type()),
 		}
-		f.BaseType = newBaseType()
-		f.SetType(v.Type())
-		f.SetTypesVar(v)
+		f.Type.SetType(v.Type())
+		f.Type.SetTypesVar(v)
 
 		if f.Type == nil {
 			continue
