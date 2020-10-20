@@ -7,7 +7,7 @@ require (
 	github.com/buger/goterm v0.0.0-20200322175922-2f3e71b85129 // indirect
 	github.com/dave/jennifer v1.4.0
 	github.com/fatih/color v1.9.0 // indirect
-	github.com/gagliardetto/feparser v0.0.0-20201020193055-8442f492b885
+	github.com/gagliardetto/feparser v0.0.0-20201020195629-f9630e10f1bc
 	github.com/gagliardetto/utilz v0.0.0-20200824151221-3a6131a12868
 	github.com/gin-gonic/gin v1.6.3
 	github.com/gogo/protobuf v1.3.1
