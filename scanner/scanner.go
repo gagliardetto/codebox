@@ -61,6 +61,15 @@ func New(addGoPath bool, packages ...string) (*Scanner, error) {
 	}, nil
 }
 
+// NewSimple creates a new Scanner that will look for types and structs
+// only in the given packages.
+func NewSimple(packages ...string) (*Scanner, error) {
+	return &Scanner{
+		packages: packages,
+		importer: parseutil.NewImporter(),
+	}, nil
+}
+
 // ScanWithCustomScanner retrieves the scanned packages containing the extracted
 // go types and structs; it uses the provided ScannerFunc.
 func (s *Scanner) ScanWithCustomScanner(sc ScannerFunc) ([]*Package, error) {
