@@ -481,6 +481,7 @@ func scanEnumValue(ctx *context, name string, named *types.Named, hasStringMetho
 }
 
 func scanStruct(s *Struct, elem *types.Struct) *Struct {
+	s.BaseType = newBaseType()
 
 	for i := 0; i < elem.NumFields(); i++ {
 		v := elem.Field(i)
