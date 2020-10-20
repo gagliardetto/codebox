@@ -2677,7 +2677,6 @@ type CodeQlIdentity struct {
 	Identity
 }
 type FEModule struct {
-	Name             string
 	PkgPath          string
 	PkgName          string
 	ID               string
