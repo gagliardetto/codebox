@@ -4,7 +4,7 @@ import (
 	"io"
 	"strconv"
 
-	somepackage "github.com/gagliardetto/codebox/demo-package"
+	somepackage "github.com/gagliardetto/codebox/deprecated/demo-package"
 )
 
 func main()              {}
