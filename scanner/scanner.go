@@ -208,7 +208,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 
 				st := scanStruct(
 					&Struct{
-						Name:       o.Name(),
+						Name:       NameForType(o.Type()),
 						Generate:   ctx.shouldGenerateType(o.Name()),
 						IsStringer: hasStringMethod,
 						Methods:    methodsForNamed(t),
@@ -216,8 +216,9 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 					},
 					s,
 				)
-
+				st.SetType(o.Type())
 				ctx.trySetDocs(o.Name(), st)
+
 				p.Structs = append(p.Structs, st)
 				return nil
 			}
