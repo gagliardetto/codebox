@@ -19,6 +19,8 @@ import (
 	parseutil "gopkg.in/src-d/go-parse-utils.v1"
 )
 
+// TODO: https://github.com/golang/tools/blob/f1b4bd93c9465ac3d4edf2a53caf28cd21f846aa/go/ssa/example_test.go
+
 var goPath = os.Getenv("GOPATH")
 
 // Scanner scans packages looking for Go source files to parse

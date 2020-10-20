@@ -693,7 +693,7 @@ import go` + "\n\n"
 				Infof("disabling %q", req.Signature)
 			}
 
-			switch stored.original.(type) {
+			switch stored.GetOriginal().(type) {
 			case *FEFunc:
 				{
 					fe := stored.GetFEFunc()
@@ -748,7 +748,7 @@ import go` + "\n\n"
 				return
 			}
 
-			switch stored.original.(type) {
+			switch stored.GetOriginal().(type) {
 			case *FEFunc:
 				{
 					fe := stored.GetFEFunc()
@@ -849,15 +849,19 @@ type IndexItem struct {
 	original interface{}
 }
 
+func (item *IndexItem) GetOriginal() interface{} {
+	return item.original
+}
+
 //
 func NewIndexItem(v interface{}) *IndexItem {
 	item := &IndexItem{}
-	item.Set(v)
+	item.SetOriginal(v)
 	return item
 }
 
 //
-func (item *IndexItem) Set(v interface{}) {
+func (item *IndexItem) SetOriginal(v interface{}) {
 	item.original = v
 }
 
@@ -868,7 +872,7 @@ func (item *IndexItem) IsNil() bool {
 
 //
 func (item *IndexItem) GetFEFunc() *FEFunc {
-	fe, ok := item.original.(*FEFunc)
+	fe, ok := item.GetOriginal().(*FEFunc)
 	if !ok {
 		return nil
 	}
@@ -877,7 +881,7 @@ func (item *IndexItem) GetFEFunc() *FEFunc {
 
 //
 func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
-	fe, ok := item.original.(*FETypeMethod)
+	fe, ok := item.GetOriginal().(*FETypeMethod)
 	if !ok {
 		return nil
 	}
@@ -885,9 +889,9 @@ func (item *IndexItem) GetFETypeMethod() *FETypeMethod {
 }
 
 func (item *IndexItem) GetFETypeMethodOrInterfaceMethod() *FETypeMethod {
-	feTyp, ok := item.original.(*FETypeMethod)
+	feTyp, ok := item.GetOriginal().(*FETypeMethod)
 	if !ok {
-		feIt, ok := item.original.(*FEInterfaceMethod)
+		feIt, ok := item.GetOriginal().(*FEInterfaceMethod)
 		if !ok {
 			return nil
 		}
@@ -903,7 +907,7 @@ func FEIToFET(feIt *FEInterfaceMethod) *FETypeMethod {
 
 //
 func (item *IndexItem) GetFEInterfaceMethod() *FEInterfaceMethod {
-	fe, ok := item.original.(*FEInterfaceMethod)
+	fe, ok := item.GetOriginal().(*FEInterfaceMethod)
 	if !ok {
 		return nil
 	}
@@ -1277,7 +1281,7 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			composeTypeAssertion(file, groupCase, in.VarName, in.original, in.IsVariadic)
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1290,9 +1294,9 @@ func generate_ReceMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Id(in.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -1355,9 +1359,9 @@ func generate_ReceMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			}).Op(":=").Id(in.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1394,7 +1398,7 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
 			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
@@ -1410,9 +1414,9 @@ func generate_ParaMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Id(out.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1453,10 +1457,10 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1472,9 +1476,9 @@ func generate_ParaMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			groupCase.Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn || i == indexOut
@@ -1515,7 +1519,7 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1539,9 +1543,9 @@ func generate_ParaMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1583,7 +1587,7 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
 			composeVarDeclaration(file, groupCase, out.VarName, out.original, out.IsVariadic)
@@ -1604,9 +1608,9 @@ func generate_ResuMethRece(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			}).Op(":=").Id(out.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1651,10 +1655,10 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1678,9 +1682,9 @@ func generate_ResuMethPara(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -1746,7 +1750,7 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1774,9 +1778,9 @@ func generate_ResuMethResu(file *File, fe *FETypeMethod, identityInp *CodeQlIden
 			}).Op(":=").Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.Func.original.GetType().(*types.Signature)
+					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1836,10 +1840,10 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the function that transfers the taint",
@@ -1852,9 +1856,9 @@ func generate_ParaFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.original.GetType().(*types.Signature)
+					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn || i == indexOut
@@ -1897,7 +1901,7 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the function that transfers the taint",
@@ -1915,9 +1919,9 @@ func generate_ParaFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.original.GetType().(*types.Signature)
+					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1959,10 +1963,10 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", out.VarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.original.GetType(), out.original.IsVariadic())
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 			importPackage(file, out.PkgPath, out.PkgName)
 
 			Comments(groupCase,
@@ -1980,9 +1984,9 @@ func generate_ResuFuncPara(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.original.GetType().(*types.Signature)
+					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -2032,7 +2036,7 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.original.GetType(), in.original.IsVariadic())
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 			importPackage(file, out.PkgPath, out.PkgName)
 
 			Comments(groupCase,
@@ -2055,9 +2059,9 @@ func generate_ResuFuncResu(file *File, fe *FEFunc, identityInp *CodeQlIdentity, 
 			}).Op(":=").Qual(fe.PkgPath, fe.Name).CallFunc(
 				func(call *Group) {
 
-					tpFun := fe.original.GetType().(*types.Signature)
+					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.original.IsVariadic())
+					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -2697,6 +2701,10 @@ type FEFunc struct {
 	original   *scanner.Func
 }
 
+func (v *FEFunc) GetOriginal() *scanner.Func {
+	return v.original
+}
+
 func DocsWithDefault(docs []string) []string {
 	if docs == nil {
 		docs = make([]string, 0)
@@ -2798,6 +2806,10 @@ type FEType struct {
 	TypeString    string
 	KindString    string
 	original      scanner.Type
+}
+
+func (v *FEType) GetOriginal() scanner.Type {
+	return v.original
 }
 
 func getFEType(tp scanner.Type) *FEType {
@@ -2957,11 +2969,20 @@ type FETypeMethod struct {
 	Func      *FEFunc
 	original  types.Type
 }
+
+func (v *FETypeMethod) GetOriginal() types.Type {
+	return v.original
+}
+
 type FEInterfaceMethod FETypeMethod
 
 type FEReceiver struct {
 	FEType
 	original types.Type
+}
+
+func (v *FEReceiver) GetOriginal() types.Type {
+	return v.original
 }
 
 func getFEInterfaceMethod(it *scanner.Interface, methodFunc *scanner.Func) *FETypeMethod {
