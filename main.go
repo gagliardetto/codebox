@@ -65,6 +65,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	pk := pks[0]
 
 	{ // Create folders:
 		// folder for all cache:
@@ -72,7 +73,6 @@ func main() {
 		// folder for all folders for assets:
 		MustCreateFolderIfNotExists(generatedDir, 0750)
 	}
-	pk := pks[0]
 	// compose the feModule:
 	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
 	feModule, err := feparser.Load(pk)
