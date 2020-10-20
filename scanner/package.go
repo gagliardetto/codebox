@@ -415,6 +415,7 @@ func (s *Struct) HasField(name string) bool {
 
 // Field contains name and type of a struct field.
 type Field struct {
+	*BaseType
 	Docs
 	Name string
 	Type Type

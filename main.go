@@ -66,9 +66,9 @@ func main() {
 		panic(err)
 	}
 	pk := pks[0]
-	// compose the feModule:
-	Infof("Composing feModule %q", scanner.RemoveGoSrcClonePath(pk.Path))
-	feModule, err := feparser.Load(pk)
+	// compose the fePackage:
+	Infof("Composing fePackage %q", scanner.RemoveGoSrcClonePath(pk.Path))
+	fePackage, err := feparser.Load(pk)
 	if err != nil {
 		panic(err)
 	}
@@ -91,14 +91,14 @@ func main() {
 		if canLoadFromDeprecatedCache {
 			tempDeprecatedFeModule := &feparser.DEPRECATEDFEModule{}
 			// Load cache:
-			Infof("Loading cached feModule from %q", deprecatedCacheFilepath)
+			Infof("Loading cached fePackage from %q", deprecatedCacheFilepath)
 			err := LoadJSON(tempDeprecatedFeModule, deprecatedCacheFilepath)
 			if err != nil {
 				panic(err)
 			}
 
 			findLatestFunc := func(signature string) *feparser.FEFunc {
-				for _, latest := range feModule.Funcs {
+				for _, latest := range fePackage.Funcs {
 					if latest.Signature == signature {
 						return latest
 					}
@@ -106,7 +106,7 @@ func main() {
 				return nil
 			}
 			findLatestTypeMethod := func(signature string) *feparser.FETypeMethod {
-				for _, latest := range feModule.TypeMethods {
+				for _, latest := range fePackage.TypeMethods {
 					if latest.Func.Signature == signature {
 						return latest
 					}
@@ -114,7 +114,7 @@ func main() {
 				return nil
 			}
 			findLatestInterfaceMethod := func(signature string) *feparser.FEInterfaceMethod {
-				for _, latest := range feModule.InterfaceMethods {
+				for _, latest := range fePackage.InterfaceMethods {
 					if latest.Func.Signature == signature {
 						return latest
 					}
@@ -270,7 +270,7 @@ func main() {
 		if cacheExists {
 			cachedMap := make(CacheType)
 			// Load cache:
-			Infof("Loading cached feModule from %q", cacheFilepath)
+			Infof("Loading cached fePackage from %q", cacheFilepath)
 			err := LoadJSON(&cachedMap, cacheFilepath)
 			if err != nil {
 				panic(err)
@@ -285,7 +285,7 @@ func main() {
 				return nil
 			}
 			// Load from cache:
-			for _, latest := range feModule.Funcs {
+			for _, latest := range fePackage.Funcs {
 				cached := findCached(latest.Signature)
 				if cached == nil {
 					Warnf("cached not found for signature %q", latest.Signature)
@@ -294,7 +294,7 @@ func main() {
 					latest.CodeQL = cached
 				}
 			}
-			for _, latest := range feModule.TypeMethods {
+			for _, latest := range fePackage.TypeMethods {
 				cached := findCached(latest.Func.Signature)
 				if cached == nil {
 					Warnf("cached not found for signature %q", latest.Func.Signature)
@@ -303,7 +303,7 @@ func main() {
 					latest.CodeQL = cached
 				}
 			}
-			for _, latest := range feModule.InterfaceMethods {
+			for _, latest := range fePackage.InterfaceMethods {
 				cached := findCached(latest.Func.Signature)
 				if cached == nil {
 					Warnf("cached not found for signature %q", latest.Func.Signature)
@@ -315,9 +315,9 @@ func main() {
 		}
 	}
 
-	lenFuncs := len(feModule.Funcs)
-	lenTypeMethods := len(feModule.TypeMethods)
-	lenInterfaceMethods := len(feModule.InterfaceMethods)
+	lenFuncs := len(fePackage.Funcs)
+	lenTypeMethods := len(fePackage.TypeMethods)
+	lenInterfaceMethods := len(fePackage.InterfaceMethods)
 	lenTotal := lenFuncs + lenTypeMethods + lenInterfaceMethods
 	Sfln(
 		IndigoBG("Package %q has %v funcs, %v methods on types, and %v methods on interfaces (total=%v)"),
@@ -331,13 +331,13 @@ func main() {
 	// Create index, and load values to it:
 	index := NewIndex()
 	{
-		for _, v := range feModule.Funcs {
+		for _, v := range fePackage.Funcs {
 			index.MustSetUnique(v.Signature, v)
 		}
-		for _, v := range feModule.TypeMethods {
+		for _, v := range fePackage.TypeMethods {
 			index.MustSetUnique(v.Func.Signature, v)
 		}
-		for _, v := range feModule.InterfaceMethods {
+		for _, v := range fePackage.InterfaceMethods {
 			index.MustSetUnique(v.Func.Signature, v)
 		}
 	}
@@ -347,20 +347,20 @@ func main() {
 		mu.Lock()
 		defer mu.Unlock()
 
-		PopulateGeneratedClassCodeQL(feModule)
+		PopulateGeneratedClassCodeQL(fePackage)
 
 		{
 			// Save cache:
-			cacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(feModule.PkgPath)+".v2.json")
+			cacheFilepath := path.Join(cacheDir, feparser.FormatCodeQlName(fePackage.PkgPath)+".v2.json")
 			cacheMap := make(CacheType)
 			{
-				for _, v := range feModule.Funcs {
+				for _, v := range fePackage.Funcs {
 					cacheMap[v.Signature] = v.CodeQL
 				}
-				for _, v := range feModule.TypeMethods {
+				for _, v := range fePackage.TypeMethods {
 					cacheMap[v.Func.Signature] = v.CodeQL
 				}
-				for _, v := range feModule.InterfaceMethods {
+				for _, v := range fePackage.InterfaceMethods {
 					cacheMap[v.Func.Signature] = v.CodeQL
 				}
 
@@ -381,7 +381,7 @@ func main() {
 		goTestFile := NewTestFile(includeBoilerplace)
 		testFuncNames := make([]string, 0)
 		{
-			for _, fe := range feModule.Funcs {
+			for _, fe := range fePackage.Funcs {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
@@ -404,7 +404,7 @@ func main() {
 			}
 		}
 		{
-			for _, fe := range feModule.TypeMethods {
+			for _, fe := range fePackage.TypeMethods {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
@@ -427,7 +427,7 @@ func main() {
 			}
 		}
 		{
-			for _, fe := range feModule.InterfaceMethods {
+			for _, fe := range fePackage.InterfaceMethods {
 				if !fe.CodeQL.IsEnabled {
 					continue
 				}
@@ -453,7 +453,7 @@ func main() {
 		{
 
 			code := Func().
-				Id("RunAllTaints_" + feparser.FormatCodeQlName(feModule.PkgPath)).
+				Id("RunAllTaints_" + feparser.FormatCodeQlName(fePackage.PkgPath)).
 				Params().
 				BlockFunc(func(group *Group) {
 					for testID, testFuncName := range testFuncNames {
@@ -477,18 +477,18 @@ func main() {
 
 		ts := time.Now()
 		// Create subfolder for package for generated assets:
-		packageAssetFolderName := feparser.FormatCodeQlName(feModule.PkgPath)
+		packageAssetFolderName := feparser.FormatCodeQlName(fePackage.PkgPath)
 		packageAssetFolderPath := path.Join(generatedDir, packageAssetFolderName)
 		MustCreateFolderIfNotExists(packageAssetFolderPath, 0750)
 		// Create folder for assets generated during this run:
-		thisRunAssetFolderName := feparser.FormatCodeQlName(feModule.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
+		thisRunAssetFolderName := feparser.FormatCodeQlName(fePackage.PkgPath) + "_" + ts.Format(FilenameTimeFormat)
 		thisRunAssetFolderPath := path.Join(packageAssetFolderPath, thisRunAssetFolderName)
 		// Create a new assets folder inside the main assets folder:
 		MustCreateFolderIfNotExists(thisRunAssetFolderPath, 0750)
 
 		{
 			// Save golang assets:
-			assetFileName := feparser.FormatCodeQlName(feModule.PkgPath) + ".go"
+			assetFileName := feparser.FormatCodeQlName(fePackage.PkgPath) + ".go"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file go test file:
@@ -511,32 +511,32 @@ func main() {
 			var buf bytes.Buffer
 
 			fileHeader := `/**
- * Provides classes modeling security-relevant aspects of the ` + "`" + feModule.PkgPath + "`" + ` package.
+ * Provides classes modeling security-relevant aspects of the ` + "`" + fePackage.PkgPath + "`" + ` package.
  */
 
 import go` + "\n\n"
 
 			moduleHeader := Sf(
 				"/** Provides models of commonly used functions in the `%s` package. */\nmodule %s {",
-				feModule.PkgPath,
-				feparser.FormatCodeQlName(feModule.PkgPath),
+				fePackage.PkgPath,
+				feparser.FormatCodeQlName(fePackage.PkgPath),
 			)
 			buf.WriteString(fileHeader + moduleHeader)
 			if compressCodeQl {
-				err := CompressedGenerateCodeQLTT_All(&buf, feModule)
+				err := CompressedGenerateCodeQLTT_All(&buf, fePackage)
 				if err != nil {
 					panic(err)
 				}
 			} else {
-				err := GenerateCodeQLTT_Functions(&buf, feModule.Funcs)
+				err := GenerateCodeQLTT_Functions(&buf, fePackage.Funcs)
 				if err != nil {
 					panic(err)
 				}
-				err = GenerateCodeQLTT_TypeMethods(&buf, feModule.TypeMethods)
+				err = GenerateCodeQLTT_TypeMethods(&buf, fePackage.TypeMethods)
 				if err != nil {
 					panic(err)
 				}
-				err = GenerateCodeQLTT_InterfaceMethods(&buf, feModule.InterfaceMethods)
+				err = GenerateCodeQLTT_InterfaceMethods(&buf, fePackage.InterfaceMethods)
 				if err != nil {
 					panic(err)
 				}
@@ -549,7 +549,7 @@ import go` + "\n\n"
 			}
 
 			// Save codeql assets:
-			assetFileName := feparser.FormatCodeQlName(feModule.PkgPath) + ".qll"
+			assetFileName := feparser.FormatCodeQlName(fePackage.PkgPath) + ".qll"
 			assetFilepath := path.Join(thisRunAssetFolderPath, assetFileName)
 
 			// Create file qll file:
@@ -590,9 +590,9 @@ import go` + "\n\n"
 			mu.Lock()
 			defer mu.Unlock()
 
-			PopulateGeneratedClassCodeQL(feModule)
+			PopulateGeneratedClassCodeQL(fePackage)
 
-			c.IndentedJSON(200, feModule)
+			c.IndentedJSON(200, fePackage)
 		})
 		r.POST("/api/disable", func(c *gin.Context) {
 			var req PayloadDisable
@@ -900,9 +900,9 @@ type GeneratedClassResponse struct {
 	GeneratedClass string
 }
 
-func PopulateGeneratedClassCodeQL(feModule *feparser.FEModule) error {
-	for i := range feModule.Funcs {
-		fe := feModule.Funcs[i]
+func PopulateGeneratedClassCodeQL(fePackage *feparser.FEPackage) error {
+	for i := range fePackage.Funcs {
+		fe := fePackage.Funcs[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
 			err := GenerateCodeQLTT_Functions(generatedCodeqlClass, []*feparser.FEFunc{fe})
@@ -912,8 +912,8 @@ func PopulateGeneratedClassCodeQL(feModule *feparser.FEModule) error {
 			fe.CodeQL.GeneratedClass = generatedCodeqlClass.String()
 		}
 	}
-	for i := range feModule.TypeMethods {
-		fe := feModule.TypeMethods[i]
+	for i := range fePackage.TypeMethods {
+		fe := fePackage.TypeMethods[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
 			err := GenerateCodeQLTT_TypeMethods(generatedCodeqlClass, []*feparser.FETypeMethod{fe})
@@ -923,8 +923,8 @@ func PopulateGeneratedClassCodeQL(feModule *feparser.FEModule) error {
 			fe.CodeQL.GeneratedClass = generatedCodeqlClass.String()
 		}
 	}
-	for i := range feModule.InterfaceMethods {
-		fe := feModule.InterfaceMethods[i]
+	for i := range fePackage.InterfaceMethods {
+		fe := fePackage.InterfaceMethods[i]
 		if err := fe.CodeQL.Validate(); err == nil {
 			generatedCodeqlClass := new(bytes.Buffer)
 			err := GenerateCodeQLTT_InterfaceMethods(generatedCodeqlClass, []*feparser.FEInterfaceMethod{fe})
@@ -2855,7 +2855,7 @@ type CompressedTemplateValue struct {
 	Conditions string
 }
 
-func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *feparser.FEModule) error {
+func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, fePackage *feparser.FEPackage) error {
 	classTpl, err := NewTextTemplateFromFile("./templates/v2-compressed-taint-tracking.txt")
 	if err != nil {
 		return err
@@ -2868,7 +2868,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *feparser.FEModu
 		}
 
 		found := 0
-		for _, fe := range feModule.Funcs {
+		for _, fe := range fePackage.Funcs {
 			if !fe.CodeQL.IsEnabled {
 				continue
 			}
@@ -2916,7 +2916,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *feparser.FEModu
 		if err != nil {
 			return err
 		}
-		for _, fe := range feModule.TypeMethods {
+		for _, fe := range fePackage.TypeMethods {
 			if !fe.CodeQL.IsEnabled {
 				continue
 			}
@@ -2947,7 +2947,7 @@ func CompressedGenerateCodeQLTT_All(buf *bytes.Buffer, feModule *feparser.FEModu
 		if err != nil {
 			return err
 		}
-		for _, fe := range feModule.InterfaceMethods {
+		for _, fe := range fePackage.InterfaceMethods {
 			if !fe.CodeQL.IsEnabled {
 				continue
 			}
