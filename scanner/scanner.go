@@ -61,9 +61,9 @@ func New(addGoPath bool, packages ...string) (*Scanner, error) {
 	}, nil
 }
 
-// Scan retrieves the scanned packages containing the extracted
-// go types and structs.
-func (s *Scanner) Scan() ([]*Package, error) {
+// ScanWithCustomScanner retrieves the scanned packages containing the extracted
+// go types and structs; it uses the provided ScannerFunc.
+func (s *Scanner) ScanWithCustomScanner(sc ScannerFunc) ([]*Package, error) {
 	var (
 		pkgs   = make([]*Package, len(s.packages))
 		errors errorList
@@ -76,7 +76,7 @@ func (s *Scanner) Scan() ([]*Package, error) {
 		go func(p string, i int) {
 			defer wg.Done()
 
-			pkg, err := s.scanPackage(p)
+			pkg, err := s.scanPackageWithScanner(p, sc)
 			mut.Lock()
 			defer mut.Unlock()
 			if err != nil {
@@ -96,7 +96,15 @@ func (s *Scanner) Scan() ([]*Package, error) {
 	return pkgs, nil
 }
 
-func scanPackage(path string) (*packages.Package, error) {
+// Scan retrieves the scanned packages containing the extracted
+// go types and structs.
+func (s *Scanner) Scan() ([]*Package, error) {
+	return s.ScanWithCustomScanner(defaultScanFunc)
+}
+
+type ScannerFunc func(path string) (*packages.Package, error)
+
+func defaultScanFunc(path string) (*packages.Package, error) {
 	// NEW way of parsing a go package:
 	//path = "/usr/local/go/src/net"
 	fmt.Println("Scanning", path)
@@ -105,7 +113,6 @@ func scanPackage(path string) (*packages.Package, error) {
 		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
 			packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile |
 			packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedTypesSizes,
-		//Dir:  path,
 	}
 	pkgs, err := packages.Load(config, path)
 	if err != nil {
@@ -114,10 +121,10 @@ func scanPackage(path string) (*packages.Package, error) {
 
 	return pkgs[0], nil
 }
-func (s *Scanner) scanPackage(p string) (*Package, error) {
-	pkg, err := scanPackage(p)
+func (s *Scanner) scanPackageWithScanner(p string, sc ScannerFunc) (*Package, error) {
+	pkg, err := sc(p)
 	if err != nil {
-		return nil, fmt.Errorf("error while scanPackage: %s", err)
+		return nil, fmt.Errorf("error while scanPackageWithScanner: %s", err)
 	}
 
 	ctx, err := newContext(pkg.Syntax)
