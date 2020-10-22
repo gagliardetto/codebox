@@ -2622,11 +2622,11 @@ func getIdentitiesByBlock_FEFunc(fn *feparser.FEFunc, block *feparser.FlowBlock)
 		if index < lenParameters {
 			// get identity from parameters:
 			id := fn.Parameters[index].Identity
-			identitiesInp = append(identitiesInp, &id)
+			identitiesInp = append(identitiesInp, id)
 		} else {
 			// get identity from results:
 			id := fn.Results[index-lenParameters].Identity
-			identitiesInp = append(identitiesInp, &id)
+			identitiesInp = append(identitiesInp, id)
 		}
 	}
 
@@ -2638,11 +2638,11 @@ func getIdentitiesByBlock_FEFunc(fn *feparser.FEFunc, block *feparser.FlowBlock)
 		if index < lenParameters {
 			// get identity from parameters:
 			id := fn.Parameters[index].Identity
-			identitiesOutp = append(identitiesOutp, &id)
+			identitiesOutp = append(identitiesOutp, id)
 		} else {
 			// get identity from results:
 			id := fn.Results[index-lenParameters].Identity
-			identitiesOutp = append(identitiesOutp, &id)
+			identitiesOutp = append(identitiesOutp, id)
 		}
 	}
 
@@ -2684,17 +2684,17 @@ func getIdentitiesByBlock_FEMethod(fe *feparser.FETypeMethod, block *feparser.Fl
 		if index == 0 {
 			// get identity from receiver:
 			id := fe.Receiver.Identity
-			identitiesInp = append(identitiesInp, &id)
+			identitiesInp = append(identitiesInp, id)
 		}
 		if index > 0 && index <= lenParameters {
 			// get identity from parameters:
 			id := fe.Func.Parameters[index-1].Identity
-			identitiesInp = append(identitiesInp, &id)
+			identitiesInp = append(identitiesInp, id)
 		}
 		if index > lenParameters {
 			// get identity from results:
 			id := fe.Func.Results[index-lenParameters-1].Identity
-			identitiesInp = append(identitiesInp, &id)
+			identitiesInp = append(identitiesInp, id)
 		}
 	}
 
@@ -2706,17 +2706,17 @@ func getIdentitiesByBlock_FEMethod(fe *feparser.FETypeMethod, block *feparser.Fl
 		if index == 0 {
 			// get identity from receiver:
 			id := fe.Receiver.Identity
-			identitiesOutp = append(identitiesOutp, &id)
+			identitiesOutp = append(identitiesOutp, id)
 		}
 		if index > 0 && index <= lenParameters {
 			// get identity from parameters:
 			id := fe.Func.Parameters[index-1].Identity
-			identitiesOutp = append(identitiesOutp, &id)
+			identitiesOutp = append(identitiesOutp, id)
 		}
 		if index > lenParameters {
 			// get identity from results:
 			id := fe.Func.Results[index-lenParameters-1].Identity
-			identitiesOutp = append(identitiesOutp, &id)
+			identitiesOutp = append(identitiesOutp, id)
 		}
 	}
 
