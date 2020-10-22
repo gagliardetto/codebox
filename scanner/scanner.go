@@ -194,10 +194,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 	switch t := o.Type().(type) {
 
 	case *types.Named:
-		hasStringMethod, err := isStringer(t)
-		if err != nil {
-			return err
-		}
+		hasStringMethod := isStringer(t)
 		switch o.(type) {
 		case *types.Const:
 			if _, ok := t.Underlying().(*types.Basic); ok {
@@ -242,7 +239,14 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 	return nil
 }
 
-func isStringer(t *types.Named) (bool, error) {
+func isStringer(t *types.Named) bool {
+	is, err := checkIsStringer(t)
+	if err != nil {
+		fmt.Printf("%s is not a stringer: %s", t, err)
+	}
+	return is
+}
+func checkIsStringer(t *types.Named) (bool, error) {
 	for i := 0; i < t.NumMethods(); i++ {
 		m := t.Method(i)
 		if m.Name() != "String" {
