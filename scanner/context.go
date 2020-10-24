@@ -106,11 +106,13 @@ func findObjectsOfType(astFiles []*ast.File, kind ast.ObjKind) map[string]*ast.O
 func (ctx *context) trySetDocs(name string, obj Documentable) {
 	if typ, ok := ctx.types[name]; ok && typ.Doc != nil {
 		obj.SetDocs(typ.Doc)
+		obj.SetComments(typ.Comment)
 	} else if fn, ok := ctx.funcs[name]; ok && fn.Doc != nil {
 		obj.SetDocs(fn.Doc)
 	} else if v, ok := ctx.consts[name]; ok {
 		if spec, ok := v.Decl.(*ast.ValueSpec); ok {
 			obj.SetDocs(spec.Doc)
+			obj.SetComments(spec.Comment)
 		}
 	}
 }
@@ -122,6 +124,22 @@ func (ctx *context) trySetDocsForInterfaceMethod(it string, method string, obj D
 				if mtx0.Names != nil && len(mtx0.Names) > 0 {
 					if method == mtx0.Names[0].Name {
 						obj.SetDocs(mtx0.Doc)
+						obj.SetComments(mtx0.Comment)
+					}
+				}
+			}
+		}
+	}
+}
+func (ctx *context) trySetDocsForStructField(st string, field string, obj Documentable) {
+	if stx0, ok := ctx.types[st]; ok {
+		itx1, ok := stx0.Type.(*ast.StructType)
+		if ok {
+			for _, fldx0 := range itx1.Fields.List {
+				if fldx0.Names != nil && len(fldx0.Names) > 0 {
+					if field == fldx0.Names[0].Name {
+						obj.SetDocs(fldx0.Doc)
+						obj.SetComments(fldx0.Comment)
 					}
 				}
 			}

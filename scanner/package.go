@@ -328,16 +328,26 @@ func (m Chan) UnqualifiedName() string {
 type Documentable interface {
 	// SetDocs sets the documentation from an AST comment group.
 	SetDocs(*ast.CommentGroup)
+	SetComments(*ast.CommentGroup)
 }
 
 // Docs holds the documentation of a struct, enum, value, field, etc.
 type Docs struct {
-	Doc []string
+	Doc     []string
+	Comment []string
 }
 
 // SetDocs sets the documentation from an AST comment group.
-// It removes the //proteus:generate comment from the comments.
 func (d *Docs) SetDocs(comments *ast.CommentGroup) {
+	d.Doc = getComments(comments)
+}
+
+// SetComments sets the documentation from an AST comment group.
+func (d *Docs) SetComments(comments *ast.CommentGroup) {
+	d.Comment = getComments(comments)
+}
+
+func getComments(comments *ast.CommentGroup) []string {
 	var list []*ast.Comment
 	if comments != nil {
 		for _, c := range comments.List {
@@ -348,10 +358,11 @@ func (d *Docs) SetDocs(comments *ast.CommentGroup) {
 	}
 
 	if len(list) > 0 {
-		d.Doc = strings.Split(strings.TrimSpace(
+		return strings.Split(strings.TrimSpace(
 			(&ast.CommentGroup{List: list}).Text(),
 		), "\n")
 	}
+	return nil
 }
 
 // Enum consists of a list of possible values.

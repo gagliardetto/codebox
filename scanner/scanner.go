@@ -212,6 +212,7 @@ func (p *Package) scanObject(ctx *context, o types.Object) error {
 						Type:       t,
 					},
 					s,
+					ctx.trySetDocsForStructField,
 				)
 				st.SetType(o.Type())
 				ctx.trySetDocs(o.Name(), st)
@@ -414,7 +415,7 @@ func scanType(typ types.Type) (t Type) {
 		st := &Struct{}
 		st.BaseType = newBaseType()
 		st.AnonymousType = u
-		t = scanStruct(st, u)
+		t = scanStruct(st, u, nil)
 		t.SetNullable(false)
 		//t.SetIsPtr(false) //TODO: see note for *types.Array
 		t.SetIsStruct(true)
@@ -484,7 +485,7 @@ func scanEnumValue(ctx *context, name string, named *types.Named, hasStringMetho
 	ctx.enumWithString = append(ctx.enumWithString, typ)
 }
 
-func scanStruct(s *Struct, elem *types.Struct) *Struct {
+func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method string, obj Documentable)) *Struct {
 	s.BaseType = newBaseType()
 	s.SetIsStruct(true)
 
@@ -511,7 +512,7 @@ func scanStruct(s *Struct, elem *types.Struct) *Struct {
 			if embedded == nil {
 				report.Warn("field %q with type %q is not a valid embedded type", v.Name(), v.Type())
 			} else {
-				s = scanStruct(s, embedded)
+				s = scanStruct(s, embedded, docSetter)
 			}
 			continue
 		}
@@ -522,6 +523,13 @@ func scanStruct(s *Struct, elem *types.Struct) *Struct {
 		}
 		f.Type.SetType(v.Type())
 		f.Type.SetTypesVar(v)
+		if docSetter != nil {
+			docSetter(
+				s.Name,
+				v.Name(),
+				f,
+			)
+		}
 
 		if f.Type == nil {
 			continue
