@@ -208,9 +208,9 @@
 
 <body>
     <div class="container-fluid" id="cb-source">
-        <h3 v-if="loading">
+        <h4 v-if="loading">
             Loading package data...
-        </h3>
+        </h4>
         <template v-if="!loading">
             <!-- Content here -->
             <h4>Package "{{source.PkgName}}" from <b>{{source.PkgPath}}</b></h4>
