@@ -31,6 +31,8 @@ github.com/gagliardetto/feparser v0.0.0-20201020211319-28276329c63f h1:rAt8OD73W
 github.com/gagliardetto/feparser v0.0.0-20201020211319-28276329c63f/go.mod h1:593gjyhDTtdDp+QkUS4kuku7vswrRBMQzwCGKiKCZig=
 github.com/gagliardetto/feparser v0.0.0-20201022212838-99bfec669153 h1:6qNMub7fMVB2W0Q+qJcvUgwr5l/8KkqTEq2BYSijR2g=
 github.com/gagliardetto/feparser v0.0.0-20201022212838-99bfec669153/go.mod h1:qkJ3IwL5kZj2VbqUiKlA/kb1p5eRt1p7cM3UEXMw67I=
+github.com/gagliardetto/feparser v0.0.0-20201024153951-6fd99aa61a3d h1:8icRwxPXcES5qKPslBVtKpiwyTHg3UguEH9Il7VU+d0=
+github.com/gagliardetto/feparser v0.0.0-20201024153951-6fd99aa61a3d/go.mod h1:qkJ3IwL5kZj2VbqUiKlA/kb1p5eRt1p7cM3UEXMw67I=
 github.com/gagliardetto/utilz v0.0.0-20200715140922-c894e8869ddc h1:qZUAmJAR5ONhXKTK7aRhLmo8oEn9jyG5GB/+MSyd5kA=
 github.com/gagliardetto/utilz v0.0.0-20200715140922-c894e8869ddc/go.mod h1:FqrJIHaVBve1PigrIcinRW1cahs8TfHVpvRoks+g6sU=
 github.com/gagliardetto/utilz v0.0.0-20200824151221-3a6131a12868 h1:qz+c8zIi6CzXVzHAVmZzbVnp4tRzw1hWAe8THlLmkeY=
