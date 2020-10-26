@@ -508,6 +508,7 @@ func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method 
 		}
 
 		if v.Anonymous() {
+			continue
 			embedded := findStruct(v.Type())
 			if embedded == nil {
 				report.Warn("field %q with type %q is not a valid embedded type", v.Name(), v.Type())
