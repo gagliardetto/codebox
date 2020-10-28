@@ -259,11 +259,12 @@ func defaultModuleScannerFunc(rawPath string) (*packages.Package, error) {
 	// - You can have a temporary folder with only a `go.mod` file
 	// that contains a reuire for the package+version you want, and
 	// go will add the missing deps, and load that version you specified.
+	Infof("Starting to load package %q ...", rawPath)
 	pkgs, err := packages.Load(config, path)
 	if err != nil {
 		return nil, fmt.Errorf("error while packages.Load: %s", err)
 	}
-	Infof("Loaded package %q", path)
+	Infof("Loaded package %q", rawPath)
 
 	var errs []error
 	packages.Visit(pkgs, nil, func(pkg *packages.Package) {
