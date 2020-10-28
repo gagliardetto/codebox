@@ -211,9 +211,12 @@
         <h4 v-if="loading">
             Loading package data...
         </h4>
-        <template v-if="!loading">
+        <div v-if="!loading">
             <!-- Content here -->
-            <h4>Package "{{source.PkgName}}" from <b>{{source.PkgPath}}</b></h4>
+            <div>
+                <h4 class="d-inline-block">Package "{{source.PkgName}}" from <b>{{source.PkgPath}}{{source.Module?"@"+source.Module.Version:""}}</b></h4>
+                <small v-if="source.Module" class="d-inline-block text-muted">({{source.Module.Time}})</small>
+            </div>
             <!-- functions -->
             <div v-for="func in source.Funcs" class="row">
                 <div class="col-md-7" v-bind:class="{ isNotUsed: !func.CodeQL.IsEnabled }">
@@ -249,7 +252,7 @@
                                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                         {{index < func.Parameters.length - 1 ? ", " : "" }}{{index==func.Parameters.length - 1 ?")":""}} </span> </td> <td v-for="(funResult, index) in func.Results" :id="cc(func.ID,'block',blockIndex,'bl', index + len(func.Parameters))" class="func-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+len(func.Parameters), func), 'selected-outp': isCheckedOutp(blockIndex, index+len(func.Parameters), func) }">
                                                             <span :title="funResult.KindString" data-toggle="tooltip">
-                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName? funResult.VarName+" ":""}}<b>{{funResult.TypeString}}</b>
                                                                 {{index < func.Results.length - 1 ? ", " : "" }}{{index==func.Results.length - 1 ?")":""}} </span> </td> </tr> <!--checkboxes for inp -->
                                             <tr>
                                                 <td>FROM:</td>
@@ -333,7 +336,7 @@
                                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                         {{index < method.Func.Parameters.length - 1 ? ", " : "" }}{{index==method.Func.Parameters.length - 1 ?")":""}} </span> </td> <td v-for="(funResult, index) in method.Func.Results" :id="cc(method.ID,'block',blockIndex,'bl',index+1+len(method.Func.Parameters))" class="method-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(method.Func.Parameters), method), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(method.Func.Parameters), method) }">
                                                             <span :title="funResult.KindString" data-toggle="tooltip">
-                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName? funResult.VarName+" ":""}}<b>{{funResult.TypeString}}</b>
                                                                 {{index < method.Func.Results.length - 1 ? ", " : "" }}{{index==method.Func.Results.length - 1 ?")":""}}</td> </span> </tr> <!--checkboxes for inp -->
                                             <tr>
                                                 <td>FROM:</td>
@@ -429,7 +432,7 @@
                                                         {{funParameter.VarName + " "}}<b>{{funParameter.TypeString}}</b>
                                                         {{index < itMeth.Func.Parameters.length - 1 ? ", " : "" }}{{index==itMeth.Func.Parameters.length - 1 ?")":""}} </span> </td> <td v-for="(funResult, index) in itMeth.Func.Results" :id="cc(itMeth.ID,'block',blockIndex,'bl',index+1+len(itMeth.Func.Parameters))" class="intmet-type" v-bind:class="{ 'selected-inp': isCheckedInp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth), 'selected-outp': isCheckedOutp(blockIndex, index+1+len(itMeth.Func.Parameters), itMeth) }">
                                                             <span :title="funResult.KindString" data-toggle="tooltip">
-                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName + " "}}<b>{{funResult.TypeString}}</b>
+                                                                {{index == 0 ? "(" : "" }}{{funResult.VarName? funResult.VarName+" ":""}}<b>{{funResult.TypeString}}</b>
                                                                 {{index < itMeth.Func.Results.length - 1 ? ", " : "" }}{{index==itMeth.Func.Results.length - 1 ?")":""}} </span> </td> </tr> <!--checkboxes for inp -->
                                             <tr>
                                                 <td>FROM:</td>
@@ -484,8 +487,8 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-    </template>
     <script type="text/javascript">
     function cc(...elems) {
         return elems.join("-")

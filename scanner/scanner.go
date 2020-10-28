@@ -6,13 +6,20 @@ import (
 	"fmt"
 	"go/token"
 	"go/types"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
 
+	"github.com/gagliardetto/golang-go/cmd/go/not-internal/get"
+	"github.com/gagliardetto/golang-go/cmd/go/not-internal/modfetch"
+	"github.com/gagliardetto/golang-go/cmd/go/not-internal/search"
+	"github.com/gagliardetto/golang-go/cmd/go/not-internal/web"
+	. "github.com/gagliardetto/utilz"
 	pkgerrors "github.com/pkg/errors"
+	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/packages"
 	"gopkg.in/src-d/proteus.v1/report"
 
@@ -22,6 +29,11 @@ import (
 // TODO: https://github.com/golang/tools/blob/f1b4bd93c9465ac3d4edf2a53caf28cd21f846aa/go/ssa/example_test.go
 
 var goPath = os.Getenv("GOPATH")
+
+const (
+	// Use default Golang proxy (???)
+	GoProxy = "https://proxy.golang.org/"
+)
 
 // Scanner scans packages looking for Go source files to parse
 // and extract types and structs from.
@@ -34,9 +46,18 @@ type Scanner struct {
 // set.
 var ErrNoGoPathSet = errors.New("GOPATH environment variable is not set")
 
+// SplitPathVersion splits a path string (e.g. example.com/hello/world@1.0.1) into
+// its path and version components. If no version notation is present, rawPath is returned.
+func SplitPathVersion(rawPath string) (path string, version string) {
+	if i := strings.Index(rawPath, "@"); i >= 0 {
+		return rawPath[:i], rawPath[i+1:]
+	}
+	return rawPath, ""
+}
+
 // New creates a new Scanner that will look for types and structs
 // only in the given packages.
-func New(addGoPath bool, packages ...string) (*Scanner, error) {
+func NewDEPRECATED(addGoPath bool, packages ...string) (*Scanner, error) {
 	if goPath == "" {
 		return nil, ErrNoGoPathSet
 	}
@@ -61,9 +82,11 @@ func New(addGoPath bool, packages ...string) (*Scanner, error) {
 	}, nil
 }
 
-// NewSimple creates a new Scanner that will look for types and structs
-// only in the given packages.
-func NewSimple(packages ...string) (*Scanner, error) {
+// New creates a new Scanner that will look for types and structs
+// only in the given packages. A provided package path can be
+// in the form `path@version`, or just `path` and the latest version will be used.
+// For Go standard library packages, the local version is used (must have Go installed).
+func New(packages ...string) (*Scanner, error) {
 	return &Scanner{
 		packages: packages,
 		importer: parseutil.NewImporter(),
@@ -108,14 +131,162 @@ func (s *Scanner) ScanWithCustomScanner(sc ScannerFunc) ([]*Package, error) {
 // Scan retrieves the scanned packages containing the extracted
 // go types and structs.
 func (s *Scanner) Scan() ([]*Package, error) {
-	return s.ScanWithCustomScanner(defaultScanFunc)
+	return s.ScanWithCustomScanner(defaultModuleScannerFunc)
 }
 
 type ScannerFunc func(path string) (*packages.Package, error)
 
-func defaultScanFunc(path string) (*packages.Package, error) {
-	// NEW way of parsing a go package:
-	//path = "/usr/local/go/src/net"
+var (
+	fromRawPathToTempGoModFilepath   = make(map[string]string)
+	fromRawPathToTempGoModFilepathMu = &sync.RWMutex{}
+)
+
+func setTempGoModFilepath(rawPath string, goModFilepath string) {
+	// TODO: is this relation stable?
+	// - What if the same package@latest is requested at two different times, resulting in two different versions?
+	fromRawPathToTempGoModFilepathMu.Lock()
+	defer fromRawPathToTempGoModFilepathMu.Unlock()
+	fromRawPathToTempGoModFilepath[rawPath] = goModFilepath
+}
+
+// GetTempGoModFilepath gets the go.mod file with which the package was
+// loaded.
+func GetTempGoModFilepath(rawPath string) string {
+	fromRawPathToTempGoModFilepathMu.RLock()
+	defer fromRawPathToTempGoModFilepathMu.RUnlock()
+	goModFilepath, ok := fromRawPathToTempGoModFilepath[rawPath]
+	if !ok {
+		return ""
+	}
+	return goModFilepath
+}
+
+func defaultModuleScannerFunc(rawPath string) (*packages.Package, error) {
+	// Split eventual path@version format:
+	path, version := SplitPathVersion(rawPath)
+	if path == "" {
+		return nil, errors.New("No package specified")
+	}
+	// Check whether the path belongs to a standard library package:
+	isStd := search.IsStandardImportPath(path)
+	if isStd {
+		Infof("Package %q is part of standard library", path)
+	}
+	var rootPath string
+	if isStd {
+		rootPath = path
+	} else {
+		// Find out the root of the package:
+		root, err := get.RepoRootForImportPath(path, get.IgnoreMod, web.DefaultSecurity)
+		if err != nil {
+			return nil, fmt.Errorf("error while getting RepoRootForImportPath: %s", err)
+		}
+		Q(root)
+		rootPath = root.Root
+	}
+
+	if !isStd {
+		// Lookup the repo:
+		repo, err := modfetch.Lookup(GoProxy, rootPath)
+		if err != nil {
+			return nil, fmt.Errorf("error while modfetch.Lookup: %s", err)
+		}
+
+		// If no version is specified,
+		// or "latest" is specified,
+		// then lookup what's the latest version:
+		if version == "" || version == "latest" {
+			latest, err := repo.Latest()
+			if err != nil {
+				return nil, fmt.Errorf("error while fetching info about latest revision: %s", err)
+			}
+			version = latest.Version
+			Infof("Using latest %q version", latest)
+		}
+
+		rev, err := repo.Stat(version)
+		if err != nil {
+			return nil, fmt.Errorf("error while repo.Stat: %s", err)
+		}
+		Q(rev)
+	}
+	config := &packages.Config{
+		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
+			packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile |
+			packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedTypesSizes | packages.NeedModule,
+	}
+	{
+		// Create a temporary folder:
+		tmpDir, err := ioutil.TempDir("", "codebox")
+		if err != nil {
+			return nil, fmt.Errorf("error while creating temp dir for module: %s", err)
+		}
+		tmpDir = MustAbs(tmpDir)
+		Q(tmpDir)
+
+		// Create a `go.mod` file requiring the specified version of the package:
+		mf := &modfile.File{}
+		mf.AddModuleStmt("example.com/hello/world")
+
+		if !isStd {
+			mf.AddNewRequire(rootPath, version, true)
+		}
+		mf.Cleanup()
+
+		mfBytes, err := mf.Format()
+		if err != nil {
+			return nil, fmt.Errorf("error while formatting temporary go.mod: %s", err)
+		}
+		goModFilepath := filepath.Join(tmpDir, "go.mod")
+		// Write temporary `go.mod` file:
+		err = ioutil.WriteFile(goModFilepath, mfBytes, 0666)
+		if err != nil {
+			return nil, fmt.Errorf("error while writing temporary go.mod: %s", err)
+		}
+		Infof("Using the following temporary go.mod file:\n")
+		Ln(string(mfBytes))
+		setTempGoModFilepath(rawPath, goModFilepath)
+
+		// Set the package loader Dir to the `tmpDir`; that will force
+		// the package loader to use the `go.mod` file and thus
+		// load the wanted version of the package:
+		config.Dir = tmpDir
+	}
+
+	// - If you set `config.Dir` to a dir that contains a `go.mod` file,
+	// and a version of `path` package is specified in that `go.mod` file,
+	// then that specific version will be parsed.
+	// - You can have a temporary folder with only a `go.mod` file
+	// that contains a reuire for the package+version you want, and
+	// go will add the missing deps, and load that version you specified.
+	pkgs, err := packages.Load(config, path)
+	if err != nil {
+		return nil, fmt.Errorf("error while packages.Load: %s", err)
+	}
+	Infof("Loaded package %q", path)
+
+	var errs []error
+	packages.Visit(pkgs, nil, func(pkg *packages.Package) {
+		for _, err := range pkg.Errors {
+			errs = append(errs, err)
+		}
+	})
+	err = CombineErrors(errs...)
+	if len(errs) > 0 {
+		return nil, fmt.Errorf("error while packages.Load: %s", err)
+	}
+
+	// TODO: remove debug:
+	for _, pkg := range pkgs {
+		Q(pkg.Module)
+	}
+	for _, pkg := range pkgs {
+		fmt.Println(pkg.ID, pkg.GoFiles)
+	}
+	return pkgs[0], nil
+}
+func deprecatedScannerFunc(path string) (*packages.Package, error) {
+	// Example: path = "/usr/local/go/src/net"
 	fmt.Println("Scanning", path)
 
 	config := &packages.Config{
@@ -509,6 +680,7 @@ func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method 
 
 		if v.Anonymous() {
 			continue
+			// TODO: add info about embedded structs to s.Embedded, which will be []*Struct (???)
 			embedded := findStruct(v.Type())
 			if embedded == nil {
 				report.Warn("field %q with type %q is not a valid embedded type", v.Name(), v.Type())

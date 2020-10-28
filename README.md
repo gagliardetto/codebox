@@ -29,11 +29,14 @@ cd $GOPATH/src/github.com/gagliardetto/codebox
 make
 
 # - Spin up the graphical tool http server for e.g. the "io" package.
-# NOTE: you still need to be inside $GOPATH/src/github.com/gagliardetto/codebox
-# NOTE: the --pkg flag must be the absolute path to the package.
-# NOTE: there might be some issues with some packages or modules.
-# NOTE: the --out-dir flag is the folder where all the generated files will go.
-codebox --out-dir=./generated/compressed --pkg=/usr/local/go/src/io --stub --http
+# NOTE: You still need to be inside $GOPATH/src/github.com/gagliardetto/codebox (to be able to access static assets)
+# NOTE: You need to have Go installed to be able to analyze standard library packages.
+# NOTE: The --pkg flag can either be <package> (defaults to latest version), or <package>@<version>;
+# e.g. github.com/gin-gonic/gin@latest
+# e.g. github.com/gin-gonic/gin@v1.6.2
+# NOTE: There might be some issues with some packages or modules.
+# NOTE: The --out-dir flag is the folder where all the generated files will go.
+codebox --out-dir=./generated/compressed --pkg=net/http --stub --http
 
 # - Open the UI in the browser:
 chrome http://127.0.0.1:8080/
@@ -45,7 +48,7 @@ chrome http://127.0.0.1:8080/
 
 # NOTE: if you only want to regenerate the code without starting the server,
 # then you need to remove the --http flag:
-codebox --out-dir=./generated/compressed --pkg=/usr/local/go/src/io --stub
+codebox --out-dir=./generated/compressed --pkg=net/http --stub
 ```
 
 # Helpful commands for batch processing

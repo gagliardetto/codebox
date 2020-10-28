@@ -44,19 +44,19 @@ func main() {
 	var includeBoilerplace bool
 	var compressCodeQl bool
 
-	flag.StringVar(&pkg, "pkg", "", "Package you want to scan (absolute path)")
+	flag.StringVar(&pkg, "pkg", "", "Package you want to scan (can be either in example.com/hello/world format, or example.com/hello/world@v1.0.1 format)")
 	flag.StringVar(&cacheDir, "cache-dir", "./cache", "Folder that contains cache of taint-tracking pointers")
 	flag.StringVar(&generatedDir, "out-dir", "./generated", "Folder that contains the generated assets (each run has its own timestamped folder)")
 	flag.BoolVar(&runServer, "http", false, "Run http server")
 	flag.BoolVar(&toStdout, "stdout", false, "Print generated to stdout")
-	flag.BoolVar(&includeBoilerplace, "stub", false, "Include utility functions (main, sink, link, etc.) in the go test files")
+	flag.BoolVar(&includeBoilerplace, "stub", true, "Include utility functions (main, sink, link, etc.) in the go test files")
 	flag.BoolVar(&compressCodeQl, "compress", true, "Compress codeql classes")
 	flag.BoolVar(&IncludeCommentsInGeneratedGo, "comments", false, "Include comments inside go test code")
 	flag.BoolVar(&InlineGeneratedGo, "inline", false, "Inline tests in generated go code")
 	flag.Parse()
 
-	// Initialize GOPATH scanner:
-	sc, err := scanner.New(false, pkg)
+	// Initialize module scanner:
+	sc, err := scanner.New(pkg)
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +67,7 @@ func main() {
 	}
 	pk := pks[0]
 	// compose the fePackage:
-	Infof("Composing fePackage %q", scanner.RemoveGoSrcClonePath(pk.Path))
+	Infof("Composing fePackage %q", pk.Path)
 	fePackage, err := feparser.Load(pk)
 	if err != nil {
 		panic(err)
@@ -503,6 +503,14 @@ func main() {
 			err = goTestFile.Render(goFile)
 			if err != nil {
 				panic(err)
+			}
+		}
+		{
+			// Save the go.mod file that was used to fetch the desired version of the package:
+			if srcGoModFilepath := scanner.GetTempGoModFilepath(pkg); srcGoModFilepath != "" {
+				dstGoModFilepath := path.Join(thisRunAssetFolderPath, "go.mod")
+				Infof("Saving saving go.mod to %q", MustAbs(dstGoModFilepath))
+				MustCopyFile(srcGoModFilepath, dstGoModFilepath)
 			}
 		}
 
