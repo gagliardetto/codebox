@@ -227,7 +227,6 @@
                             <input type="checkbox" v-model="func.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, func.Signature)">
                             <span class="slider bg-success"></span>
                         </label>
-                        <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',func.ID)">COPY</button>
                         <div class="col-md-12">
                             <span class="com">
                                 <div v-for="comment in func.Docs">// {{ comment }}</div>
@@ -287,7 +286,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled }">
+                    <div class="codebox-generated border-success" v-bind:class="{ hidden: !func.CodeQL.IsEnabled || !func.CodeQL.GeneratedClass }">
                         <div class="type-indication text-success">CODEQL PREVIEW</div>
                         <code :id="cc('code',func.ID)">
                             {{ func.CodeQL.GeneratedClass }}
@@ -305,7 +304,6 @@
                             <input type="checkbox" v-model="method.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, method.Func.Signature)">
                             <span class="slider bg-primary"></span>
                         </label>
-                        <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',method.ID)">COPY</button>
                         <div class="col-md-12">
                             <span class="com">
                                 <div v-for="comment in method.Docs">// {{ comment }}</div>
@@ -383,7 +381,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled }">
+                    <div class="codebox-generated border-primary" v-bind:class="{ hidden: !method.CodeQL.IsEnabled || !method.CodeQL.GeneratedClass }">
                         <div class="type-indication text-primary">CODEQL PREVIEW</div>
                         <code :id="cc('code',method.ID)">
                             {{ method.CodeQL.GeneratedClass }}
@@ -401,7 +399,6 @@
                             <input type="checkbox" v-model="itMeth.CodeQL.IsEnabled" @change="onChangeIsEnabled($event, itMeth.Func.Signature)">
                             <span class="slider bg-warning"></span>
                         </label>
-                        <button type="button" class="btn btn-primary text-white copy-btn ml-auto" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }" @click.stop.prevent="copyTestingCode($event)" :for="cc('code',itMeth.ID)">COPY</button>
                         <div class="col-md-12">
                             <span class="com">
                                 <div v-for="comment in itMeth.Docs">// {{ comment }}</div>
@@ -479,7 +476,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled }">
+                    <div class="codebox-generated border-warning" v-bind:class="{ hidden: !itMeth.CodeQL.IsEnabled || !itMeth.CodeQL.GeneratedClass }">
                         <div class="type-indication text-warning">CODEQL PREVIEW</div>
                         <code :id="cc('code',itMeth.ID)">
                             {{ itMeth.CodeQL.GeneratedClass }}
@@ -740,13 +737,22 @@
                             },
                             body: JSON.stringify(payload),
                         })
-                        .catch((error) => {
-                            console.error('Error:', error);
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw response;
+                            }
                         })
-                        .then(response => response.json())
-                        .then((data) => {
-                            fn.CodeQL.GeneratedClass = data.GeneratedClass;
-                        });;
+                        .then(json => {
+                            fn.CodeQL.GeneratedClass = json.GeneratedClass;
+                            this.$forceUpdate();
+                        })
+                        .catch((error) => {
+                            fn.CodeQL.GeneratedClass = "";
+                            this.$forceUpdate();
+                            console.error('Error:', error);
+                        });
                 }
             },
             addBlock(fn) {
