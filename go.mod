@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/dave/jennifer v1.4.0
-	github.com/gagliardetto/feparser v0.0.0-20201024155207-4bbeb9f49269
+	github.com/gagliardetto/feparser v0.0.0-20201128200749-aafe7080a5cc
 	github.com/gagliardetto/golang-go v0.0.0-20201020153340-53909ea70814
 	github.com/gagliardetto/utilz v0.0.0-20200824151221-3a6131a12868
 	github.com/gin-gonic/gin v1.6.3

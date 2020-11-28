@@ -1207,7 +1207,7 @@ func generate_ReceMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.IsVariadic)
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
 			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
@@ -1267,7 +1267,7 @@ func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.IsVariadic)
+			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1330,7 +1330,7 @@ func generate_ParaMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.IsVariadic)
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1519,7 +1519,7 @@ func generate_ResuMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.IsVariadic)
+			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that will transfer the taint",
