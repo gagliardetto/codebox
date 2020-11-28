@@ -282,7 +282,11 @@ func defaultModuleScannerFunc(rawPath string) (*packages.Package, error) {
 		Q(pkg.Module)
 	}
 	for _, pkg := range pkgs {
-		fmt.Println(pkg.ID, pkg.GoFiles)
+		Sfln(
+			"%s has %v files",
+			pkg.ID,
+			len(pkg.GoFiles),
+		)
 	}
 	return pkgs[0], nil
 }
@@ -328,6 +332,40 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 		Path:    RemoveGoPath(gopkg),
 		Name:    gopkg.Name(),
 		Aliases: make(map[string]Type),
+		Types:   make([]*Named, 0),
+	}
+
+	{ // Gather type declarations:
+		for _, name := range gopkg.Scope().Names() {
+			obj := gopkg.Scope().Lookup(name)
+			// Skip non-exported objects.
+			if !obj.Exported() {
+				continue
+			}
+
+			// Skip anything that is not a declared type (i.e. variables, constants, functions ...)
+			if tn, ok := obj.(*types.TypeName); ok {
+				// Skip alias types:
+				if tn.IsAlias() {
+					continue
+				}
+				// TODO: Skip structs and interfaces?
+				_, isStruct := obj.Type().Underlying().(*types.Struct)
+				_, isInterface := obj.Type().Underlying().(*types.Interface)
+				_, _ = isStruct, isInterface
+
+				typeName := scanType(obj.Type())
+				if named, ok := typeName.(*Named); ok {
+					named.Object = obj
+					ctx.trySetDocs(obj.Name(), named)
+					pkg.Types = append(pkg.Types, named)
+				} else {
+					//panic(Sf("not *Named: %T", typeName))
+				}
+			} else {
+				//Ln(fmt.Errorf(RedBG("is not a named type: %v"), obj))
+			}
+		}
 	}
 
 	pkg.Methods = methodsInScope(gopkg.Scope())
@@ -343,6 +381,14 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 }
 
 func (p *Package) scanObject(ctx *context, o types.Object) error {
+	{
+		// Skip alias types:
+		if typeName, ok := o.(*types.TypeName); ok {
+			if typeName.IsAlias() {
+				return nil
+			}
+		}
+	}
 	if !o.Exported() {
 		return nil
 	}

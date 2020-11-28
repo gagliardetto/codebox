@@ -13,16 +13,18 @@ import (
 // a reference of all defined structs and type aliases.
 // A Package is only safe to use once it is resolved.
 type Package struct {
-	Resolved   bool
 	Path       string
 	Name       string
 	Module     *packages.Module
 	Structs    []*Struct
-	Enums      []*Enum
 	Funcs      []*Func
 	Interfaces []*Interface
 	Methods    []*types.Selection
-	Aliases    map[string]Type
+	Types      []*Named // Types contains types found in the package; excluded are structs and interfaces.
+	// TODO: remove:
+	Resolved bool
+	Aliases  map[string]Type
+	Enums    []*Enum
 }
 
 // collectEnums finds the enum values collected during the scan and generates
@@ -197,8 +199,10 @@ func (b Basic) UnqualifiedName() string {
 // Named is non-basic type identified by a name on some package.
 type Named struct {
 	*BaseType
-	Path string
-	Name string
+	Docs
+	Path   string
+	Name   string
+	Object types.Object
 }
 
 // String returns a string representation for the type
@@ -221,11 +225,11 @@ func (n Named) UnqualifiedName() string {
 
 // NewNamed creates a new named type given its package path and name.
 func NewNamed(path, name string) Type {
-	return &Named{
-		newBaseType(),
-		path,
-		name,
-	}
+	n := &Named{}
+	n.BaseType = newBaseType()
+	n.Path = path
+	n.Name = name
+	return n
 }
 
 // Alias represents a type declaration from a type to another type
