@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -13,9 +12,9 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"unicode"
 
 	. "github.com/dave/jennifer/jen"
+	"github.com/gagliardetto/codebox/gogentools"
 	"github.com/gagliardetto/codebox/scanner"
 	"github.com/gagliardetto/feparser"
 	. "github.com/gagliardetto/utilz"
@@ -888,22 +887,6 @@ func (index *Storage) MustSetUnique(signature string, v interface{}) {
 	}
 }
 
-func HashAnyWithJSON(v interface{}) (uint64, error) {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return 0, err
-	}
-	return HashBytes(b), nil
-}
-
-func MustHashAnyWithJSON(v interface{}) uint64 {
-	h, err := HashAnyWithJSON(v)
-	if err != nil {
-		panic(err)
-	}
-	return h
-}
-
 type GeneratedClassResponse struct {
 	GeneratedClass string
 }
@@ -1196,8 +1179,8 @@ func generate_ReceMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Receiver
 	out := fe.Func.Parameters[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1207,10 +1190,10 @@ func generate_ReceMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1218,14 +1201,14 @@ func generate_ReceMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.Id(in.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -1256,8 +1239,8 @@ func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Receiver
 	out := fe.Func.Results[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1267,7 +1250,7 @@ func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal(), in.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1275,7 +1258,7 @@ func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.ListFunc(func(resGroup *Group) {
 				for i, v := range fe.Func.Results {
@@ -1290,7 +1273,7 @@ func generate_ReceMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1316,8 +1299,8 @@ func generate_ParaMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Parameters[indexIn]
 	out := fe.Receiver
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1327,10 +1310,10 @@ func generate_ParaMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that transfers the taint",
@@ -1338,14 +1321,14 @@ func generate_ParaMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.Id(out.VarName).Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1375,8 +1358,8 @@ func generate_ParaMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Parameters[indexIn]
 	out := fe.Func.Parameters[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1386,10 +1369,10 @@ func generate_ParaMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1400,14 +1383,14 @@ func generate_ParaMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.Id("mediumObjCQL").Dot(fe.Func.Name).CallFunc(
 				func(call *Group) {
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn || i == indexOut
@@ -1437,8 +1420,8 @@ func generate_ParaMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Parameters[indexIn]
 	out := fe.Func.Results[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1448,7 +1431,7 @@ func generate_ParaMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1459,7 +1442,7 @@ func generate_ParaMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.ListFunc(func(resGroup *Group) {
 				for i, v := range fe.Func.Results {
@@ -1474,7 +1457,7 @@ func generate_ParaMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1505,8 +1488,8 @@ func generate_ResuMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Results[indexIn]
 	out := fe.Receiver
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1516,10 +1499,10 @@ func generate_ResuMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal(), out.Is.Variadic)
 
 			Comments(groupCase,
 				"Call the method that will transfer the taint",
@@ -1539,7 +1522,7 @@ func generate_ResuMethRece(file *File, fe *feparser.FETypeMethod, identityInp *f
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1573,8 +1556,8 @@ func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Results[indexIn]
 	out := fe.Func.Parameters[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1584,10 +1567,10 @@ func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1598,7 +1581,7 @@ func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.ListFunc(func(resGroup *Group) {
 				for i, _ := range fe.Func.Results {
@@ -1613,7 +1596,7 @@ func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -1642,21 +1625,6 @@ func generate_ResuMethPara(file *File, fe *feparser.FETypeMethod, identityInp *f
 	return code.Line()
 }
 
-func JoinDash(elems ...string) string {
-	return strings.Join(elems, "-")
-}
-func LowerCaseFirst(str string) string {
-	for i, v := range str {
-		return string(unicode.ToLower(v)) + str[i+1:]
-	}
-	return ""
-}
-func NewLowerTitleCodeQlName(elems ...string) string {
-	return LowerCaseFirst(NewCodeQlName(elems...))
-}
-func NewCodeQlName(elems ...string) string {
-	return feparser.FormatCodeQlName(JoinDash(elems...))
-}
 func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: result
 	// medium: method
@@ -1668,8 +1636,8 @@ func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 	in := fe.Func.Results[indexIn]
 	out := fe.Func.Results[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1679,7 +1647,7 @@ func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, "Declare medium object/interface:")
 			groupCase.Var().Id("mediumObjCQL").Qual(fe.Receiver.PkgPath, fe.Receiver.TypeName)
@@ -1690,7 +1658,7 @@ func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 				Sf("(`%s` is now tainted).", out.VarName),
 			)
 
-			importPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
+			gogentools.ImportPackage(file, fe.Func.PkgPath, fe.Func.PkgName)
 
 			groupCase.ListFunc(func(resGroup *Group) {
 				for i, v := range fe.Func.Results {
@@ -1709,7 +1677,7 @@ func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 
 					tpFun := fe.Func.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.Func.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -1731,22 +1699,6 @@ func generate_ResuMethResu(file *File, fe *feparser.FETypeMethod, identityInp *f
 	return code.Line()
 }
 
-func NewNameWithPrefix(prefix string) string {
-	return Sf("%s%v", prefix, DeterministicRandomIntRange(111, 999))
-}
-func MustVarName(name string) string {
-	return MustVarNameWithDefaultPrefix(name, "variable")
-}
-func MustVarNameWithDefaultPrefix(name string, prefix string) string {
-	if prefix == "" {
-		prefix = "var"
-	}
-	if name == "" {
-		return NewNameWithPrefix(prefix)
-	}
-
-	return name
-}
 func generate_ParaFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparser.CodeQlIdentity, identityOutp *feparser.CodeQlIdentity) *Statement {
 	// from: param
 	// medium: func
@@ -1758,8 +1710,8 @@ func generate_ParaFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 	in := fe.Parameters[indexIn]
 	out := fe.Parameters[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1769,10 +1721,10 @@ func generate_ParaFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", outVarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the function that transfers the taint",
@@ -1780,14 +1732,14 @@ func generate_ParaFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 				Sf("`%s` is now tainted.", outVarName),
 			)
 
-			importPackage(file, fe.PkgPath, fe.PkgName)
+			gogentools.ImportPackage(file, fe.PkgPath, fe.PkgName)
 
 			groupCase.Qual(fe.PkgPath, fe.Name).CallFunc(
 				func(call *Group) {
 
 					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn || i == indexOut
@@ -1819,8 +1771,8 @@ func generate_ParaFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 	in := fe.Parameters[indexIn]
 	out := fe.Results[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1830,7 +1782,7 @@ func generate_ParaFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase,
 				"Call the function that transfers the taint",
@@ -1850,7 +1802,7 @@ func generate_ParaFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 
 					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexIn
@@ -1881,8 +1833,8 @@ func generate_ResuFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 	in := fe.Results[indexIn]
 	out := fe.Parameters[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1892,11 +1844,11 @@ func generate_ResuFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
 
 			Comments(groupCase, Sf("Declare `%s` variable:", out.VarName))
-			composeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
-			importPackage(file, out.PkgPath, out.PkgName)
+			gogentools.ComposeVarDeclaration(file, groupCase, out.VarName, out.GetOriginal().GetType(), out.GetOriginal().IsVariadic())
+			gogentools.ImportPackage(file, out.PkgPath, out.PkgName)
 
 			Comments(groupCase,
 				"Call the function that will transfer the taint",
@@ -1915,7 +1867,7 @@ func generate_ResuFuncPara(file *File, fe *feparser.FEFunc, identityInp *feparse
 
 					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for i, zero := range zeroVals {
 						isConsidered := i == indexOut
@@ -1954,8 +1906,8 @@ func generate_ResuFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 	in := fe.Results[indexIn]
 	out := fe.Results[indexOut]
 
-	in.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("from", in.TypeName))
-	out.VarName = NewNameWithPrefix(NewLowerTitleCodeQlName("into", out.TypeName))
+	in.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("from", in.TypeName))
+	out.VarName = gogentools.NewNameWithPrefix(feparser.NewLowerTitleName("into", out.TypeName))
 
 	inVarName := in.VarName
 	outVarName := out.VarName
@@ -1965,8 +1917,8 @@ func generate_ResuFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 			Comments(groupCase, Sf("The flow is from `%s` into `%s`.", inVarName, outVarName))
 
 			Comments(groupCase, Sf("Assume that `sourceCQL` has the underlying type of `%s`:", inVarName))
-			composeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
-			importPackage(file, out.PkgPath, out.PkgName)
+			gogentools.ComposeTypeAssertion(file, groupCase, in.VarName, in.GetOriginal().GetType(), in.GetOriginal().IsVariadic())
+			gogentools.ImportPackage(file, out.PkgPath, out.PkgName)
 
 			Comments(groupCase,
 				"Call the function that transfers the taint",
@@ -1990,7 +1942,7 @@ func generate_ResuFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 
 					tpFun := fe.GetOriginal().GetType().(*types.Signature)
 
-					zeroVals := scanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
+					zeroVals := gogentools.ScanTupleOfZeroValues(file, tpFun.Params(), fe.GetOriginal().IsVariadic())
 
 					for _, zero := range zeroVals {
 						call.Add(zero)
@@ -2013,354 +1965,8 @@ func generate_ResuFuncResu(file *File, fe *feparser.FEFunc, identityInp *feparse
 	return code.Line()
 }
 
-func scanTupleOfZeroValues(file *File, tuple *types.Tuple, isVariadic bool) []Code {
-
-	result := make([]Code, 0)
-
-	for i := 0; i < tuple.Len(); i++ {
-		tp := newStatement()
-
-		isLast := i == tuple.Len()-1
-		if isLast && isVariadic {
-			composeZeroDeclaration(file, tp, tuple.At(i).Type().(*types.Slice).Elem())
-		} else {
-			composeZeroDeclaration(file, tp, tuple.At(i).Type())
-		}
-		result = append(result, tp)
-	}
-
-	return result
-}
-func composeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
-	switch t := typ.(type) {
-	case *types.Basic:
-		{
-			switch t.Name() {
-			case "bool":
-				{
-					stat.Lit(false)
-				}
-			case "string":
-				{
-					stat.Lit("")
-				}
-			case "int", "int8", "int16", "int32", "int64",
-				"uint", "uint8", "uint16", "uint32", "uint64",
-				"uintptr":
-				{
-					stat.Lit(0)
-				}
-			case "float32", "float64":
-				{
-					stat.Lit(0.0)
-				}
-			case "byte":
-				{
-					stat.Lit(0)
-				}
-			case "rune":
-				{
-					stat.Lit(0)
-				}
-			case "complex64", "complex128":
-				{
-					stat.Lit(0)
-				}
-			case "Pointer":
-				{
-					stat.Nil()
-				}
-			default:
-				Errorf("unknown typeName: %q (%q) of kind %s", t.Name(), t.String(), t.Kind())
-			}
-		}
-	case *types.Array:
-		{
-			stat.Nil()
-		}
-	case *types.Slice:
-		{
-			stat.Nil()
-		}
-	case *types.Struct:
-		{
-			fields := make([]Code, 0)
-			for i := 0; i < t.NumFields(); i++ {
-				field := t.Field(i)
-				fldStm := newStatement()
-				fldStm.Id(field.Name())
-
-				importPackage(file, scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
-
-				composeZeroDeclaration(file, fldStm, field.Type())
-				fields = append(fields, fldStm)
-			}
-			stat.Struct(fields...).Block()
-		}
-	case *types.Pointer:
-		{
-			stat.Nil()
-		}
-	case *types.Tuple:
-		{
-			// TODO
-			stat.Nil()
-		}
-	case *types.Signature:
-		{
-			stat.Nil()
-		}
-	case *types.Interface:
-		{
-			stat.Nil()
-		}
-	case *types.Map:
-		{
-			stat.Nil()
-		}
-	case *types.Chan:
-		{
-			stat.Nil()
-		}
-	case *types.Named:
-		{
-			if t.Obj() != nil && t.Obj().Pkg() != nil {
-				importPackage(file, scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
-			}
-
-			switch named := t.Underlying().(type) {
-			case *types.Basic:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Array:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Slice:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Struct:
-				{
-					stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name()).Block()
-				}
-			case *types.Pointer:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Tuple:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Signature:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Interface:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Map:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Chan:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-			case *types.Named:
-				{
-					composeZeroDeclaration(file, stat, named)
-				}
-
-			}
-		}
-	}
-}
-
-// declare `name := sourceCQL.(Type)`
-func composeTypeAssertion(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
-	assertContent := newStatement()
-	if isVariadic {
-		composeTypeDeclaration(file, assertContent, typ.(*types.Slice).Elem())
-	} else {
-		composeTypeDeclaration(file, assertContent, typ)
-	}
-	group.Id(varName).Op(":=").Id("sourceCQL").Assert(assertContent)
-}
-
-// declare `var name Type`
-func composeVarDeclaration(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
-	if isVariadic {
-		composeTypeDeclaration(file, group.Var().Id(varName), typ.(*types.Slice).Elem())
-	} else {
-		composeTypeDeclaration(file, group.Var().Id(varName), typ)
-	}
-}
 func newStatement() *Statement {
 	return &Statement{}
-}
-
-func importPackage(file *File, pkgPath string, pkgName string) {
-	if pkgPath == "" || pkgName == "" {
-		return
-	}
-	if feparser.ShouldUseAlias(pkgPath, pkgName) {
-		file.ImportAlias(pkgPath, pkgName)
-	} else {
-		file.ImportName(pkgPath, pkgName)
-	}
-}
-
-// composeTypeDeclaration adds the `Type` inside `var name Type`
-func composeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
-	switch t := typ.(type) {
-	case *types.Basic:
-		{
-			if t.Name() == "Pointer" {
-				stat.Qual("unsafe", t.Name())
-			} else {
-				stat.Qual("", t.Name())
-			}
-		}
-	case *types.Array:
-		{
-			if t.Len() > 0 {
-				stat.Index(Lit(t.Len()))
-			} else {
-				stat.Index()
-			}
-			composeTypeDeclaration(file, stat, t.Elem())
-		}
-	case *types.Slice:
-		{
-			stat.Index()
-			composeTypeDeclaration(file, stat, t.Elem())
-		}
-	case *types.Struct:
-		{
-			fields := make([]Code, 0)
-			for i := 0; i < t.NumFields(); i++ {
-				field := t.Field(i)
-				fldStm := newStatement()
-				fldStm.Id(field.Name())
-
-				importPackage(file, scanner.RemoveGoPath(field.Pkg()), field.Pkg().Name())
-
-				composeTypeDeclaration(file, fldStm, field.Type())
-				fields = append(fields, fldStm)
-			}
-			stat.Struct(fields...)
-		}
-	case *types.Pointer:
-		{
-			stat.Op("*")
-			composeTypeDeclaration(file, stat, t.Elem())
-		}
-	case *types.Tuple:
-		{
-			// TODO
-			tuple := scanTupleOfTypes(file, t, false)
-			stat.Add(tuple...)
-		}
-	case *types.Signature:
-		{
-			paramsTuple := scanTupleOfTypes(file, t.Params(), t.Variadic())
-			resultsTuple := scanTupleOfTypes(file, t.Results(), false)
-
-			stat.Func().Params(paramsTuple...).List(resultsTuple...)
-		}
-	case *types.Interface:
-		{
-			if t.String() == "error" {
-				stat.Qual("", "error")
-			} else {
-				if t.Empty() {
-					stat.Interface()
-				} else {
-					{
-						// TODO: check if has at least one method?
-						// Get receiver info from the first explicit method:
-						meth := t.ExplicitMethod(0)
-						methFunc := meth.Type().(*types.Signature)
-						pkgPath := scanner.RemoveGoPath(methFunc.Recv().Pkg())
-						pkgName := methFunc.Recv().Pkg().Name()
-						typeName := methFunc.Recv().Name()
-
-						importPackage(file, pkgPath, pkgName)
-						stat.Qual(pkgPath, typeName)
-					}
-				}
-			}
-		}
-	case *types.Map:
-		{
-			mapKey := newStatement()
-			composeTypeDeclaration(file, mapKey, t.Key())
-			stat.Map(mapKey)
-			composeTypeDeclaration(file, stat, t.Elem())
-		}
-	case *types.Chan:
-		{
-
-			switch t.Dir() {
-			case types.SendRecv:
-				stat.Chan()
-			case types.RecvOnly:
-				stat.Op("<-").Chan()
-			case types.SendOnly:
-				stat.Chan().Op("<-")
-			}
-
-			composeTypeDeclaration(file, stat, t.Elem())
-		}
-	case *types.Named:
-		{
-			if t.Obj() != nil && t.Obj().Name() == "error" {
-				stat.Error()
-			} else {
-				if t.Obj() != nil && t.Obj().Pkg() != nil {
-					importPackage(file, scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
-					stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name())
-				}
-			}
-		}
-	default:
-		panic(typ)
-	}
-
-}
-
-func scanTupleOfTypes(file *File, tuple *types.Tuple, isVariadic bool) []Code {
-
-	result := make([]Code, 0)
-
-	for i := 0; i < tuple.Len(); i++ {
-		tp := newStatement()
-
-		if tp != nil {
-			// If this is the last element,
-			// and the function is variadic,
-			// then set it to true:
-			isLast := i == tuple.Len()-1
-			if isLast && isVariadic {
-				tp.Op("...")
-
-				switch singleType := tuple.At(i).Type().(type) {
-				case *types.Slice:
-					composeTypeDeclaration(file, tp, singleType.Elem())
-				case *types.Array:
-					composeTypeDeclaration(file, tp, singleType.Elem())
-				}
-			} else {
-				composeTypeDeclaration(file, tp, tuple.At(i).Type())
-			}
-			result = append(result, tp)
-		}
-	}
-
-	return result
 }
 
 type Medium string

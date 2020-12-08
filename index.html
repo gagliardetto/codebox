@@ -203,6 +203,9 @@
         border: 0;
         border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
+    [v-cloak] {
+      display: none;
+    }
     </style>
 </head>
 
@@ -211,7 +214,7 @@
         <h4 v-if="loading">
             Loading package data...
         </h4>
-        <div v-if="!loading">
+        <div v-if="!loading" v-cloak>
             <!-- Content here -->
             <div>
                 <h4 class="d-inline-block">Package "{{source.PkgName}}" from <b>{{source.PkgPath}}{{source.Module?"@"+source.Module.Version:""}}</b></h4>
