@@ -199,7 +199,11 @@ func ComposeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 func ComposeTypeAssertion(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
 	assertContent := newStatement()
 	if isVariadic {
-		ComposeTypeDeclaration(file, assertContent, typ.(*types.Slice).Elem())
+		if slice, ok := typ.(*types.Slice); ok {
+			ComposeTypeDeclaration(file, assertContent, slice.Elem())
+		} else {
+			ComposeTypeDeclaration(file, assertContent, typ)
+		}
 	} else {
 		ComposeTypeDeclaration(file, assertContent, typ)
 	}
@@ -212,7 +216,11 @@ func newStatement() *Statement {
 // declare `var name Type`
 func ComposeVarDeclaration(file *File, group *Group, varName string, typ types.Type, isVariadic bool) {
 	if isVariadic {
-		ComposeTypeDeclaration(file, group.Var().Id(varName), typ.(*types.Slice).Elem())
+		if slice, ok := typ.(*types.Slice); ok {
+			ComposeTypeDeclaration(file, group.Var().Id(varName), slice.Elem())
+		} else {
+			ComposeTypeDeclaration(file, group.Var().Id(varName), typ)
+		}
 	} else {
 		ComposeTypeDeclaration(file, group.Var().Id(varName), typ)
 	}
