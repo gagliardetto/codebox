@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
-	"strings"
+
+	. "github.com/gagliardetto/utilz"
 )
 
 // context holds all the scanning context of a single package. Contains all
@@ -132,6 +133,7 @@ func (ctx *context) trySetDocsForInterfaceMethod(it string, method string, obj D
 	}
 }
 func (ctx *context) trySetDocsForStructField(st string, field string, obj Documentable) {
+	found := false
 	if stx0, ok := ctx.types[st]; ok {
 		itx1, ok := stx0.Type.(*ast.StructType)
 		if ok {
@@ -140,34 +142,26 @@ func (ctx *context) trySetDocsForStructField(st string, field string, obj Docume
 					if field == fldx0.Names[0].Name {
 						obj.SetDocs(fldx0.Doc)
 						obj.SetComments(fldx0.Comment)
+						found = true
 					}
 				}
 			}
 		}
 	}
-}
 
-const genComment = `//proteus:generate`
-
-func (ctx *context) shouldGenerateType(name string) bool {
-	if typ, ok := ctx.types[name]; ok && typ.Doc != nil {
-		return hasGenerateComment(typ.Doc)
-	}
-	return false
-}
-
-func (ctx *context) shouldGenerateFunc(name string) bool {
-	if fn, ok := ctx.funcs[name]; ok && fn.Doc != nil {
-		return hasGenerateComment(fn.Doc)
-	}
-	return false
-}
-
-func hasGenerateComment(doc *ast.CommentGroup) bool {
-	for _, l := range doc.List {
-		if strings.HasPrefix(l.Text, genComment) {
-			return true
+	if !found {
+		// This trick is used for getting the comments/docs
+		// which are set on an embedded type:
+		if stx0, ok := ctx.types[st]; ok {
+			itx1, ok := stx0.Type.(*ast.StructType)
+			if ok {
+				for index, fldx0 := range itx1.Fields.List {
+					if Itoa(index) == field {
+						obj.SetDocs(fldx0.Doc)
+						obj.SetComments(fldx0.Comment)
+					}
+				}
+			}
 		}
 	}
-	return false
 }

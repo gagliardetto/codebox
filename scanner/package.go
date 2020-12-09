@@ -13,37 +13,15 @@ import (
 // a reference of all defined structs and type aliases.
 // A Package is only safe to use once it is resolved.
 type Package struct {
-	Path       string
-	Name       string
-	Module     *packages.Module
+	Path   string
+	Name   string
+	Module *packages.Module
+
 	Structs    []*Struct
 	Funcs      []*Func
 	Interfaces []*Interface
-	Methods    []*types.Selection
+	Methods    []*Func
 	Types      []*Named // Types contains types found in the package; excluded are structs and interfaces.
-	// TODO: remove:
-	Resolved bool
-	Aliases  map[string]Type
-	Enums    []*Enum
-}
-
-// collectEnums finds the enum values collected during the scan and generates
-// the corresponding enum types, removing them as aliases from the package.
-func (p *Package) collectEnums(ctx *context) {
-	for k := range p.Aliases {
-		if vals, ok := ctx.enumValues[k]; ok {
-			idx := strings.LastIndex(k, ".")
-			name := k[idx+1:]
-			if !ctx.shouldGenerateType(name) {
-				continue
-			}
-
-			hasStringMethod := containsString(ctx.enumWithString, k)
-
-			p.Enums = append(p.Enums, newEnum(ctx, name, vals, hasStringMethod))
-			delete(p.Aliases, k)
-		}
-	}
 }
 
 func containsString(arr []string, s string) bool {
@@ -355,9 +333,7 @@ func getComments(comments *ast.CommentGroup) []string {
 	var list []*ast.Comment
 	if comments != nil {
 		for _, c := range comments.List {
-			if !strings.HasPrefix(c.Text, genComment) {
-				list = append(list, c)
-			}
+			list = append(list, c)
 		}
 	}
 
@@ -388,13 +364,11 @@ type EnumValue struct {
 type Struct struct {
 	*BaseType
 	Docs
-	Generate      bool
 	Name          string
 	Fields        []*Field
-	Methods       []*types.Func
 	Type          *types.Named
 	AnonymousType *types.Struct
-	IsStringer    bool
+	Embedded      []Type
 }
 
 // String returns a string representation for the type

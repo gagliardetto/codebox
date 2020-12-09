@@ -4,7 +4,6 @@ package scanner
 import (
 	"errors"
 	"fmt"
-	"go/token"
 	"go/types"
 	"io/ioutil"
 	"os"
@@ -326,16 +325,13 @@ func (s *Scanner) scanPackageWithScanner(p string, sc ScannerFunc) (*Package, er
 }
 
 func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
-	objs := objectsInScope(gopkg.Scope())
-
 	pkg := &Package{
-		Path:    RemoveGoPath(gopkg),
-		Name:    gopkg.Name(),
-		Aliases: make(map[string]Type),
-		Types:   make([]*Named, 0),
+		Path:  RemoveGoPath(gopkg),
+		Name:  gopkg.Name(),
+		Types: make([]*Named, 0),
 	}
 
-	{ // Gather type declarations:
+	{
 		for _, name := range gopkg.Scope().Names() {
 			obj := gopkg.Scope().Lookup(name)
 			// Skip non-exported objects.
@@ -343,190 +339,91 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 				continue
 			}
 
-			// Skip anything that is not a declared type (i.e. variables, constants, functions ...)
-			if tn, ok := obj.(*types.TypeName); ok {
-				// Skip alias types:
-				if tn.IsAlias() {
-					continue
-				}
-				// TODO: Skip structs and interfaces?
-				_, isStruct := obj.Type().Underlying().(*types.Struct)
-				_, isInterface := obj.Type().Underlying().(*types.Interface)
-				_, _ = isStruct, isInterface
+			switch thing := obj.(type) {
+			case *types.TypeName:
+				{
+					// Skip alias types:
+					if thing.IsAlias() {
+						continue
+					}
 
-				typeName := scanType(obj.Type())
-				if named, ok := typeName.(*Named); ok {
-					named.Object = obj
-					ctx.trySetDocs(obj.Name(), named)
-					pkg.Types = append(pkg.Types, named)
-				} else {
-					//panic(Sf("not *Named: %T", typeName))
+					switch namedOrSignature := obj.Type().(type) {
+					case *types.Named:
+						{
+							typeName := scanType(namedOrSignature)
+							if named, ok := typeName.(*Named); ok {
+								named.Object = obj
+								ctx.trySetDocs(obj.Name(), named)
+								pkg.Types = append(pkg.Types, named)
+							}
+
+							methods := methodsForNamed(namedOrSignature)
+							{
+								for _, fun := range methods {
+									switch funcThing := fun.Type().(type) {
+									case *types.Signature:
+										{
+											fn := scanFunc(&Func{Name: fun.Name()}, funcThing)
+											fn.Signature = StringRemoveGoPath(fun.String())
+											fn.PkgPath = RemoveGoPath(gopkg)
+											fn.PkgName = gopkg.Name()
+											ctx.trySetDocs(name+"."+fun.Name(), fn)
+											pkg.Methods = append(pkg.Methods, fn)
+										}
+									}
+								}
+							}
+
+							switch deeperThing := obj.Type().Underlying().(type) {
+							case *types.Struct:
+								{
+									st := scanStruct(
+										&Struct{
+											Name: name,
+											Type: namedOrSignature,
+										},
+										deeperThing,
+										ctx.trySetDocsForStructField,
+									)
+									st.SetType(namedOrSignature)
+									ctx.trySetDocs(name, st)
+
+									pkg.Structs = append(pkg.Structs, st)
+								}
+							case *types.Interface:
+								{
+									it := scanInterface(&Interface{Name: name}, deeperThing, ctx.trySetDocsForInterfaceMethod)
+									ctx.trySetDocs(name, it)
+
+									it.SetType(namedOrSignature)
+									pkg.Interfaces = append(pkg.Interfaces, it)
+								}
+							}
+						}
+
+					}
+
 				}
-			} else {
-				//Ln(fmt.Errorf(RedBG("is not a named type: %v"), obj))
+			case *types.Const:
+			case *types.Var:
+			case *types.Func:
+
+				switch funcThing := thing.Type().(type) {
+				case *types.Signature:
+					{
+						fn := scanFunc(&Func{Name: name}, funcThing)
+						fn.Signature = StringRemoveGoPath(funcThing.String())
+						fn.PkgPath = RemoveGoPath(gopkg)
+						fn.PkgName = gopkg.Name()
+						ctx.trySetDocs(name, fn)
+						pkg.Funcs = append(pkg.Funcs, fn)
+					}
+				}
 			}
+
 		}
 	}
-
-	pkg.Methods = methodsInScope(gopkg.Scope())
-
-	for _, o := range objs {
-		if o.Pkg() != nil {
-			// Ignore objects from packages other than the current one:
-			if o.Pkg().Path() != gopkg.Path() {
-				continue
-			}
-		}
-		if err := pkg.scanObject(ctx, o); err != nil {
-			return nil, err
-		}
-	}
-
-	pkg.collectEnums(ctx)
 	return pkg, nil
-}
-
-func (p *Package) scanObject(ctx *context, o types.Object) error {
-	{
-		// Skip alias types:
-		if typeName, ok := o.(*types.TypeName); ok {
-			if typeName.IsAlias() {
-				return nil
-			}
-		}
-	}
-	if !o.Exported() {
-		return nil
-	}
-
-	// Scan interface types:
-	switch t := o.Type().Underlying().(type) {
-	case *types.Interface:
-
-		if !token.IsExported(NameForType(o.Type())) {
-			break
-		}
-
-		it := scanInterface(&Interface{Name: NameForType(o.Type())}, t, ctx.trySetDocsForInterfaceMethod)
-		ctx.trySetDocs(NameForType(o.Type()), it)
-
-		it.SetType(o.Type())
-		p.Interfaces = append(p.Interfaces, it)
-	}
-
-	// Scan other types:
-	switch t := o.Type().(type) {
-
-	case *types.Named:
-		hasStringMethod := isStringer(t)
-		switch o.(type) {
-		case *types.Const:
-			if _, ok := t.Underlying().(*types.Basic); ok {
-				scanEnumValue(ctx, o.Name(), t, hasStringMethod)
-			}
-		case *types.TypeName:
-			if s, ok := t.Underlying().(*types.Struct); ok {
-
-				st := scanStruct(
-					&Struct{
-						Name:       NameForType(o.Type()),
-						Generate:   ctx.shouldGenerateType(o.Name()),
-						IsStringer: hasStringMethod,
-						Methods:    methodsForNamed(t),
-						Type:       t,
-					},
-					s,
-					ctx.trySetDocsForStructField,
-				)
-				st.SetType(o.Type())
-				ctx.trySetDocs(o.Name(), st)
-
-				p.Structs = append(p.Structs, st)
-				return nil
-			}
-
-			p.Aliases[objName(t.Obj())] = scanType(t.Underlying())
-		}
-	case *types.Signature:
-		if o.Exported() {
-			fn := scanFunc(&Func{Name: o.Name()}, t)
-			fn.Signature = StringRemoveGoPath(o.String())
-			fn.PkgPath = RemoveGoPath(o.Pkg())
-			if o.Pkg() != nil {
-				fn.PkgName = o.Pkg().Name()
-			}
-			ctx.trySetDocs(nameForFunc(o), fn)
-			p.Funcs = append(p.Funcs, fn)
-		}
-
-	}
-
-	return nil
-}
-
-func isStringer(t *types.Named) bool {
-	is, err := checkIsStringer(t)
-	if err != nil {
-		fmt.Printf("%s is not a stringer: %s", t, err)
-	}
-	return is
-}
-func checkIsStringer(t *types.Named) (bool, error) {
-	for i := 0; i < t.NumMethods(); i++ {
-		m := t.Method(i)
-		if m.Name() != "String" {
-			continue
-		}
-
-		sign := m.Type().(*types.Signature)
-		if sign.Params().Len() != 0 {
-			return false, fmt.Errorf("type %s implements a String method that does not satisfy fmt.Stringer (wrong number of parameters)", t.Obj().Name())
-		}
-
-		results := sign.Results()
-		if results == nil || results.Len() != 1 {
-			return false, fmt.Errorf("type %s implements a String method that does not satisfy fmt.Stringer (wrong number of results)", t.Obj().Name())
-		}
-
-		if returnType, ok := results.At(0).Type().(*types.Basic); ok {
-			if returnType.Name() == "string" {
-				return true, nil
-			}
-			return false, fmt.Errorf("type %s implements a String method that does not satisfy fmt.Stringer (wrong type of result)", t.Obj().Name())
-		}
-	}
-
-	return false, nil
-}
-
-// IsValidatable tells whether a type has a
-// Validate() error
-// method.
-func IsValidatable(t *types.Named) (bool, error) {
-	for i := 0; i < t.NumMethods(); i++ {
-		m := t.Method(i)
-		if m.Name() != "Validate" {
-			continue
-		}
-
-		sign := m.Type().(*types.Signature)
-		if sign.Params().Len() != 0 {
-			return false, fmt.Errorf("type %s implements a Validate method that does not satisfy Validate (wrong number of parameters)", t.Obj().Name())
-		}
-
-		results := sign.Results()
-		if results == nil || results.Len() != 1 {
-			return false, fmt.Errorf("type %s implements a Validate method that does not satisfy Validate (wrong number of results)", t.Obj().Name())
-		}
-
-		if results.At(0).Type().String() == "error" {
-			return true, nil
-		} else {
-			return false, fmt.Errorf("type %s implements a Validate method that does not satisfy Validate (wrong type of result)", t.Obj().Name())
-		}
-	}
-
-	return false, nil
 }
 
 func methodsForNamed(t *types.Named) []*types.Func {
@@ -539,26 +436,6 @@ func methodsForNamed(t *types.Named) []*types.Func {
 		methods = append(methods, meth)
 	}
 	return methods
-}
-
-func nameForFunc(o types.Object) (name string) {
-	s := o.Type().(*types.Signature)
-
-	if s.Recv() != nil {
-		name = NameForType(s.Recv().Type()) + "."
-	}
-
-	name = name + o.Name()
-
-	return
-}
-
-func NameForType(o types.Type) (name string) {
-	name = o.String()
-	i := strings.LastIndex(name, ".")
-	name = name[i+1:]
-
-	return
 }
 
 func setTypeParameters(typ types.Type, t Type) {
@@ -703,21 +580,14 @@ func scanType(typ types.Type) (t Type) {
 	return
 }
 
-func scanEnumValue(ctx *context, name string, named *types.Named, hasStringMethod bool) {
-	typ := objName(named.Obj())
-	ctx.enumValues[typ] = append(ctx.enumValues[typ], name)
-	ctx.enumWithString = append(ctx.enumWithString, typ)
-}
-
 func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method string, obj Documentable)) *Struct {
 	s.BaseType = newBaseType()
 	s.SetIsStruct(true)
 
 	for i := 0; i < elem.NumFields(); i++ {
 		v := elem.Field(i)
-		tags := findProtoTags(elem.Tag(i))
 
-		if isIgnoredField(v, tags) {
+		if !v.Exported() {
 			continue
 		}
 
@@ -731,14 +601,26 @@ func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method 
 			continue
 		}
 
-		if v.Anonymous() {
-			continue
-			// TODO: add info about embedded structs to s.Embedded, which will be []*Struct (???)
-			embedded := findStruct(v.Type())
+		if v.Embedded() {
+			// Scan embedded types:
+			embedded := scanType(v.Type())
 			if embedded == nil {
 				report.Warn("field %q with type %q is not a valid embedded type", v.Name(), v.Type())
 			} else {
-				s = scanStruct(s, embedded, docSetter)
+				if s.Embedded == nil {
+					s.Embedded = make([]Type, 0)
+				}
+
+				if named, ok := embedded.(*Named); ok {
+					if docSetter != nil {
+						docSetter(
+							s.Name,
+							Itoa(i),
+							named,
+						)
+					}
+					s.Embedded = append(s.Embedded, named)
+				}
 			}
 			continue
 		}
@@ -770,6 +652,7 @@ func scanStruct(s *Struct, elem *types.Struct, docSetter func(it string, method 
 func scanFunc(fn *Func, signature *types.Signature) *Func {
 	if signature.Recv() != nil {
 		fn.Receiver = scanType(signature.Recv().Type())
+		fn.Receiver.SetTypesVar(signature.Recv())
 	}
 
 	if fn.BaseType == nil {
@@ -803,8 +686,10 @@ ExplicitMethodLoop:
 			meth.(*types.Signature),
 		)
 		fn.Signature = StringRemoveGoPath(methObj.String())
-		fn.PkgPath = RemoveGoPath(methObj.Pkg())
-		fn.PkgName = methObj.Pkg().Name()
+		if methObj.Pkg() != nil {
+			fn.PkgPath = RemoveGoPath(methObj.Pkg())
+			fn.PkgName = methObj.Pkg().Name()
+		}
 
 		if docSetter != nil {
 			docSetter(
@@ -840,19 +725,6 @@ func scanTuple(tuple *types.Tuple, isVariadic bool) []Type {
 	}
 
 	return result
-}
-
-func findStruct(t types.Type) *types.Struct {
-	switch elem := t.(type) {
-	case *types.Pointer:
-		return findStruct(elem.Elem())
-	case *types.Named:
-		return findStruct(elem.Underlying())
-	case *types.Struct:
-		return elem
-	default:
-		return nil
-	}
 }
 
 // newEnum creates a new enum with the given name.
@@ -904,72 +776,6 @@ func (v enumValues) Less(i, j int) bool {
 
 func isIgnoredField(f *types.Var, tags []string) bool {
 	return !f.Exported() || (len(tags) > 0 && tags[0] == "-")
-}
-
-func objectsInScope(scope *types.Scope) (objs []types.Object) {
-	for _, n := range scope.Names() {
-		obj := scope.Lookup(n)
-		objs = append(objs, obj)
-
-		typ := obj.Type()
-
-		if _, ok := typ.Underlying().(*types.Struct); ok {
-			// Only need to extract methods for the pointer type since it contains
-			// the methods for the non-pointer type as well.
-			objs = append(objs, methodsForType(types.NewPointer(typ))...)
-		} else {
-			objs = append(objs, methodsForType(types.NewPointer(typ))...)
-		}
-
-	}
-	return
-}
-
-func methodsInScope(scope *types.Scope) (objs []*types.Selection) {
-	for _, n := range scope.Names() {
-		if !token.IsExported(n) {
-			continue
-		}
-		obj := scope.Lookup(n)
-
-		typ := obj.Type()
-
-		if !obj.Exported() {
-			continue
-		}
-
-		if _, ok := typ.Underlying().(*types.Struct); ok {
-			// Only need to extract methods for the pointer type since it contains
-			// the methods for the non-pointer type as well.
-			objs = append(objs, methodNamesForType(types.NewPointer(typ))...)
-		} else {
-			objs = append(objs, methodNamesForType(types.NewPointer(typ))...)
-		}
-	}
-	return
-}
-func methodNamesForType(typ types.Type) (objs []*types.Selection) {
-	methods := types.NewMethodSet(typ)
-
-	for i := 0; i < methods.Len(); i++ {
-		objs = append(objs, methods.At(i))
-	}
-
-	return
-}
-
-func methodsForType(typ types.Type) (objs []types.Object) {
-	methods := types.NewMethodSet(typ)
-
-	for i := 0; i < methods.Len(); i++ {
-		objs = append(objs, methods.At(i).Obj())
-	}
-
-	return
-}
-
-func objName(obj types.Object) string {
-	return fmt.Sprintf("%s.%s", RemoveGoPath(obj.Pkg()), obj.Name())
 }
 
 func RemoveGoPath(pkg *types.Package) string {
