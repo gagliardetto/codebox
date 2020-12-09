@@ -371,6 +371,12 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 	pkg.Methods = methodsInScope(gopkg.Scope())
 
 	for _, o := range objs {
+		if o.Pkg() != nil {
+			// Ignore objects from packages other than the current one:
+			if o.Pkg().Path() != gopkg.Path() {
+				continue
+			}
+		}
 		if err := pkg.scanObject(ctx, o); err != nil {
 			return nil, err
 		}
