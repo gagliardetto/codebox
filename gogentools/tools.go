@@ -27,7 +27,6 @@ func MustVarNameWithDefaultPrefix(name string, prefix string) string {
 	return name
 }
 func ScanTupleOfZeroValues(file *File, tuple *types.Tuple, isVariadic bool) []Code {
-
 	result := make([]Code, 0)
 
 	for i := 0; i < tuple.Len(); i++ {
@@ -35,13 +34,16 @@ func ScanTupleOfZeroValues(file *File, tuple *types.Tuple, isVariadic bool) []Co
 
 		isLast := i == tuple.Len()-1
 		if isLast && isVariadic {
-			ComposeZeroDeclaration(file, tp, tuple.At(i).Type().(*types.Slice).Elem())
+			if slice, ok := tuple.At(i).Type().(*types.Slice); ok {
+				ComposeZeroDeclaration(file, tp, slice.Elem())
+			} else {
+				ComposeZeroDeclaration(file, tp, tuple.At(i).Type())
+			}
 		} else {
 			ComposeZeroDeclaration(file, tp, tuple.At(i).Type())
 		}
 		result = append(result, tp)
 	}
-
 	return result
 }
 
