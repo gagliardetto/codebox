@@ -406,6 +406,7 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 				}
 			case *types.Const:
 			case *types.Var:
+				// TODO: scan variables of signature type?
 			case *types.Func:
 
 				switch funcThing := thing.Type().(type) {
