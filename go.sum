@@ -23,6 +23,7 @@ github.com/gagliardetto/codebox v0.0.0-20201020205706-efd468d49a6b/go.mod h1:7NW
 github.com/gagliardetto/codebox v0.0.0-20201022212556-10faf9c803dd/go.mod h1:s9knS6Cqdr3OYPjL50WGwXSwol+770HkI8EsqyBGO4w=
 github.com/gagliardetto/codebox v0.0.0-20201024154105-b723e18975a4/go.mod h1:VOrzdgNZplaIJ7hq4+kgYpKMFucIU4SS8qxaamdcw4c=
 github.com/gagliardetto/codebox v0.0.0-20201128200422-aa1e2926a1e9/go.mod h1:EVCaf/vxeRsOmwjRwGSbQArdwcBQUvnlTMBrCM16Zoc=
+github.com/gagliardetto/codebox v0.0.0-20201209222109-6336b02e0b3e/go.mod h1:cKAkmWcEzf8o9m3Nu1uSvhxXpNYN7s7GyeHNJM5NFmY=
 github.com/gagliardetto/feparser v0.0.0-20201020161618-7f23b4f2bcf7 h1:tkq7foVQocEC9taWKU4RkJot5v4QqtS8E+t+SP4nvIg=
 github.com/gagliardetto/feparser v0.0.0-20201020161618-7f23b4f2bcf7/go.mod h1:1ula649k+N2bbJRIjun5HbcJy8GDEHAyai9HW9+Z36E=
 github.com/gagliardetto/feparser v0.0.0-20201020193055-8442f492b885 h1:pZj3ssRGTH5Hp3i7jnDfIWfOX5sdw9TBTf8rd+1Mrso=
@@ -39,6 +40,8 @@ github.com/gagliardetto/feparser v0.0.0-20201128200749-aafe7080a5cc h1:eCoHBaP/h
 github.com/gagliardetto/feparser v0.0.0-20201128200749-aafe7080a5cc/go.mod h1:hvKgXQqitHMGgGptzvq8gmQN+T7jzuERd5qkyB0yGOY=
 github.com/gagliardetto/feparser v0.0.0-20201208154012-edd6ee714e38 h1:XRp5DiSoKcEi8r3VOVjtvmDy6+u5WqvtiD5pm+xwsKA=
 github.com/gagliardetto/feparser v0.0.0-20201208154012-edd6ee714e38/go.mod h1:w6kwmLt6AZ5GbvBgUl7VteYO/LdPEB+MF20XLZWlkkE=
+github.com/gagliardetto/feparser v0.0.0-20201209222233-cf9480d31970 h1:6pZf4UtDe9dBVs+hmCYgvczzU/Fi0grCja187ERLej4=
+github.com/gagliardetto/feparser v0.0.0-20201209222233-cf9480d31970/go.mod h1:u1O4Zf7jdHzaTQAA0469VrnrYGvxueSESGh5K+ozSeA=
 github.com/gagliardetto/golang-go v0.0.0-20201020153340-53909ea70814 h1:4YMGFsBLNFgdj78/H4ItwQb5f5+RAZcnwf/IfWjXryc=
 github.com/gagliardetto/golang-go v0.0.0-20201020153340-53909ea70814/go.mod h1:q1shG4u1Y4/sCCDTmRCkaDqNwD1wCDdmhvAcou8ZmPA=
 github.com/gagliardetto/utilz v0.0.0-20200715140922-c894e8869ddc h1:qZUAmJAR5ONhXKTK7aRhLmo8oEn9jyG5GB/+MSyd5kA=

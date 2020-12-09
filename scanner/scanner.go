@@ -412,7 +412,7 @@ func buildPackage(ctx *context, gopkg *types.Package) (*Package, error) {
 				case *types.Signature:
 					{
 						fn := scanFunc(&Func{Name: name}, funcThing)
-						fn.Signature = StringRemoveGoPath(funcThing.String())
+						fn.Signature = StringRemoveGoPath(thing.String())
 						fn.PkgPath = RemoveGoPath(gopkg)
 						fn.PkgName = gopkg.Name()
 						ctx.trySetDocs(name, fn)
