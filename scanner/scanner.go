@@ -210,9 +210,7 @@ func defaultModuleScannerFunc(rawPath string) (*packages.Package, error) {
 		Q(rev)
 	}
 	config := &packages.Config{
-		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
-			packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile |
-			packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedTypesSizes | packages.NeedModule,
+		Mode: packages.LoadSyntax | packages.NeedModule,
 	}
 	{
 		// Create a temporary folder:
@@ -294,9 +292,7 @@ func deprecatedScannerFunc(path string) (*packages.Package, error) {
 	fmt.Println("Scanning", path)
 
 	config := &packages.Config{
-		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
-			packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile |
-			packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedTypesSizes,
+		Mode: packages.LoadSyntax | packages.NeedModule,
 	}
 	pkgs, err := packages.Load(config, path)
 	if err != nil {
