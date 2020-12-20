@@ -3,7 +3,6 @@ package gogentools
 
 import (
 	"go/types"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"unicode"
@@ -403,7 +402,7 @@ func ScanTupleOfTypes(file *File, tuple *types.Tuple, isVariadic bool) []Code {
 // of the backage path are the same; if they are not,
 // then the package should use an alias in the import.
 func ShouldUseAlias(pkgPath string, pkgName string) bool {
-	return filepath.Base(pkgPath) != pkgName
+	return guessAlias(pkgPath) != pkgName
 }
 func guessAlias(path string) string {
 	// From https://github.com/dave/jennifer/blob/2abe0ee856a1cfbca4a3327861b51d9c1c1a8592/jen/file.go#L224
