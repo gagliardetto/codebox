@@ -4,6 +4,10 @@ package gogentools
 import (
 	"go/types"
 	"path/filepath"
+	"regexp"
+	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/codebox/scanner"
@@ -159,6 +163,9 @@ func ComposeZeroDeclaration(file *File, stat *Statement, typ types.Type) {
 				}
 			case *types.Struct:
 				{
+					if guessAlias(t.Obj().Pkg().Path()) != t.Obj().Pkg().Name() {
+						file.ImportAlias(t.Obj().Pkg().Path(), t.Obj().Pkg().Name())
+					}
 					stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name()).Block()
 				}
 			case *types.Pointer:
@@ -312,6 +319,10 @@ func ComposeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 						typeName := methFunc.Recv().Name()
 
 						ImportPackage(file, pkgPath, pkgName)
+
+						if guessAlias(methFunc.Recv().Pkg().Path()) != methFunc.Recv().Pkg().Name() {
+							file.ImportAlias(methFunc.Recv().Pkg().Path(), methFunc.Recv().Pkg().Name())
+						}
 						stat.Qual(pkgPath, typeName)
 					}
 				}
@@ -345,6 +356,9 @@ func ComposeTypeDeclaration(file *File, stat *Statement, typ types.Type) {
 			} else {
 				if t.Obj() != nil && t.Obj().Pkg() != nil {
 					ImportPackage(file, scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Pkg().Name())
+					if guessAlias(t.Obj().Pkg().Path()) != t.Obj().Pkg().Name() {
+						file.ImportAlias(t.Obj().Pkg().Path(), t.Obj().Pkg().Name())
+					}
 					stat.Qual(scanner.RemoveGoPath(t.Obj().Pkg()), t.Obj().Name())
 				}
 			}
@@ -390,4 +404,38 @@ func ScanTupleOfTypes(file *File, tuple *types.Tuple, isVariadic bool) []Code {
 // then the package should use an alias in the import.
 func ShouldUseAlias(pkgPath string, pkgName string) bool {
 	return filepath.Base(pkgPath) != pkgName
+}
+func guessAlias(path string) string {
+	// From https://github.com/dave/jennifer/blob/2abe0ee856a1cfbca4a3327861b51d9c1c1a8592/jen/file.go#L224
+	alias := path
+
+	if strings.HasSuffix(alias, "/") {
+		// training slashes are usually tolerated, so we can get rid of one if
+		// it exists
+		alias = alias[:len(alias)-1]
+	}
+
+	if strings.Contains(alias, "/") {
+		// if the path contains a "/", use the last part
+		alias = alias[strings.LastIndex(alias, "/")+1:]
+	}
+
+	// alias should be lower case
+	alias = strings.ToLower(alias)
+
+	// alias should now only contain alphanumerics
+	importsRegex := regexp.MustCompile(`[^a-z0-9]`)
+	alias = importsRegex.ReplaceAllString(alias, "")
+
+	// can't have a first digit, per Go identifier rules, so just skip them
+	for firstRune, runeLen := utf8.DecodeRuneInString(alias); unicode.IsDigit(firstRune); firstRune, runeLen = utf8.DecodeRuneInString(alias) {
+		alias = alias[runeLen:]
+	}
+
+	// If path part was all digits, we may be left with an empty string. In this case use "pkg" as the alias.
+	if alias == "" {
+		alias = "pkg"
+	}
+
+	return alias
 }
