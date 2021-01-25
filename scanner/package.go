@@ -21,7 +21,7 @@ type Package struct {
 	Funcs      []*Func
 	Interfaces []*Interface
 	Methods    []*Func
-	Types      []*Named // Types contains types found in the package; excluded are structs and interfaces.
+	Types      []*Named // Types contains types found in the package.
 }
 
 func containsString(arr []string, s string) bool {
