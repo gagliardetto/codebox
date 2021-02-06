@@ -243,8 +243,8 @@ func (a Alias) UnqualifiedName() string {
 	return a.Type.UnqualifiedName()
 }
 
-// Map is a map type with a key and a value type.
-type Map struct {
+// MMap is a map type with a key and a value type.
+type MMap struct {
 	*BaseType
 	Key   Type
 	Value Type
@@ -252,7 +252,7 @@ type Map struct {
 
 // NewMap creates a new map type with the given key and value types.
 func NewMap(key, val Type) Type {
-	return &Map{
+	return &MMap{
 		newBaseType(),
 		key,
 		val,
@@ -260,12 +260,12 @@ func NewMap(key, val Type) Type {
 }
 
 // String returns a string representation for the type
-func (m Map) String() string {
+func (m MMap) String() string {
 	return fmt.Sprintf("map[%s]%s", m.Key.String(), m.Value.String())
 }
 
 // TypeString returns a string representation for the type casting
-func (m Map) TypeString() string {
+func (m MMap) TypeString() string {
 	// TODO: this should return map[somepackage.SomeType]somepackage1.SomeType1
 	// i.e. package name + UnqualifiedName()
 	// for key and value types.
@@ -273,7 +273,7 @@ func (m Map) TypeString() string {
 }
 
 // UnqualifiedName returns the bare name, without the package.
-func (m Map) UnqualifiedName() string {
+func (m MMap) UnqualifiedName() string {
 	return m.String()
 }
 
