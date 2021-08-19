@@ -226,7 +226,7 @@ func defaultModuleScannerFunc(rawPath string) (*packages.Package, error) {
 		mf.AddModuleStmt("example.com/hello/world")
 
 		if !isStd {
-			mf.AddNewRequire(rootPath, version, true)
+			mf.AddNewRequire(rootPath, version, false)
 		}
 		mf.Cleanup()
 
