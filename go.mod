@@ -8,11 +8,11 @@ require (
 	github.com/gagliardetto/golang-go v0.0.0-20201020153340-53909ea70814
 	github.com/gagliardetto/utilz v0.0.0-20200824151221-3a6131a12868
 	github.com/gin-gonic/gin v1.7.0
-	github.com/gogo/protobuf v1.3.1
+	github.com/gogo/protobuf v1.3.2
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/mod v0.3.0
-	golang.org/x/tools v0.0.0-20200804011535-6c149bb5ef0d
+	golang.org/x/tools v0.0.0-20210106214847-113979e3529a
 	gopkg.in/src-d/go-parse-utils.v1 v1.1.2
 	gopkg.in/src-d/proteus.v1 v1.3.3
 )
